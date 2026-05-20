@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Help Center — Sage AI keeps this updated</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f8f8f5;--card:#ffffff;--accent:#6d28d9;--text:#111111;--muted:#6b7280;--border:#e5e5e0;
+  --bg2:#f3f3ef;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;
+  --gray:#6b7280;--gray2:#9ca3af;--green:#16a34a;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+
+/* TOP BANNER */
+.top-banner{background:var(--dark);color:white;text-align:center;padding:10px;font-size:0.8rem;letter-spacing:0.02em}
+.top-banner span{color:#a78bfa}
+
+/* NAV */
+nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1300px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:var(--dark);display:flex;align-items:center;gap:8px;cursor:pointer}
+.nav-logo .ai-tag{font-size:0.55rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:0.04em}
+.nav-links{display:flex;gap:4px;flex:1;justify-content:center}
+.nav-lnk{padding:6px 13px;border-radius:6px;font-size:0.83rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all 0.2s;border:1px solid transparent;white-space:nowrap}
+.nav-lnk:hover,.nav-lnk.active{background:var(--bg2);color:var(--dark);border-color:var(--border)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-search-bar{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.83rem;color:var(--gray);width:190px;transition:all 0.2s}
+.nav-search-bar:focus-within{border-color:var(--purple);background:white}
+.nav-search-bar input{background:none;border:none;outline:none;color:var(--text);width:100%;font-size:0.83rem}
+.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;position:relative;text-decoration:none}
+.nav-icon:hover{border-color:var(--purple);background:var(--bg2)}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#1a0533 0%,#0a1a2e 60%,#001a1a 100%);color:white;padding:64px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(109,40,217,0.3),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(8,145,178,0.2),transparent 60%)}
+.hero-inner{max-width:680px;margin:0 auto;position:relative;z-index:1}
+.sage-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);border-radius:100px;padding:5px 16px;font-size:0.75rem;color:#c4b5fd;margin-bottom:18px;font-weight:600}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4.5vw,3rem);font-weight:800;line-height:1.1;margin-bottom:12px}
+.hero h1 em{font-style:normal;background:linear-gradient(135deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:28px}
+
+/* SEARCH */
+.search-wrap{max-width:560px;margin:0 auto;position:relative}
+.faq-search{width:100%;background:white;border:none;border-radius:12px;padding:14px 20px 14px 48px;font-size:0.95rem;font-family:'Inter',sans-serif;outline:none;box-shadow:0 4px 20px rgba(0,0,0,0.2);color:var(--text)}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:1.1rem;pointer-events:none}
+.search-count{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:0.75rem;color:var(--gray);font-weight:600}
+
+/* CATEGORY TABS */
+.tabs-section{max-width:900px;margin:0 auto;padding:40px 24px 0}
+.tabs-wrap{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tabs-wrap::-webkit-scrollbar{display:none}
+.tab-btn{padding:8px 18px;border-radius:100px;font-size:0.83rem;font-weight:600;border:1px solid var(--border);background:white;color:var(--gray);cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0}
+.tab-btn:hover{border-color:var(--purple);color:var(--purple)}
+.tab-btn.active{background:var(--purple);color:white;border-color:var(--purple)}
+
+/* FAQ ACCORDION */
+.faq-section{max-width:900px;margin:0 auto;padding:28px 24px}
+.cat-group{display:none}
+.cat-group.visible{display:block;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.cat-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.faq-item{background:white;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;overflow:hidden;transition:border 0.2s}
+.faq-item.open{border-color:rgba(109,40,217,0.3)}
+.faq-q{padding:16px 20px;font-weight:600;font-size:0.88rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:12px;user-select:none}
+.faq-q:hover{color:var(--purple)}
+.faq-q .arrow{font-size:0.7rem;transition:transform 0.25s;flex-shrink:0;color:var(--gray)}
+.faq-item.open .faq-q .arrow{transform:rotate(180deg);color:var(--purple)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height 0.35s ease,padding 0.2s}
+.faq-item.open .faq-a{max-height:300px;padding:0 20px 16px}
+.faq-a p{font-size:0.83rem;color:var(--gray);line-height:1.65}
+.faq-a a{color:var(--purple);font-weight:600}
+
+/* No results */
+.no-results{text-align:center;padding:40px;display:none}
+.no-results.visible{display:block}
+
+/* SAGE BADGE */
+.sage-bar{max-width:900px;margin:0 auto 40px;padding:0 24px}
+.sage-inner{background:linear-gradient(135deg,rgba(109,40,217,0.06),rgba(8,145,178,0.03));border:1px solid rgba(109,40,217,0.15);border-radius:12px;padding:14px 20px;display:flex;align-items:center;gap:12px}
+.sage-icon{font-size:1.4rem}
+.sage-text{font-size:0.82rem;color:var(--gray)}
+.sage-text strong{color:var(--text)}
+
+/* CTA */
+.cta-section{max-width:900px;margin:0 auto;padding:0 24px 56px}
+.cta-card{background:linear-gradient(135deg,#1a0533,#0a1a2e);border-radius:20px;padding:40px;text-align:center;color:white;position:relative;overflow:hidden}
+.cta-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(109,40,217,0.3),transparent 70%)}
+.cta-inner{position:relative;z-index:1}
+.cta-icon{font-size:2.5rem;margin-bottom:14px}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px}
+.cta-sub{color:rgba(255,255,255,0.6);font-size:0.88rem;margin-bottom:24px}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-cta-primary{background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:10px;padding:11px 24px;font-size:0.88rem;font-weight:700;transition:all 0.2s}
+.btn-cta-primary:hover{opacity:0.9}
+.btn-cta-ghost{background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:11px 24px;font-size:0.88rem;font-weight:600;transition:all 0.2s}
+.btn-cta-ghost:hover{background:rgba(255,255,255,0.18)}
+
+footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem}
+footer a{color:#a78bfa;margin:0 8px}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-search-bar{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="top-banner">🤖 Sage AI updates this page daily — <span>36 articles covering everything you need</span></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="window.location.href='mystore.html'">
+      VibeStore <div class="ai-tag">AI</div>
+    </div>
+    <div class="nav-links">
+      <a href="collections.html" class="nav-lnk">Shop</a>
+      <a href="sale.html" class="nav-lnk">Sale 🔥</a>
+      <a href="blog.html" class="nav-lnk">Blog</a>
+      <a href="returns.html" class="nav-lnk">Returns</a>
+      <a href="faq.html" class="nav-lnk active">Help</a>
+      <a href="contact.html" class="nav-lnk">Contact</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-search-bar"><span>🔍</span><input placeholder="Search products..."/></div>
+      <a href="account.html" class="nav-icon" title="Account">👤</a>
+      <a href="track.html" class="nav-icon" title="Orders">📦</a>
+      <a href="wishlist.html" class="nav-icon" title="Wishlist">♡</a>
+      <a href="cart.html" class="nav-icon" title="Cart" style="position:relative">
+        🛒<div class="cart-count" id="cartCount">0</div>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO + SEARCH -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="sage-badge">📚 Sage AI · Knowledge Base</div>
+    <h1>Help <em>Center</em></h1>
+    <p class="hero-sub">Find instant answers to your questions across orders, shipping, returns, payments, and more.</p>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="faq-search" id="faqSearch" placeholder="Search for answers..." oninput="filterFaq(this.value)"/>
+      <span class="search-count" id="searchCount">36 articles</span>
+    </div>
+  </div>
+</div>
+
+<!-- CATEGORY TABS -->
+<div class="tabs-section">
+  <div class="tabs-wrap">
+    <button class="tab-btn active" onclick="showCat('orders',this)">📦 Orders</button>
+    <button class="tab-btn" onclick="showCat('shipping',this)">🚚 Shipping</button>
+    <button class="tab-btn" onclick="showCat('returns',this)">↩️ Returns</button>
+    <button class="tab-btn" onclick="showCat('payments',this)">💳 Payments</button>
+    <button class="tab-btn" onclick="showCat('account',this)">👤 Account</button>
+    <button class="tab-btn" onclick="showCat('products',this)">🛍️ Products</button>
+  </div>
+</div>
+
+<!-- FAQ CONTENT -->
+<div class="faq-section" id="faqContainer">
+
+  <div class="cat-group visible" data-cat="orders">
+    <div class="cat-title">📦 Orders</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I track my order? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Go to the <a href="track.html">Track Order</a> page and enter your order number (e.g. VS-2024-XXXX) along with your registered email. You'll see live courier tracking with estimated delivery time. You'll also receive SMS and email updates automatically.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I cancel or modify my order? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes — orders can be cancelled or modified within 2 hours of placing them. After that, the order enters our fulfilment pipeline and cannot be changed. Once delivered, you can initiate a return instead. Contact us immediately via chat for the fastest resolution.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">I haven't received my order — what do I do? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>First, check the tracking page to see the latest courier status. If it shows delivered but you haven't received it, please check with neighbours and your building reception. If still missing, contact us within 7 days and we'll raise a courier investigation and arrange a replacement or full refund.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I change my delivery address after placing an order? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Address changes are possible within 1 hour of ordering. After that, once the shipment is created with the courier, we are unable to redirect it. Please double-check your address before confirming checkout. Contact support immediately if you need to change it.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What if my item arrives damaged? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>We're sorry to hear that! Please take photos of the damaged item and packaging immediately, then raise a return request within 48 hours via our <a href="returns.html">Returns</a> page and select "Damaged on arrival". We'll arrange a free pickup and send a replacement or issue a full refund — your choice.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I download my invoice? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Log into your <a href="account.html">Account</a>, go to Orders, click on the order, and you'll find a "Download GST Invoice" button. Invoices are available for all completed orders. If you need a specific format for business purposes, email us and we'll send a custom invoice within 2 hours.</p></div>
+    </div>
+  </div>
+
+  <div class="cat-group" data-cat="shipping">
+    <div class="cat-title">🚚 Shipping</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What are the delivery timeframes? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Standard delivery: 3–5 business days. Express delivery: 1–2 business days (additional charges apply). Same-day delivery is available in select metro cities for orders placed before 12pm. Rural pincode deliveries may take 5–7 business days.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is the free shipping threshold? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Enjoy free standard shipping on all orders over ₹999. Orders below ₹999 attract a flat shipping fee of ₹49. VibeStore Prime members get free shipping on all orders, regardless of order value.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you offer international shipping? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Currently, we ship within India only. International shipping is on our roadmap for 2025. If you're outside India and want to place an order, you can use a freight forwarding service. Sign up for our newsletter to be notified when international shipping launches.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How does express delivery work? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Select "Express Delivery" at checkout. Orders placed before 2pm on business days are delivered the next business day. Orders after 2pm are delivered in 2 business days. Express is available in all major cities. A nominal fee of ₹99–₹149 applies depending on weight.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Which courier partners do you use? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>We partner with Delhivery, Bluedart, Ekart, and DTDC depending on your pincode and order type. Our AI routing engine automatically selects the fastest and most reliable courier for your location. Premium orders are always shipped via Bluedart.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What if my package is lost in transit? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>If your tracking shows no movement for 3+ business days, contact us immediately. We'll raise a courier investigation within 24 hours. If the package is confirmed lost, we'll either reship or issue a full refund — whichever you prefer. All shipments are insured.</p></div>
+    </div>
+  </div>
+
+  <div class="cat-group" data-cat="returns">
+    <div class="cat-title">↩️ Returns</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is your return policy duration? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>We offer a 30-day hassle-free return policy from the date of delivery. No questions asked for most products. Electronics have a 15-day return window. Certain items like innerwear, food products, and customised goods are non-returnable for hygiene reasons.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I initiate a return? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Visit our <a href="returns.html">Returns page</a>, enter your order number and email, select the items you want to return, choose your reason and preferred resolution. Zen AI will process your return request in under 60 seconds and schedule a free pickup.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do I need to arrange return pickup myself? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>No — we arrange free door-step pickup for all returns. Once your return is approved, our courier partner will contact you to schedule a convenient pickup time within 24–48 hours. You just need to pack the item securely in the original packaging if available.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does a refund take? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Store credit: instant. UPI / Bank transfer: 24–48 hours. Credit/Debit card: 5–7 business days. Net banking: 3–5 business days. Refund timeline begins after we receive and inspect the returned item, which typically takes 2–3 days after pickup.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How does the exchange process work? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Select "Exchange" as your preferred resolution during the return process. Specify the desired size, color, or product. We'll ship the replacement after picking up the original item. Exchange orders are prioritised and usually delivered within 3–4 business days of pickup.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Which items cannot be returned? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Non-returnable items include: innerwear / swimwear (hygiene), food & beverages, customised/personalised products, digital software licenses, items marked "Final Sale", and products with broken seals after delivery (e.g., some health products). All non-returnable items are clearly marked on their product pages.</p></div>
+    </div>
+  </div>
+
+  <div class="cat-group" data-cat="payments">
+    <div class="cat-title">💳 Payments</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What payment methods do you accept? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>We accept all major payment methods: UPI (PhonePe, GPay, Paytm), Credit & Debit cards (Visa, Mastercard, RuPay, Amex), Net Banking (50+ banks), BNPL (Buy Now Pay Later via Simpl, Lazypay), EMI (No-cost EMI via major banks), and VibeStore Wallet.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you offer EMI or no-cost EMI? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes! No-cost EMI is available on orders over ₹2,999 via HDFC, ICICI, SBI, Axis, Kotak, and IndusInd credit cards for 3, 6, and 12-month tenures. Standard EMI is available on all major cards. EMI options are displayed at checkout based on your card.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">My payment failed but amount was deducted — what do I do? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>If your payment was deducted but the order wasn't placed, don't worry — the amount will automatically be refunded to your original payment method within 5–7 business days. If you don't see the refund after 7 days, contact us with your bank transaction reference and we'll resolve it immediately.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How long does my refund take to reach my account? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Refund timelines: UPI 24–48 hours, Debit card 3–5 days, Credit card 5–7 days, Net Banking 3–5 days, VibeStore Wallet instant. These are bank processing times and may vary. You'll receive an email confirmation when we initiate the refund on our end.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I get a GST invoice for my purchase? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes! All orders automatically generate a GST invoice. Go to Account → Orders → click your order → Download GST Invoice. If you need a B2B invoice with your company GSTIN, enter your GST number in My Account → Business Profile before placing the order.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I top up my VibeStore Wallet? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Go to Account → Wallet → Add Money. You can top up using UPI, net banking, or any card. Minimum top-up is ₹100. Wallet balance never expires and earns 0.5% monthly interest on balances over ₹1,000. Wallet top-ups also get bonus cashback during promotional events.</p></div>
+    </div>
+  </div>
+
+  <div class="cat-group" data-cat="account">
+    <div class="cat-title">👤 Account</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I create an account? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Click "Sign Up" on the top-right of any page. Enter your name, mobile number, and email. Verify via OTP. Your account is ready in 30 seconds! You can also sign up using Google or Apple for faster access. A VibeStore account lets you track orders, save addresses, earn loyalty points, and more.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">I forgot my password — how do I reset it? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Click "Forgot Password" on the login page. Enter your registered email or mobile number. You'll receive a password reset link or OTP. The link expires in 10 minutes. If you don't receive the email, check your spam folder. You can also log in via mobile OTP without a password.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I update my delivery address? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Go to Account → Addresses → Add New Address or edit an existing one. You can save up to 5 addresses (Home, Work, etc.). Mark one as default for faster checkout. You can also set different addresses for billing and shipping. Addresses can be updated anytime before an order is shipped.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I delete my account? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>We're sad to see you go! To delete your account, go to Account → Settings → Delete Account. Please note: deletion is permanent and will remove all order history, wishlist, and wallet balance. Outstanding refunds will be processed to your original payment method. Contact us if you want help migrating data first.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do loyalty points work? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Earn 1 loyalty point for every ₹10 spent. Points can be redeemed at ₹0.50 per point on any order. Bonus points on birthdays (3x), during sale events (2x), and for reviews (50 points each). Points expire after 12 months of inactivity. View your balance in Account → Loyalty Points.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I manage notification settings? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Go to Account → Notifications to customise what you receive. You can independently toggle: order updates (recommended on), promotional emails, SMS alerts, WhatsApp messages, and push notifications. To unsubscribe from all marketing, click "Unsubscribe" at the bottom of any email.</p></div>
+    </div>
+  </div>
+
+  <div class="cat-group" data-cat="products">
+    <div class="cat-title">🛍️ Products</div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I know products are authentic? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>100% authenticity guaranteed. We source directly from brand-authorised distributors and manufacturers. Products marked "VibeStore Verified" carry our authenticity seal. Electronics come with brand warranty cards. If you ever receive a counterfeit product, we offer a full refund plus 20% compensation credit.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Where can I find the size guide? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Each clothing, footwear, and accessory product page has a "Size Guide" button. It shows detailed measurements for all sizes in cm and inches. For best fit, measure yourself and compare against the guide. Our AI stylist can also recommend the best size based on your measurements and past purchases.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I get notified when a product is back in stock? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>On any out-of-stock product page, click "Notify Me When Available". Enter your email (or log in and it's automatic). You'll get an instant notification when stock is replenished. You can manage your stock alert subscriptions in Account → Notifications → Stock Alerts.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How do I leave a product review? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Only verified purchasers can leave reviews. After delivery, you'll receive a review request email. You can also go to Account → Orders → click your order → Write Review. Reviews earn 50 loyalty points. Photo reviews earn an extra 25 points. We don't remove negative reviews — all feedback is genuine.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Do you offer gift wrapping? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes! Select "Add Gift Wrapping" at checkout for ₹49. Choose from 5 premium wrapping styles and include a personalised message card. Gift-wrapped orders come in a special VibeStore gift box. Recipient won't see the price. Perfect for birthdays, anniversaries, and festive occasions!</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I place bulk / wholesale orders? <span class="arrow">▼</span></div>
+      <div class="faq-a"><p>Yes! For bulk orders (10+ units of same product), email us at bulk@vibestore.in with your requirements. We offer volume discounts of 10–25% depending on quantity. Corporate gifting orders include custom branding options. We can fulfil orders up to 10,000 units with 7–10 day lead time.</p></div>
+    </div>
+  </div>
+
+  <div class="no-results" id="noResults">
+    <div style="font-size:3rem;margin-bottom:12px">🔍</div>
+    <div style="font-weight:700;font-size:1rem;margin-bottom:6px">No results found</div>
+    <div style="font-size:0.83rem;color:var(--gray)">Try different keywords or <a href="contact.html" style="color:var(--purple);font-weight:600">contact our support team</a></div>
+  </div>
+</div>
+
+<!-- SAGE BADGE -->
+<div class="sage-bar">
+  <div class="sage-inner">
+    <div class="sage-icon">🤖</div>
+    <div class="sage-text"><strong>Sage AI</strong> reviews and updates this Help Center daily — articles are checked for accuracy every 24 hours based on policy changes, customer feedback, and new product launches.</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-card">
+    <div class="cta-inner">
+      <div class="cta-icon">💬</div>
+      <div class="cta-title">Still need help?</div>
+      <div class="cta-sub">Our support team and Rex AI are available 24/7 to answer any question</div>
+      <div class="cta-btns">
+        <button class="btn-cta-primary" onclick="window.location.href='contact.html'">Contact Us →</button>
+        <button class="btn-cta-ghost" onclick="window.location.href='track.html'">Track Order</button>
+        <button class="btn-cta-ghost" onclick="window.location.href='returns.html'">Start a Return</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
+  <br/><br/>
+  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
+  <a href="collections.html">Collections</a><a href="sale.html">Sale</a><a href="compare.html">Compare</a><a href="gift-cards.html">Gift Cards</a><a href="blog.html">Blog</a>
+  &nbsp;|&nbsp;
+  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
+  <a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track.html">Track Order</a><a href="notifications.html">Notifications</a>
+  &nbsp;|&nbsp;
+  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
+  <a href="account.html">My Account</a><a href="loyalty.html">Loyalty</a><a href="wishlist.html">Wishlist</a><a href="referral.html">Referral</a>
+  &nbsp;|&nbsp;
+  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
+  <a href="index.html">Home</a><a href="referral.html">Referrals</a><a href="contact.html">Contact</a>
+</footer>
+
+<script src="rex-chat.js"></script>
+<script>
+function updateCartCount(){
+  try{
+    const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const count=cart.reduce((s,i)=>s+(i.qty||1),0);
+    const el=document.getElementById('cartCount');
+    if(el) el.textContent=count;
+  }catch(e){}
+}
+updateCartCount();
+
+function showCat(cat, btn){
+  document.querySelectorAll('.cat-group').forEach(g=>g.classList.remove('visible'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  const group=document.querySelector('.cat-group[data-cat="'+cat+'"]');
+  if(group) group.classList.add('visible');
+  btn.classList.add('active');
+  document.getElementById('faqSearch').value='';
+  document.getElementById('searchCount').textContent='6 articles';
+  document.getElementById('noResults').classList.remove('visible');
+}
+
+function toggleFaq(el){
+  const item=el.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  // Close all in same cat group
+  item.closest('.cat-group').querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+function filterFaq(query){
+  query=query.trim().toLowerCase();
+  const allGroups=document.querySelectorAll('.cat-group');
+  const allItems=document.querySelectorAll('.faq-item');
+  const noResults=document.getElementById('noResults');
+  const count=document.getElementById('searchCount');
+  const tabs=document.querySelectorAll('.tab-btn');
+
+  if(!query){
+    // Restore to orders tab
+    allGroups.forEach(g=>g.classList.remove('visible'));
+    tabs.forEach(b=>b.classList.remove('active'));
+    const ordersGroup=document.querySelector('.cat-group[data-cat="orders"]');
+    if(ordersGroup) ordersGroup.classList.add('visible');
+    if(tabs[0]) tabs[0].classList.add('active');
+    allItems.forEach(i=>i.style.display='');
+    noResults.classList.remove('visible');
+    count.textContent='36 articles';
+    return;
+  }
+
+  // Show all groups when searching
+  allGroups.forEach(g=>{g.classList.add('visible');g.style.display=''});
+  tabs.forEach(b=>b.classList.remove('active'));
+
+  let visible=0;
+  allItems.forEach(item=>{
+    const qText=item.querySelector('.faq-q').textContent.toLowerCase();
+    const aText=item.querySelector('.faq-a').textContent.toLowerCase();
+    const match=qText.includes(query)||aText.includes(query);
+    item.style.display=match?'':'none';
+    if(match) visible++;
+  });
+
+  // Hide empty groups
+  allGroups.forEach(g=>{
+    const hasVisible=Array.from(g.querySelectorAll('.faq-item')).some(i=>i.style.display!=='none');
+    g.style.display=hasVisible?'':'none';
+  });
+
+  count.textContent=visible+' result'+(visible!==1?'s':'');
+  noResults.classList.toggle('visible',visible===0);
+}
+</script>
+</body>
+</html>

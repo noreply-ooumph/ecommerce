@@ -30,6 +30,32 @@ input,select,textarea{font-family:'Inter',sans-serif}
 /* LEFT */
 .checkout-left{padding:40px;border-right:1px solid var(--border);overflow-y:auto}
 
+/* EXPRESS CHECKOUT (NEW) */
+.express-checkout{background:white;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
+.express-title{font-size:0.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;text-align:center;margin-bottom:14px}
+.express-btns{display:flex;flex-direction:column;gap:10px}
+.btn-express{width:100%;border:none;border-radius:10px;padding:13px 16px;font-size:0.88rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.2s}
+.btn-upi{background:linear-gradient(135deg,#1a237e,#283593);color:white}
+.btn-upi:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-razorpay{background:linear-gradient(135deg,#002970,#0961e1);color:white}
+.btn-razorpay:hover{opacity:0.9;transform:translateY(-1px)}
+.btn-paypal{background:linear-gradient(135deg,#003087,#0070e0);color:white}
+.btn-paypal:hover{opacity:0.9;transform:translateY(-1px)}
+.express-or{display:flex;align-items:center;gap:12px;margin:18px 0}
+.express-or-line{flex:1;height:1px;background:var(--border)}
+.express-or-text{font-size:0.72rem;font-weight:600;color:var(--gray2);white-space:nowrap}
+
+/* GUEST / SIGN IN TOGGLE (NEW) */
+.auth-toggle-section{background:white;border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.auth-tabs{display:flex;border-bottom:1px solid var(--border)}
+.auth-tab{flex:1;padding:13px;font-size:0.85rem;font-weight:600;text-align:center;cursor:pointer;color:var(--gray);background:var(--bg2);transition:all 0.2s;border:none}
+.auth-tab.active{background:white;color:var(--dark)}
+.auth-tab:first-child{border-right:1px solid var(--border)}
+.auth-tab-body{padding:16px 20px}
+.auth-guest-note{font-size:0.8rem;color:var(--gray);line-height:1.6}
+.auth-signin-form{display:none}
+.auth-signin-form.show{display:block}
+
 /* SECTION CARD */
 .co-section{background:white;border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden;transition:box-shadow 0.2s}
 .co-section:focus-within{box-shadow:0 0 0 2px rgba(109,40,217,0.15)}
@@ -71,12 +97,13 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .card-icons{display:flex;gap:6px}
 .card-icon{width:32px;height:20px;background:var(--bg2);border-radius:4px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:700;color:var(--gray)}
 
-/* COUPON */
+/* COUPON (RIGHT SIDEBAR) */
 .coupon-row{display:flex;gap:8px;margin-top:8px}
 .coupon-input{flex:1}
 .coupon-btn{background:var(--dark);color:white;border:none;border-radius:8px;padding:10px 18px;font-size:0.83rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s}
 .coupon-btn:hover{opacity:0.85}
 .coupon-success{font-size:0.75rem;color:var(--green);margin-top:6px;display:none;align-items:center;gap:5px}
+.coupon-error{font-size:0.75rem;color:var(--red);margin-top:6px;display:none}
 
 /* RIGHT - ORDER SUMMARY */
 .checkout-right{background:var(--bg2);padding:32px 28px;overflow-y:auto;border-left:1px solid var(--border)}
@@ -86,14 +113,19 @@ input,select,textarea{font-family:'Inter',sans-serif}
 .sum-img{width:52px;height:52px;background:white;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;position:relative}
 .sum-qty-badge{position:absolute;top:-6px;right:-6px;background:var(--dark);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
 .sum-item-name{font-size:0.83rem;font-weight:600;flex:1}
+.sum-item-detail{font-size:0.72rem;color:var(--gray);margin-top:1px}
 .sum-item-price{font-weight:700;font-size:0.88rem;white-space:nowrap}
 .sum-divider{height:1px;background:var(--border);margin:16px 0}
 .sum-row{display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:8px}
-.sum-row.total{font-weight:700;font-size:1rem;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)}
+.sum-row.total{font-weight:700;font-size:1rem;margin-top:8px;padding-top:12px;border-top:2px solid var(--dark)}
 .sum-row.discount{color:var(--green)}
 .ai-savings{background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:12px 14px;margin-top:12px}
 .ai-savings-title{font-size:0.75rem;font-weight:700;color:var(--green);margin-bottom:4px;display:flex;align-items:center;gap:5px}
 .ai-savings-text{font-size:0.72rem;color:var(--gray)}
+
+/* PROMO CODE IN SIDEBAR (NEW) */
+.promo-box{background:white;border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px}
+.promo-box-title{font-size:0.78rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:6px}
 
 /* PLACE ORDER BTN */
 .btn-place{width:100%;background:linear-gradient(135deg,#1a0533,#2d1b69);color:white;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;margin-top:20px;transition:all 0.3s;position:relative;overflow:hidden}
@@ -144,7 +176,7 @@ input,select,textarea{font-family:'Inter',sans-serif}
 
 <!-- NAV -->
 <div class="checkout-nav">
-  <div class="checkout-logo" onclick="window.location.href='store.html'">
+  <div class="checkout-logo" onclick="window.location.href='mystore.html'">
     🛍️ MyStore <span class="ai-tag">AI</span>
   </div>
   <div class="checkout-steps">
@@ -163,11 +195,50 @@ input,select,textarea{font-family:'Inter',sans-serif}
   <!-- LEFT -->
   <div class="checkout-left">
 
+    <!-- EXPRESS CHECKOUT (NEW) -->
+    <div class="express-checkout">
+      <div class="express-title">Express checkout</div>
+      <div class="express-btns">
+        <button class="btn-express btn-upi" onclick="expressCheckout('UPI')">
+          <span>📱</span> Pay with UPI
+        </button>
+        <button class="btn-express btn-razorpay" onclick="expressCheckout('Razorpay')">
+          <span>⚡</span> Pay with Razorpay
+        </button>
+        <button class="btn-express btn-paypal" onclick="expressCheckout('PayPal')">
+          <span>🅿️</span> Pay with PayPal
+        </button>
+      </div>
+      <div class="express-or">
+        <div class="express-or-line"></div>
+        <div class="express-or-text">OR — enter details below</div>
+        <div class="express-or-line"></div>
+      </div>
+    </div>
+
+    <!-- GUEST / SIGN IN TOGGLE (NEW) -->
+    <div class="auth-toggle-section">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="guestTab" onclick="switchAuth('guest')">Continue as Guest</button>
+        <button class="auth-tab" id="signinTab" onclick="switchAuth('signin')">Sign In</button>
+      </div>
+      <div class="auth-tab-body">
+        <div id="guestBody">
+          <div class="auth-guest-note">No account needed — just fill in your details below and you're good to go. Fast, easy, and secure.</div>
+        </div>
+        <div class="auth-signin-form" id="signinBody">
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" placeholder="you@example.com" id="signinEmail"/></div>
+          <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••"/></div>
+          <button style="width:100%;background:var(--dark);color:white;border:none;border-radius:8px;padding:11px;font-size:0.85rem;font-weight:700;transition:background 0.2s" onmouseover="this.style.background='var(--purple2)'" onmouseout="this.style.background='var(--dark)'" onclick="toast_s('🔑 Signed in successfully!')">Sign In →</button>
+          <div style="text-align:center;font-size:0.72rem;color:var(--gray);margin-top:10px">Forgot password? <span style="color:var(--purple);cursor:pointer;font-weight:600">Reset it</span></div>
+        </div>
+      </div>
+    </div>
+
     <!-- CONTACT -->
     <div class="co-section">
       <div class="co-section-hdr">
         <div class="co-section-title">📧 Contact Information</div>
-        <div style="font-size:0.75rem;color:var(--gray)">Already have an account? <span style="color:var(--purple);cursor:pointer;font-weight:600">Sign in</span></div>
       </div>
       <div class="co-section-body">
         <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" id="email" oninput="checkFields()"/></div>
@@ -282,16 +353,6 @@ input,select,textarea{font-family:'Inter',sans-serif}
           </div>
           <div style="font-size:0.75rem;color:var(--gray)">Available on HDFC, ICICI, Axis, SBI credit cards</div>
         </div>
-
-        <!-- COUPON -->
-        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
-          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px">🎟️ Coupon / Promo Code</div>
-          <div class="coupon-row">
-            <input class="form-input coupon-input" placeholder="Enter code (try VIBE20)" id="couponInput"/>
-            <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
-          </div>
-          <div class="coupon-success" id="couponSuccess">✓ VIBE20 applied — 20% off!</div>
-        </div>
       </div>
     </div>
 
@@ -308,10 +369,25 @@ input,select,textarea{font-family:'Inter',sans-serif}
   <div class="checkout-right">
     <div class="summary-title">Order Summary</div>
     <div class="summary-items" id="summaryItems"></div>
+
     <div class="sum-divider"></div>
-    <div class="sum-row"><span>Subtotal</span><span id="sumSubtotal">$0</span></div>
-    <div class="sum-row"><span>Shipping</span><span id="sumShipping" style="color:var(--green)">FREE</span></div>
-    <div class="sum-row discount" id="sumDiscountRow" style="display:none"><span>Discount (VIBE20)</span><span id="sumDiscount">-$0</span></div>
+
+    <!-- PROMO CODE FIELD IN SIDEBAR (NEW) -->
+    <div class="promo-box">
+      <div class="promo-box-title">🎟️ Discount code or gift card</div>
+      <div class="coupon-row">
+        <input class="form-input coupon-input" placeholder='Try "LAUNCH20"' id="couponInput" onkeydown="if(event.key==='Enter')applyCoupon()"/>
+        <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+      </div>
+      <div class="coupon-success" id="couponSuccess"><span style="font-size:1rem">✅</span> LAUNCH20 applied — 20% off!</div>
+      <div class="coupon-error" id="couponError">❌ Invalid code. Try LAUNCH20.</div>
+    </div>
+
+    <!-- TOTALS BREAKDOWN (ENHANCED) -->
+    <div class="sum-row"><span style="color:var(--gray)">Subtotal</span><span id="sumSubtotal">$0</span></div>
+    <div class="sum-row discount" id="sumDiscountRow" style="display:none"><span>Discount (LAUNCH20) 🎉</span><span id="sumDiscount">-$0</span></div>
+    <div class="sum-row"><span style="color:var(--gray)">Shipping</span><span id="sumShipping" style="color:var(--green)">FREE</span></div>
+    <div class="sum-row"><span style="color:var(--gray)">Tax (GST 18%)</span><span id="sumTax">$0</span></div>
     <div class="sum-row total"><span>Total</span><span id="sumTotal">$0</span></div>
 
     <div class="ai-savings">
@@ -356,8 +432,8 @@ input,select,textarea{font-family:'Inter',sans-serif}
     </div>
 
     <div class="success-btns">
-      <button class="btn-track" onclick="toast_s('📦 Opening live tracking...')">Track My Order</button>
-      <button class="btn-shop-more" onclick="window.location.href='store.html'">Continue Shopping</button>
+      <button class="btn-track" onclick="window.location.href='track.html'">Track My Order</button>
+      <button class="btn-shop-more" onclick="window.location.href='mystore.html'">Continue Shopping</button>
     </div>
 
     <div style="margin-top:20px;font-size:0.78rem;color:var(--gray2)">Need help? <span style="color:var(--purple);cursor:pointer;font-weight:600" onclick="toast_s('💬 Rex AI is connecting...')">Chat with Rex AI →</span></div>
@@ -378,7 +454,7 @@ let payMethod = 'card';
 function init(){
   if(cart.length===0){
     // demo cart
-    cart=[{id:'p1',name:'Wireless Earbuds Pro',price:89,emoji:'🎧',qty:1},{id:'p7',name:'USB-C Hub Pro',price:49,emoji:'🔌',qty:1}];
+    cart=[{id:'p1',name:'Wireless Earbuds Pro',price:89,emoji:'🎧',qty:2},{id:'p7',name:'USB-C Hub Pro',price:49,emoji:'🔌',qty:1}];
   }
   renderSummary();
   checkFields();
@@ -389,7 +465,10 @@ function renderSummary(){
   el.innerHTML = cart.map(i=>`
     <div class="sum-item">
       <div class="sum-img">${i.emoji}<div class="sum-qty-badge">${i.qty}</div></div>
-      <div class="sum-item-name">${i.name}</div>
+      <div style="flex:1">
+        <div class="sum-item-name">${i.name}</div>
+        <div class="sum-item-detail">Qty: ${i.qty} × $${i.price.toFixed(2)}</div>
+      </div>
       <div class="sum-item-price">$${(i.price*i.qty).toFixed(2)}</div>
     </div>`).join('');
   updateTotals();
@@ -398,16 +477,51 @@ function renderSummary(){
 function updateTotals(){
   const sub = cart.reduce((s,i)=>s+i.price*i.qty,0);
   const ship = shippingCost;
-  const disc = couponApplied ? Math.round(sub*0.2) : 0;
+  const disc = couponApplied ? Math.round(sub*0.20*100)/100 : 0;
   discountAmt = disc;
-  const total = sub + ship - disc;
+  const afterDisc = sub - disc;
+  const tax = Math.round(afterDisc * 0.18 * 100) / 100;
+  const total = afterDisc + ship + tax;
+
   document.getElementById('sumSubtotal').textContent = '$'+sub.toFixed(2);
   document.getElementById('sumShipping').textContent = ship===0?'FREE':'$'+ship.toFixed(2);
+  document.getElementById('sumTax').textContent = '$'+tax.toFixed(2);
   document.getElementById('sumTotal').textContent = '$'+total.toFixed(2);
+
   const dRow = document.getElementById('sumDiscountRow');
-  if(couponApplied){dRow.style.display='flex';document.getElementById('sumDiscount').textContent='-$'+disc.toFixed(2);}
-  else{dRow.style.display='none';}
-  document.getElementById('aiSavingsText').textContent = `Luna AI dropped prices on ${Math.min(cart.length,2)} items in your cart today. You're saving an estimated $${30+disc} vs yesterday's prices.`;
+  if(couponApplied){
+    dRow.style.display='flex';
+    document.getElementById('sumDiscount').textContent='-$'+disc.toFixed(2);
+  } else {
+    dRow.style.display='none';
+  }
+  document.getElementById('aiSavingsText').textContent = `Luna AI dropped prices on ${Math.min(cart.length,2)} items in your cart today. You're saving an estimated $${(30+disc).toFixed(0)} vs yesterday's prices.`;
+}
+
+// GUEST / SIGN-IN TOGGLE
+function switchAuth(mode){
+  document.getElementById('guestTab').classList.toggle('active', mode==='guest');
+  document.getElementById('signinTab').classList.toggle('active', mode==='signin');
+  document.getElementById('guestBody').style.display = mode==='guest'?'block':'none';
+  document.getElementById('signinBody').classList.toggle('show', mode==='signin');
+}
+
+// EXPRESS CHECKOUT
+function expressCheckout(provider){
+  toast_s('⚡ Redirecting to '+provider+'...');
+  setTimeout(()=>{
+    // simulate quick checkout
+    if(!document.getElementById('email').value){
+      document.getElementById('email').value = 'guest@mystore.com';
+    }
+    if(!document.getElementById('fname').value){
+      document.getElementById('fname').value = 'Guest';
+      document.getElementById('addr1').value = 'Express Checkout';
+      document.getElementById('city').value = 'Auto';
+    }
+    checkFields();
+    setTimeout(()=>placeOrder(), 400);
+  }, 800);
 }
 
 // FORM VALIDATION
@@ -459,12 +573,17 @@ function formatExpiry(el){
 
 function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
-  if(code==='VIBE20'){
+  const successEl = document.getElementById('couponSuccess');
+  const errorEl = document.getElementById('couponError');
+  successEl.style.display='none';
+  errorEl.style.display='none';
+  if(code==='LAUNCH20'){
     couponApplied=true;
-    document.getElementById('couponSuccess').style.display='flex';
+    successEl.style.display='flex';
     updateTotals();
-    toast_s('🎟️ Coupon applied — 20% off!');
+    toast_s('🎟️ LAUNCH20 applied — 20% off!');
   } else {
+    errorEl.style.display='block';
     toast_s('❌ Invalid coupon code');
   }
 }
@@ -478,7 +597,6 @@ function placeOrder(){
   txt.style.display='none';
   spin.style.display='block';
 
-  // simulate step progress
   document.getElementById('step2').classList.remove('active');
   document.getElementById('step2').classList.add('done');
   document.getElementById('step2').querySelector('.step-dot').textContent='✓';
@@ -493,14 +611,16 @@ function placeOrder(){
 
   setTimeout(()=>{
     showSuccess();
-    // clear cart
     localStorage.removeItem('vs_cart');
   },2000);
 }
 
 function showSuccess(){
   const sub = cart.reduce((s,i)=>s+i.price*i.qty,0);
-  const total = sub + shippingCost - discountAmt;
+  const disc = couponApplied ? Math.round(sub*0.20*100)/100 : 0;
+  const afterDisc = sub - disc;
+  const tax = Math.round(afterDisc * 0.18 * 100) / 100;
+  const total = afterDisc + shippingCost + tax;
   const orderId = '#VS-'+Math.floor(40000+Math.random()*9999);
   const delivDate = new Date();
   delivDate.setDate(delivDate.getDate()+4);
@@ -518,7 +638,6 @@ function showSuccess(){
 
   launchConfetti();
 
-  // simulate Zen AI completing
   setTimeout(()=>{
     document.getElementById('zenDot').textContent='✓';
     document.getElementById('zenDot').style.background='rgba(22,163,74,0.1)';
@@ -546,6 +665,48 @@ function toast_s(msg){
 
 init();
 </script>
+<footer style="background:#0f0f1a;color:rgba(255,255,255,0.7);padding:40px 24px 24px">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px">
+    <div>
+      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Shop</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+        <a href="collections.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Collections</a>
+        <a href="sale.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Sale</a>
+        <a href="compare.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Compare</a>
+        <a href="gift-cards.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Gift Cards</a>
+        <a href="blog.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Blog</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Support</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+        <a href="returns.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Returns</a>
+        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact Us</a>
+        <a href="faq.html" style="color:rgba(255,255,255,0.6);text-decoration:none">FAQ</a>
+        <a href="track.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Track Order</a>
+        <a href="notifications.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Notifications</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Account</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+        <a href="account.html" style="color:rgba(255,255,255,0.6);text-decoration:none">My Account</a>
+        <a href="loyalty.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Loyalty</a>
+        <a href="wishlist.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Wishlist</a>
+        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referrals</a>
+      </div>
+    </div>
+    <div>
+      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Company</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
+        <a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none">About Us</a>
+        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referral Program</a>
+        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact</a>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center">© 2025 MyStore. All rights reserved.</div>
+</footer>
+
 <script src="rex-chat.js"></script></body>
 </html>
-

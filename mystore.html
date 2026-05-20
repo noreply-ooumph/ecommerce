@@ -477,7 +477,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
 ══════════════════════════════════ */
 .site-footer{background:var(--nav-bg);padding:48px 24px 24px;margin-top:8px;}
 .footer-inner{max-width:1280px;margin:0 auto;}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:40px;}
 .footer-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:white;letter-spacing:-0.02em;margin-bottom:12px;}
 .footer-brand p{font-size:0.82rem;color:rgba(255,255,255,0.45);line-height:1.7;max-width:220px;}
 .footer-agents{display:flex;flex-wrap:wrap;gap:5px;margin-top:14px;}
@@ -650,16 +650,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
 <!-- ── STICKY NAV ── -->
 <nav class="site-nav">
   <div class="nav-inner">
-    <a href="#" class="nav-logo" id="navLogo">Vibe<span>Store</span></a>
+    <a href="mystore.html" class="nav-logo" id="navLogo">Vibe<span>Store</span></a>
     <div class="nav-links">
       <a href="collections.html" class="nav-link">Shop</a>
-      <a href="collections.html" class="nav-link">Collections</a>
+      <a href="sale.html" class="nav-link">Sale 🔥</a>
       <a href="blog.html" class="nav-link">Blog</a>
+      <a href="compare.html" class="nav-link" style="font-size:0.78rem">Compare</a>
       <a href="referral.html" class="nav-link">Refer & Earn</a>
     </div>
     <div class="nav-search">
       <svg width="14" height="14" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input type="text" placeholder="Search products…" id="searchInput" onkeydown="if(event.key==='Enter')window.location.href='search.html'"/>
+      <input type="text" placeholder="Search products…" id="searchInput" onkeydown="if(event.key==='Enter')window.location.href='search.html?q='+encodeURIComponent(this.value)"/>
     </div>
     <div class="nav-icons">
       <a href="account.html" class="nav-icon-btn" title="Account">
@@ -830,24 +831,33 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
       </div>
       <div class="footer-col">
         <h4>Shop</h4>
-        <a href="collections.html">All Products</a>
-        <a href="collections.html">New Arrivals</a>
-        <a href="store.html">Sale</a>
+        <a href="collections.html">All Collections</a>
+        <a href="sale.html">Sale 🔥</a>
+        <a href="compare.html">Compare Products</a>
+        <a href="gift-cards.html">Gift Cards</a>
         <a href="blog.html">Blog</a>
       </div>
       <div class="footer-col">
         <h4>Support</h4>
+        <a href="returns.html">Returns</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
         <a href="track.html">Track Order</a>
-        <a href="account.html">My Account</a>
         <a href="notifications.html">Notifications</a>
-        <a href="#">Contact Rex AI</a>
+      </div>
+      <div class="footer-col">
+        <h4>Account</h4>
+        <a href="account.html">My Account</a>
+        <a href="loyalty.html">Loyalty Rewards</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="referral.html">Refer a Friend</a>
+        <a href="notifications.html">Notifications</a>
       </div>
       <div class="footer-col">
         <h4>Company</h4>
         <a href="index.html">About VibeStore</a>
-        <a href="referral.html">Refer & Earn</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+        <a href="referral.html">Referral Program</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
     <div class="footer-bottom">

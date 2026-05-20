@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>404 — Page Not Found · VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#06060f;--navy2:#0d0d1f;--navy3:#13132a;
+  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
+  --lavender:#c4b5fd;--white:#f1f0ff;--gray:#94a3b8;
+  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+}
+html,body{height:100%;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--navy);
+  color:var(--white);
+  overflow-x:hidden;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;
+}
+
+/* CANVAS */
+canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+/* MAIN CONTENT */
+.container{position:relative;z-index:2;text-align:center;max-width:680px;width:100%;}
+
+/* 404 BIG */
+.num-404{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:min(160px,22vw);
+  font-weight:800;
+  line-height:1;
+  background:linear-gradient(135deg,var(--purple2),var(--cyan2),var(--lavender));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  animation:glow-pulse 3s ease-in-out infinite;
+  letter-spacing:-4px;
+  margin-bottom:0;
+}
+@keyframes glow-pulse{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(124,58,237,0.4));}
+  50%{filter:drop-shadow(0 0 40px rgba(6,182,212,0.6));}
+}
+
+.heading{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:clamp(1.4rem,4vw,2rem);
+  font-weight:700;
+  margin-bottom:14px;
+  margin-top:8px;
+}
+
+.sub{color:var(--gray);font-size:0.95rem;line-height:1.7;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;}
+
+/* REX BUBBLE */
+.rex-wrap{display:inline-flex;align-items:flex-end;gap:12px;margin-bottom:36px;flex-wrap:wrap;justify-content:center;}
+.rex-avatar{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.5rem;flex-shrink:0;
+  box-shadow:0 0 20px rgba(124,58,237,0.4);
+  animation:rex-bounce 2s ease-in-out infinite;
+}
+@keyframes rex-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.speech-bubble{
+  background:var(--navy2);
+  border:1px solid var(--border);
+  border-radius:18px 18px 18px 4px;
+  padding:14px 18px;
+  font-size:0.88rem;
+  color:var(--white);
+  line-height:1.6;
+  max-width:360px;
+  text-align:left;
+  position:relative;
+}
+.speech-bubble::after{
+  content:'';position:absolute;bottom:0;left:-8px;
+  border:8px solid transparent;
+  border-right-color:var(--navy2);
+  border-bottom:none;
+}
+.rex-name{font-size:0.7rem;color:var(--cyan);font-weight:700;display:block;margin-bottom:3px;}
+
+/* TYPING INDICATOR */
+.typing{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:8px 16px;margin-bottom:32px;font-size:0.82rem;color:var(--gray);}
+.typing-dots{display:flex;gap:4px;margin-left:4px;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:dot-pulse 1.2s ease-in-out infinite;}
+.typing-dot:nth-child(2){animation-delay:0.2s;}
+.typing-dot:nth-child(3){animation-delay:0.4s;}
+@keyframes dot-pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
+
+/* SEARCH BAR */
+.search-wrap{position:relative;max-width:440px;margin:0 auto 36px;}
+.search-wrap input{
+  width:100%;background:var(--card);border:1px solid var(--border);
+  border-radius:14px;padding:14px 50px 14px 18px;
+  font-size:0.92rem;color:var(--white);font-family:'Inter',sans-serif;
+  outline:none;transition:border-color 0.2s;
+}
+.search-wrap input::placeholder{color:var(--gray);}
+.search-wrap input:focus{border-color:rgba(124,58,237,0.5);}
+.search-wrap button{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  background:linear-gradient(135deg,var(--purple),var(--cyan));
+  border:none;border-radius:9px;width:36px;height:36px;
+  font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+}
+
+/* SUGGESTION CARDS */
+.suggestions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+.sug-card{
+  background:var(--card);border:1px solid var(--border);border-radius:16px;
+  padding:22px 16px;cursor:pointer;text-decoration:none;
+  transition:all 0.25s;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.sug-card:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.08);transform:translateY(-3px);}
+.sug-icon{font-size:2rem;}
+.sug-title{font-weight:700;font-size:0.9rem;color:var(--white);}
+.sug-desc{font-size:0.75rem;color:var(--gray);text-align:center;}
+
+/* QUICK LINKS */
+.quick-links{border-top:1px solid var(--border);padding-top:24px;}
+.ql-label{font-size:0.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:12px;}
+.ql-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.ql-link{
+  background:var(--card);border:1px solid var(--border);border-radius:100px;
+  padding:7px 16px;font-size:0.8rem;color:var(--gray);text-decoration:none;
+  transition:all 0.2s;
+}
+.ql-link:hover{border-color:var(--cyan);color:var(--cyan2);}
+
+@media(max-width:600px){
+  .suggestions{grid-template-columns:1fr;}
+  .num-404{font-size:20vw;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<div class="container">
+
+  <div class="num-404">404</div>
+
+  <h1 class="heading">Oops! This page wandered off.</h1>
+
+  <p class="sub">The page you're looking for doesn't exist, has been moved, or the URL might have a typo. Let's get you back on track.</p>
+
+  <!-- Rex AI -->
+  <div class="rex-wrap">
+    <div class="rex-avatar">🤖</div>
+    <div class="speech-bubble">
+      <span class="rex-name">Rex AI</span>
+      Hi! I'm Rex. I couldn't find that page but I can help you find what you need 👋 Try searching below or browse the popular links.
+    </div>
+  </div>
+
+  <!-- Typing indicator -->
+  <div class="typing">
+    🤖 Rex AI is searching for what you meant
+    <div class="typing-dots">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search for what you were looking for..." onkeydown="if(event.key==='Enter')doSearch()"/>
+    <button onclick="doSearch()">🔍</button>
+  </div>
+
+  <!-- Suggestion Cards -->
+  <div class="suggestions">
+    <a href="index.html" class="sug-card">
+      <div class="sug-icon">🏠</div>
+      <div class="sug-title">Go Home</div>
+      <div class="sug-desc">Back to VibeStore homepage</div>
+    </a>
+    <a href="collections.html" class="sug-card">
+      <div class="sug-icon">🛍️</div>
+      <div class="sug-title">Browse Products</div>
+      <div class="sug-desc">Explore thousands of products</div>
+    </a>
+    <a href="contact.html" class="sug-card">
+      <div class="sug-icon">💬</div>
+      <div class="sug-title">Contact Support</div>
+      <div class="sug-desc">Get help from our team</div>
+    </a>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="quick-links">
+    <div class="ql-label">Quick Links</div>
+    <div class="ql-grid">
+      <a href="collections.html" class="ql-link">🔥 Popular Collections</a>
+      <a href="sale.html" class="ql-link">🏷️ Today's Deals</a>
+      <a href="track.html" class="ql-link">📦 Track Order</a>
+      <a href="faq.html" class="ql-link">❓ Help Center</a>
+      <a href="search.html" class="ql-link">🔍 Search</a>
+      <a href="blog.html" class="ql-link">📝 Blog</a>
+    </div>
+  </div>
+
+</div>
+
+<script src="rex-chat.js"></script>
+<script>
+// ── PARTICLE CANVAS (same as index.html) ──
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize(){
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle{
+  constructor(){this.reset();}
+  reset(){
+    this.x = Math.random()*W;
+    this.y = Math.random()*H;
+    this.r = Math.random()*1.5+0.5;
+    this.vx = (Math.random()-0.5)*0.4;
+    this.vy = (Math.random()-0.5)*0.4;
+    this.alpha = Math.random()*0.5+0.1;
+    this.color = Math.random()>0.5 ? '#7c3aed' : '#06b6d4';
+  }
+  update(){
+    this.x += this.vx; this.y += this.vy;
+    if(this.x<0||this.x>W||this.y<0||this.y>H) this.reset();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle = this.color;
+    ctx.globalAlpha = this.alpha;
+    ctx.fill();
+  }
+}
+
+for(let i=0;i<80;i++) particles.push(new Particle());
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  // draw connections
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<100){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='rgba(124,58,237,'+(0.08*(1-dist/100))+')';
+        ctx.globalAlpha=1;
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      }
+    }
+    particles[i].update();
+    particles[i].draw();
+  }
+  ctx.globalAlpha=1;
+  requestAnimationFrame(animate);
+}
+animate();
+
+function doSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(q) window.location.href = 'search.html?q='+encodeURIComponent(q);
+}
+</script>
+</body>
+</html>

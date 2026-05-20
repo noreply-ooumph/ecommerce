@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Products — VibeStore Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060f;--bg2:#0d0d1f;--bg3:#13132a;
+  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
+  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
+  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;
+  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --sidebar-w:240px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+select,input{font-family:'Inter',sans-serif}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
+  transition:width 0.3s,transform 0.3s;z-index:200;
+}
+.sb-logo{
+  padding:20px 20px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.sb-logo-text{
+  font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--purple2),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color 0.2s}
+.sb-store:hover{border-color:rgba(124,58,237,0.3)}
+.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sb-store-name{font-size:0.83rem;font-weight:600}
+.sb-store-url{font-size:0.68rem;color:var(--gray)}
+.sb-chevron{margin-left:auto;color:var(--gray);font-size:0.7rem}
+
+.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;margin:2px 8px;border-radius:8px;
+  font-size:0.84rem;color:var(--gray);cursor:pointer;
+  transition:all 0.2s;border:1px solid transparent;
+  text-decoration:none;
+}
+.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
+.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
+.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.sb-badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
+.sb-badge-orange{background:rgba(251,146,60,0.15);color:var(--orange)}
+
+.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--card);cursor:pointer;transition:background 0.2s}
+.sb-user:hover{background:rgba(255,255,255,0.06)}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
+.sb-user-name{font-size:0.82rem;font-weight:600}
+.sb-user-plan{font-size:0.68rem;color:var(--cyan)}
+.sb-user-caret{margin-left:auto;color:var(--gray);font-size:0.75rem}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── TOPBAR ── */
+#topbar{
+  height:60px;flex-shrink:0;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 24px;gap:12px;
+}
+.tb-hamburger{display:none;width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+.tb-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700}
+.tb-spacer{flex:1}
+.tb-ai-badge{display:flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:100px;padding:5px 12px;font-size:0.72rem;color:var(--green);white-space:nowrap}
+.tb-ai-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.tb-icon-btn{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:border-color 0.2s;position:relative;flex-shrink:0}
+.tb-icon-btn:hover{border-color:var(--purple2)}
+.notif-dot::after{content:'';position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--bg2)}
+.tb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px}
+
+/* ── METRIC CARDS ── */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;transition:border-color 0.2s}
+.metric-card:hover{border-color:rgba(124,58,237,0.25)}
+.mc-label{font-size:0.72rem;color:var(--gray);font-weight:500;display:flex;align-items:center;gap:6px}
+.mc-val{font-family:'Space Grotesk',sans-serif;font-size:1.9rem;font-weight:700;margin:2px 0 4px}
+.mc-sub{font-size:0.72rem;display:flex;align-items:center;gap:4px}
+.mc-icon{font-size:1.4rem}
+.col-white{color:var(--white)}
+.col-green{color:var(--green)}
+.col-orange{color:var(--orange)}
+.col-red{color:var(--red)}
+
+/* ── ARIA BANNER ── */
+.aria-banner{
+  background:rgba(251,146,60,0.08);border:1px solid rgba(251,146,60,0.25);
+  border-radius:12px;padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+}
+.aria-icon{font-size:1.4rem;flex-shrink:0}
+.aria-text{font-size:0.83rem;line-height:1.5}
+.aria-text strong{color:var(--orange)}
+.aria-actions{margin-left:auto;display:flex;gap:8px;flex-shrink:0}
+.btn-ghost{background:rgba(255,255,255,0.06);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:500;transition:all 0.2s}
+.btn-ghost:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.2)}
+.btn-orange{background:rgba(251,146,60,0.15);border:1px solid rgba(251,146,60,0.3);color:var(--orange);border-radius:8px;padding:6px 14px;font-size:0.78rem;font-weight:600;transition:all 0.2s}
+.btn-orange:hover{background:rgba(251,146,60,0.25)}
+
+/* ── PAGE ACTIONS ── */
+.page-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.btn-green{background:linear-gradient(135deg,#16a34a,#4ade80);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:0.84rem;font-weight:600;transition:opacity 0.2s;display:flex;align-items:center;gap:6px}
+.btn-green:hover{opacity:0.88}
+.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:9px 16px;font-size:0.84rem;font-weight:500;transition:all 0.2s;display:flex;align-items:center;gap:6px}
+.btn-secondary:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.06)}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;flex:1}
+
+/* ── FILTER TABS ── */
+.filter-tabs{display:flex;gap:2px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;width:fit-content}
+.ftab{padding:6px 16px;border-radius:7px;font-size:0.82rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all 0.2s;border:none;background:none;display:flex;align-items:center;gap:6px}
+.ftab:hover{color:var(--white)}
+.ftab.active{background:rgba(124,58,237,0.2);color:var(--white);box-shadow:0 0 0 1px rgba(124,58,237,0.3)}
+.ftab-count{font-size:0.68rem;background:rgba(255,255,255,0.1);padding:1px 6px;border-radius:4px;font-weight:700}
+.ftab.active .ftab-count{background:rgba(124,58,237,0.3);color:var(--lav)}
+
+/* ── TOOLBAR ── */
+.toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.search-wrap{flex:1;min-width:200px;max-width:340px;position:relative}
+.search-wrap input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px 14px 8px 36px;font-size:0.83rem;color:var(--white);outline:none;transition:border-color 0.2s}
+.search-wrap input:focus{border-color:var(--purple)}
+.search-wrap input::placeholder{color:var(--gray)}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--gray);font-size:0.9rem;pointer-events:none}
+.filter-select{background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:8px 12px;font-size:0.82rem;outline:none;cursor:pointer;transition:border-color 0.2s;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' fill='none'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238892a4' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+.filter-select:focus{border-color:var(--purple)}
+
+/* ── BULK ACTIONS ── */
+.bulk-bar{
+  background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.25);
+  border-radius:10px;padding:10px 16px;
+  display:none;align-items:center;gap:12px;
+  animation:slideDown 0.2s ease;
+}
+.bulk-bar.visible{display:flex}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.bulk-count{font-size:0.83rem;font-weight:600;color:var(--lav)}
+.bulk-spacer{flex:1}
+.bulk-select{background:var(--bg2);border:1px solid rgba(124,58,237,0.3);color:var(--white);border-radius:7px;padding:7px 12px;font-size:0.82rem;outline:none;cursor:pointer}
+.btn-bulk-apply{background:var(--purple);border:none;color:#fff;border-radius:7px;padding:7px 14px;font-size:0.82rem;font-weight:600;transition:opacity 0.2s}
+.btn-bulk-apply:hover{opacity:0.85}
+.btn-bulk-cancel{background:none;border:1px solid var(--border);color:var(--gray);border-radius:7px;padding:7px 12px;font-size:0.82rem;transition:all 0.2s}
+.btn-bulk-cancel:hover{color:var(--white);border-color:rgba(255,255,255,0.2)}
+
+/* ── TABLE ── */
+.table-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.tbl{width:100%;border-collapse:collapse;font-size:0.82rem}
+.tbl th{text-align:left;padding:12px 14px;color:var(--gray);font-weight:500;border-bottom:1px solid var(--border);white-space:nowrap;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em}
+.tbl th:first-child{padding-left:16px}
+.tbl td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
+.tbl td:first-child{padding-left:16px}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tbody tr{transition:background 0.15s}
+.tbl tbody tr:hover td{background:rgba(255,255,255,0.02)}
+
+.cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--gray2);background:none;cursor:pointer;accent-color:var(--purple);flex-shrink:0}
+
+.prod-cell{display:flex;align-items:center;gap:12px}
+.prod-thumb{width:40px;height:40px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.prod-name{font-weight:600;font-size:0.84rem;color:var(--white);margin-bottom:2px}
+.prod-variants{font-size:0.7rem;color:var(--gray)}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.68rem;font-weight:600;white-space:nowrap}
+.b-green{background:rgba(74,222,128,0.12);color:var(--green)}
+.b-yellow{background:rgba(251,191,36,0.12);color:var(--yellow)}
+.b-gray{background:rgba(148,163,184,0.12);color:#94a3b8}
+.b-purple{background:rgba(167,139,250,0.12);color:var(--lav)}
+.b-orange{background:rgba(251,146,60,0.12);color:var(--orange)}
+.b-red{background:rgba(248,113,113,0.12);color:var(--red)}
+.b-cyan{background:rgba(6,182,212,0.12);color:var(--cyan)}
+
+.inv-good{color:var(--white)}
+.inv-low{color:var(--orange);font-weight:600}
+.inv-out{color:var(--red);font-weight:600}
+.inv-inf{color:var(--cyan)}
+.inv-dash{color:var(--gray2)}
+.inv-tag{font-size:0.65rem;margin-left:4px;vertical-align:middle}
+
+.row-actions{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+.act-btn{width:30px;height:30px;border-radius:6px;background:none;border:1px solid transparent;display:flex;align-items:center;justify-content:center;font-size:0.85rem;cursor:pointer;color:var(--gray);transition:all 0.2s;text-decoration:none}
+.act-btn:hover{background:rgba(255,255,255,0.06);border-color:var(--border);color:var(--white)}
+.act-btn.edit:hover{color:var(--purple2);border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.08)}
+
+/* ── PAGINATION ── */
+.pagination{display:flex;align-items:center;gap:8px;justify-content:space-between;padding:14px 16px;border-top:1px solid var(--border)}
+.pag-info{font-size:0.78rem;color:var(--gray)}
+.pag-info strong{color:var(--white)}
+.pag-btns{display:flex;gap:4px}
+.pag-btn{width:32px;height:32px;border-radius:6px;background:none;border:1px solid var(--border);color:var(--gray);font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.pag-btn:hover{background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.3);color:var(--white)}
+.pag-btn.cur{background:rgba(124,58,237,0.2);border-color:rgba(124,58,237,0.4);color:var(--white);font-weight:600}
+.pag-btn:disabled{opacity:0.35;cursor:not-allowed}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:var(--bg2);border:1px solid rgba(124,58,237,0.3);
+  border-radius:12px;padding:14px 18px;
+  display:flex;align-items:center;gap:12px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  animation:toastIn 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+  min-width:300px;max-width:360px;
+}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+.toast-icon{font-size:1.3rem;flex-shrink:0;animation:spin 2s linear infinite}
+@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.toast-body{}
+.toast-title{font-size:0.83rem;font-weight:600;color:var(--white);margin-bottom:2px}
+.toast-sub{font-size:0.74rem;color:var(--gray)}
+.toast-progress{position:absolute;bottom:0;left:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:0 0 12px 12px;animation:shrink 8s linear forwards}
+@keyframes shrink{from{width:100%}to{width:0%}}
+.toast-close{margin-left:auto;color:var(--gray);background:none;border:none;font-size:1rem;cursor:pointer;flex-shrink:0;transition:color 0.2s}
+.toast-close:hover{color:var(--white)}
+
+/* ── OVERLAY (mobile) ── */
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:150;backdrop-filter:blur(2px)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:768px){
+  #sidebar{
+    position:fixed;left:0;top:0;height:100vh;
+    transform:translateX(-100%);
+  }
+  #sidebar.open{transform:translateX(0)}
+  #overlay.visible{display:block}
+  .tb-hamburger{display:flex}
+  .tbl th:nth-child(5),
+  .tbl td:nth-child(5),
+  .tbl th:nth-child(6),
+  .tbl td:nth-child(6){display:none}
+  .aria-actions{display:none}
+  .page-actions .btn-secondary{display:none}
+}
+@media(max-width:560px){
+  .metrics-row{grid-template-columns:repeat(2,1fr)}
+  .tbl th:nth-child(4),
+  .tbl td:nth-child(4){display:none}
+  #content{padding:16px}
+  .filter-tabs{overflow-x:auto}
+  .toast{right:12px;bottom:12px;min-width:260px}
+}
+@media(max-width:400px){
+  .metrics-row{grid-template-columns:1fr 1fr}
+  .mc-val{font-size:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<!-- OVERLAY -->
+<div id="overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-dot"></div>
+    <span class="sb-logo-text">VibeStore</span>
+  </div>
+
+  <div class="sb-store">
+    <div class="sb-store-icon">🛍️</div>
+    <div>
+      <div class="sb-store-name">My Vibe Store</div>
+      <div class="sb-store-url">vibestore.myshopify.com</div>
+    </div>
+    <div class="sb-chevron">▾</div>
+  </div>
+
+  <div class="sb-section">Main Menu</div>
+
+  <a href="app.html" class="sb-item">
+    <span class="icon">🏠</span> Dashboard
+  </a>
+  <a href="admin-orders.html" class="sb-item">
+    <span class="icon">📦</span> Orders
+    <span class="sb-badge">14</span>
+  </a>
+  <a href="admin-products.html" class="sb-item active">
+    <span class="icon">🏷️</span> Products
+  </a>
+  <a href="admin-customers.html" class="sb-item">
+    <span class="icon">👥</span> Customers
+  </a>
+  <a href="admin-discounts.html" class="sb-item">
+    <span class="icon">🎟️</span> Discounts
+  </a>
+  <a href="admin-reports.html" class="sb-item">
+    <span class="icon">📊</span> Reports
+  </a>
+  <a href="admin-settings.html" class="sb-item">
+    <span class="icon">⚙️</span> Settings
+  </a>
+
+  <div class="sb-section">Store</div>
+  <a href="mystore.html" class="sb-item">
+    <span class="icon">🔗</span> View Store
+    <span class="sb-badge sb-badge-green">Live</span>
+  </a>
+  <a href="index.html" class="sb-item">
+    <span class="icon">🏠</span> Back to Site
+  </a>
+
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">SA</div>
+      <div>
+        <div class="sb-user-name">Sarth A.</div>
+        <div class="sb-user-plan">✦ Pro Plan</div>
+      </div>
+      <span class="sb-user-caret">⌄</span>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <div class="tb-hamburger" onclick="openSidebar()">☰</div>
+    <div class="tb-title">Products</div>
+    <div class="tb-spacer"></div>
+    <div class="tb-ai-badge">
+      <div class="tb-ai-dot"></div>
+      Aria AI Active
+    </div>
+    <div class="tb-icon-btn notif-dot" title="Notifications">🔔</div>
+    <div class="tb-icon-btn" title="Help">❓</div>
+    <div class="tb-avatar" title="Account">SA</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- PAGE HEADER -->
+    <div class="page-actions">
+      <div class="page-title">Products</div>
+      <button class="btn-secondary" onclick="alert('CSV import modal')">
+        ⬆️ Import CSV
+      </button>
+      <button class="btn-secondary" onclick="alert('Export CSV')">
+        ⬇️ Export
+      </button>
+      <button class="btn-green" onclick="window.location.href='product.html'">
+        ＋ Add Product
+      </button>
+    </div>
+
+    <!-- ARIA AI BANNER -->
+    <div class="aria-banner">
+      <span class="aria-icon">🤖</span>
+      <div class="aria-text">
+        <strong>Aria AI</strong> is monitoring <strong>1,247 SKUs</strong> across your catalog —
+        <strong style="color:var(--orange)">3 items are low stock</strong> and
+        <strong style="color:var(--red)">2 items are out of stock</strong>.
+        Restocking recommendations are ready.
+      </div>
+      <div class="aria-actions">
+        <button class="btn-ghost" onclick="this.closest('.aria-banner').style.display='none'">Dismiss</button>
+        <button class="btn-orange">View Report →</button>
+      </div>
+    </div>
+
+    <!-- QUICK STATS -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="mc-label">🏷️ Total Products</div>
+        <div class="mc-val col-white">128</div>
+        <div class="mc-sub" style="color:var(--gray)">Across all categories</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">✅ Active</div>
+        <div class="mc-val col-green">114</div>
+        <div class="mc-sub col-green">↑ 89% of catalog</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">⚠️ Low Stock</div>
+        <div class="mc-val col-orange">3</div>
+        <div class="mc-sub col-orange">Below 5 units</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">🚫 Out of Stock</div>
+        <div class="mc-val col-red">2</div>
+        <div class="mc-sub col-red">Needs restock now</div>
+      </div>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <div class="filter-tabs">
+        <button class="ftab active" onclick="setTab(this,'all')">
+          All <span class="ftab-count">128</span>
+        </button>
+        <button class="ftab" onclick="setTab(this,'active')">
+          Active <span class="ftab-count">114</span>
+        </button>
+        <button class="ftab" onclick="setTab(this,'draft')">
+          Draft <span class="ftab-count">8</span>
+        </button>
+        <button class="ftab" onclick="setTab(this,'archived')">
+          Archived <span class="ftab-count">6</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search products…" oninput="filterTable()"/>
+      </div>
+      <select class="filter-select" onchange="filterTable()">
+        <option value="">Vendor: All</option>
+        <option>Sony</option>
+        <option>Apple</option>
+        <option>Zara</option>
+        <option>The Ordinary</option>
+        <option>Liforme</option>
+        <option>Penguin</option>
+        <option>Tanishq</option>
+        <option>LEGO</option>
+        <option>Umbra</option>
+        <option>Blue Tokai</option>
+        <option>DesignLab</option>
+        <option>TriggerPoint</option>
+      </select>
+      <select class="filter-select" onchange="filterTable()">
+        <option value="">Product type: All</option>
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Beauty</option>
+        <option>Sports</option>
+        <option>Books</option>
+        <option>Jewellery</option>
+        <option>Toys</option>
+        <option>Home</option>
+        <option>Food</option>
+        <option>Digital</option>
+      </select>
+      <select class="filter-select">
+        <option value="">Tagged with</option>
+        <option>new-arrival</option>
+        <option>bestseller</option>
+        <option>sale</option>
+        <option>featured</option>
+      </select>
+      <select class="filter-select" onchange="sortTable(this.value)" style="margin-left:auto">
+        <option value="name">Sort: Product name</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="inv">Inventory: Low first</option>
+      </select>
+    </div>
+
+    <!-- BULK ACTIONS BAR -->
+    <div class="bulk-bar" id="bulkBar">
+      <span class="bulk-count" id="bulkCount">0 selected</span>
+      <div class="bulk-spacer"></div>
+      <select class="bulk-select" id="bulkAction">
+        <option value="">Select action…</option>
+        <option value="archive">Archive selected</option>
+        <option value="delete">Delete selected</option>
+        <option value="tags">Add tags</option>
+        <option value="active">Set Active</option>
+        <option value="draft">Set Draft</option>
+      </select>
+      <button class="btn-bulk-apply" onclick="applyBulk()">Apply</button>
+      <button class="btn-bulk-cancel" onclick="clearSelection()">Cancel</button>
+    </div>
+
+    <!-- PRODUCTS TABLE -->
+    <div class="table-wrap">
+      <table class="tbl" id="productsTable">
+        <thead>
+          <tr>
+            <th style="width:36px"><input type="checkbox" class="cb" id="selectAll" onchange="toggleAll(this)"/></th>
+            <th>Product</th>
+            <th>Status</th>
+            <th>Inventory</th>
+            <th>Type</th>
+            <th>Vendor</th>
+            <th>Price</th>
+            <th style="width:100px;text-align:right">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+
+          <!-- Row 1: Sony WH-1000XM5 -->
+          <tr data-status="active" data-type="Electronics" data-vendor="Sony" data-price="299">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🎧</div>
+                <div>
+                  <div class="prod-name">Sony WH-1000XM5</div>
+                  <div class="prod-variants">3 variants · Headphones</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">47 in stock</span></td>
+            <td><span class="badge b-purple">Electronics</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Sony</td>
+            <td style="font-weight:600">$299.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Sony WH-1000XM5')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 2: MacBook Air M3 -->
+          <tr data-status="active" data-type="Electronics" data-vendor="Apple" data-price="1149">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">💻</div>
+                <div>
+                  <div class="prod-name">MacBook Air M3</div>
+                  <div class="prod-variants">4 variants · Laptop</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">12 in stock</span></td>
+            <td><span class="badge b-purple">Electronics</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Apple</td>
+            <td style="font-weight:600">$1,149.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'MacBook Air M3')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 3: Silk Wrap Dress (LOW STOCK) -->
+          <tr data-status="active" data-type="Fashion" data-vendor="Zara" data-price="44">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">👗</div>
+                <div>
+                  <div class="prod-name">Silk Wrap Dress</div>
+                  <div class="prod-variants">6 variants · Dress</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-low">3 in stock <span class="inv-tag badge b-orange">LOW</span></span></td>
+            <td><span class="badge b-cyan">Fashion</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Zara</td>
+            <td style="font-weight:600">$44.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Silk Wrap Dress')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 4: Hyaluronic Serum (OUT OF STOCK) -->
+          <tr data-status="active" data-type="Beauty" data-vendor="The Ordinary" data-price="6.99">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🧴</div>
+                <div>
+                  <div class="prod-name">Hyaluronic Serum 2%</div>
+                  <div class="prod-variants">2 variants · Skincare</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-out">0 in stock <span class="inv-tag badge b-red">OUT</span></span></td>
+            <td><span class="badge b-yellow">Beauty</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">The Ordinary</td>
+            <td style="font-weight:600">$6.99</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Hyaluronic Serum 2%')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 5: Yoga Mat Pro -->
+          <tr data-status="active" data-type="Sports" data-vendor="Liforme" data-price="49">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🧘</div>
+                <div>
+                  <div class="prod-name">Yoga Mat Pro</div>
+                  <div class="prod-variants">3 variants · Fitness</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">89 in stock</span></td>
+            <td><span class="badge b-green">Sports</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Liforme</td>
+            <td style="font-weight:600">$49.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Yoga Mat Pro')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 6: Atomic Habits -->
+          <tr data-status="active" data-type="Books" data-vendor="Penguin" data-price="3.99">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">📗</div>
+                <div>
+                  <div class="prod-name">Atomic Habits</div>
+                  <div class="prod-variants">1 variant · Non-fiction</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">234 in stock</span></td>
+            <td><span class="badge b-gray">Books</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Penguin</td>
+            <td style="font-weight:600">$3.99</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Atomic Habits')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 7: Gold Ring 14K (DRAFT) -->
+          <tr data-status="draft" data-type="Jewellery" data-vendor="Tanishq" data-price="189">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">💍</div>
+                <div>
+                  <div class="prod-name">Gold Ring 14K</div>
+                  <div class="prod-variants">5 variants · Ring</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-yellow">○ Draft</span></td>
+            <td><span class="inv-dash">—</span></td>
+            <td><span class="badge b-yellow">Jewellery</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Tanishq</td>
+            <td style="font-weight:600">$189.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Gold Ring 14K')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 8: LEGO City Set -->
+          <tr data-status="active" data-type="Toys" data-vendor="LEGO" data-price="29">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🧱</div>
+                <div>
+                  <div class="prod-name">LEGO City Set</div>
+                  <div class="prod-variants">2 variants · Building Set</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">56 in stock</span></td>
+            <td><span class="badge b-orange">Toys</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">LEGO</td>
+            <td style="font-weight:600">$29.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'LEGO City Set')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 9: Bamboo Organiser -->
+          <tr data-status="active" data-type="Home" data-vendor="Umbra" data-price="14">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🏠</div>
+                <div>
+                  <div class="prod-name">Bamboo Desk Organiser</div>
+                  <div class="prod-variants">4 variants · Home Office</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-good">22 in stock</span></td>
+            <td><span class="badge b-gray">Home</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Umbra</td>
+            <td style="font-weight:600">$14.00</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Bamboo Desk Organiser')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 10: Cold Brew Coffee (OUT OF STOCK) -->
+          <tr data-status="active" data-type="Food" data-vendor="Blue Tokai" data-price="5.99">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">☕</div>
+                <div>
+                  <div class="prod-name">Cold Brew Coffee</div>
+                  <div class="prod-variants">3 variants · Beverages</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-out">0 in stock <span class="inv-tag badge b-red">OUT</span></span></td>
+            <td><span class="badge b-yellow">Food</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">Blue Tokai</td>
+            <td style="font-weight:600">$5.99</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Cold Brew Coffee')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 11: React Component Lib -->
+          <tr data-status="active" data-type="Digital" data-vendor="DesignLab" data-price="19.99">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">⚛️</div>
+                <div>
+                  <div class="prod-name">React Component Library</div>
+                  <div class="prod-variants">1 variant · Download</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-green">● Active</span></td>
+            <td><span class="inv-inf">∞ digital</span></td>
+            <td><span class="badge b-purple">Digital</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">DesignLab</td>
+            <td style="font-weight:600">$19.99</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'React Component Library')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 12: Foam Roller (DRAFT) -->
+          <tr data-status="draft" data-type="Sports" data-vendor="TriggerPoint" data-price="14.99">
+            <td><input type="checkbox" class="cb row-cb" onchange="updateBulk()"/></td>
+            <td>
+              <div class="prod-cell">
+                <div class="prod-thumb">🟠</div>
+                <div>
+                  <div class="prod-name">Foam Roller Grid 13"</div>
+                  <div class="prod-variants">2 variants · Recovery</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge b-yellow">○ Draft</span></td>
+            <td><span class="inv-dash">—</span></td>
+            <td><span class="badge b-green">Sports</span></td>
+            <td style="color:var(--gray);font-size:0.8rem">TriggerPoint</td>
+            <td style="font-weight:600">$14.99</td>
+            <td>
+              <div class="row-actions">
+                <a href="product.html" class="act-btn edit" title="Edit">✏️</a>
+                <a href="product.html" class="act-btn" title="View">👁️</a>
+                <button class="act-btn" title="More options" onclick="showMore(event,'Foam Roller Grid 13&quot;')">⋯</button>
+              </div>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <!-- PAGINATION -->
+      <div class="pagination">
+        <div class="pag-info">Showing <strong>1–12</strong> of <strong>128</strong> products</div>
+        <div class="pag-btns">
+          <button class="pag-btn" disabled title="Previous">‹</button>
+          <button class="pag-btn cur">1</button>
+          <button class="pag-btn" onclick="goPage(2)">2</button>
+          <button class="pag-btn" onclick="goPage(3)">3</button>
+          <button class="pag-btn" onclick="goPage(4)">4</button>
+          <span style="color:var(--gray);padding:0 4px;line-height:32px;font-size:0.8rem">…</span>
+          <button class="pag-btn" onclick="goPage(11)">11</button>
+          <button class="pag-btn" onclick="goPage(12)" title="Next">›</button>
+        </div>
+      </div>
+    </div><!-- /table-wrap -->
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- CONTEXT MENU (more options) -->
+<div id="ctxMenu" style="
+  display:none;position:fixed;z-index:5000;
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:10px;padding:6px;min-width:160px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  animation:fadeIn 0.15s ease;
+">
+  <div class="ctx-item" onclick="ctxAction('edit')">✏️ &nbsp;Edit product</div>
+  <div class="ctx-item" onclick="ctxAction('duplicate')">📋 &nbsp;Duplicate</div>
+  <div class="ctx-item" onclick="ctxAction('archive')">📦 &nbsp;Archive</div>
+  <div class="ctx-item" onclick="ctxAction('tags')">🏷️ &nbsp;Add tags</div>
+  <div style="height:1px;background:var(--border);margin:4px 0"></div>
+  <div class="ctx-item" style="color:var(--red)" onclick="ctxAction('delete')">🗑️ &nbsp;Delete</div>
+</div>
+
+<!-- TOAST NOTIFICATION -->
+<div class="toast" id="sageToast">
+  <span class="toast-icon">⚙️</span>
+  <div class="toast-body">
+    <div class="toast-title">Sage AI is working…</div>
+    <div class="toast-sub">Writing descriptions for <strong style="color:var(--cyan)">3 products</strong> · ~40s remaining</div>
+  </div>
+  <button class="toast-close" onclick="document.getElementById('sageToast').remove()">✕</button>
+  <div class="toast-progress"></div>
+</div>
+
+<style>
+.ctx-item{padding:8px 12px;border-radius:7px;font-size:0.82rem;cursor:pointer;color:var(--white);transition:background 0.15s;display:flex;align-items:center}
+.ctx-item:hover{background:rgba(255,255,255,0.06)}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+
+<script>
+/* ── SIDEBAR MOBILE ── */
+function openSidebar(){
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('overlay').classList.add('visible');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('visible');
+}
+
+/* ── FILTER TABS ── */
+function setTab(el, status){
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const rows = document.querySelectorAll('#tableBody tr');
+  rows.forEach(row=>{
+    if(status==='all'){row.style.display=''}
+    else{row.style.display=row.dataset.status===status?'':'none'}
+  });
+  updatePagInfo();
+}
+
+/* ── SEARCH & FILTER ── */
+function filterTable(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const vendor = document.querySelectorAll('.filter-select')[0].value.toLowerCase();
+  const type = document.querySelectorAll('.filter-select')[1].value.toLowerCase();
+  const rows = document.querySelectorAll('#tableBody tr');
+  rows.forEach(row=>{
+    const text = row.textContent.toLowerCase();
+    const rv = row.dataset.vendor.toLowerCase();
+    const rt = row.dataset.type.toLowerCase();
+    const matchQ = !q || text.includes(q);
+    const matchV = !vendor || rv===vendor;
+    const matchT = !type || rt===type;
+    row.style.display = matchQ && matchV && matchT ? '' : 'none';
+  });
+  updatePagInfo();
+}
+
+/* ── SORT ── */
+function sortTable(mode){
+  const tbody = document.getElementById('tableBody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  rows.sort((a,b)=>{
+    if(mode==='name'){
+      return a.querySelector('.prod-name').textContent.localeCompare(b.querySelector('.prod-name').textContent);
+    }
+    if(mode==='price-asc') return parseFloat(a.dataset.price)-parseFloat(b.dataset.price);
+    if(mode==='price-desc') return parseFloat(b.dataset.price)-parseFloat(a.dataset.price);
+    return 0;
+  });
+  rows.forEach(r=>tbody.appendChild(r));
+}
+
+/* ── CHECKBOXES / BULK ── */
+function toggleAll(cb){
+  document.querySelectorAll('.row-cb').forEach(c=>c.checked=cb.checked);
+  updateBulk();
+}
+function updateBulk(){
+  const checked = document.querySelectorAll('.row-cb:checked');
+  const bar = document.getElementById('bulkBar');
+  document.getElementById('bulkCount').textContent = checked.length+' selected';
+  bar.classList.toggle('visible', checked.length>0);
+  const allCbs = document.querySelectorAll('.row-cb');
+  document.getElementById('selectAll').indeterminate = checked.length>0 && checked.length<allCbs.length;
+  document.getElementById('selectAll').checked = checked.length===allCbs.length;
+}
+function clearSelection(){
+  document.querySelectorAll('.row-cb, #selectAll').forEach(c=>c.checked=false);
+  document.getElementById('selectAll').indeterminate=false;
+  updateBulk();
+}
+function applyBulk(){
+  const action = document.getElementById('bulkAction').value;
+  const count = document.querySelectorAll('.row-cb:checked').length;
+  if(!action){alert('Please select an action.');return;}
+  if(!count){alert('No products selected.');return;}
+  if(action==='delete'){
+    if(!confirm('Delete '+count+' product(s)? This cannot be undone.'))return;
+  }
+  alert('Action "'+action+'" applied to '+count+' product(s).');
+  clearSelection();
+}
+
+/* ── CONTEXT MENU ── */
+let ctxProduct='';
+function showMore(e, name){
+  e.stopPropagation();
+  ctxProduct=name;
+  const menu = document.getElementById('ctxMenu');
+  menu.style.display='block';
+  const r=e.target.getBoundingClientRect();
+  let left=r.right-160, top=r.bottom+6;
+  if(left<8)left=8;
+  if(top+200>window.innerHeight)top=r.top-210;
+  menu.style.left=left+'px';
+  menu.style.top=top+'px';
+}
+function ctxAction(action){
+  document.getElementById('ctxMenu').style.display='none';
+  if(action==='edit') window.location.href='product.html';
+  else if(action==='delete'){
+    if(confirm('Delete "'+ctxProduct+'"?')) alert('"'+ctxProduct+'" deleted.');
+  }
+  else alert(action+' applied to "'+ctxProduct+'"');
+}
+document.addEventListener('click',()=>document.getElementById('ctxMenu').style.display='none');
+
+/* ── PAGINATION INFO ── */
+function updatePagInfo(){
+  const vis = Array.from(document.querySelectorAll('#tableBody tr')).filter(r=>r.style.display!=='none').length;
+  document.querySelector('.pag-info').innerHTML='Showing <strong>1–'+vis+'</strong> of <strong>128</strong> products';
+}
+function goPage(n){
+  document.querySelectorAll('.pag-btn').forEach(b=>{b.classList.remove('cur');b.disabled=false});
+  alert('Navigate to page '+n+' (backend pagination)');
+}
+
+/* ── AUTO-DISMISS TOAST ── */
+setTimeout(()=>{
+  const t=document.getElementById('sageToast');
+  if(t)t.style.animation='toastIn 0.3s ease reverse forwards';
+  setTimeout(()=>{if(t)t.remove()},8300);
+},8000);
+</script>
+</body>
+</html>

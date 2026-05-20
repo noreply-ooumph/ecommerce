@@ -243,20 +243,21 @@ footer{background:var(--dark);color:white;margin-top:80px}
 <!-- NAV -->
 <nav>
   <div class="nav-inner">
-    <div class="nav-logo" onclick="window.location.href='index.html'" style="cursor:pointer">
+    <a class="nav-logo" href="mystore.html" style="cursor:pointer;text-decoration:none;color:inherit;display:flex;align-items:center;gap:8px">
       MyStore <div class="ai-tag">AI</div>
-    </div>
+    </a>
     <div class="nav-cats">
-      <div class="nav-cat active" onclick="filterCat('all',this)">All</div>
-      <div class="nav-cat" onclick="filterCat('electronics',this)">Electronics</div>
-      <div class="nav-cat" onclick="filterCat('accessories',this)">Accessories</div>
-      <div class="nav-cat" onclick="filterCat('audio',this)">Audio</div>
-      <div class="nav-cat" onclick="filterCat('wearables',this)">Wearables</div>
-      <div class="nav-cat" onclick="filterCat('home',this)">Home</div>
+      <a class="nav-cat active" href="mystore.html">Home</a>
+      <a class="nav-cat" href="collections.html">Shop</a>
+      <a class="nav-cat" href="sale.html">Sale 🔥</a>
+      <a class="nav-cat" href="blog.html">Blog</a>
+      <a class="nav-cat" href="compare.html" style="font-size:0.78rem">Compare</a>
     </div>
     <div class="nav-right">
-      <div class="nav-search"><span>🔍</span><input placeholder="Search products..."/></div>
-      <div class="nav-icon" onclick="toggleWishlist()" title="Wishlist">♡</div>
+      <div class="nav-search"><span>🔍</span><input placeholder="Search products..." onkeydown="if(event.key==='Enter')window.location.href='search.html?q='+encodeURIComponent(this.value)"/></div>
+      <a class="nav-icon" href="wishlist.html" title="Wishlist">♡</a>
+      <a class="nav-icon" href="account.html" title="Account">👤</a>
+      <a class="nav-icon" href="track.html" title="Orders">📦</a>
       <div class="nav-icon" onclick="openCart()" title="Cart">
         🛒<div class="cart-count" id="cartCount">0</div>
       </div>
@@ -431,9 +432,10 @@ footer{background:var(--dark);color:white;margin-top:80px}
         <div style="width:36px;height:36px;background:rgba(255,255,255,0.08);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem">📷</div>
       </div>
     </div>
-    <div class="footer-col"><h4>Shop</h4><ul><li><a href="#" onclick="filterCat('electronics')">Electronics</a></li><li><a href="#">Audio</a></li><li><a href="#">Wearables</a></li><li><a href="#">Accessories</a></li><li><a href="#">Deals</a></li></ul></div>
-    <div class="footer-col"><h4>Help</h4><ul><li><a href="#" onclick="toast_s('Rex AI is connecting...')">AI Support Chat</a></li><li><a href="#">Track Order</a></li><li><a href="#">Returns</a></li><li><a href="#">FAQ</a></li><li><a href="#">Shipping Info</a></li></ul></div>
-    <div class="footer-col"><h4>Company</h4><ul><li><a href="index.html">About VibeStore</a></li><li><a href="app.html">Merchant Login</a></li><li><a href="index.html#pricing">Pricing</a></li><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li></ul></div>
+    <div class="footer-col"><h4>Shop</h4><ul><li><a href="collections.html">All Collections</a></li><li><a href="sale.html">Sale 🔥</a></li><li><a href="compare.html">Compare Products</a></li><li><a href="gift-cards.html">Gift Cards</a></li><li><a href="blog.html">Blog</a></li></ul></div>
+    <div class="footer-col"><h4>Support</h4><ul><li><a href="returns.html">Returns</a></li><li><a href="contact.html">Contact Us</a></li><li><a href="faq.html">FAQ</a></li><li><a href="track.html">Track Order</a></li><li><a href="notifications.html">Notifications</a></li></ul></div>
+    <div class="footer-col"><h4>Account</h4><ul><li><a href="account.html">My Account</a></li><li><a href="loyalty.html">Loyalty Rewards</a></li><li><a href="wishlist.html">Wishlist</a></li><li><a href="referral.html">Refer a Friend</a></li><li><a href="notifications.html">Notifications</a></li></ul></div>
+    <div class="footer-col"><h4>Company</h4><ul><li><a href="index.html">About VibeStore</a></li><li><a href="referral.html">Referral Program</a></li><li><a href="contact.html">Contact</a></li></ul></div>
   </div>
   <div class="footer-bottom">
     <p>© 2025 MyStore. All rights reserved.</p>

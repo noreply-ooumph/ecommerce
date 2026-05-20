@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Settings — VibeStore Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060f;--bg2:#0d0d1f;--bg3:#13132a;
+  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
+  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
+  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;--blue:#60a5fa;
+  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --sidebar-w:240px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'Inter',sans-serif}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+@keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes toastOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}
+@keyframes fadeUp{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+
+/* ─── SIDEBAR ─── */
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
+  z-index:100;
+}
+.sb-logo{
+  padding:20px 20px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+  font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;
+  background:linear-gradient(135deg,var(--purple2),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  flex-shrink:0;
+}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
+.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sb-store-name{font-size:0.83rem;font-weight:600}
+.sb-store-url{font-size:0.68rem;color:var(--gray)}
+.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
+.sb-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 16px;margin:2px 8px;border-radius:8px;
+  font-size:0.84rem;color:var(--gray);cursor:pointer;
+  transition:all 0.2s;border:1px solid transparent;
+}
+.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
+.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
+.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.sb-badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
+.sb-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border)}
+.sb-footer-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
+.sb-user-name{font-size:0.8rem;font-weight:600}
+.sb-user-role{font-size:0.68rem;color:var(--gray)}
+
+/* ─── MAIN ─── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{
+  height:60px;flex-shrink:0;
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 28px;gap:16px;
+}
+.topbar-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700}
+.topbar-sub{font-size:0.8rem;color:var(--gray);margin-left:4px}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.tb-icon-btn{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;font-size:1rem;color:var(--gray)}
+.tb-icon-btn:hover{background:rgba(124,58,237,0.12);color:var(--white);border-color:rgba(124,58,237,0.25)}
+
+/* ─── SETTINGS LAYOUT ─── */
+#content{flex:1;overflow-y:auto;display:flex;gap:0}
+
+/* Settings sidebar (secondary nav) */
+#settings-nav{
+  width:220px;flex-shrink:0;
+  border-right:1px solid var(--border);
+  padding:24px 12px;
+  overflow-y:auto;
+}
+.sn-label{font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase;padding:0 8px;margin-bottom:8px;margin-top:20px}
+.sn-label:first-child{margin-top:0}
+.sn-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 12px;border-radius:8px;margin-bottom:2px;
+  font-size:0.84rem;color:var(--gray);cursor:pointer;
+  transition:all 0.2s;border:1px solid transparent;
+}
+.sn-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
+.sn-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
+.sn-item .sn-icon{font-size:0.9rem;width:18px;text-align:center;flex-shrink:0}
+
+/* Settings panel area */
+#settings-panel{flex:1;overflow-y:auto;padding:32px 36px}
+.panel{display:none;animation:fadeUp 0.25s ease}
+.panel.active{display:block}
+
+/* ─── COMMON PANEL STYLES ─── */
+.panel-header{margin-bottom:28px}
+.panel-header h2{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:700;margin-bottom:6px}
+.panel-header p{font-size:0.87rem;color:var(--gray)}
+
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:20px}
+.card-title{font-size:0.95rem;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card-title .ct-icon{font-size:1.1rem}
+
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.form-row.single{grid-template-columns:1fr}
+.form-row.triple{grid-template-columns:1fr 1fr 1fr}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-size:0.78rem;font-weight:600;color:var(--lav)}
+.form-input{
+  background:rgba(255,255,255,0.05);border:1px solid var(--border);
+  border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.87rem;
+  transition:border-color 0.2s,box-shadow 0.2s;outline:none;
+}
+.form-input:focus{border-color:rgba(124,58,237,0.5);box-shadow:0 0 0 3px rgba(124,58,237,0.12)}
+.form-input::placeholder{color:var(--gray2)}
+select.form-input option{background:#1a1a2e;color:var(--white)}
+textarea.form-input{resize:vertical;min-height:110px;line-height:1.6}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-info{}
+.toggle-info .ti-title{font-size:0.87rem;font-weight:600;margin-bottom:3px}
+.toggle-info .ti-sub{font-size:0.77rem;color:var(--gray)}
+.toggle{position:relative;width:44px;height:24px;flex-shrink:0}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{
+  position:absolute;inset:0;background:var(--gray2);border-radius:12px;cursor:pointer;
+  transition:background 0.25s;
+}
+.toggle-slider::before{
+  content:'';position:absolute;width:18px;height:18px;left:3px;top:3px;
+  background:var(--white);border-radius:50%;transition:transform 0.25s;
+}
+.toggle input:checked + .toggle-slider{background:var(--purple)}
+.toggle input:checked + .toggle-slider::before{transform:translateX(20px)}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:8px;font-size:0.87rem;font-weight:600;
+  border:none;cursor:pointer;transition:all 0.2s;
+}
+.btn-primary{background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff}
+.btn-primary:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 4px 20px rgba(124,58,237,0.4)}
+.btn-outline{background:transparent;border:1px solid var(--border);color:var(--white)}
+.btn-outline:hover{background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.2)}
+.btn-cyan{background:linear-gradient(135deg,var(--cyan),var(--cyan2));color:#06060f;font-weight:700}
+.btn-cyan:hover{opacity:0.9;transform:translateY(-1px);box-shadow:0 4px 20px rgba(6,182,212,0.4)}
+.btn-sm{padding:7px 14px;font-size:0.78rem}
+.btn-danger{background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.25);color:var(--red)}
+.btn-danger:hover{background:rgba(248,113,113,0.2)}
+.btn-green{background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.25);color:var(--green)}
+.btn-green:hover{background:rgba(74,222,128,0.2)}
+
+.panel-save{margin-top:24px;padding-top:24px;border-top:1px solid var(--border);display:flex;align-items:center;gap:12px}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700}
+.badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
+.badge-yellow{background:rgba(251,191,36,0.15);color:var(--yellow)}
+.badge-purple{background:rgba(124,58,237,0.2);color:var(--lav)}
+.badge-cyan{background:rgba(6,182,212,0.15);color:var(--cyan)}
+.badge-red{background:rgba(248,113,113,0.15);color:var(--red)}
+.badge-blue{background:rgba(96,165,250,0.15);color:var(--blue)}
+
+/* Usage bar */
+.usage-item{margin-bottom:14px}
+.usage-head{display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:6px}
+.usage-head span:first-child{color:var(--gray)}
+.usage-head span:last-child{font-weight:600}
+.usage-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.usage-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.usage-fill.cyan{background:linear-gradient(90deg,var(--cyan),var(--cyan2))}
+.usage-fill.green{background:linear-gradient(90deg,#4ade80,#22d3ee)}
+
+/* Table */
+.data-table{width:100%;border-collapse:collapse}
+.data-table th{font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.data-table td{padding:12px 14px;font-size:0.84rem;border-bottom:1px solid rgba(255,255,255,0.04)}
+.data-table tr:last-child td{border-bottom:none}
+.data-table tr:hover td{background:rgba(255,255,255,0.02)}
+
+/* Payment provider row */
+.provider-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--border)}
+.provider-row:last-child{border-bottom:none}
+.provider-logo{width:42px;height:28px;border-radius:6px;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:var(--white);flex-shrink:0}
+.provider-info{flex:1}
+.provider-info .pi-name{font-size:0.87rem;font-weight:600}
+.provider-info .pi-fee{font-size:0.75rem;color:var(--gray);margin-top:2px}
+.provider-actions{display:flex;align-items:center;gap:10px}
+
+/* Shipping zone card */
+.zone-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.zone-row:last-child{border-bottom:none}
+.zone-flag{font-size:1.3rem;flex-shrink:0}
+.zone-info{flex:1}
+.zone-info .zi-name{font-size:0.87rem;font-weight:600;margin-bottom:3px}
+.zone-info .zi-rates{font-size:0.75rem;color:var(--gray)}
+
+/* Radio group */
+.radio-group{display:flex;flex-direction:column;gap:10px}
+.radio-opt{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all 0.2s}
+.radio-opt:hover{border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.04)}
+.radio-opt input[type=radio]{accent-color:var(--purple);margin-top:2px;flex-shrink:0}
+.radio-opt-info .ro-title{font-size:0.87rem;font-weight:600}
+.radio-opt-info .ro-sub{font-size:0.76rem;color:var(--gray);margin-top:2px}
+
+/* Domain row */
+.domain-row{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--border)}
+.domain-row:last-child{border-bottom:none}
+.domain-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem}
+.domain-info{flex:1}
+.domain-info .di-url{font-size:0.87rem;font-weight:600;font-family:'Space Grotesk',sans-serif}
+.domain-info .di-type{font-size:0.75rem;color:var(--gray);margin-top:2px}
+
+/* Staff row */
+.staff-row{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.staff-row:last-child{border-bottom:none}
+.staff-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;flex-shrink:0}
+.staff-info{flex:1}
+.staff-info .si-name{font-size:0.87rem;font-weight:600}
+.staff-info .si-email{font-size:0.75rem;color:var(--gray);margin-top:2px}
+
+/* AI badge */
+.ai-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:6px 12px;border-radius:20px;font-size:0.78rem;font-weight:600;
+  background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(6,182,212,0.15));
+  border:1px solid rgba(124,58,237,0.3);color:var(--lav);
+}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);animation:pulse 1.5s infinite}
+
+/* Plan card */
+.plan-card{
+  background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,182,212,0.08));
+  border:1px solid rgba(124,58,237,0.3);border-radius:14px;padding:24px;margin-bottom:20px;
+}
+.plan-name{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:4px}
+.plan-price{font-size:0.9rem;color:var(--gray)}
+
+.enterprise-cta{
+  background:linear-gradient(135deg,rgba(6,182,212,0.1),rgba(124,58,237,0.12));
+  border:1px solid rgba(6,182,212,0.25);border-radius:14px;padding:20px 24px;
+  display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;
+}
+.ec-info .ec-title{font-size:1rem;font-weight:700;margin-bottom:4px}
+.ec-info .ec-sub{font-size:0.82rem;color:var(--gray)}
+
+/* Toast */
+#toast{
+  position:fixed;bottom:28px;right:28px;z-index:9999;
+  background:linear-gradient(135deg,rgba(74,222,128,0.15),rgba(6,182,212,0.1));
+  border:1px solid rgba(74,222,128,0.3);
+  border-radius:10px;padding:14px 20px;
+  display:flex;align-items:center;gap:10px;
+  font-size:0.87rem;font-weight:600;color:var(--white);
+  pointer-events:none;opacity:0;min-width:260px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.4);
+}
+#toast.show{animation:toastIn 0.35s cubic-bezier(0.34,1.56,0.64,1) forwards;opacity:1}
+#toast.hide{animation:toastOut 0.3s ease forwards}
+#toast .t-icon{font-size:1.1rem}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(124,58,237,0.3);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(124,58,237,0.5)}
+
+/* Divider */
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* Section sub-heading */
+.section-sub{font-size:0.78rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:14px;margin-top:20px}
+.section-sub:first-child{margin-top:0}
+
+/* Responsive */
+@media(max-width:1100px){
+  #settings-nav{width:180px}
+  #settings-panel{padding:24px 20px}
+}
+@media(max-width:860px){
+  #sidebar{display:none}
+  .form-row{grid-template-columns:1fr}
+  .form-row.triple{grid-template-columns:1fr 1fr}
+  #settings-nav{width:160px}
+}
+@media(max-width:640px){
+  #settings-nav{display:none}
+  #settings-panel{padding:20px 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── SIDEBAR ─── -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-dot"></div>
+    VibeStore
+  </div>
+  <div class="sb-store">
+    <div class="sb-store-icon">🛍️</div>
+    <div>
+      <div class="sb-store-name">My VibeStore</div>
+      <div class="sb-store-url">mystore.vibestore.app</div>
+    </div>
+  </div>
+  <div class="sb-section">Main Menu</div>
+  <a href="app.html" class="sb-item"><span class="icon">🏠</span>Dashboard</a>
+  <a href="admin-orders.html" class="sb-item"><span class="icon">📦</span>Orders<span class="sb-badge">12</span></a>
+  <a href="admin-products.html" class="sb-item"><span class="icon">🏷️</span>Products</a>
+  <a href="admin-customers.html" class="sb-item"><span class="icon">👥</span>Customers</a>
+  <a href="admin-discounts.html" class="sb-item"><span class="icon">🎟️</span>Discounts</a>
+  <a href="admin-reports.html" class="sb-item"><span class="icon">📊</span>Reports</a>
+  <div class="sb-section">System</div>
+  <a href="admin-settings.html" class="sb-item active"><span class="icon">⚙️</span>Settings</a>
+  <a href="mystore.html" class="sb-item"><span class="icon">🔗</span>View Store<span class="sb-badge sb-badge-green">Live</span></a>
+  <a href="index.html" class="sb-item"><span class="icon">🏠</span>Back to Site</a>
+  <div class="sb-footer">
+    <div class="sb-footer-user">
+      <div class="sb-avatar">VS</div>
+      <div>
+        <div class="sb-user-name">Sarthak</div>
+        <div class="sb-user-role">Owner · Full Access</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ─── MAIN ─── -->
+<div id="main">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div>
+      <span class="topbar-title">Settings</span>
+      <span class="topbar-sub">/ Store configuration</span>
+    </div>
+    <div class="topbar-right">
+      <div class="tb-icon-btn" title="Notifications">🔔</div>
+      <div class="tb-icon-btn" title="Help">❓</div>
+    </div>
+  </div>
+
+  <!-- ─── CONTENT ─── -->
+  <div id="content">
+
+    <!-- ─── SETTINGS NAV ─── -->
+    <div id="settings-nav">
+      <div class="sn-label">General</div>
+      <div class="sn-item active" data-panel="store-details" onclick="showPanel('store-details',this)">
+        <span class="sn-icon">🏪</span> Store details
+      </div>
+      <div class="sn-item" data-panel="plan-billing" onclick="showPanel('plan-billing',this)">
+        <span class="sn-icon">💳</span> Plan &amp; billing
+      </div>
+
+      <div class="sn-label">Commerce</div>
+      <div class="sn-item" data-panel="payments" onclick="showPanel('payments',this)">
+        <span class="sn-icon">💰</span> Payments
+      </div>
+      <div class="sn-item" data-panel="checkout" onclick="showPanel('checkout',this)">
+        <span class="sn-icon">🛒</span> Checkout
+      </div>
+      <div class="sn-item" data-panel="shipping" onclick="showPanel('shipping',this)">
+        <span class="sn-icon">🚚</span> Shipping &amp; delivery
+      </div>
+      <div class="sn-item" data-panel="taxes" onclick="showPanel('taxes',this)">
+        <span class="sn-icon">🧾</span> Taxes &amp; duties
+      </div>
+
+      <div class="sn-label">Technical</div>
+      <div class="sn-item" data-panel="domains" onclick="showPanel('domains',this)">
+        <span class="sn-icon">🌐</span> Domains
+      </div>
+      <div class="sn-item" data-panel="notifications" onclick="showPanel('notifications',this)">
+        <span class="sn-icon">🔔</span> Notifications
+      </div>
+
+      <div class="sn-label">Access</div>
+      <div class="sn-item" data-panel="users" onclick="showPanel('users',this)">
+        <span class="sn-icon">👥</span> Users &amp; permissions
+      </div>
+      <div class="sn-item" data-panel="policies" onclick="showPanel('policies',this)">
+        <span class="sn-icon">📄</span> Policies
+      </div>
+    </div>
+
+    <!-- ─── SETTINGS PANELS ─── -->
+    <div id="settings-panel">
+
+      <!-- ════════════════════════════════════
+           1. STORE DETAILS
+      ════════════════════════════════════ -->
+      <div class="panel active" id="panel-store-details">
+        <div class="panel-header">
+          <h2>Store details</h2>
+          <p>Basic information about your store displayed to customers and search engines.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🏪</span> Store information</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Store name</label>
+              <input type="text" class="form-input" value="My VibeStore" placeholder="Enter store name"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store email</label>
+              <input type="email" class="form-input" value="hello@myvibestore.com" placeholder="store@email.com"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Phone number</label>
+              <input type="tel" class="form-input" value="+91 98765 43210" placeholder="+91 XXXXX XXXXX"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store currency</label>
+              <select class="form-input">
+                <option value="INR" selected>INR — Indian Rupee (₹)</option>
+                <option value="USD">USD — US Dollar ($)</option>
+                <option value="GBP">GBP — British Pound (£)</option>
+                <option value="EUR">EUR — Euro (€)</option>
+                <option value="AED">AED — UAE Dirham (د.إ)</option>
+                <option value="SGD">SGD — Singapore Dollar (S$)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Store description</label>
+              <textarea class="form-input" placeholder="Describe your store…">Curated fashion, gadgets, and lifestyle products — delivered fast across India. Shop smarter with AI-powered recommendations.</textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📍</span> Store address</div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Address line 1</label>
+              <input type="text" class="form-input" value="12 Hazratganj, Sector 5" placeholder="Street address"/>
+            </div>
+          </div>
+          <div class="form-row single">
+            <div class="form-group">
+              <label class="form-label">Address line 2</label>
+              <input type="text" class="form-input" value="Near Civil Lines" placeholder="Apartment, suite, etc."/>
+            </div>
+          </div>
+          <div class="form-row triple">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-input" value="Lucknow"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">State / Province</label>
+              <input type="text" class="form-input" value="Uttar Pradesh"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Postal code</label>
+              <input type="text" class="form-input" value="226001"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Country</label>
+              <select class="form-input">
+                <option selected>India</option>
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>UAE</option>
+                <option>Singapore</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Timezone</label>
+              <select class="form-input">
+                <option selected>(GMT+5:30) India Standard Time</option>
+                <option>(GMT+0:00) UTC</option>
+                <option>(GMT-5:00) Eastern Time (US)</option>
+                <option>(GMT+4:00) Gulf Standard Time</option>
+                <option>(GMT+8:00) Singapore Time</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🔧</span> Preferences</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Unit system</div>
+              <div class="ti-sub">Metric (kg, cm) — used for product weights and dimensions</div>
+            </div>
+            <select class="form-input" style="width:140px">
+              <option selected>Metric</option>
+              <option>Imperial</option>
+            </select>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">"Powered by VibeStore" branding</div>
+              <div class="ti-sub">Show VibeStore badge in storefront footer</div>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" checked/>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Store details saved successfully ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           2. PLAN & BILLING
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-plan-billing">
+        <div class="panel-header">
+          <h2>Plan &amp; billing</h2>
+          <p>Manage your subscription, payment method, and billing history.</p>
+        </div>
+
+        <div class="plan-card">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap">
+            <div>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+                <div class="plan-name">Growth</div>
+                <span class="badge badge-purple">Current plan</span>
+              </div>
+              <div class="plan-price">$49 / month · Renews June 20, 2026</div>
+            </div>
+            <button class="btn btn-outline btn-sm">Change plan</button>
+          </div>
+          <hr class="divider"/>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+            <div class="usage-item">
+              <div class="usage-head"><span>Products</span><span>128 / ∞</span></div>
+              <div class="usage-bar"><div class="usage-fill" style="width:28%"></div></div>
+            </div>
+            <div class="usage-item">
+              <div class="usage-head"><span>AI agent calls</span><span>8,400 / ∞</span></div>
+              <div class="usage-bar"><div class="usage-fill cyan" style="width:42%"></div></div>
+            </div>
+            <div class="usage-item">
+              <div class="usage-head"><span>Staff accounts</span><span>2 / 5</span></div>
+              <div class="usage-bar"><div class="usage-fill green" style="width:40%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="enterprise-cta">
+          <div class="ec-info">
+            <div class="ec-title">🚀 Upgrade to Enterprise</div>
+            <div class="ec-sub">Unlimited staff, priority AI, dedicated support, custom integrations, and 99.9% SLA.</div>
+          </div>
+          <button class="btn btn-cyan btn-sm">Talk to sales</button>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">💳</span> Payment method</div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 0">
+            <div style="width:52px;height:34px;background:linear-gradient(135deg,#1a56db,#1e40af);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;flex-shrink:0">VISA</div>
+            <div style="flex:1">
+              <div style="font-size:0.87rem;font-weight:600">Visa ending in 4242</div>
+              <div style="font-size:0.75rem;color:var(--gray);margin-top:2px">Expires 08/27 · Billing name: Sarthak</div>
+            </div>
+            <span class="badge badge-green">● Active</span>
+            <button class="btn btn-outline btn-sm">Replace</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📋</span> Billing history</div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date</th><th>Description</th><th>Amount</th><th>Status</th><th>Invoice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color:var(--gray)">May 20, 2026</td>
+                <td>Growth Plan — May 2026</td>
+                <td style="font-weight:600">$49.00</td>
+                <td><span class="badge badge-green">Paid</span></td>
+                <td><button class="btn btn-outline btn-sm">⬇ PDF</button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--gray)">Apr 20, 2026</td>
+                <td>Growth Plan — Apr 2026</td>
+                <td style="font-weight:600">$49.00</td>
+                <td><span class="badge badge-green">Paid</span></td>
+                <td><button class="btn btn-outline btn-sm">⬇ PDF</button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--gray)">Mar 20, 2026</td>
+                <td>Growth Plan — Mar 2026</td>
+                <td style="font-weight:600">$49.00</td>
+                <td><span class="badge badge-green">Paid</span></td>
+                <td><button class="btn btn-outline btn-sm">⬇ PDF</button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--gray)">Feb 20, 2026</td>
+                <td>Growth Plan — Feb 2026</td>
+                <td style="font-weight:600">$49.00</td>
+                <td><span class="badge badge-green">Paid</span></td>
+                <td><button class="btn btn-outline btn-sm">⬇ PDF</button></td>
+              </tr>
+              <tr>
+                <td style="color:var(--gray)">Jan 20, 2026</td>
+                <td>Growth Plan — Jan 2026 (prorated)</td>
+                <td style="font-weight:600">$32.67</td>
+                <td><span class="badge badge-green">Paid</span></td>
+                <td><button class="btn btn-outline btn-sm">⬇ PDF</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Billing details updated ✓')">Save changes</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           3. PAYMENTS
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-payments">
+        <div class="panel-header">
+          <h2>Payments</h2>
+          <p>Configure payment providers and transaction settings for your store.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">💳</span> Payment providers</div>
+          <div class="provider-row">
+            <div class="provider-logo" style="background:linear-gradient(135deg,var(--purple),var(--cyan));font-size:0.65rem">VS</div>
+            <div class="provider-info">
+              <div class="pi-name">VibeStore Payments <span class="badge badge-green" style="margin-left:6px">● Enabled</span></div>
+              <div class="pi-fee">1.8% transaction fee · Instant payout · All major cards + UPI + wallets</div>
+            </div>
+            <div class="provider-actions">
+              <button class="btn btn-outline btn-sm">⚙ Settings</button>
+              <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="provider-row">
+            <div class="provider-logo" style="background:#2b3eb5;font-size:0.6rem">RPY</div>
+            <div class="provider-info">
+              <div class="pi-name">Razorpay</div>
+              <div class="pi-fee">2.0% transaction fee · UPI, cards, net banking, EMI</div>
+            </div>
+            <div class="provider-actions">
+              <button class="btn btn-outline btn-sm">⚙ Settings</button>
+              <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="provider-row">
+            <div class="provider-logo" style="background:#003087;font-size:0.6rem">PP</div>
+            <div class="provider-info">
+              <div class="pi-name">PayPal</div>
+              <div class="pi-fee">3.49% + fixed fee · International payments</div>
+            </div>
+            <div class="provider-actions">
+              <button class="btn btn-outline btn-sm">⚙ Settings</button>
+              <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="provider-row">
+            <div class="provider-logo" style="background:#635bff;font-size:0.6rem">STR</div>
+            <div class="provider-info">
+              <div class="pi-name">Stripe</div>
+              <div class="pi-fee">2.9% + ₹15 · Global card acceptance</div>
+            </div>
+            <div class="provider-actions">
+              <button class="btn btn-outline btn-sm">⚙ Settings</button>
+              <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="provider-row">
+            <div class="provider-logo" style="background:rgba(74,222,128,0.15);color:var(--green);font-size:0.6rem">COD</div>
+            <div class="provider-info">
+              <div class="pi-name">Cash on Delivery</div>
+              <div class="pi-fee">No transaction fee · Verification OTP enabled</div>
+            </div>
+            <div class="provider-actions">
+              <button class="btn btn-outline btn-sm">⚙ Settings</button>
+              <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🧪</span> Test mode</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Enable test mode</div>
+              <div class="ti-sub">Process test transactions without real charges. Disable before going live.</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Payment settings saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           4. CHECKOUT
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-checkout">
+        <div class="panel-header">
+          <h2>Checkout</h2>
+          <p>Customize the customer checkout experience and form fields.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">👤</span> Customer accounts</div>
+          <div class="radio-group">
+            <label class="radio-opt">
+              <input type="radio" name="accounts" value="required"/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Required</div>
+                <div class="ro-sub">Customers must create or log in to an account before checkout.</div>
+              </div>
+            </label>
+            <label class="radio-opt">
+              <input type="radio" name="accounts" value="optional" checked/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Optional</div>
+                <div class="ro-sub">Customers can check out as guests or with an account.</div>
+              </div>
+            </label>
+            <label class="radio-opt">
+              <input type="radio" name="accounts" value="disabled"/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Disabled</div>
+                <div class="ro-sub">Accounts are hidden and guest checkout is the only option.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📞</span> Contact method</div>
+          <div class="radio-group">
+            <label class="radio-opt">
+              <input type="radio" name="contact" value="email" checked/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Email</div>
+                <div class="ro-sub">Customers provide an email for order confirmation and updates.</div>
+              </div>
+            </label>
+            <label class="radio-opt">
+              <input type="radio" name="contact" value="phone"/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Phone number</div>
+                <div class="ro-sub">Customers provide a phone number for SMS updates.</div>
+              </div>
+            </label>
+            <label class="radio-opt">
+              <input type="radio" name="contact" value="either"/>
+              <div class="radio-opt-info">
+                <div class="ro-title">Either — customer chooses</div>
+                <div class="ro-sub">Customers can provide either email or phone at checkout.</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📝</span> Form fields</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Company name</div>
+              <div class="ti-sub">Show company name field in shipping address form</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Address line 2</div>
+              <div class="ti-sub">Show apartment / suite / floor field in address form</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Shipping phone number</div>
+              <div class="ti-sub">Collect phone number for shipping notifications and delivery calls</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Guest checkout</div>
+              <div class="ti-sub">Allow customers to complete purchase without creating an account</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🎁</span> Order options</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Tipping</div>
+              <div class="ti-sub">Show tipping options at checkout (suggested: 5%, 10%, 15%)</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Order notes</div>
+              <div class="ti-sub">Let customers add special instructions or notes to their order</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Checkout settings saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           5. SHIPPING & DELIVERY
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-shipping">
+        <div class="panel-header">
+          <h2>Shipping &amp; delivery</h2>
+          <p>Set up shipping zones, rates, and carrier integrations.</p>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <div class="ai-badge"><div class="ai-dot"></div>Zen AI · Auto-selecting fastest carrier per order</div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">🗺️</span> Shipping zones</div>
+            <button class="btn btn-outline btn-sm">+ Add zone</button>
+          </div>
+          <div class="zone-row">
+            <div class="zone-flag">🇮🇳</div>
+            <div class="zone-info">
+              <div class="zi-name">India <span class="badge badge-green" style="margin-left:6px">Active</span></div>
+              <div class="zi-rates">Free shipping on orders above ₹499 · ₹49 flat rate below threshold</div>
+            </div>
+            <button class="btn btn-outline btn-sm">Edit rates</button>
+          </div>
+          <div class="zone-row">
+            <div class="zone-flag">🌍</div>
+            <div class="zone-info">
+              <div class="zi-name">International <span class="badge badge-yellow" style="margin-left:6px">Selected countries</span></div>
+              <div class="zi-rates">₹299 flat rate · Estimated 7–14 business days</div>
+            </div>
+            <button class="btn btn-outline btn-sm">Edit rates</button>
+          </div>
+          <div class="zone-row">
+            <div class="zone-flag">⚡</div>
+            <div class="zone-info">
+              <div class="zi-name">Express Delivery <span class="badge badge-cyan" style="margin-left:6px">Same-day</span></div>
+              <div class="zi-rates">₹149 flat rate · Available in select metros · Delivery within 4–8 hrs</div>
+            </div>
+            <button class="btn btn-outline btn-sm">Edit rates</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📮</span> Carriers &amp; integrations</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">India Post</div>
+              <div class="ti-sub">Speed Post, Registered Post · COD available · Pan-India coverage</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-outline btn-sm">Configure</button>
+              <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Delhivery</div>
+              <div class="ti-sub">Express &amp; surface freight · 19,000+ pin codes · Real-time tracking</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-outline btn-sm">Configure</button>
+              <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Blue Dart</div>
+              <div class="ti-sub">Premium express · 220+ countries · Guaranteed next-day in metros</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn btn-outline btn-sm">Configure</button>
+              <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Shipping settings saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           6. TAXES & DUTIES
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-taxes">
+        <div class="panel-header">
+          <h2>Taxes &amp; duties</h2>
+          <p>Manage tax collection, rates, and regional overrides for your store.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🧾</span> Tax region</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Primary tax region</label>
+              <select class="form-input">
+                <option selected>India (GST)</option>
+                <option>United States (Sales Tax)</option>
+                <option>European Union (VAT)</option>
+                <option>United Kingdom (VAT)</option>
+                <option>Australia (GST)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Default tax rate</label>
+              <input type="text" class="form-input" value="18%" placeholder="e.g. 18%"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">GST registration number (GSTIN)</label>
+              <input type="text" class="form-input" value="09XXXXX1234Z1Z5" placeholder="15-digit GSTIN"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">HSN / SAC code (default)</label>
+              <input type="text" class="form-input" value="6204" placeholder="e.g. 6204"/>
+            </div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Charge taxes on shipping</div>
+              <div class="ti-sub">Apply tax rate to shipping charges at checkout</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Include tax in product prices</div>
+              <div class="ti-sub">Show prices inclusive of tax (MRP-style display)</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">📋</span> Tax overrides by category</div>
+            <button class="btn btn-outline btn-sm">+ Add override</button>
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr><th>Category</th><th>HSN Code</th><th>Tax Rate</th><th>Notes</th><th></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Clothing &amp; Apparel</td>
+                <td style="font-family:monospace;color:var(--cyan)">6201–6217</td>
+                <td><span class="badge badge-yellow">12%</span></td>
+                <td style="color:var(--gray)">IGST applicable</td>
+                <td><button class="btn btn-outline btn-sm">Edit</button></td>
+              </tr>
+              <tr>
+                <td>Electronics</td>
+                <td style="font-family:monospace;color:var(--cyan)">8471–8543</td>
+                <td><span class="badge badge-red">18%</span></td>
+                <td style="color:var(--gray)">Standard rate</td>
+                <td><button class="btn btn-outline btn-sm">Edit</button></td>
+              </tr>
+              <tr>
+                <td>Books &amp; Stationery</td>
+                <td style="font-family:monospace;color:var(--cyan)">4901–4907</td>
+                <td><span class="badge badge-green">0%</span></td>
+                <td style="color:var(--gray)">GST exempt</td>
+                <td><button class="btn btn-outline btn-sm">Edit</button></td>
+              </tr>
+              <tr>
+                <td>Food &amp; Groceries</td>
+                <td style="font-family:monospace;color:var(--cyan)">0401–2106</td>
+                <td><span class="badge badge-green">5%</span></td>
+                <td style="color:var(--gray)">Essential goods</td>
+                <td><button class="btn btn-outline btn-sm">Edit</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Tax settings saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           7. DOMAINS
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-domains">
+        <div class="panel-header">
+          <h2>Domains</h2>
+          <p>Manage your store's web address and SSL settings.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🌐</span> Connected domains</div>
+          <div class="domain-row">
+            <div class="domain-icon" style="background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(6,182,212,0.2))">🌐</div>
+            <div class="domain-info">
+              <div class="di-url">mystore.vibestore.app</div>
+              <div class="di-type">Free VibeStore subdomain · Auto-renewed</div>
+            </div>
+            <span class="badge badge-green">● Primary</span>
+            <span class="badge badge-cyan">🔒 SSL Active</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🔗</span> Connect a custom domain</div>
+          <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px">Point your own domain to your VibeStore. After connecting, update your DNS A record to our IP.</p>
+          <div style="display:flex;gap:10px;align-items:flex-end">
+            <div class="form-group" style="flex:1">
+              <label class="form-label">Custom domain</label>
+              <input type="text" class="form-input" placeholder="e.g. shop.yourbrand.com"/>
+            </div>
+            <button class="btn btn-cyan" onclick="showToast('Domain verification initiated — check DNS settings ✓')">Connect domain</button>
+          </div>
+          <div style="margin-top:14px;padding:12px 14px;background:rgba(251,191,36,0.06);border:1px solid rgba(251,191,36,0.2);border-radius:8px">
+            <div style="font-size:0.78rem;color:var(--yellow);font-weight:600;margin-bottom:4px">⚠ DNS configuration required</div>
+            <div style="font-size:0.75rem;color:var(--gray)">Add an A record pointing to <span style="font-family:monospace;color:var(--cyan)">34.120.45.88</span> in your domain registrar's DNS settings. Changes may take up to 48 hours to propagate.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🔒</span> SSL &amp; redirects</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">SSL certificate</div>
+              <div class="ti-sub">Your store is secured with TLS 1.3 — auto-renewed every 90 days</div>
+            </div>
+            <span class="badge badge-green">● Enabled</span>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Redirect www to non-www</div>
+              <div class="ti-sub">Automatically redirect www.yourdomain.com → yourdomain.com</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Redirect HTTP to HTTPS</div>
+              <div class="ti-sub">Force all traffic over secure HTTPS connection</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Domain settings saved ✓')">Save changes</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           8. NOTIFICATIONS
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-notifications">
+        <div class="panel-header">
+          <h2>Notifications</h2>
+          <p>Configure automated emails and SMS messages sent to customers.</p>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <div class="ai-badge"><div class="ai-dot"></div>Echo AI · Managing all customer notification copy</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📧</span> Email notifications</div>
+
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">New order confirmation</div>
+              <div class="ti-sub">Send confirmation email when a customer places an order</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Order shipped</div>
+              <div class="ti-sub">Notify customer when their order is dispatched with tracking info</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Out for delivery</div>
+              <div class="ti-sub">Notify customer when package is out for delivery today</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Order delivered</div>
+              <div class="ti-sub">Send delivery confirmation and request product review</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Refund issued</div>
+              <div class="ti-sub">Inform customer when a refund has been processed to their account</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Abandoned cart recovery</div>
+              <div class="ti-sub">Send reminder email 1 hr, 24 hr after cart abandonment</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Back in stock alerts</div>
+              <div class="ti-sub">Email customers who requested notification for a restocked item</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Promotional &amp; marketing emails</div>
+              <div class="ti-sub">Send product launches, offers, and newsletter campaigns</div>
+            </div>
+            <label class="toggle"><input type="checkbox"/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">💬</span> SMS notifications</div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">Enable SMS notifications</div>
+              <div class="ti-sub">Send order updates and delivery alerts via SMS (requires mobile number at checkout)</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="ti-title">OTP verification for COD orders</div>
+              <div class="ti-sub">Require OTP confirmation on Cash on Delivery orders to reduce fraud</div>
+            </div>
+            <label class="toggle"><input type="checkbox" checked/><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">📮</span> Sender details</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Sender name</label>
+              <input type="text" class="form-input" value="My VibeStore" placeholder="Display name in email"/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Reply-to email</label>
+              <input type="email" class="form-input" value="support@myvibestore.com" placeholder="reply@yourdomain.com"/>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Notification preferences saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           9. USERS & PERMISSIONS
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-users">
+        <div class="panel-header">
+          <h2>Users &amp; permissions</h2>
+          <p>Manage who can access your admin and what they can do.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">👑</span> Account owner</div>
+          <div class="staff-row">
+            <div class="staff-avatar" style="background:linear-gradient(135deg,var(--purple),var(--cyan))">SK</div>
+            <div class="staff-info">
+              <div class="si-name">Sarthak K. <span class="badge badge-purple" style="margin-left:6px">Owner</span></div>
+              <div class="si-email">noreply@ooumph.com · Full access · Cannot be restricted</div>
+            </div>
+            <span class="badge badge-green">● Active</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">👥</span> Staff members</div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Invite sent to new staff member ✓')">+ Invite staff</button>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar" style="background:linear-gradient(135deg,#3b82f6,#1d4ed8)">PR</div>
+            <div class="staff-info">
+              <div class="si-name">Priya Rajan <span class="badge badge-blue" style="margin-left:6px">Manager</span></div>
+              <div class="si-email">priya@myvibestore.com · Orders, Products, Customers</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="badge badge-green">● Active</span>
+              <button class="btn btn-outline btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Remove</button>
+            </div>
+          </div>
+          <div class="staff-row">
+            <div class="staff-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706)">AK</div>
+            <div class="staff-info">
+              <div class="si-name">Arjun Khanna <span class="badge badge-yellow" style="margin-left:6px">Support</span></div>
+              <div class="si-email">arjun@myvibestore.com · Orders, Customers only</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <span class="badge badge-yellow">● Away</span>
+              <button class="btn btn-outline btn-sm">Edit</button>
+              <button class="btn btn-danger btn-sm">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><span class="ct-icon">🔐</span> Permission categories</div>
+          <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px">Staff permissions are grouped by module. Toggle access per staff role in their profile.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">📦 Orders</div>
+              <div style="font-size:0.75rem;color:var(--gray)">View, fulfill, refund, cancel</div>
+            </div>
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">🏷️ Products</div>
+              <div style="font-size:0.75rem;color:var(--gray)">Create, edit, delete listings</div>
+            </div>
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">👥 Customers</div>
+              <div style="font-size:0.75rem;color:var(--gray)">View profiles, export data</div>
+            </div>
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">🎟️ Discounts</div>
+              <div style="font-size:0.75rem;color:var(--gray)">Create and manage coupons</div>
+            </div>
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">📊 Reports</div>
+              <div style="font-size:0.75rem;color:var(--gray)">View analytics and exports</div>
+            </div>
+            <div style="padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px">
+              <div style="font-size:0.82rem;font-weight:600;margin-bottom:4px">⚙️ Settings</div>
+              <div style="font-size:0.75rem;color:var(--gray)">Owner only — not delegatable</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('User permissions updated ✓')">Save changes</button>
+        </div>
+      </div>
+
+      <!-- ════════════════════════════════════
+           10. POLICIES
+      ════════════════════════════════════ -->
+      <div class="panel" id="panel-policies">
+        <div class="panel-header">
+          <h2>Policies</h2>
+          <p>Legal pages displayed in your store footer. Customers can review these during checkout.</p>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">↩️</span> Refund policy</div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Sage AI is generating your refund policy…')">✨ Generate with Sage AI</button>
+          </div>
+          <textarea class="form-input" style="min-height:130px">We offer a 7-day hassle-free return policy on all products. Items must be unused, in original packaging, and accompanied by proof of purchase. Refunds are processed within 5–7 business days to the original payment method. Sale items and personalized products are non-refundable unless damaged or defective. To initiate a return, contact our support team at support@myvibestore.com or raise a request from your account dashboard.</textarea>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">🔏</span> Privacy policy</div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Sage AI is generating your privacy policy…')">✨ Generate with Sage AI</button>
+          </div>
+          <textarea class="form-input" style="min-height:130px">My VibeStore respects your privacy. We collect personal information (name, address, email, payment details) solely to process your orders and improve your shopping experience. We do not sell or share your data with third parties except as required for order fulfillment (shipping partners) or legal compliance. All data is stored securely and encrypted at rest. You may request data deletion at any time by contacting us. Cookies are used to personalize your experience and analyze site traffic. By using our store, you consent to this policy.</textarea>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">📜</span> Terms of service</div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Sage AI is generating your terms of service…')">✨ Generate with Sage AI</button>
+          </div>
+          <textarea class="form-input" style="min-height:130px">By accessing or placing an order through My VibeStore, you agree to be bound by these Terms of Service. All prices are in Indian Rupees (INR) unless otherwise stated. We reserve the right to refuse service, cancel orders, or limit quantities at our discretion. Product images are for illustrative purposes; actual items may vary slightly. Intellectual property on this site belongs to My VibeStore. Disputes shall be resolved under the laws of India, jurisdiction Lucknow, Uttar Pradesh. We are not liable for delays caused by courier partners, natural disasters, or events beyond our control.</textarea>
+        </div>
+
+        <div class="card">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+            <div class="card-title" style="margin-bottom:0"><span class="ct-icon">🚚</span> Shipping policy</div>
+            <button class="btn btn-outline btn-sm" onclick="showToast('Sage AI is generating your shipping policy…')">✨ Generate with Sage AI</button>
+          </div>
+          <textarea class="form-input" style="min-height:130px">Orders are processed within 1–2 business days after payment confirmation. Standard shipping within India takes 3–7 business days. Express same-day delivery is available in select cities (Delhi, Mumbai, Bangalore, Hyderabad, Lucknow) for orders placed before 12 PM. Free shipping on all domestic orders above ₹499. International orders ship within 7–14 business days. A tracking number is emailed once your order is dispatched. We are not responsible for delays caused by customs or unforeseen courier issues. For queries, contact support@myvibestore.com.</textarea>
+        </div>
+
+        <div class="panel-save">
+          <button class="btn btn-primary" onclick="showToast('Store policies saved ✓')">Save changes</button>
+          <button class="btn btn-outline">Cancel</button>
+        </div>
+      </div>
+
+    </div><!-- /settings-panel -->
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ─── TOAST ─── -->
+<div id="toast">
+  <span class="t-icon">✅</span>
+  <span id="toast-msg">Settings saved successfully</span>
+</div>
+
+<script>
+// ─── Panel switcher ───
+function showPanel(id, el) {
+  // Hide all panels
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  // Remove active from nav items
+  document.querySelectorAll('.sn-item').forEach(i => i.classList.remove('active'));
+  // Show target panel
+  const panel = document.getElementById('panel-' + id);
+  if (panel) panel.classList.add('active');
+  // Activate nav item
+  if (el) el.classList.add('active');
+}
+
+// ─── Toast ───
+let toastTimer = null;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  const msgEl = document.getElementById('toast-msg');
+  msgEl.textContent = msg;
+  toast.classList.remove('hide');
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+  }, 3200);
+}
+
+// ─── Keyboard shortcut: Ctrl+S saves ───
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    showToast('Settings saved ✓');
+  }
+});
+
+// ─── Highlight active radio option ───
+document.querySelectorAll('.radio-opt input[type=radio]').forEach(radio => {
+  radio.addEventListener('change', () => {
+    const group = radio.closest('.radio-group');
+    if (!group) return;
+    group.querySelectorAll('.radio-opt').forEach(opt => opt.style.borderColor = '');
+    if (radio.checked) {
+      radio.closest('.radio-opt').style.borderColor = 'rgba(124,58,237,0.5)';
+      radio.closest('.radio-opt').style.background = 'rgba(124,58,237,0.06)';
+    }
+  });
+  // Init highlight on checked ones
+  if (radio.checked) {
+    radio.closest('.radio-opt').style.borderColor = 'rgba(124,58,237,0.5)';
+    radio.closest('.radio-opt').style.background = 'rgba(124,58,237,0.06)';
+  }
+});
+</script>
+
+</body>
+</html>

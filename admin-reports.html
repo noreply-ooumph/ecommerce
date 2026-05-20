@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Reports — VibeStore Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060f;--bg2:#0d0d1f;--bg3:#13132a;
+  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
+  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
+  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;
+  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
+  --sidebar-w:240px;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+a{text-decoration:none;color:inherit}
+button,select,input{font-family:'Inter',sans-serif;cursor:pointer}
+
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+
+/* ── SIDEBAR ── */
+#sidebar{
+  width:var(--sidebar-w);flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
+  transition:width 0.3s,transform 0.3s;z-index:200;
+}
+.sb-logo{padding:20px 20px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sb-logo-text{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;background:linear-gradient(135deg,var(--purple2),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color 0.2s}
+.sb-store:hover{border-color:rgba(124,58,237,0.3)}
+.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.sb-store-name{font-size:0.83rem;font-weight:600}
+.sb-store-url{font-size:0.68rem;color:var(--gray)}
+.sb-chevron{margin-left:auto;color:var(--gray);font-size:0.7rem}
+.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;margin:2px 8px;border-radius:8px;font-size:0.84rem;color:var(--gray);cursor:pointer;transition:all 0.2s;border:1px solid transparent;text-decoration:none;}
+.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
+.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
+.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
+.sb-badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
+.sb-badge-orange{background:rgba(251,146,60,0.15);color:var(--orange)}
+.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--card);cursor:pointer;transition:background 0.2s}
+.sb-user:hover{background:rgba(255,255,255,0.06)}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
+.sb-user-name{font-size:0.82rem;font-weight:600}
+.sb-user-plan{font-size:0.68rem;color:var(--cyan)}
+.sb-user-caret{margin-left:auto;color:var(--gray);font-size:0.75rem}
+
+/* ── MAIN ── */
+#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── TOPBAR ── */
+#topbar{height:60px;flex-shrink:0;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:12px;}
+.tb-hamburger{display:none;width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;flex-shrink:0}
+.tb-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700}
+.tb-spacer{flex:1}
+.tb-ai-badge{display:flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:100px;padding:5px 12px;font-size:0.72rem;color:var(--green);white-space:nowrap}
+.tb-ai-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
+.tb-icon-btn{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:border-color 0.2s;position:relative;flex-shrink:0}
+.tb-icon-btn:hover{border-color:var(--purple2)}
+.notif-dot::after{content:'';position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--bg2)}
+.tb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;cursor:pointer;flex-shrink:0}
+
+/* ── CONTENT ── */
+#content{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px}
+
+/* ── DATE RANGE ── */
+.page-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;flex:1;}
+.date-btns{display:flex;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:4px;}
+.d-btn{background:none;border:none;color:var(--gray);border-radius:7px;padding:6px 12px;font-size:0.78rem;font-weight:500;transition:all 0.2s;}
+.d-btn:hover{color:var(--white)}
+.d-btn.active{background:rgba(124,58,237,0.2);color:var(--white);}
+.btn-export-all{background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;color:white;border-radius:8px;padding:9px 18px;font-size:0.84rem;font-weight:600;display:flex;align-items:center;gap:6px;}
+
+/* ── METRIC CARDS ── */
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:4px;transition:border-color 0.2s}
+.metric-card:hover{border-color:rgba(124,58,237,0.25)}
+.mc-label{font-size:0.72rem;color:var(--gray);font-weight:500;display:flex;align-items:center;gap:6px}
+.mc-val{font-family:'Space Grotesk',sans-serif;font-size:1.85rem;font-weight:700;margin:2px 0 4px}
+.mc-sub{font-size:0.72rem;display:flex;align-items:center;gap:4px}
+.col-green{color:var(--green)}
+.col-red{color:var(--red)}
+.col-yellow{color:var(--yellow)}
+.col-cyan{color:var(--cyan)}
+
+/* ── CHARTS ROW ── */
+.charts-row{display:grid;grid-template-columns:1fr 320px;gap:16px;}
+.chart-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+.chart-title{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;}
+.chart-sub{font-size:0.72rem;color:var(--gray);margin-bottom:16px;}
+.chart-wrap{position:relative;}
+
+/* top products */
+.prod-list{display:flex;flex-direction:column;gap:10px;margin-top:4px;}
+.prod-item{display:flex;align-items:center;gap:10px;}
+.prod-rank{font-size:0.72rem;font-weight:700;color:var(--gray);width:16px;text-align:center;flex-shrink:0;}
+.prod-emoji{font-size:1.1rem;flex-shrink:0;}
+.prod-info{flex:1;min-width:0;}
+.prod-name{font-size:0.78rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.prod-rev{font-size:0.68rem;color:var(--gray);}
+.prod-bar-wrap{width:80px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;flex-shrink:0;}
+.prod-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));}
+
+/* ── SECOND ROW ── */
+.charts-row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+
+/* Category bars */
+.cat-row{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.cat-item{}
+.cat-meta{display:flex;justify-content:space-between;font-size:0.75rem;margin-bottom:4px;}
+.cat-name{font-weight:500;}
+.cat-val{color:var(--gray);}
+.cat-bar-wrap{height:8px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;}
+.cat-bar{height:100%;border-radius:4px;transition:width 1s ease;}
+
+/* Acquisition legend */
+.acq-wrap{display:flex;flex-direction:column;gap:0;}
+.acq-legend{display:flex;flex-direction:column;gap:8px;margin-top:8px;}
+.acq-item{display:flex;align-items:center;gap:8px;font-size:0.78rem;}
+.acq-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.acq-name{flex:1;}
+.acq-pct{font-weight:700;font-size:0.8rem;}
+
+/* ── REPORT CARDS ── */
+.report-cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.report-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 16px;transition:all 0.25s;cursor:pointer;}
+.report-card:hover{border-color:rgba(124,58,237,0.35);background:rgba(124,58,237,0.05);transform:translateY(-2px);}
+.rc-icon{font-size:1.8rem;margin-bottom:8px;}
+.rc-title{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:4px;}
+.rc-desc{font-size:0.74rem;color:var(--gray);line-height:1.5;margin-bottom:12px;}
+.btn-view{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.25);color:var(--lav);border-radius:7px;padding:6px 13px;font-size:0.76rem;font-weight:600;transition:all 0.2s;}
+.btn-view:hover{background:rgba(124,58,237,0.3);}
+
+/* ── ATLAS INSIGHTS ── */
+.insights-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;}
+.insight-hdr{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+.insight-hdr h3{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;font-weight:700;}
+.ai-live{display:inline-flex;align-items:center;gap:5px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:100px;padding:3px 10px;font-size:0.7rem;color:var(--green);}
+.ai-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;}
+.insights-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.insight-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+.ic-trend{font-size:0.7rem;font-weight:700;margin-bottom:6px;display:flex;align-items:center;gap:4px;}
+.ic-trend.up{color:var(--green);}
+.ic-trend.down{color:var(--red);}
+.ic-trend.warn{color:var(--yellow);}
+.ic-title{font-size:0.82rem;font-weight:600;margin-bottom:5px;line-height:1.4;}
+.ic-body{font-size:0.74rem;color:var(--gray);line-height:1.5;margin-bottom:10px;}
+.ic-action{display:inline-block;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.2);color:var(--lav);border-radius:6px;padding:4px 10px;font-size:0.7rem;font-weight:600;}
+
+/* ── EXPORT SECTION ── */
+.export-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.export-label{font-size:0.82rem;font-weight:600;color:var(--gray);margin-right:4px;}
+.btn-exp{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:8px 16px;font-size:0.82rem;font-weight:500;transition:all 0.2s;}
+.btn-exp:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.08);}
+
+/* ── SECTION LABEL ── */
+.sec-lbl{font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .charts-row{grid-template-columns:1fr;}
+  .insights-grid{grid-template-columns:1fr 1fr;}
+  .report-cards-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:900px){
+  .metrics-row{grid-template-columns:repeat(2,1fr);}
+  .charts-row2{grid-template-columns:1fr;}
+  .report-cards-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:768px){
+  #sidebar{position:fixed;transform:translateX(-100%);height:100%;}
+  #sidebar.open{transform:translateX(0);}
+  .tb-hamburger{display:flex!important;}
+  .insights-grid{grid-template-columns:1fr;}
+  .report-cards-grid{grid-template-columns:1fr;}
+  .metrics-row{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:480px){
+  .metrics-row{grid-template-columns:1fr;}
+  .date-btns{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+  <div class="sb-logo">
+    <div class="sb-dot"></div>
+    <span class="sb-logo-text">VibeStore</span>
+  </div>
+  <div class="sb-store">
+    <div class="sb-store-icon">🛍️</div>
+    <div>
+      <div class="sb-store-name">My VibeStore</div>
+      <div class="sb-store-url">vibestore.in</div>
+    </div>
+    <span class="sb-chevron">▾</span>
+  </div>
+
+  <div class="sb-section">Main Menu</div>
+  <a href="app.html" class="sb-item"><span class="icon">🏠</span> Dashboard</a>
+  <a href="admin-orders.html" class="sb-item"><span class="icon">📦</span> Orders <span class="sb-badge">14</span></a>
+  <a href="admin-products.html" class="sb-item"><span class="icon">🏷️</span> Products</a>
+  <a href="admin-customers.html" class="sb-item"><span class="icon">👥</span> Customers</a>
+  <a href="admin-discounts.html" class="sb-item"><span class="icon">🎟️</span> Discounts</a>
+  <a href="admin-reports.html" class="sb-item active"><span class="icon">📊</span> Reports</a>
+  <a href="admin-settings.html" class="sb-item"><span class="icon">⚙️</span> Settings</a>
+
+  <div class="sb-section">Store</div>
+  <a href="mystore.html" class="sb-item"><span class="icon">🔗</span> View Store <span class="sb-badge sb-badge-green">Live</span></a>
+  <a href="index.html" class="sb-item"><span class="icon">🏠</span> Back to Site</a>
+
+  <div class="sb-bottom">
+    <div class="sb-user">
+      <div class="sb-avatar">SK</div>
+      <div>
+        <div class="sb-user-name">Sarthak K.</div>
+        <div class="sb-user-plan">Admin · Pro Plan</div>
+      </div>
+      <span class="sb-user-caret">▾</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+  <!-- TOPBAR -->
+  <div id="topbar">
+    <button class="tb-hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="tb-title">Reports</div>
+    <div class="tb-spacer"></div>
+    <div class="tb-ai-badge"><div class="tb-ai-dot"></div>Atlas AI Active</div>
+    <div class="tb-icon-btn notif-dot">🔔</div>
+    <div class="tb-avatar">SK</div>
+  </div>
+
+  <!-- CONTENT -->
+  <div id="content">
+
+    <!-- Page Top -->
+    <div class="page-top">
+      <div class="page-title">Reports & Analytics</div>
+      <div class="date-btns">
+        <button class="d-btn" onclick="setRange(this)">7d</button>
+        <button class="d-btn active" onclick="setRange(this)">30d</button>
+        <button class="d-btn" onclick="setRange(this)">90d</button>
+        <button class="d-btn" onclick="setRange(this)">Custom</button>
+      </div>
+      <button class="btn-export-all">⬇ Export All</button>
+    </div>
+
+    <!-- METRIC CARDS -->
+    <div class="metrics-row">
+      <div class="metric-card">
+        <div class="mc-label">💰 Total Revenue</div>
+        <div class="mc-val">₹8,42,000</div>
+        <div class="mc-sub col-green">▲ 18.4% vs last period</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">📦 Orders</div>
+        <div class="mc-val">1,247</div>
+        <div class="mc-sub col-green">▲ 12.1% vs last period</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">🛒 Avg Order Value</div>
+        <div class="mc-val">₹675</div>
+        <div class="mc-sub col-yellow">▲ 5.2% vs last period</div>
+      </div>
+      <div class="metric-card">
+        <div class="mc-label">🎯 Conversion Rate</div>
+        <div class="mc-val">3.8%</div>
+        <div class="mc-sub col-red">▼ 0.3% vs last period</div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW 1 -->
+    <div class="charts-row">
+      <!-- Revenue Chart -->
+      <div class="chart-card">
+        <div class="chart-title">
+          Revenue Trend — Last 30 Days
+          <div style="display:flex;gap:14px;font-size:0.72rem;font-weight:500;">
+            <span style="color:var(--cyan);">— Actual</span>
+            <span style="color:rgba(251,146,60,0.9);">-- AI Forecast</span>
+          </div>
+        </div>
+        <div class="chart-sub">Daily revenue with Atlas AI 7-day forecast overlay</div>
+        <div class="chart-wrap" style="height:220px;">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Top Products -->
+      <div class="chart-card">
+        <div class="chart-title">Top Products</div>
+        <div class="chart-sub">By revenue, last 30 days</div>
+        <div class="prod-list">
+          <div class="prod-item">
+            <div class="prod-rank">1</div>
+            <div class="prod-emoji">🎧</div>
+            <div class="prod-info">
+              <div class="prod-name">Sony WH-1000XM5</div>
+              <div class="prod-rev">₹1,19,960</div>
+            </div>
+            <div class="prod-bar-wrap"><div class="prod-bar" style="width:100%;"></div></div>
+          </div>
+          <div class="prod-item">
+            <div class="prod-rank">2</div>
+            <div class="prod-emoji">📱</div>
+            <div class="prod-info">
+              <div class="prod-name">iPhone 15 Pro</div>
+              <div class="prod-rev">₹98,500</div>
+            </div>
+            <div class="prod-bar-wrap"><div class="prod-bar" style="width:82%;"></div></div>
+          </div>
+          <div class="prod-item">
+            <div class="prod-rank">3</div>
+            <div class="prod-emoji">💻</div>
+            <div class="prod-info">
+              <div class="prod-name">MacBook Air M3</div>
+              <div class="prod-rev">₹87,200</div>
+            </div>
+            <div class="prod-bar-wrap"><div class="prod-bar" style="width:73%;"></div></div>
+          </div>
+          <div class="prod-item">
+            <div class="prod-rank">4</div>
+            <div class="prod-emoji">🤖</div>
+            <div class="prod-info">
+              <div class="prod-name">Mi Robot Vacuum</div>
+              <div class="prod-rev">₹64,000</div>
+            </div>
+            <div class="prod-bar-wrap"><div class="prod-bar" style="width:54%;"></div></div>
+          </div>
+          <div class="prod-item">
+            <div class="prod-rank">5</div>
+            <div class="prod-emoji">🎮</div>
+            <div class="prod-info">
+              <div class="prod-name">PS5 DualSense</div>
+              <div class="prod-rev">₹48,750</div>
+            </div>
+            <div class="prod-bar-wrap"><div class="prod-bar" style="width:41%;"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW 2 -->
+    <div class="charts-row2">
+      <!-- Sales by Category -->
+      <div class="chart-card">
+        <div class="chart-title">Sales by Category</div>
+        <div class="chart-sub">Revenue contribution, last 30 days</div>
+        <div class="cat-row">
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Electronics</span><span class="cat-val">₹3,84,000 · 45.6%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:90%;background:linear-gradient(90deg,#7c3aed,#9d5cf5);"></div></div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Audio</span><span class="cat-val">₹1,68,000 · 20%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:55%;background:linear-gradient(90deg,#06b6d4,#22d3ee);"></div></div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Computers</span><span class="cat-val">₹1,26,000 · 15%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:42%;background:linear-gradient(90deg,#4ade80,#22d3ee);"></div></div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Gaming</span><span class="cat-val">₹84,200 · 10%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:30%;background:linear-gradient(90deg,#fbbf24,#fb923c);"></div></div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Smart Home</span><span class="cat-val">₹50,520 · 6%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:20%;background:linear-gradient(90deg,#ec4899,#8b5cf6);"></div></div>
+          </div>
+          <div class="cat-item">
+            <div class="cat-meta"><span class="cat-name">Others</span><span class="cat-val">₹29,280 · 3.4%</span></div>
+            <div class="cat-bar-wrap"><div class="cat-bar" style="width:12%;background:rgba(255,255,255,0.2);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Acquisition -->
+      <div class="chart-card acq-wrap">
+        <div class="chart-title">Customer Acquisition</div>
+        <div class="chart-sub">Traffic source breakdown, last 30 days</div>
+        <div style="height:180px;position:relative;">
+          <canvas id="acqChart"></canvas>
+        </div>
+        <div class="acq-legend">
+          <div class="acq-item"><div class="acq-dot" style="background:#7c3aed;"></div><span class="acq-name">Organic Search</span><span class="acq-pct">34%</span></div>
+          <div class="acq-item"><div class="acq-dot" style="background:#06b6d4;"></div><span class="acq-name">Paid Ads</span><span class="acq-pct">28%</span></div>
+          <div class="acq-item"><div class="acq-dot" style="background:#4ade80;"></div><span class="acq-name">Social Media</span><span class="acq-pct">18%</span></div>
+          <div class="acq-item"><div class="acq-dot" style="background:#fbbf24;"></div><span class="acq-name">Direct</span><span class="acq-pct">12%</span></div>
+          <div class="acq-item"><div class="acq-dot" style="background:#f87171;"></div><span class="acq-name">Referral</span><span class="acq-pct">8%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- REPORT TYPE CARDS -->
+    <div class="sec-lbl">Report Types</div>
+    <div class="report-cards-grid">
+      <div class="report-card">
+        <div class="rc-icon">💰</div>
+        <div class="rc-title">Sales Report</div>
+        <div class="rc-desc">Revenue trends, order volume, GMV breakdown, and top-performing product lines.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+      <div class="report-card">
+        <div class="rc-icon">👥</div>
+        <div class="rc-title">Customer Report</div>
+        <div class="rc-desc">New vs returning customers, LTV analysis, cohort retention, and churn indicators.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+      <div class="report-card">
+        <div class="rc-icon">📦</div>
+        <div class="rc-title">Inventory Report</div>
+        <div class="rc-desc">Stock levels, low inventory alerts, reorder suggestions, and warehouse movement.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+      <div class="report-card">
+        <div class="rc-icon">📣</div>
+        <div class="rc-title">Marketing Report</div>
+        <div class="rc-desc">Campaign performance, ROAS, email click rates, coupon usage, and ad spend ROI.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+      <div class="report-card">
+        <div class="rc-icon">👁️</div>
+        <div class="rc-title">Behaviour Report</div>
+        <div class="rc-desc">Session heatmaps, funnel drop-offs, search queries, add-to-cart rates.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+      <div class="report-card">
+        <div class="rc-icon">🏦</div>
+        <div class="rc-title">Finance Report</div>
+        <div class="rc-desc">P&L summary, tax collected, refunds, payment gateway fees, and net revenue.</div>
+        <button class="btn-view">View Report →</button>
+      </div>
+    </div>
+
+    <!-- ATLAS AI INSIGHTS -->
+    <div class="insights-panel">
+      <div class="insight-hdr">
+        <span>🤖</span>
+        <h3>Atlas AI Insights</h3>
+        <div class="ai-live"><div class="ai-live-dot"></div>Live</div>
+      </div>
+      <div class="insights-grid">
+        <div class="insight-card">
+          <div class="ic-trend up">▲ Positive Trend</div>
+          <div class="ic-title">Electronics revenue up 23% this week</div>
+          <div class="ic-body">Sony headphones and iPhone 15 Pro are driving a surge. Weekend shoppers are 2.4x more likely to purchase electronics. Consider a weekend flash sale.</div>
+          <span class="ic-action">Run Flash Sale →</span>
+        </div>
+        <div class="insight-card">
+          <div class="ic-trend warn">⚠ Action Needed</div>
+          <div class="ic-title">Cart abandonment at 68% — above benchmark</div>
+          <div class="ic-body">Carts are being abandoned most on the shipping cost page. Offering free shipping above ₹999 could recover an estimated ₹42,000 in revenue this month.</div>
+          <span class="ic-action">Review Shipping →</span>
+        </div>
+        <div class="insight-card">
+          <div class="ic-trend down">▼ Needs Attention</div>
+          <div class="ic-title">Conversion rate dipped 0.3% this period</div>
+          <div class="ic-body">Mobile checkout flow shows a drop at the payment step. An A/B test on the payment page redesign is recommended. Estimated lift: +0.6%.</div>
+          <span class="ic-action">A/B Test →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT SECTION -->
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 20px;">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:14px;">Export Reports</div>
+      <div class="export-row">
+        <span class="export-label">Download as:</span>
+        <button class="btn-exp">📊 CSV</button>
+        <button class="btn-exp">📄 PDF</button>
+        <button class="btn-exp">📗 Excel (.xlsx)</button>
+        <div style="flex:1;"></div>
+        <span style="font-size:0.72rem;color:var(--gray);">Last generated: 20 May 2026, 09:41 AM</span>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<script>
+// Sidebar toggle
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+}
+
+// Date range buttons
+function setRange(btn){
+  document.querySelectorAll('.d-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// Revenue Line Chart
+(function(){
+  const labels = [];
+  const actual = [];
+  const forecast = [];
+  const today = new Date('2026-05-20');
+  for(let i=29;i>=0;i--){
+    const d = new Date(today);
+    d.setDate(d.getDate()-i);
+    labels.push(d.toLocaleDateString('en-IN',{day:'2-digit',month:'short'}));
+    actual.push(Math.floor(18000 + Math.random()*14000 + Math.sin(i/3)*4000));
+    forecast.push(i <= 6 ? Math.floor(22000 + Math.random()*8000) : null);
+  }
+
+  const ctx = document.getElementById('revenueChart').getContext('2d');
+  new Chart(ctx,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        {
+          label:'Revenue',
+          data:actual,
+          borderColor:'#06b6d4',
+          backgroundColor:'rgba(6,182,212,0.07)',
+          borderWidth:2,
+          pointRadius:2,
+          tension:0.4,
+          fill:true,
+        },
+        {
+          label:'AI Forecast',
+          data:forecast,
+          borderColor:'rgba(251,146,60,0.85)',
+          backgroundColor:'rgba(251,146,60,0.05)',
+          borderWidth:2,
+          pointRadius:3,
+          borderDash:[5,4],
+          tension:0.4,
+          fill:false,
+        }
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(13,13,31,0.95)',
+          borderColor:'rgba(255,255,255,0.1)',
+          borderWidth:1,
+          callbacks:{
+            label(ctx){ return ' ₹'+ctx.parsed.y.toLocaleString('en-IN'); }
+          }
+        }
+      },
+      scales:{
+        x:{
+          grid:{color:'rgba(255,255,255,0.04)'},
+          ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:8}
+        },
+        y:{
+          grid:{color:'rgba(255,255,255,0.05)'},
+          ticks:{
+            color:'#8892a4',font:{size:10},
+            callback:v=>'₹'+(v/1000).toFixed(0)+'k'
+          }
+        }
+      }
+    }
+  });
+})();
+
+// Acquisition Doughnut Chart
+(function(){
+  const ctx = document.getElementById('acqChart').getContext('2d');
+  new Chart(ctx,{
+    type:'doughnut',
+    data:{
+      labels:['Organic','Paid Ads','Social','Direct','Referral'],
+      datasets:[{
+        data:[34,28,18,12,8],
+        backgroundColor:['#7c3aed','#06b6d4','#4ade80','#fbbf24','#f87171'],
+        borderColor:'rgba(13,13,31,0)',
+        borderWidth:0,
+        hoverOffset:6,
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      cutout:'68%',
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(13,13,31,0.95)',
+          borderColor:'rgba(255,255,255,0.1)',
+          borderWidth:1,
+          callbacks:{
+            label(ctx){ return ' '+ctx.label+': '+ctx.parsed+'%'; }
+          }
+        }
+      }
+    }
+  });
+})();
+</script>
+</body>
+</html>

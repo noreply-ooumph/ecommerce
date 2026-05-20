@@ -162,16 +162,21 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
 <body>
 
 <nav class="nav">
-  <a href="store.html" class="nav-logo">Vibe<span>Store</span></a>
+  <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
   <div class="nav-search">
     <span>🔍</span>
-    <input type="text" id="searchInput" placeholder="Search products, brands, categories..." value="wireless headphones"/>
+    <input type="text" id="searchInput" placeholder="Search products, brands, categories..." value="wireless headphones" onkeydown="if(event.key==='Enter')doSearch()"/>
     <button onclick="doSearch()">Search</button>
   </div>
   <div class="nav-links">
-    <a href="store.html">Store</a>
-    <a href="account.html">👤</a>
-    <a href="track.html">📦</a>
+    <a href="mystore.html">Home</a>
+    <a href="collections.html">Shop</a>
+    <a href="sale.html">Sale 🔥</a>
+    <a href="blog.html">Blog</a>
+    <a href="compare.html" style="font-size:0.8rem">Compare</a>
+    <a href="account.html" title="Account">👤</a>
+    <a href="track.html" title="Orders">📦</a>
+    <a href="wishlist.html" title="Wishlist">♡</a>
     <button class="nav-cart" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
   </div>
 </nav>
@@ -438,5 +443,52 @@ updateCartCount();
 renderProducts();
 renderCart();
 </script>
+
+<footer style="background:#0f0f1a;color:white;margin-top:60px">
+  <div style="max-width:1300px;margin:0 auto;padding:48px 24px 24px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px">
+    <div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:12px">🛍️ VibeStore</div>
+      <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;line-height:1.7">AI-powered commerce. Every product curated, priced, and delivered with intelligence.</p>
+    </div>
+    <div>
+      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Shop</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
+        <li><a href="collections.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">All Collections</a></li>
+        <li><a href="sale.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Sale 🔥</a></li>
+        <li><a href="compare.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Compare Products</a></li>
+        <li><a href="gift-cards.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Gift Cards</a></li>
+        <li><a href="blog.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Blog</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Support</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
+        <li><a href="returns.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Returns</a></li>
+        <li><a href="contact.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Contact Us</a></li>
+        <li><a href="faq.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">FAQ</a></li>
+        <li><a href="track.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Track Order</a></li>
+        <li><a href="notifications.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Notifications</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Account</h4>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
+        <li><a href="account.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">My Account</a></li>
+        <li><a href="loyalty.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Loyalty Rewards</a></li>
+        <li><a href="wishlist.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Wishlist</a></li>
+        <li><a href="referral.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Refer a Friend</a></li>
+        <li><a href="notifications.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none">Notifications</a></li>
+      </ul>
+    </div>
+  </div>
+  <div style="max-width:1300px;margin:0 auto;padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+    <p style="font-size:0.74rem;color:rgba(255,255,255,0.35)">© 2025 VibeStore. All rights reserved.</p>
+    <div style="display:flex;gap:16px">
+      <a href="index.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">About VibeStore</a>
+      <a href="referral.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">Referral</a>
+      <a href="contact.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">Contact</a>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
