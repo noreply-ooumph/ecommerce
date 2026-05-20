@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Notifications — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--bg:#f8f8f5;--border:#e5e5e0;--text:#0f0f1a;--muted:#6b7280;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+.nav{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;}
+.nav-logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;}
+.nav-links a:hover{color:white;}
+.nav-badge{position:relative;display:inline-block;}
+.nbadge{position:absolute;top:-6px;right:-6px;background:#ef4444;color:white;width:16px;height:16px;border-radius:50%;font-size:0.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* HEADER */
+.page-hdr{background:white;border-bottom:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.page-hdr-left h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:10px;}
+.unread-pill{background:var(--purple);color:white;font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:100px;}
+.page-hdr-left p{font-size:0.82rem;color:var(--muted);margin-top:3px;}
+.hdr-actions{display:flex;gap:8px;}
+.hdr-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.2s;font-family:'Inter',sans-serif;}
+.hdr-btn:hover{border-color:var(--purple);color:var(--purple);}
+.hdr-btn.primary{background:var(--navy);color:white;border-color:var(--navy);}
+.hdr-btn.primary:hover{background:var(--purple);border-color:var(--purple);}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:260px 1fr 280px;gap:0;min-height:calc(100vh - 120px);}
+
+/* LEFT SIDEBAR — FILTERS */
+.lsb{background:white;border-right:1px solid var(--border);padding:20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.lsb-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.lsb-section:last-child{border-bottom:none;margin-bottom:0;}
+.lsb-title{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:10px;}
+.filter-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background 0.2s;font-size:0.84rem;}
+.filter-item:hover{background:var(--bg);}
+.filter-item.active{background:rgba(124,58,237,0.08);color:var(--purple);font-weight:600;}
+.filter-item .fi-left{display:flex;align-items:center;gap:8px;}
+.fi-count{font-size:0.7rem;background:var(--bg);border-radius:100px;padding:1px 7px;color:var(--muted);}
+.filter-item.active .fi-count{background:rgba(124,58,237,0.15);color:var(--purple);}
+
+/* AGENT FILTER */
+.agent-filter{display:flex;flex-direction:column;gap:6px;}
+.agent-chip{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;}
+.agent-chip:hover{background:var(--bg);}
+.agent-chip.active{background:rgba(124,58,237,0.08);}
+.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* MAIN — NOTIFICATIONS LIST */
+.main{padding:0;}
+.notif-date-group{padding:0;}
+.date-label{padding:10px 20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);border-top:1px solid var(--border);position:sticky;top:0;z-index:10;}
+.notif{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:white;transition:background 0.2s;cursor:pointer;position:relative;}
+.notif:hover{background:#fdfcff;}
+.notif.unread{background:#faf7ff;}
+.notif.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);border-radius:0 2px 2px 0;}
+.notif-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.notif-icon.order{background:rgba(6,182,212,0.12);}
+.notif-icon.price{background:rgba(16,163,74,0.12);}
+.notif-icon.promo{background:rgba(245,158,11,0.12);}
+.notif-icon.ship{background:rgba(59,130,246,0.12);}
+.notif-icon.review{background:rgba(139,92,246,0.12);}
+.notif-icon.system{background:rgba(107,114,128,0.12);}
+.notif-icon.ref{background:rgba(236,72,153,0.12);}
+.notif-body{flex:1;min-width:0;}
+.notif-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;}
+.notif-agent{font-size:0.7rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.04em;}
+.notif-time{font-size:0.7rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.notif-title{font-size:0.87rem;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4;}
+.notif.unread .notif-title{color:var(--navy);}
+.notif-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;}
+.notif-actions{display:flex;gap:7px;margin-top:8px;}
+.na-btn{font-size:0.75rem;font-weight:600;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text);transition:all 0.2s;}
+.na-btn:hover{border-color:var(--purple);color:var(--purple);}
+.na-btn.primary{background:var(--purple);color:white;border-color:var(--purple);}
+.na-btn.primary:hover{background:#6d28d9;}
+.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;margin-top:6px;}
+
+/* RIGHT SIDEBAR — AI AGENTS LIVE */
+.rsb{background:white;border-left:1px solid var(--border);padding:20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.rsb-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.agent-card{border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;transition:all 0.2s;}
+.agent-card:hover{border-color:rgba(124,58,237,0.3);box-shadow:0 4px 12px rgba(0,0,0,0.06);}
+.agent-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.agent-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.agent-info h4{font-size:0.85rem;font-weight:700;color:var(--text);}
+.agent-status{font-size:0.7rem;display:flex;align-items:center;gap:4px;}
+.status-dot{width:5px;height:5px;border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.dot-green{background:#4ade80;}
+.dot-amber{background:#f59e0b;}
+.agent-activity{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.agent-stat{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+.as-item{text-align:center;}
+.as-n{font-size:0.82rem;font-weight:700;color:var(--text);}
+.as-l{font-size:0.66rem;color:var(--muted);}
+
+/* NOTIF SETTINGS */
+.notif-settings{background:linear-gradient(135deg,rgba(124,58,237,0.06),rgba(6,182,212,0.06));border:1px solid rgba(124,58,237,0.15);border-radius:12px;padding:14px;margin-top:12px;}
+.ns-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;}
+.ns-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;}
+.ns-row span{font-size:0.78rem;color:var(--text);}
+.toggle{width:32px;height:18px;background:#d1d5db;border-radius:100px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
+.toggle.on{background:var(--purple);}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:white;transition:left 0.2s;}
+.toggle.on::after{left:16px;}
+
+/* LOAD MORE */
+.load-more{padding:20px;text-align:center;}
+.load-btn{background:white;border:1px solid var(--border);border-radius:9px;padding:10px 28px;font-size:0.84rem;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.2s;font-family:'Inter',sans-serif;}
+.load-btn:hover{border-color:var(--purple);color:var(--purple);}
+
+@media(max-width:1024px){.layout{grid-template-columns:220px 1fr;}.rsb{display:none;}}
+@media(max-width:768px){.layout{grid-template-columns:1fr;}.lsb{display:none;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="store.html" class="nav-logo">Vibe<span>Store</span></a>
+  <div class="nav-links">
+    <a href="store.html">Store</a>
+    <a href="account.html">👤 Account</a>
+    <a href="track.html">📦 Orders</a>
+    <a href="wishlist.html">♡ Wishlist</a>
+  </div>
+</nav>
+
+<div class="page-hdr">
+  <div class="page-hdr-left">
+    <h1>🔔 Notifications <span class="unread-pill" id="unreadCount">12 unread</span></h1>
+    <p>All 8 AI agents report here in real-time — orders, prices, deals, and more.</p>
+  </div>
+  <div class="hdr-actions">
+    <button class="hdr-btn" onclick="markAllRead()">✓ Mark all read</button>
+    <button class="hdr-btn" onclick="clearRead()">🗑 Clear read</button>
+    <button class="hdr-btn primary" onclick="window.location.href='store.html'">🛍️ Shop Now</button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- LEFT SIDEBAR -->
+  <aside class="lsb">
+    <div class="lsb-section">
+      <div class="lsb-title">Filter by Type</div>
+      <div class="filter-item active" onclick="setFilter(this,'all')"><div class="fi-left">📋 All</div><span class="fi-count">28</span></div>
+      <div class="filter-item" onclick="setFilter(this,'unread')"><div class="fi-left">🔵 Unread</div><span class="fi-count">12</span></div>
+      <div class="filter-item" onclick="setFilter(this,'order')"><div class="fi-left">📦 Orders</div><span class="fi-count">6</span></div>
+      <div class="filter-item" onclick="setFilter(this,'price')"><div class="fi-left">📉 Price Drops</div><span class="fi-count">4</span></div>
+      <div class="filter-item" onclick="setFilter(this,'promo')"><div class="fi-left">🎟️ Promotions</div><span class="fi-count">5</span></div>
+      <div class="filter-item" onclick="setFilter(this,'ship')"><div class="fi-left">🚚 Shipping</div><span class="fi-count">3</span></div>
+      <div class="filter-item" onclick="setFilter(this,'ref')"><div class="fi-left">🎁 Referrals</div><span class="fi-count">2</span></div>
+      <div class="filter-item" onclick="setFilter(this,'system')"><div class="fi-left">⚙️ System</div><span class="fi-count">8</span></div>
+    </div>
+    <div class="lsb-section">
+      <div class="lsb-title">Filter by Agent</div>
+      <div class="agent-filter">
+        <div class="agent-chip active" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#7c3aed"></div>All Agents</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#06b6d4"></div>Zen AI (Ops)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#f59e0b"></div>Luna AI (Price)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#ec4899"></div>Aria AI (Sales)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#10b981"></div>Atlas AI (Search)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#8b5cf6"></div>Rex AI (Support)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#ef4444"></div>Nova AI (Merch)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#3b82f6"></div>Sage AI (Content)</div>
+        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#f97316"></div>Echo AI (Social)</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN NOTIFICATIONS -->
+  <main class="main" id="notifMain">
+    <div class="date-label">Today — May 19, 2025</div>
+    <div id="notifList"></div>
+    <div class="date-label">Yesterday — May 18, 2025</div>
+    <div id="notifListOld"></div>
+    <div class="load-more"><button class="load-btn" onclick="loadMore()">Load older notifications</button></div>
+  </main>
+
+  <!-- RIGHT SIDEBAR — AI AGENTS LIVE -->
+  <aside class="rsb">
+    <div class="rsb-title">🤖 AI Agents — Live</div>
+
+    <div class="agent-card">
+      <div class="agent-hdr">
+        <div class="agent-avatar" style="background:rgba(6,182,212,0.12)">🚀</div>
+        <div class="agent-info"><h4>Zen AI</h4><div class="agent-status"><div class="status-dot dot-green"></div><span style="color:#16a34a">Processing orders</span></div></div>
+      </div>
+      <div class="agent-activity" id="zenActivity">Dispatching order #VS-48302 · Verifying payment for #VS-48310</div>
+      <div class="agent-stat">
+        <div class="as-item"><div class="as-n">142</div><div class="as-l">Orders today</div></div>
+        <div class="as-item"><div class="as-n">2.1s</div><div class="as-l">Avg process</div></div>
+        <div class="as-item"><div class="as-n">99.9%</div><div class="as-l">Accuracy</div></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-hdr">
+        <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">💰</div>
+        <div class="agent-info"><h4>Luna AI</h4><div class="agent-status"><div class="status-dot dot-green"></div><span style="color:#16a34a">Tracking 8,240 prices</span></div></div>
+      </div>
+      <div class="agent-activity">Found 14 price drops in the last hour · Sony XM5 lowest in 6 months</div>
+      <div class="agent-stat">
+        <div class="as-item"><div class="as-n">14</div><div class="as-l">Drops today</div></div>
+        <div class="as-item"><div class="as-n">8,240</div><div class="as-l">Items tracked</div></div>
+        <div class="as-item"><div class="as-n">₹2.1M</div><div class="as-l">User savings</div></div>
+      </div>
+    </div>
+
+    <div class="agent-card">
+      <div class="agent-hdr">
+        <div class="agent-avatar" style="background:rgba(236,72,153,0.12)">🎯</div>
+        <div class="agent-info"><h4>Aria AI</h4><div class="agent-status"><div class="status-dot dot-amber"></div><span style="color:#d97706">Running campaign</span></div></div>
+      </div>
+      <div class="agent-activity">Flash Sale campaign active · Sending personalised push to 42K users</div>
+      <div class="agent-stat">
+        <div class="as-item"><div class="as-n">₹4.2L</div><div class="as-l">Revenue today</div></div>
+        <div class="as-item"><div class="as-n">3.8%</div><div class="as-l">Conv. rate</div></div>
+        <div class="as-item"><div class="as-n">42K</div><div class="as-l">Reached</div></div>
+      </div>
+    </div>
+
+    <div class="notif-settings">
+      <div class="ns-title">⚙️ Notification Settings</div>
+      <div class="ns-row"><span>Order updates</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="ns-row"><span>Price drop alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="ns-row"><span>Flash sale alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="ns-row"><span>Referral updates</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
+      <div class="ns-row"><span>AI agent reports</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+      <div class="ns-row"><span>Marketing emails</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+  </aside>
+</div>
+
+<script src="rex-chat.js"></script>
+<script>
+const TODAY_NOTIFS = [
+  {type:'ship',icon:'🚚',iconClass:'ship',agent:'Zen AI',time:'2 min ago',title:'Your order is out for delivery!',desc:'Order #VS-48291 (Sony WH-1000XM5) is out for delivery. Expected by 6:00 PM today.',unread:true,actions:[{label:'Track Live',primary:true,href:'track.html'},{label:'Contact Driver',primary:false}]},
+  {type:'price',icon:'📉',iconClass:'price',agent:'Luna AI',time:'18 min ago',title:'Price drop on your wishlist item!',desc:'Sony WH-1000XM5 dropped ₹3,000 (from ₹32,990 to ₹29,990). This is the lowest price in 6 months.',unread:true,actions:[{label:'Buy Now',primary:true,href:'product.html?id=p1'},{label:'View Wishlist',primary:false,href:'wishlist.html'}]},
+  {type:'promo',icon:'🎟️',iconClass:'promo',agent:'Aria AI',time:'42 min ago',title:'Flash Sale — 4 hours left!',desc:'Your saved categories have up to 60% off. Aria AI picked 12 items matching your taste.',unread:true,actions:[{label:'Shop Sale',primary:true,href:'store.html'},{label:'View Deals',primary:false,href:'collections.html'}]},
+  {type:'ref',icon:'🎁',iconClass:'ref',agent:'Aria AI',time:'1h ago',title:'Referral reward credited!',desc:'Priya S. completed her first order. ₹750 has been added to your VibeWallet.',unread:true,actions:[{label:'View Earnings',primary:true,href:'referral.html'},{label:'Share More',primary:false}]},
+  {type:'price',icon:'📉',iconClass:'price',agent:'Luna AI',time:'2h ago',title:'3 wishlist items on sale now',desc:'JBL Charge 5 (41% off), Samsung Galaxy Watch 6 (17% off), and Bose SoundLink Max (11% off) are all on sale.',unread:true,actions:[{label:'View Wishlist',primary:true,href:'wishlist.html'}]},
+  {type:'order',icon:'📦',iconClass:'order',agent:'Zen AI',time:'3h ago',title:'Order confirmed — #VS-48310',desc:'Your order for Apple AirPods Max (₹49,900) has been confirmed. Zen AI is preparing it for dispatch.',unread:true,actions:[{label:'Track Order',primary:true,href:'track.html'},{label:'View Order',primary:false,href:'account.html'}]},
+  {type:'system',icon:'⭐',iconClass:'review',agent:'Echo AI',time:'5h ago',title:'Leave a review — earn 200 VibeCash',desc:'You received Sony WH-1000XM5 last week. Share your experience and Echo AI will post it to help other buyers.',unread:false,actions:[{label:'Write Review',primary:true},{label:'Remind Later',primary:false}]},
+  {type:'promo',icon:'🎯',iconClass:'promo',agent:'Atlas AI',time:'6h ago',title:'New picks just for you',desc:'Atlas AI analysed your browsing history and curated 8 new products you'll love. Updated daily.',unread:false,actions:[{label:'See Picks',primary:true,href:'search.html'}]},
+];
+
+const OLD_NOTIFS = [
+  {type:'ship',icon:'✅',iconClass:'ship',agent:'Zen AI',time:'Yesterday 4:32 PM',title:'Order delivered successfully',desc:'Order #VS-48278 was delivered. Zen AI confirmed receipt via your building\'s smart locker.',unread:false,actions:[{label:'Rate Delivery',primary:false},{label:'View Order',primary:false,href:'account.html'}]},
+  {type:'price',icon:'📈',iconClass:'price',agent:'Luna AI',time:'Yesterday 2:11 PM',title:'Price alert — AirPods Max rising',desc:'Apple AirPods Max price increased by ₹2,000 since last week. Luna AI recommends buying soon if interested.',unread:false,actions:[{label:'View Item',primary:true,href:'wishlist.html'}]},
+  {type:'system',icon:'🔐',iconClass:'system',agent:'Nova AI',time:'Yesterday 10:00 AM',title:'Account security check passed',desc:'Nova AI completed your monthly security audit. All devices and logins look normal.',unread:false,actions:[]},
+  {type:'ref',icon:'👥',iconClass:'ref',agent:'Aria AI',time:'Yesterday 9:14 AM',title:'New referral signed up!',desc:'Ananya K. joined VibeStore using your code SARTH-VS42. You\'ll earn ₹750 when she places her first order.',unread:false,actions:[{label:'View Referrals',primary:false,href:'referral.html'}]},
+];
+
+function renderNotif(n, idx, isOld) {
+  return `<div class="notif${n.unread?' unread':''}" id="notif-${isOld?'old':'new'}-${idx}">
+    <div class="notif-icon ${n.iconClass}">${n.icon}</div>
+    <div class="notif-body">
+      <div class="notif-top">
+        <span class="notif-agent">${n.agent}</span>
+        <span class="notif-time">${n.time}</span>
+      </div>
+      <div class="notif-title">${n.title}</div>
+      <div class="notif-desc">${n.desc}</div>
+      ${n.actions.length?`<div class="notif-actions">${n.actions.map(a=>`<button class="na-btn${a.primary?' primary':''}" onclick="${a.href?`window.location.href='${a.href}'`:'void(0)'}">${a.label}</button>`).join('')}</div>`:''}
+    </div>
+    ${n.unread?'<div class="unread-dot"></div>':''}
+  </div>`;
+}
+
+function renderAll() {
+  document.getElementById('notifList').innerHTML = TODAY_NOTIFS.map((n,i)=>renderNotif(n,i,false)).join('');
+  document.getElementById('notifListOld').innerHTML = OLD_NOTIFS.map((n,i)=>renderNotif(n,i,true)).join('');
+}
+
+function markAllRead() {
+  TODAY_NOTIFS.forEach(n=>n.unread=false);
+  OLD_NOTIFS.forEach(n=>n.unread=false);
+  document.getElementById('unreadCount').textContent = '0 unread';
+  renderAll();
+}
+
+function clearRead() {
+  TODAY_NOTIFS.filter(n=>!n.unread).forEach((_,i)=>{}); // no-op visual
+  renderAll();
+}
+
+function setFilter(el, type) {
+  document.querySelectorAll('.filter-item').forEach(f=>f.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function loadMore() { alert('Aria AI is fetching older notifications...'); }
+
+// Live Zen AI activity updates
+const zenActivities = [
+  'Dispatching order #VS-48302 · Verifying payment for #VS-48310',
+  'Processing 3 return requests · Scheduling pickup for order #VS-48299',
+  'Fraud check passed for #VS-48315 · Notifying warehouse',
+  'Coordinating same-day delivery for #VS-48320 · ETA: 5:30 PM',
+];
+let zenIdx = 0;
+setInterval(()=>{
+  const el = document.getElementById('zenActivity');
+  if(el){el.style.opacity='0';setTimeout(()=>{el.textContent=zenActivities[++zenIdx%zenActivities.length];el.style.opacity='1';},300);}
+},4000);
+
+renderAll();
+</script>
+</body>
+</html>

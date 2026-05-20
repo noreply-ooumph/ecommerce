@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Checkout — MyStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf8;--bg2:#f3f3ef;--white:#fff;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;--gray:#6b7280;--gray2:#9ca3af;--border:#e5e5e0;--green:#16a34a;--red:#dc2626}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+input,select,textarea{font-family:'Inter',sans-serif}
+
+/* NAV */
+.checkout-nav{background:white;border-bottom:1px solid var(--border);padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.checkout-logo{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px}
+.ai-tag{font-size:0.5rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-weight:700;font-family:'Inter',sans-serif}
+.checkout-steps{display:flex;align-items:center;gap:6px;font-size:0.78rem}
+.step{display:flex;align-items:center;gap:5px;color:var(--gray2)}
+.step.active{color:var(--purple);font-weight:600}
+.step.done{color:var(--green)}
+.step-dot{width:20px;height:20px;border-radius:50%;border:2px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;flex-shrink:0}
+.step-sep{width:24px;height:1px;background:var(--border)}
+.nav-secure{display:flex;align-items:center;gap:5px;font-size:0.75rem;color:var(--gray)}
+
+/* LAYOUT */
+.checkout-layout{display:grid;grid-template-columns:1fr 420px;min-height:calc(100vh - 60px)}
+
+/* LEFT */
+.checkout-left{padding:40px;border-right:1px solid var(--border);overflow-y:auto}
+
+/* SECTION CARD */
+.co-section{background:white;border:1px solid var(--border);border-radius:14px;margin-bottom:16px;overflow:hidden;transition:box-shadow 0.2s}
+.co-section:focus-within{box-shadow:0 0 0 2px rgba(109,40,217,0.15)}
+.co-section-hdr{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);background:var(--bg2)}
+.co-section-title{font-weight:700;font-size:0.9rem;display:flex;align-items:center;gap:8px}
+.co-section-body{padding:20px}
+.co-edit{font-size:0.75rem;color:var(--purple);cursor:pointer;font-weight:600}
+.co-edit:hover{color:var(--purple2)}
+
+/* FORM */
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:0.75rem;font-weight:600;color:var(--gray);margin-bottom:5px}
+.form-input{width:100%;background:white;border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--dark);font-size:0.85rem;outline:none;transition:all 0.2s}
+.form-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
+.form-input::placeholder{color:var(--gray2)}
+.form-select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+
+/* SHIPPING OPTIONS */
+.ship-options{display:flex;flex-direction:column;gap:10px}
+.ship-opt{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:all 0.2s}
+.ship-opt:hover{border-color:var(--purple)}
+.ship-opt.selected{border-color:var(--purple);background:rgba(109,40,217,0.04)}
+.ship-radio{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.ship-opt.selected .ship-radio{border-color:var(--purple);background:var(--purple)}
+.ship-opt.selected .ship-radio::after{content:'';width:6px;height:6px;border-radius:50%;background:white}
+.ship-info{flex:1}
+.ship-name{font-weight:600;font-size:0.85rem}
+.ship-desc{font-size:0.72rem;color:var(--gray);margin-top:2px}
+.ship-price{font-weight:700;font-size:0.88rem}
+.ship-ai{font-size:0.68rem;color:var(--purple);margin-top:3px;display:flex;align-items:center;gap:3px}
+
+/* PAYMENT */
+.pay-methods{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.pay-method{padding:8px 16px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;background:white}
+.pay-method:hover{border-color:var(--purple)}
+.pay-method.active{border-color:var(--purple);background:rgba(109,40,217,0.06);color:var(--purple)}
+.card-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:end}
+.card-icons{display:flex;gap:6px}
+.card-icon{width:32px;height:20px;background:var(--bg2);border-radius:4px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.55rem;font-weight:700;color:var(--gray)}
+
+/* COUPON */
+.coupon-row{display:flex;gap:8px;margin-top:8px}
+.coupon-input{flex:1}
+.coupon-btn{background:var(--dark);color:white;border:none;border-radius:8px;padding:10px 18px;font-size:0.83rem;font-weight:600;white-space:nowrap;transition:opacity 0.2s}
+.coupon-btn:hover{opacity:0.85}
+.coupon-success{font-size:0.75rem;color:var(--green);margin-top:6px;display:none;align-items:center;gap:5px}
+
+/* RIGHT - ORDER SUMMARY */
+.checkout-right{background:var(--bg2);padding:32px 28px;overflow-y:auto;border-left:1px solid var(--border)}
+.summary-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:20px}
+.summary-items{display:flex;flex-direction:column;gap:14px;margin-bottom:20px}
+.sum-item{display:flex;align-items:center;gap:12px}
+.sum-img{width:52px;height:52px;background:white;border-radius:10px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;position:relative}
+.sum-qty-badge{position:absolute;top:-6px;right:-6px;background:var(--dark);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sum-item-name{font-size:0.83rem;font-weight:600;flex:1}
+.sum-item-price{font-weight:700;font-size:0.88rem;white-space:nowrap}
+.sum-divider{height:1px;background:var(--border);margin:16px 0}
+.sum-row{display:flex;justify-content:space-between;font-size:0.83rem;margin-bottom:8px}
+.sum-row.total{font-weight:700;font-size:1rem;margin-top:8px;padding-top:12px;border-top:1px solid var(--border)}
+.sum-row.discount{color:var(--green)}
+.ai-savings{background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:12px 14px;margin-top:12px}
+.ai-savings-title{font-size:0.75rem;font-weight:700;color:var(--green);margin-bottom:4px;display:flex;align-items:center;gap:5px}
+.ai-savings-text{font-size:0.72rem;color:var(--gray)}
+
+/* PLACE ORDER BTN */
+.btn-place{width:100%;background:linear-gradient(135deg,#1a0533,#2d1b69);color:white;border:none;border-radius:12px;padding:15px;font-size:1rem;font-weight:700;margin-top:20px;transition:all 0.3s;position:relative;overflow:hidden}
+.btn-place:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(109,40,217,0.3)}
+.btn-place:active{transform:translateY(0)}
+.btn-place.loading{pointer-events:none}
+.btn-place .spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.secure-note{text-align:center;font-size:0.72rem;color:var(--gray);margin-top:10px;display:flex;align-items:center;justify-content:center;gap:5px}
+
+/* ===== SUCCESS SCREEN ===== */
+#success-screen{display:none;position:fixed;inset:0;background:var(--bg);z-index:1000;overflow-y:auto}
+.success-inner{max-width:640px;margin:0 auto;padding:60px 24px;text-align:center}
+.success-anim{width:90px;height:90px;background:linear-gradient(135deg,var(--purple),var(--cyan));border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2.5rem;animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.success-title{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;margin-bottom:8px}
+.success-sub{color:var(--gray);font-size:0.95rem;margin-bottom:32px}
+.order-card{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px;text-align:left}
+.order-card-row{display:flex;justify-content:space-between;font-size:0.85rem;padding:8px 0;border-bottom:1px solid var(--border)}
+.order-card-row:last-child{border:none;font-weight:700;font-size:0.95rem}
+.ai-timeline{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:24px;text-align:left}
+.ai-timeline-title{font-weight:700;font-size:0.9rem;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.timeline-item{display:flex;gap:14px;margin-bottom:14px}
+.timeline-item:last-child{margin-bottom:0}
+.tl-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
+.tl-dot.done-dot{background:rgba(22,163,74,0.1)}
+.tl-dot.pending-dot{background:rgba(109,40,217,0.08)}
+.tl-info-title{font-size:0.83rem;font-weight:600;margin-bottom:2px}
+.tl-info-sub{font-size:0.73rem;color:var(--gray)}
+.tl-time{font-size:0.68rem;color:var(--gray2);margin-left:auto;white-space:nowrap;padding-top:4px}
+.success-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn-track{background:var(--dark);color:white;border:none;border-radius:10px;padding:12px 28px;font-size:0.9rem;font-weight:700;transition:opacity 0.2s}
+.btn-track:hover{opacity:0.85}
+.btn-shop-more{background:white;color:var(--dark);border:1px solid var(--border);border-radius:10px;padding:12px 28px;font-size:0.9rem;font-weight:600;transition:all 0.2s}
+.btn-shop-more:hover{border-color:var(--dark)}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;top:0;left:0;width:100%;height:0;z-index:9999;pointer-events:none}
+.conf{position:absolute;width:8px;height:8px;border-radius:1px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(-10px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* RESPONSIVE */
+@media(max-width:900px){.checkout-layout{grid-template-columns:1fr}.checkout-right{border-top:1px solid var(--border);border-left:none}.form-row{grid-template-columns:1fr}}
+@media(max-width:600px){.checkout-left{padding:20px}.checkout-right{padding:20px 16px}.checkout-steps{display:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<div class="checkout-nav">
+  <div class="checkout-logo" onclick="window.location.href='store.html'">
+    🛍️ MyStore <span class="ai-tag">AI</span>
+  </div>
+  <div class="checkout-steps">
+    <div class="step done" id="step1"><div class="step-dot">✓</div>Cart</div>
+    <div class="step-sep"></div>
+    <div class="step active" id="step2"><div class="step-dot">2</div>Details</div>
+    <div class="step-sep"></div>
+    <div class="step" id="step3"><div class="step-dot">3</div>Payment</div>
+    <div class="step-sep"></div>
+    <div class="step" id="step4"><div class="step-dot">4</div>Confirm</div>
+  </div>
+  <div class="nav-secure">🔒 Secure SSL Checkout</div>
+</div>
+
+<div class="checkout-layout">
+  <!-- LEFT -->
+  <div class="checkout-left">
+
+    <!-- CONTACT -->
+    <div class="co-section">
+      <div class="co-section-hdr">
+        <div class="co-section-title">📧 Contact Information</div>
+        <div style="font-size:0.75rem;color:var(--gray)">Already have an account? <span style="color:var(--purple);cursor:pointer;font-weight:600">Sign in</span></div>
+      </div>
+      <div class="co-section-body">
+        <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" id="email" oninput="checkFields()"/></div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--gray)">
+          <input type="checkbox" id="newsletter" checked style="accent-color:var(--purple)"/>
+          <label for="newsletter">Subscribe to AI-curated deal alerts</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- SHIPPING ADDRESS -->
+    <div class="co-section">
+      <div class="co-section-hdr">
+        <div class="co-section-title">📦 Shipping Address</div>
+        <span class="co-edit" onclick="autofill()">🤖 AI Autofill</span>
+      </div>
+      <div class="co-section-body">
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" placeholder="Aryan" id="fname" oninput="checkFields()"/></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" placeholder="Kapoor" id="lname" oninput="checkFields()"/></div>
+        </div>
+        <div class="form-group"><label class="form-label">Address Line 1</label><input class="form-input" placeholder="123 Main Street" id="addr1" oninput="checkFields()"/></div>
+        <div class="form-group"><label class="form-label">Address Line 2 (Optional)</label><input class="form-input" placeholder="Apartment, floor, etc."/></div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">City</label><input class="form-input" placeholder="Lucknow" id="city" oninput="checkFields()"/></div>
+          <div class="form-group"><label class="form-label">PIN Code</label><input class="form-input" placeholder="226010" id="pin" oninput="checkFields()"/></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label class="form-label">State</label><select class="form-input form-select"><option>Uttar Pradesh</option><option>Maharashtra</option><option>Karnataka</option><option>Delhi</option><option>Tamil Nadu</option><option>Gujarat</option></select></div>
+          <div class="form-group"><label class="form-label">Country</label><select class="form-input form-select"><option>India</option><option>United States</option><option>United Kingdom</option></select></div>
+        </div>
+        <div class="form-group"><label class="form-label">Phone Number</label><input class="form-input" type="tel" placeholder="+91 98765 43210" id="phone" oninput="checkFields()"/></div>
+        <div style="background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.12);border-radius:8px;padding:10px 14px;font-size:0.75rem;color:var(--purple);margin-top:4px">🤖 <strong>Zen AI</strong> will track and update you on your shipment automatically</div>
+      </div>
+    </div>
+
+    <!-- SHIPPING METHOD -->
+    <div class="co-section">
+      <div class="co-section-hdr"><div class="co-section-title">🚚 Shipping Method</div></div>
+      <div class="co-section-body">
+        <div class="ship-options">
+          <div class="ship-opt selected" onclick="selectShipping(this,'free',0)">
+            <div class="ship-radio"></div>
+            <div class="ship-info">
+              <div class="ship-name">Standard Delivery</div>
+              <div class="ship-desc">Arrives in 3–5 business days</div>
+              <div class="ship-ai">🤖 Zen AI will auto-dispatch within 2 hours</div>
+            </div>
+            <div class="ship-price" style="color:var(--green)">FREE</div>
+          </div>
+          <div class="ship-opt" onclick="selectShipping(this,'express',149)">
+            <div class="ship-radio"></div>
+            <div class="ship-info">
+              <div class="ship-name">Express Delivery</div>
+              <div class="ship-desc">Arrives tomorrow by 9PM</div>
+              <div class="ship-ai">🤖 Priority queue — Zen handles instantly</div>
+            </div>
+            <div class="ship-price">₹149</div>
+          </div>
+          <div class="ship-opt" onclick="selectShipping(this,'same',299)">
+            <div class="ship-radio"></div>
+            <div class="ship-info">
+              <div class="ship-name">Same-Day Delivery</div>
+              <div class="ship-desc">Order before 2PM · Arrives today</div>
+              <div class="ship-ai">🤖 Zen AI expedites fulfilment immediately</div>
+            </div>
+            <div class="ship-price">₹299</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAYMENT -->
+    <div class="co-section">
+      <div class="co-section-hdr"><div class="co-section-title">💳 Payment</div><div style="display:flex;gap:4px" class="card-icons"><div class="card-icon">VISA</div><div class="card-icon">MC</div><div class="card-icon">UPI</div></div></div>
+      <div class="co-section-body">
+        <div class="pay-methods">
+          <div class="pay-method active" onclick="selectPay(this,'card')">💳 Card</div>
+          <div class="pay-method" onclick="selectPay(this,'upi')">📱 UPI</div>
+          <div class="pay-method" onclick="selectPay(this,'cod')">💵 Cash on Delivery</div>
+          <div class="pay-method" onclick="selectPay(this,'emi')">🏦 EMI</div>
+        </div>
+
+        <div id="pay-card">
+          <div class="form-group"><label class="form-label">Card Number</label>
+            <div style="position:relative"><input class="form-input" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)"/><span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:1rem">💳</span></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Expiry Date</label><input class="form-input" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)"/></div>
+            <div class="form-group"><label class="form-label">CVV</label><input class="form-input" placeholder="•••" maxlength="3" type="password"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Name on Card</label><input class="form-input" placeholder="ARYAN KAPOOR"/></div>
+          <div style="font-size:0.72rem;color:var(--gray);display:flex;align-items:center;gap:5px;margin-top:4px">🔒 256-bit SSL encrypted · PCI DSS compliant</div>
+        </div>
+
+        <div id="pay-upi" style="display:none">
+          <div class="form-group"><label class="form-label">UPI ID</label><input class="form-input" placeholder="yourname@upi"/></div>
+          <div style="font-size:0.75rem;color:var(--gray);margin-top:4px">You'll receive a payment request on your UPI app</div>
+        </div>
+
+        <div id="pay-cod" style="display:none">
+          <div style="background:rgba(22,163,74,0.06);border:1px solid rgba(22,163,74,0.15);border-radius:10px;padding:14px;font-size:0.83rem;color:var(--gray)">Pay ₹0 now. Pay the full amount in cash when your order arrives. <span style="color:var(--green);font-weight:600">No extra charges.</span></div>
+        </div>
+
+        <div id="pay-emi" style="display:none">
+          <div class="form-group"><label class="form-label">Select EMI Plan</label>
+            <select class="form-input form-select">
+              <option>3 months — No cost EMI</option>
+              <option>6 months — No cost EMI</option>
+              <option>12 months — 1.5% per month</option>
+            </select>
+          </div>
+          <div style="font-size:0.75rem;color:var(--gray)">Available on HDFC, ICICI, Axis, SBI credit cards</div>
+        </div>
+
+        <!-- COUPON -->
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px">🎟️ Coupon / Promo Code</div>
+          <div class="coupon-row">
+            <input class="form-input coupon-input" placeholder="Enter code (try VIBE20)" id="couponInput"/>
+            <button class="coupon-btn" onclick="applyCoupon()">Apply</button>
+          </div>
+          <div class="coupon-success" id="couponSuccess">✓ VIBE20 applied — 20% off!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLACE ORDER -->
+    <button class="btn-place" id="placeBtn" onclick="placeOrder()" disabled style="opacity:0.5">
+      <span id="btnText">Complete Order →</span>
+      <div class="spinner" id="btnSpinner"></div>
+    </button>
+    <div class="secure-note">🔒 Your payment is 100% secure · All data encrypted</div>
+    <div style="text-align:center;margin-top:12px;font-size:0.72rem;color:var(--gray2)">By placing this order you agree to our <span style="color:var(--purple);cursor:pointer">Terms of Service</span> and <span style="color:var(--purple);cursor:pointer">Privacy Policy</span></div>
+  </div>
+
+  <!-- RIGHT - SUMMARY -->
+  <div class="checkout-right">
+    <div class="summary-title">Order Summary</div>
+    <div class="summary-items" id="summaryItems"></div>
+    <div class="sum-divider"></div>
+    <div class="sum-row"><span>Subtotal</span><span id="sumSubtotal">$0</span></div>
+    <div class="sum-row"><span>Shipping</span><span id="sumShipping" style="color:var(--green)">FREE</span></div>
+    <div class="sum-row discount" id="sumDiscountRow" style="display:none"><span>Discount (VIBE20)</span><span id="sumDiscount">-$0</span></div>
+    <div class="sum-row total"><span>Total</span><span id="sumTotal">$0</span></div>
+
+    <div class="ai-savings">
+      <div class="ai-savings-title">🤖 AI Saved You Money</div>
+      <div class="ai-savings-text" id="aiSavingsText">Luna AI dropped prices on 2 items in your cart today. You're saving an estimated $30 vs yesterday's prices.</div>
+    </div>
+
+    <div style="margin-top:20px;padding:14px;background:white;border:1px solid var(--border);border-radius:12px">
+      <div style="font-size:0.75rem;font-weight:700;margin-bottom:10px;color:var(--gray)">🤖 WHAT HAPPENS AFTER YOU ORDER</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--gray)"><span>📧</span>Rex AI sends order confirmation instantly</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--gray)"><span>📦</span>Zen AI processes & dispatches within 2 hrs</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--gray)"><span>🚚</span>Real-time tracking updates via SMS</div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.75rem;color:var(--gray)"><span>💬</span>Rex AI available 24/7 for any queries</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS SCREEN -->
+<div id="success-screen">
+  <div class="confetti-wrap" id="confetti"></div>
+  <div class="success-inner">
+    <div class="success-anim">✓</div>
+    <div class="success-title">Order Confirmed! 🎉</div>
+    <div class="success-sub">Thank you! Your order is being processed by our AI agents right now.</div>
+
+    <div class="order-card">
+      <div class="order-card-row"><span style="color:var(--gray)">Order ID</span><span style="font-weight:700;color:var(--purple)" id="orderId">#VS-48291</span></div>
+      <div class="order-card-row"><span style="color:var(--gray)">Email</span><span id="confirmEmail">—</span></div>
+      <div class="order-card-row"><span style="color:var(--gray)">Estimated Delivery</span><span style="color:var(--green);font-weight:600" id="deliveryDate">—</span></div>
+      <div class="order-card-row"><span>Total Paid</span><span id="confirmTotal">$0</span></div>
+    </div>
+
+    <div class="ai-timeline">
+      <div class="ai-timeline-title">🤖 AI Agent Status</div>
+      <div class="timeline-item"><div class="tl-dot done-dot">✓</div><div style="flex:1"><div class="tl-info-title">Rex AI — Order Confirmed</div><div class="tl-info-sub">Confirmation email sent to your inbox</div></div><div class="tl-time" id="tl1">Just now</div></div>
+      <div class="timeline-item"><div class="tl-dot done-dot">✓</div><div style="flex:1"><div class="tl-info-title">Luna AI — Price Locked</div><div class="tl-info-sub">Best price guaranteed at time of purchase</div></div><div class="tl-time">Just now</div></div>
+      <div class="timeline-item"><div class="tl-dot pending-dot" id="zenDot" style="background:rgba(109,40,217,0.08)">⏳</div><div style="flex:1"><div class="tl-info-title">Zen AI — Processing Fulfilment</div><div class="tl-info-sub" id="zenSub">Picking & packing your items...</div></div><div class="tl-time">~5 mins</div></div>
+      <div class="timeline-item"><div class="tl-dot pending-dot">📦</div><div style="flex:1"><div class="tl-info-title">Zen AI — Dispatch</div><div class="tl-info-sub">Will be handed to courier within 2 hours</div></div><div class="tl-time">~2 hrs</div></div>
+      <div class="timeline-item"><div class="tl-dot pending-dot">🚚</div><div style="flex:1"><div class="tl-info-title">Delivery Partner — In Transit</div><div class="tl-info-sub">Track real-time via SMS updates</div></div><div class="tl-time" id="delivDate">—</div></div>
+    </div>
+
+    <div class="success-btns">
+      <button class="btn-track" onclick="toast_s('📦 Opening live tracking...')">Track My Order</button>
+      <button class="btn-shop-more" onclick="window.location.href='store.html'">Continue Shopping</button>
+    </div>
+
+    <div style="margin-top:20px;font-size:0.78rem;color:var(--gray2)">Need help? <span style="color:var(--purple);cursor:pointer;font-weight:600" onclick="toast_s('💬 Rex AI is connecting...')">Chat with Rex AI →</span></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toastEl" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999"></div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+let shippingCost = 0;
+let discountAmt = 0;
+let couponApplied = false;
+let payMethod = 'card';
+
+// INIT
+function init(){
+  if(cart.length===0){
+    // demo cart
+    cart=[{id:'p1',name:'Wireless Earbuds Pro',price:89,emoji:'🎧',qty:1},{id:'p7',name:'USB-C Hub Pro',price:49,emoji:'🔌',qty:1}];
+  }
+  renderSummary();
+  checkFields();
+}
+
+function renderSummary(){
+  const el = document.getElementById('summaryItems');
+  el.innerHTML = cart.map(i=>`
+    <div class="sum-item">
+      <div class="sum-img">${i.emoji}<div class="sum-qty-badge">${i.qty}</div></div>
+      <div class="sum-item-name">${i.name}</div>
+      <div class="sum-item-price">$${(i.price*i.qty).toFixed(2)}</div>
+    </div>`).join('');
+  updateTotals();
+}
+
+function updateTotals(){
+  const sub = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const ship = shippingCost;
+  const disc = couponApplied ? Math.round(sub*0.2) : 0;
+  discountAmt = disc;
+  const total = sub + ship - disc;
+  document.getElementById('sumSubtotal').textContent = '$'+sub.toFixed(2);
+  document.getElementById('sumShipping').textContent = ship===0?'FREE':'$'+ship.toFixed(2);
+  document.getElementById('sumTotal').textContent = '$'+total.toFixed(2);
+  const dRow = document.getElementById('sumDiscountRow');
+  if(couponApplied){dRow.style.display='flex';document.getElementById('sumDiscount').textContent='-$'+disc.toFixed(2);}
+  else{dRow.style.display='none';}
+  document.getElementById('aiSavingsText').textContent = `Luna AI dropped prices on ${Math.min(cart.length,2)} items in your cart today. You're saving an estimated $${30+disc} vs yesterday's prices.`;
+}
+
+// FORM VALIDATION
+function checkFields(){
+  const ok = document.getElementById('email').value.includes('@') &&
+    document.getElementById('fname').value.length>0 &&
+    document.getElementById('addr1').value.length>0 &&
+    document.getElementById('city').value.length>0;
+  const btn = document.getElementById('placeBtn');
+  btn.disabled = !ok;
+  btn.style.opacity = ok?'1':'0.5';
+}
+
+function autofill(){
+  document.getElementById('fname').value='Sarthak';
+  document.getElementById('lname').value='Kumar';
+  document.getElementById('addr1').value='42 Tech Park, Hazratganj';
+  document.getElementById('city').value='Lucknow';
+  document.getElementById('pin').value='226001';
+  document.getElementById('phone').value='+91 98765 43210';
+  document.getElementById('email').value='sarth@mystore.com';
+  toast_s('🤖 Address filled by AI');
+  checkFields();
+}
+
+function selectShipping(el, type, cost){
+  document.querySelectorAll('.ship-opt').forEach(o=>o.classList.remove('selected'));
+  el.classList.add('selected');
+  shippingCost = cost;
+  updateTotals();
+}
+
+function selectPay(el, method){
+  document.querySelectorAll('.pay-method').forEach(m=>m.classList.remove('active'));
+  el.classList.add('active');
+  payMethod = method;
+  ['card','upi','cod','emi'].forEach(m=>document.getElementById('pay-'+m).style.display=m===method?'block':'none');
+}
+
+function formatCard(el){
+  let v = el.value.replace(/\D/g,'').substring(0,16);
+  el.value = v.match(/.{1,4}/g)?.join(' ')||v;
+}
+function formatExpiry(el){
+  let v = el.value.replace(/\D/g,'');
+  if(v.length>=2) v = v.substring(0,2)+' / '+v.substring(2,4);
+  el.value = v;
+}
+
+function applyCoupon(){
+  const code = document.getElementById('couponInput').value.trim().toUpperCase();
+  if(code==='VIBE20'){
+    couponApplied=true;
+    document.getElementById('couponSuccess').style.display='flex';
+    updateTotals();
+    toast_s('🎟️ Coupon applied — 20% off!');
+  } else {
+    toast_s('❌ Invalid coupon code');
+  }
+}
+
+// PLACE ORDER
+function placeOrder(){
+  const btn = document.getElementById('placeBtn');
+  const txt = document.getElementById('btnText');
+  const spin = document.getElementById('btnSpinner');
+  btn.classList.add('loading');
+  txt.style.display='none';
+  spin.style.display='block';
+
+  // simulate step progress
+  document.getElementById('step2').classList.remove('active');
+  document.getElementById('step2').classList.add('done');
+  document.getElementById('step2').querySelector('.step-dot').textContent='✓';
+  document.getElementById('step3').classList.add('active');
+
+  setTimeout(()=>{
+    document.getElementById('step3').classList.remove('active');
+    document.getElementById('step3').classList.add('done');
+    document.getElementById('step3').querySelector('.step-dot').textContent='✓';
+    document.getElementById('step4').classList.add('active');
+  },800);
+
+  setTimeout(()=>{
+    showSuccess();
+    // clear cart
+    localStorage.removeItem('vs_cart');
+  },2000);
+}
+
+function showSuccess(){
+  const sub = cart.reduce((s,i)=>s+i.price*i.qty,0);
+  const total = sub + shippingCost - discountAmt;
+  const orderId = '#VS-'+Math.floor(40000+Math.random()*9999);
+  const delivDate = new Date();
+  delivDate.setDate(delivDate.getDate()+4);
+  const opts={weekday:'short',month:'short',day:'numeric'};
+
+  document.getElementById('orderId').textContent = orderId;
+  document.getElementById('confirmEmail').textContent = document.getElementById('email').value||'sarth@mystore.com';
+  document.getElementById('deliveryDate').textContent = delivDate.toLocaleDateString('en-US',opts);
+  document.getElementById('confirmTotal').textContent = '$'+total.toFixed(2);
+  document.getElementById('delivDate').textContent = delivDate.toLocaleDateString('en-US',opts);
+
+  document.getElementById('success-screen').style.display='block';
+  document.body.style.overflow='hidden';
+  setTimeout(()=>document.body.style.overflow='',100);
+
+  launchConfetti();
+
+  // simulate Zen AI completing
+  setTimeout(()=>{
+    document.getElementById('zenDot').textContent='✓';
+    document.getElementById('zenDot').style.background='rgba(22,163,74,0.1)';
+    document.getElementById('zenSub').textContent='Items picked & packed ✓';
+  },3000);
+}
+
+function launchConfetti(){
+  const wrap = document.getElementById('confetti');
+  const colors=['#7c3aed','#06b6d4','#4ade80','#fbbf24','#f87171','#c4b5fd'];
+  for(let i=0;i<80;i++){
+    const c = document.createElement('div');
+    c.className='conf';
+    c.style.cssText=`left:${Math.random()*100}%;background:${colors[i%colors.length]};width:${4+Math.random()*8}px;height:${4+Math.random()*8}px;animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*0.5}s;border-radius:${Math.random()>0.5?'50%':'2px'}`;
+    wrap.appendChild(c);
+  }
+  setTimeout(()=>wrap.innerHTML='',3000);
+}
+
+function toast_s(msg){
+  const el=document.getElementById('toastEl');
+  el.innerHTML=`<div style="background:var(--dark);color:white;border-radius:100px;padding:10px 20px;font-size:0.82rem;font-weight:500;display:flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:fadeIn 0.3s ease">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='',2600);
+}
+
+init();
+</script>
+<script src="rex-chat.js"></script></body>
+</html>
+

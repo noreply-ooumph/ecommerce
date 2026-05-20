@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My Account — MyStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#fafaf8;--bg2:#f3f3ef;--white:#fff;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;--gray:#6b7280;--gray2:#9ca3af;--border:#e5e5e0;--green:#16a34a;--red:#dc2626;--yellow:#d97706}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+
+/* NAV */
+nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px}
+.ai-tag{font-size:0.5rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-weight:700}
+.nav-links{flex:1;display:flex;align-items:center;gap:24px}
+.nav-links a{font-size:0.85rem;color:var(--gray);font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--dark)}
+.nav-right{display:flex;align-items:center;gap:10px}
+.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;position:relative}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+
+/* AUTH SCREEN */
+#auth-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:40px 24px}
+.auth-card{background:white;border:1px solid var(--border);border-radius:20px;width:100%;max-width:440px;overflow:hidden}
+.auth-hdr{padding:32px 32px 24px;text-align:center;border-bottom:1px solid var(--border)}
+.auth-logo{font-size:2.5rem;margin-bottom:12px}
+.auth-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px}
+.auth-sub{font-size:0.83rem;color:var(--gray)}
+.auth-tabs{display:flex;padding:16px 32px 0}
+.auth-tab{flex:1;text-align:center;padding:10px;font-size:0.85rem;font-weight:600;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s}
+.auth-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
+.auth-body{padding:24px 32px 32px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:5px}
+.form-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--dark);font-size:0.85rem;outline:none;transition:all 0.2s}
+.form-input:focus{border-color:var(--purple);background:white;box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
+.form-input::placeholder{color:var(--gray2)}
+.btn-auth{width:100%;background:linear-gradient(135deg,#1a0533,var(--purple));color:white;border:none;border-radius:10px;padding:13px;font-size:0.92rem;font-weight:700;transition:all 0.3s;margin-bottom:12px}
+.btn-auth:hover{opacity:0.9;transform:translateY(-1px)}
+.social-btns{display:flex;gap:8px}
+.btn-social{flex:1;background:white;border:1px solid var(--border);border-radius:10px;padding:11px;font-size:0.82rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;transition:border-color 0.2s}
+.btn-social:hover{border-color:var(--purple)}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--gray2);font-size:0.75rem}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.forgot{font-size:0.75rem;color:var(--purple);cursor:pointer;text-align:right;margin-top:-8px;margin-bottom:14px}
+.ai-login-note{background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.12);border-radius:8px;padding:10px 14px;font-size:0.75rem;color:var(--purple);text-align:center;margin-top:12px}
+
+/* DASHBOARD */
+#dash-screen{display:none;max-width:1200px;margin:0 auto;padding:32px 24px}
+.dash-grid{display:grid;grid-template-columns:260px 1fr;gap:24px}
+.dash-sidebar{display:flex;flex-direction:column;gap:8px}
+.dash-user-card{background:white;border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;margin-bottom:8px}
+.dash-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:white;margin:0 auto 12px}
+.dash-name{font-weight:700;font-size:0.95rem;margin-bottom:2px}
+.dash-email{font-size:0.75rem;color:var(--gray)}
+.dash-plan{display:inline-flex;align-items:center;gap:4px;background:rgba(109,40,217,0.08);color:var(--purple);border-radius:100px;padding:3px 10px;font-size:0.7rem;font-weight:700;margin-top:6px}
+.sb-nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:0.83rem;color:var(--gray);cursor:pointer;transition:all 0.2s;font-weight:500;border:1px solid transparent}
+.sb-nav-item:hover{background:white;border-color:var(--border);color:var(--dark)}
+.sb-nav-item.active{background:white;border-color:var(--border);color:var(--dark);font-weight:600}
+.sb-nav-item .icon{font-size:1rem;width:20px;text-align:center}
+.dash-main{display:flex;flex-direction:column;gap:20px}
+
+/* PANELS */
+.panel{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;display:none}
+.panel.active{display:block}
+.panel-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+
+/* ORDER CARDS */
+.order-card-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;transition:box-shadow 0.2s;cursor:pointer}
+.order-card-item:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
+.oc-hdr{background:var(--bg2);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.oc-id{font-weight:700;font-size:0.83rem;color:var(--purple)}
+.oc-date{font-size:0.75rem;color:var(--gray)}
+.oc-status-badge{margin-left:auto}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:0.68rem;font-weight:700}
+.b-green{background:rgba(22,163,74,0.1);color:var(--green)}
+.b-yellow{background:rgba(217,119,6,0.1);color:var(--yellow)}
+.b-cyan{background:rgba(8,145,178,0.1);color:var(--cyan)}
+.b-purple{background:rgba(109,40,217,0.1);color:var(--purple)}
+.b-red{background:rgba(220,38,38,0.1);color:var(--red)}
+.oc-body{padding:14px 16px;display:flex;align-items:center;gap:12px}
+.oc-emojis{display:flex;gap:6px}
+.oc-emoji{width:44px;height:44px;background:var(--bg2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
+.oc-info{flex:1}
+.oc-items-text{font-size:0.82rem;font-weight:500;margin-bottom:2px}
+.oc-total{font-size:0.8rem;color:var(--gray)}
+.oc-ai{font-size:0.7rem;color:var(--purple);margin-top:3px}
+.oc-actions{display:flex;gap:6px}
+.oc-btn{padding:6px 14px;border:1px solid var(--border);border-radius:7px;font-size:0.75rem;font-weight:600;background:white;transition:all 0.2s}
+.oc-btn:hover{border-color:var(--purple);color:var(--purple)}
+.oc-btn-primary{background:var(--dark);color:white;border-color:var(--dark)}
+.oc-btn-primary:hover{background:var(--purple2);border-color:var(--purple2);color:white}
+
+/* WISHLIST */
+.wish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.wish-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative}
+.wish-img{height:90px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2.2rem}
+.wish-info{padding:10px}
+.wish-name{font-size:0.78rem;font-weight:600;margin-bottom:3px}
+.wish-price{font-weight:700;font-size:0.85rem;color:var(--purple);margin-bottom:8px}
+.wish-add{width:100%;background:var(--dark);color:white;border:none;border-radius:6px;padding:7px;font-size:0.72rem;font-weight:600}
+.wish-add:hover{background:var(--purple2)}
+.wish-rm{position:absolute;top:6px;right:6px;width:24px;height:24px;background:white;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.7rem;cursor:pointer}
+.wish-rm:hover{background:var(--red);color:white;border-color:var(--red)}
+
+/* PROFILE FORM */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.save-btn{background:var(--dark);color:white;border:none;border-radius:10px;padding:11px 24px;font-size:0.85rem;font-weight:700;transition:all 0.2s;margin-top:4px}
+.save-btn:hover{background:var(--purple2)}
+
+/* ADDRESS CARDS */
+.addr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.addr-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
+.addr-card.default{border-color:rgba(109,40,217,0.3);background:rgba(109,40,217,0.03)}
+.addr-default-badge{font-size:0.65rem;font-weight:700;color:var(--purple);background:rgba(109,40,217,0.1);padding:2px 8px;border-radius:100px;margin-bottom:8px;display:inline-block}
+.addr-name{font-weight:700;font-size:0.85rem;margin-bottom:4px}
+.addr-text{font-size:0.78rem;color:var(--gray);line-height:1.5}
+.addr-actions{display:flex;gap:6px;margin-top:10px}
+.addr-btn{padding:5px 12px;border:1px solid var(--border);border-radius:6px;font-size:0.72rem;font-weight:600;background:white;transition:all 0.2s;cursor:pointer}
+.addr-btn:hover{border-color:var(--purple);color:var(--purple)}
+.add-addr-card{background:var(--bg2);border:2px dashed var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;min-height:120px}
+.add-addr-card:hover{border-color:var(--purple);background:rgba(109,40,217,0.03)}
+
+/* METRICS ROW */
+.acc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.acc-metric{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.acc-metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:2px}
+.acc-metric-lbl{font-size:0.7rem;color:var(--gray)}
+
+/* AI RECOMMENDATIONS */
+.ai-rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.ai-rec-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
+.ai-rec-card:hover{transform:translateY(-2px);border-color:rgba(109,40,217,0.25)}
+.ai-rec-img{height:80px;background:white;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.ai-rec-info{padding:10px}
+.ai-rec-name{font-size:0.78rem;font-weight:600;margin-bottom:3px}
+.ai-rec-price{font-weight:700;font-size:0.85rem;color:var(--purple)}
+.ai-rec-reason{font-size:0.65rem;color:var(--gray);margin-top:3px}
+
+/* LOGOUT */
+.logout-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-size:0.83rem;color:var(--red);cursor:pointer;transition:all 0.2s;border:1px solid transparent;margin-top:4px}
+.logout-btn:hover{background:rgba(220,38,38,0.06);border-color:rgba(220,38,38,0.15)}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
+.ti{background:var(--dark);color:white;border-radius:100px;padding:10px 20px;font-size:0.82rem;font-weight:500;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:su 0.3s ease}
+@keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* RESPONSIVE */
+@media(max-width:768px){.dash-grid{grid-template-columns:1fr}.dash-sidebar{flex-direction:row;overflow-x:auto;gap:6px}.dash-user-card{display:none}.wish-grid{grid-template-columns:repeat(2,1fr)}.profile-grid{grid-template-columns:1fr}.addr-grid{grid-template-columns:1fr}.acc-metrics{grid-template-columns:repeat(3,1fr)}.ai-rec-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.wish-grid,.ai-rec-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="window.location.href='store.html'">MyStore <span class="ai-tag">AI</span></div>
+    <div class="nav-links">
+      <a href="store.html">Shop</a>
+      <a href="store.html">Deals</a>
+    </div>
+    <div class="nav-right">
+      <div class="nav-icon" onclick="window.location.href='store.html'">🛒<div class="cart-count" id="cartCount">0</div></div>
+    </div>
+  </div>
+</nav>
+
+<!-- AUTH SCREEN -->
+<div id="auth-screen">
+  <div class="auth-card">
+    <div class="auth-hdr">
+      <div class="auth-logo">🛍️</div>
+      <div class="auth-title">Welcome Back</div>
+      <div class="auth-sub">Sign in to your MyStore account</div>
+    </div>
+    <div style="padding:0 32px">
+      <div class="auth-tabs">
+        <div class="auth-tab active" onclick="switchAuth('login',this)">Sign In</div>
+        <div class="auth-tab" onclick="switchAuth('signup',this)">Create Account</div>
+      </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-body" id="auth-login">
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" id="loginEmail"/></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••" id="loginPass"/></div>
+      <div class="forgot" onclick="toast_('📧 Password reset link sent!')">Forgot password?</div>
+      <button class="btn-auth" onclick="login()">Sign In →</button>
+      <div class="auth-divider">or continue with</div>
+      <div class="social-btns">
+        <button class="btn-social" onclick="login()">🔵 Google</button>
+        <button class="btn-social" onclick="login()">⬛ Apple</button>
+      </div>
+      <div class="ai-login-note">🤖 Rex AI will personalise your experience after sign-in</div>
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="auth-body" id="auth-signup" style="display:none">
+      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" placeholder="Aryan Kapoor"/></div>
+      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min 8 characters"/></div>
+      <button class="btn-auth" onclick="login()">Create Account →</button>
+      <div class="ai-login-note">🤖 Atlas AI will start building your personalised feed immediately</div>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dash-screen">
+  <div class="dash-grid">
+    <!-- SIDEBAR -->
+    <div class="dash-sidebar">
+      <div class="dash-user-card">
+        <div class="dash-avatar" id="dashAvatar">AK</div>
+        <div class="dash-name" id="dashName">Aryan Kapoor</div>
+        <div class="dash-email" id="dashEmail">aryan@example.com</div>
+        <div class="dash-plan">⭐ VIP Member</div>
+      </div>
+      <div class="sb-nav-item active" onclick="showPanel('overview',this)"><span class="icon">🏠</span>Overview</div>
+      <div class="sb-nav-item" onclick="showPanel('orders',this)"><span class="icon">📦</span>My Orders</div>
+      <div class="sb-nav-item" onclick="showPanel('wishlist',this)"><span class="icon">♡</span>Wishlist</div>
+      <div class="sb-nav-item" onclick="showPanel('addresses',this)"><span class="icon">📍</span>Addresses</div>
+      <div class="sb-nav-item" onclick="showPanel('profile',this)"><span class="icon">👤</span>Profile</div>
+      <div class="sb-nav-item" onclick="showPanel('aiinsights',this)"><span class="icon">🤖</span>AI Insights</div>
+      <div class="sb-nav-item logout-btn" onclick="logout()"><span class="icon">🚪</span>Sign Out</div>
+    </div>
+
+    <!-- MAIN PANELS -->
+    <div class="dash-main">
+
+      <!-- OVERVIEW -->
+      <div class="panel active" id="panel-overview">
+        <div class="panel-title">Good to see you, <span id="greetName">Aryan</span> 👋</div>
+        <div class="acc-metrics">
+          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--purple)">12</div><div class="acc-metric-lbl">Total Orders</div></div>
+          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--cyan)">$1,284</div><div class="acc-metric-lbl">Total Spent</div></div>
+          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--green)">4</div><div class="acc-metric-lbl">Wishlist Items</div></div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--gray);margin-bottom:10px">Recent Order</div>
+        <div class="order-card-item" onclick="showPanel('orders',document.querySelector('[onclick*=orders]'))">
+          <div class="oc-hdr">
+            <span class="oc-id">#VS-48291</span>
+            <span class="oc-date">May 18, 2025</span>
+            <span class="oc-status-badge"><span class="badge b-cyan">In Transit</span></span>
+          </div>
+          <div class="oc-body">
+            <div class="oc-emojis"><div class="oc-emoji">🎧</div><div class="oc-emoji">🔌</div></div>
+            <div class="oc-info">
+              <div class="oc-items-text">Wireless Earbuds Pro + USB-C Hub Pro</div>
+              <div class="oc-total">2 items · $138.00 · Standard Delivery</div>
+              <div class="oc-ai">🤖 Zen AI: Dispatched 1hr ago · Arrives May 22</div>
+            </div>
+            <div class="oc-actions">
+              <button class="oc-btn oc-btn-primary" onclick="event.stopPropagation();window.location.href='track.html'">Track</button>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--gray);margin:16px 0 10px;display:flex;align-items:center;gap:6px">🤖 Atlas AI recommends for you</div>
+        <div class="ai-rec-grid" id="overviewRecs"></div>
+      </div>
+
+      <!-- ORDERS -->
+      <div class="panel" id="panel-orders">
+        <div class="panel-title">My Orders <span class="badge b-purple">12 total</span></div>
+        <div id="ordersList"></div>
+      </div>
+
+      <!-- WISHLIST -->
+      <div class="panel" id="panel-wishlist">
+        <div class="panel-title">Wishlist <span style="font-size:0.75rem;color:var(--gray);font-weight:400">4 saved items</span></div>
+        <div class="wish-grid" id="wishGrid"></div>
+      </div>
+
+      <!-- ADDRESSES -->
+      <div class="panel" id="panel-addresses">
+        <div class="panel-title">Saved Addresses</div>
+        <div class="addr-grid">
+          <div class="addr-card default">
+            <div class="addr-default-badge">✓ Default</div>
+            <div class="addr-name">Aryan Kapoor</div>
+            <div class="addr-text">42 Tech Park, Hazratganj<br/>Lucknow, UP 226001<br/>+91 98765 43210</div>
+            <div class="addr-actions">
+              <button class="addr-btn" onclick="toast_('✏️ Edit address')">Edit</button>
+              <button class="addr-btn" onclick="toast_('✓ Set as default')">Set Default</button>
+            </div>
+          </div>
+          <div class="addr-card">
+            <div class="addr-name">Office</div>
+            <div class="addr-text">12 Gomti Nagar, Sector 7<br/>Lucknow, UP 226010<br/>+91 98765 43210</div>
+            <div class="addr-actions">
+              <button class="addr-btn" onclick="toast_('✏️ Edit address')">Edit</button>
+              <button class="addr-btn" onclick="toast_('✓ Set as default')">Set Default</button>
+            </div>
+          </div>
+          <div class="add-addr-card" onclick="toast_('➕ Add new address')">
+            <div style="text-align:center;color:var(--gray)"><div style="font-size:1.5rem;margin-bottom:6px">+</div><div style="font-size:0.8rem;font-weight:600">Add New Address</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="panel" id="panel-profile">
+        <div class="panel-title">Profile Settings</div>
+        <div class="dash-user-card" style="display:flex;align-items:center;gap:16px;text-align:left;margin-bottom:20px;border-radius:12px">
+          <div class="dash-avatar" style="width:56px;height:56px;font-size:1.2rem;flex-shrink:0">AK</div>
+          <div><div class="dash-name">Aryan Kapoor</div><div class="dash-email">aryan@example.com</div></div>
+          <button class="addr-btn" style="margin-left:auto" onclick="toast_('📷 Upload photo')">Change Photo</button>
+        </div>
+        <div class="profile-grid">
+          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Aryan"/></div>
+          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Kapoor"/></div>
+          <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" value="aryan@example.com"/></div>
+          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" value="+91 98765 43210"/></div>
+          <div class="form-group"><label class="form-label">Birthday</label><input class="form-input" type="date" value="1995-03-15"/></div>
+          <div class="form-group"><label class="form-label">Gender</label><select class="form-input" style="appearance:none"><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
+        </div>
+        <div style="margin-bottom:16px">
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px">Communication Preferences</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--purple)"/>Order updates via email</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--purple)"/>🤖 AI-curated deal alerts</label>
+            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"/>Promotional SMS</label>
+          </div>
+        </div>
+        <button class="save-btn" onclick="toast_('✅ Profile saved!')">Save Changes</button>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
+          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px;color:var(--red)">Danger Zone</div>
+          <button onclick="toast_('🔒 Change password email sent')" style="padding:8px 16px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;font-weight:600;background:white;margin-right:8px">Change Password</button>
+          <button onclick="toast_('⚠️ Contact support to delete account')" style="padding:8px 16px;border:1px solid rgba(220,38,38,0.3);border-radius:8px;font-size:0.78rem;font-weight:600;color:var(--red);background:white">Delete Account</button>
+        </div>
+      </div>
+
+      <!-- AI INSIGHTS -->
+      <div class="panel" id="panel-aiinsights">
+        <div class="panel-title">🤖 Your AI Insights</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+          <div style="background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.15);border-radius:12px;padding:16px">
+            <div style="font-size:1rem;margin-bottom:6px">📊</div>
+            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Atlas AI — Spending Pattern</div>
+            <div style="font-size:0.75rem;color:var(--gray)">You spend most on Electronics (68%). Best time to buy: Tuesday morning — prices are 12% lower on average.</div>
+          </div>
+          <div style="background:rgba(8,145,178,0.05);border:1px solid rgba(8,145,178,0.15);border-radius:12px;padding:16px">
+            <div style="font-size:1rem;margin-bottom:6px">🎯</div>
+            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Luna AI — Price Watch</div>
+            <div style="font-size:0.75rem;color:var(--gray)">2 wishlist items have dropped in price this week. Smart Watch Ultra is at its lowest in 60 days.</div>
+          </div>
+          <div style="background:rgba(22,163,74,0.05);border:1px solid rgba(22,163,74,0.15);border-radius:12px;padding:16px">
+            <div style="font-size:1rem;margin-bottom:6px">🌟</div>
+            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Rex AI — Loyalty Status</div>
+            <div style="font-size:0.75rem;color:var(--gray)">You're a VIP member! You've saved ₹2,840 through AI-optimised pricing over your order history.</div>
+          </div>
+          <div style="background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.15);border-radius:12px;padding:16px">
+            <div style="font-size:1rem;margin-bottom:6px">🔔</div>
+            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Aria AI — Restock Alert</div>
+            <div style="font-size:0.75rem;color:var(--gray)">Wireless Earbuds Pro (your wishlist) has only 8 units left. Buy now before it sells out.</div>
+          </div>
+        </div>
+        <div style="font-size:0.82rem;font-weight:700;margin-bottom:10px">Recommended for You</div>
+        <div class="ai-rec-grid" id="insightRecs"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const ORDERS_DATA = [
+  {id:'#VS-48291',date:'May 18, 2025',items:'Wireless Earbuds Pro, USB-C Hub Pro',emojis:['🎧','🔌'],total:'$138.00',status:'In Transit',agent:'Zen AI dispatched 1hr ago · Arrives May 22',statusClass:'b-cyan'},
+  {id:'#VS-47820',date:'May 10, 2025',items:'Smart Watch Ultra',emojis:['⌚'],total:'$249.00',status:'Delivered',agent:'Delivered May 13 · Rex AI sent review request',statusClass:'b-green'},
+  {id:'#VS-46410',date:'Apr 28, 2025',items:'Mechanical Keyboard TKL',emojis:['⌨️'],total:'$139.00',status:'Delivered',agent:'Delivered May 2 · Rated 5★',statusClass:'b-green'},
+  {id:'#VS-44100',date:'Apr 12, 2025',items:'Webcam 4K HD, Laptop Stand',emojis:['📷','💻'],total:'$146.00',status:'Delivered',agent:'Delivered Apr 16',statusClass:'b-green'},
+  {id:'#VS-41220',date:'Mar 30, 2025',items:'USB-C Hub Pro',emojis:['🔌'],total:'$49.00',status:'Returned',agent:'Refunded Mar 31 by Rex AI',statusClass:'b-red'},
+];
+const WISHLIST = [
+  {emoji:'⌚',name:'Smart Watch Ultra',price:'$249',og:'$299'},
+  {emoji:'🎙️',name:'Studio Condenser Mic',price:'$129',og:'$159'},
+  {emoji:'🖥️',name:'Monitor Arm Dual',price:'$89',og:'$89'},
+  {emoji:'🔋',name:'Power Bank 20000mAh',price:'$59',og:'$79'},
+];
+const RECS = [
+  {emoji:'🖱️',name:'Ergonomic Mouse',price:'$49',reason:'Based on your keyboard purchase'},
+  {emoji:'📱',name:'Phone Stand MagSafe',price:'$29',reason:'Trending in your category'},
+  {emoji:'🎧',name:'Earpad Replacement Kit',price:'$19',reason:'Accessory for your earbuds'},
+];
+
+let loggedIn = false;
+
+function switchAuth(type, el){
+  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('auth-login').style.display = type==='login'?'block':'none';
+  document.getElementById('auth-signup').style.display = type==='signup'?'block':'none';
+}
+
+function login(){
+  loggedIn = true;
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('dash-screen').style.display = 'block';
+  renderDash();
+  toast_('👋 Welcome back, Aryan!');
+}
+
+function logout(){
+  loggedIn = false;
+  document.getElementById('dash-screen').style.display = 'none';
+  document.getElementById('auth-screen').style.display = 'flex';
+  toast_('👋 Signed out');
+}
+
+function showPanel(id, el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+}
+
+function renderDash(){
+  // Orders
+  const ol = document.getElementById('ordersList');
+  if(ol) ol.innerHTML = ORDERS_DATA.map(o=>`
+    <div class="order-card-item">
+      <div class="oc-hdr"><span class="oc-id">${o.id}</span><span class="oc-date">${o.date}</span><span class="oc-status-badge"><span class="badge ${o.statusClass}">${o.status}</span></span></div>
+      <div class="oc-body">
+        <div class="oc-emojis">${o.emojis.map(e=>`<div class="oc-emoji">${e}</div>`).join('')}</div>
+        <div class="oc-info"><div class="oc-items-text">${o.items}</div><div class="oc-total">${o.total}</div><div class="oc-ai">🤖 ${o.agent}</div></div>
+        <div class="oc-actions">
+          ${o.status==='In Transit'?`<button class="oc-btn oc-btn-primary" onclick="window.location.href='track.html'">Track</button>`:''}
+          ${o.status==='Delivered'?`<button class="oc-btn" onclick="toast_('🔄 Reorder placed!')">Reorder</button>`:''}
+          <button class="oc-btn" onclick="toast_('💬 Rex AI opening...')">Help</button>
+        </div>
+      </div>
+    </div>`).join('');
+
+  // Wishlist
+  const wg = document.getElementById('wishGrid');
+  if(wg) wg.innerHTML = WISHLIST.map((w,i)=>`
+    <div class="wish-card">
+      <div class="wish-img">${w.emoji}</div>
+      <div class="wish-info">
+        <div class="wish-name">${w.name}</div>
+        <div class="wish-price">${w.price} <span style="text-decoration:line-through;color:var(--gray2);font-size:0.72rem;font-weight:400">${w.og}</span></div>
+        <button class="wish-add" onclick="addWishToCart('${w.name}')">Add to Cart</button>
+      </div>
+      <div class="wish-rm" onclick="removeWish(this,'${w.name}')">✕</div>
+    </div>`).join('');
+
+  // Recs
+  ['overviewRecs','insightRecs'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.innerHTML = RECS.map(r=>`
+      <div class="ai-rec-card" onclick="window.location.href='product.html'">
+        <div class="ai-rec-img">${r.emoji}</div>
+        <div class="ai-rec-info"><div class="ai-rec-name">${r.name}</div><div class="ai-rec-price">${r.price}</div><div class="ai-rec-reason">🤖 ${r.reason}</div></div>
+      </div>`).join('');
+  });
+}
+
+function addWishToCart(name){ toast_('🛒 '+name+' added to cart'); }
+function removeWish(el, name){ el.closest('.wish-card').style.opacity='0.3'; toast_('✕ '+name+' removed from wishlist'); }
+
+function toast_(msg){
+  const el=document.getElementById('toast');
+  el.innerHTML=`<div class="ti">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='',2600);
+}
+
+// auto-login for demo
+const cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
+</script>
+</body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Search — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--card:#ffffff;--bg:#f8f8f5;--border:#e5e5e0;--text:#0f0f1a;--muted:#6b7280;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+
+/* NAV */
+.nav{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;}
+.nav-logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-search{flex:1;max-width:600px;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;}
+.nav-search input{flex:1;background:none;border:none;outline:none;color:white;font-size:0.9rem;font-family:'Inter',sans-serif;}
+.nav-search input::placeholder{color:rgba(255,255,255,0.4);}
+.nav-search button{background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:8px;padding:6px 14px;color:white;font-size:0.8rem;font-weight:600;cursor:pointer;}
+.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+.nav-links a:hover{color:white;}
+.nav-cart{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 14px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;position:relative;}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* AI BANNER */
+.ai-banner{background:linear-gradient(135deg,#1a0533,#0c1a3a);padding:20px 24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ai-badge{background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:8px;padding:6px 12px;font-size:0.75rem;font-weight:600;color:#a78bfa;}
+.ai-banner-text{color:rgba(255,255,255,0.9);font-size:0.9rem;}
+.ai-banner-text strong{color:white;}
+.ai-suggestions{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;}
+.ai-sug{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:5px 12px;font-size:0.75rem;color:rgba(255,255,255,0.8);cursor:pointer;transition:all 0.2s;}
+.ai-sug:hover{background:rgba(124,58,237,0.2);border-color:rgba(124,58,237,0.4);color:white;}
+
+/* LAYOUT */
+.page{display:flex;gap:0;min-height:calc(100vh - 60px);}
+.sidebar{width:260px;flex-shrink:0;background:white;border-right:1px solid var(--border);padding:24px 20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
+.main{flex:1;padding:24px;}
+
+/* SIDEBAR FILTERS */
+.filter-section{margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.filter-section:last-child{border-bottom:none;}
+.filter-title{font-size:0.8rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+.filter-clear{font-size:0.7rem;color:var(--purple);cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0;}
+.filter-option{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;}
+.filter-option input[type=checkbox]{accent-color:var(--purple);width:14px;height:14px;}
+.filter-option label{font-size:0.83rem;color:var(--text);cursor:pointer;flex:1;}
+.filter-option .count{font-size:0.72rem;color:var(--muted);background:var(--bg);border-radius:100px;padding:1px 7px;}
+.price-range{display:flex;flex-direction:column;gap:10px;}
+.price-inputs{display:flex;gap:8px;}
+.price-inputs input{flex:1;border:1px solid var(--border);border-radius:8px;padding:7px 10px;font-size:0.8rem;outline:none;color:var(--text);}
+.price-inputs input:focus{border-color:var(--purple);}
+.range-slider{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:linear-gradient(to right,var(--purple) 60%,var(--border) 60%);outline:none;}
+.range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--purple);cursor:pointer;box-shadow:0 2px 6px rgba(124,58,237,0.4);}
+.rating-option{display:flex;align-items:center;gap:6px;padding:5px 0;cursor:pointer;}
+.stars{color:#f59e0b;font-size:0.85rem;}
+.ai-filter-btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:10px;padding:10px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;margin-top:4px;font-family:'Inter',sans-serif;}
+
+/* RESULTS HEADER */
+.results-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:gap;}
+.results-meta{font-size:0.85rem;color:var(--muted);}
+.results-meta strong{color:var(--text);}
+.sort-row{display:flex;align-items:center;gap:12px;}
+.view-toggle{display:flex;gap:4px;}
+.view-btn{width:32px;height:32px;border:1px solid var(--border);border-radius:6px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;transition:all 0.2s;}
+.view-btn.active{background:var(--purple);border-color:var(--purple);color:white;}
+.sort-select{border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:0.82rem;color:var(--text);background:white;outline:none;cursor:pointer;}
+
+/* ACTIVE FILTERS */
+.active-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;}
+.filter-tag{display:flex;align-items:center;gap:6px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:100px;padding:4px 10px;font-size:0.75rem;color:var(--purple);font-weight:500;}
+.filter-tag span{cursor:pointer;font-size:0.9rem;opacity:0.6;}
+.filter-tag span:hover{opacity:1;}
+
+/* PRODUCT GRID */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.products-grid.list{grid-template-columns:1fr;}
+.product-card{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:all 0.25s;position:relative;cursor:pointer;}
+.product-card:hover{box-shadow:0 8px 32px rgba(0,0,0,0.1);transform:translateY(-3px);}
+.product-img{height:200px;display:flex;align-items:center;justify-content:center;font-size:4rem;background:linear-gradient(135deg,#f3f0ff,#e0f7fa);}
+.product-card.list .product-img{width:160px;height:160px;flex-shrink:0;border-radius:12px;}
+.product-card.list{display:flex;gap:16px;padding:16px;}
+.product-card.list .product-img{font-size:3rem;}
+.product-info{padding:14px;}
+.product-card.list .product-info{flex:1;padding:0;}
+.product-badge{position:absolute;top:10px;left:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:100px;}
+.wishlist-btn{position:absolute;top:10px;right:10px;background:white;border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem;transition:all 0.2s;}
+.wishlist-btn:hover{background:var(--purple);border-color:var(--purple);}
+.product-card.list .wishlist-btn{position:static;width:auto;height:auto;border:none;background:none;font-size:1.1rem;}
+.p-name{font-size:0.88rem;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.p-ai{font-size:0.72rem;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+.p-ai::before{content:'🤖';font-size:0.7rem;}
+.p-rating{display:flex;align-items:center;gap:4px;margin-bottom:8px;}
+.p-stars{color:#f59e0b;font-size:0.8rem;}
+.p-reviews{font-size:0.72rem;color:var(--muted);}
+.p-price{display:flex;align-items:center;gap:8px;}
+.p-price-main{font-size:1rem;font-weight:700;color:var(--navy);}
+.p-price-old{font-size:0.8rem;color:var(--muted);text-decoration:line-through;}
+.p-price-save{font-size:0.7rem;font-weight:600;color:#16a34a;background:#dcfce7;border-radius:100px;padding:2px 6px;}
+.p-actions{display:flex;gap:8px;margin-top:12px;}
+.btn-cart{flex:1;background:var(--navy);color:white;border:none;border-radius:8px;padding:9px;font-size:0.8rem;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;}
+.btn-cart:hover{background:var(--purple);}
+.btn-buy{background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;border:none;border-radius:8px;padding:9px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* AI INSIGHTS BAR */
+.ai-insights{background:white;border:1px solid var(--border);border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.ai-insight-item{display:flex;align-items:center;gap:8px;font-size:0.8rem;}
+.ai-insight-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;}
+.ai-insight-icon.luna{background:rgba(124,58,237,0.1);}
+.ai-insight-icon.atlas{background:rgba(6,182,212,0.1);}
+.ai-insight-icon.aria{background:rgba(245,158,11,0.1);}
+.ai-insight-text{color:var(--muted);}
+.ai-insight-text strong{color:var(--text);}
+.ai-divider{width:1px;height:28px;background:var(--border);}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:60px 20px;}
+.no-results .icon{font-size:3.5rem;margin-bottom:16px;}
+.no-results h3{font-size:1.2rem;font-weight:700;margin-bottom:8px;}
+.no-results p{color:var(--muted);font-size:0.9rem;margin-bottom:20px;}
+
+/* PAGINATION */
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:32px;}
+.page-btn{width:36px;height:36px;border:1px solid var(--border);border-radius:8px;background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;font-weight:600;transition:all 0.2s;}
+.page-btn.active{background:var(--purple);border-color:var(--purple);color:white;}
+.page-btn:hover:not(.active){background:var(--bg);}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:900;display:none;}
+.cart-overlay.open{display:block;}
+.cart-drawer{position:fixed;right:0;top:0;height:100%;width:380px;max-width:100vw;background:white;z-index:901;transform:translateX(100%);transition:transform 0.3s ease;display:flex;flex-direction:column;}
+.cart-drawer.open{transform:translateX(0);}
+.cart-hdr{padding:20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-hdr h3{font-size:1rem;font-weight:700;}
+.cart-close{cursor:pointer;font-size:1.2rem;color:var(--muted);}
+.cart-body{flex:1;overflow-y:auto;padding:16px;}
+.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.cart-item-img{width:56px;height:56px;background:linear-gradient(135deg,#f3f0ff,#e0f7fa);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.cart-item-info{flex:1;}
+.cart-item-name{font-size:0.83rem;font-weight:600;margin-bottom:4px;}
+.cart-item-price{font-size:0.9rem;font-weight:700;color:var(--purple);}
+.cart-qty{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.qty-btn{width:24px;height:24px;border:1px solid var(--border);border-radius:6px;background:white;cursor:pointer;font-weight:700;font-size:0.9rem;}
+.qty-val{font-size:0.85rem;font-weight:600;min-width:20px;text-align:center;}
+.cart-remove{color:var(--muted);cursor:pointer;font-size:0.75rem;margin-top:4px;}
+.cart-footer{padding:16px;border-top:1px solid var(--border);}
+.cart-total{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px;}
+.btn-checkout{width:100%;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;border:none;border-radius:10px;padding:13px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.cart-empty{text-align:center;padding:40px;color:var(--muted);}
+
+@media(max-width:768px){
+  .sidebar{display:none;}
+  .products-grid{grid-template-columns:repeat(2,1fr);}
+  .ai-insights{display:none;}
+}
+@media(max-width:480px){
+  .products-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="store.html" class="nav-logo">Vibe<span>Store</span></a>
+  <div class="nav-search">
+    <span>🔍</span>
+    <input type="text" id="searchInput" placeholder="Search products, brands, categories..." value="wireless headphones"/>
+    <button onclick="doSearch()">Search</button>
+  </div>
+  <div class="nav-links">
+    <a href="store.html">Store</a>
+    <a href="account.html">👤</a>
+    <a href="track.html">📦</a>
+    <button class="nav-cart" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<div class="ai-banner">
+  <div class="ai-badge">🤖 Atlas AI Search</div>
+  <div class="ai-banner-text">Showing AI-curated results for <strong>"wireless headphones"</strong> — <strong>Atlas</strong> analysed 1,247 products to rank these for you</div>
+  <div class="ai-suggestions">
+    <div class="ai-sug" onclick="searchFor('noise cancelling headphones')">noise cancelling</div>
+    <div class="ai-sug" onclick="searchFor('gaming headset')">gaming headset</div>
+    <div class="ai-sug" onclick="searchFor('earbuds')">earbuds</div>
+    <div class="ai-sug" onclick="searchFor('studio headphones')">studio</div>
+  </div>
+</div>
+
+<div class="page">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="filter-section">
+      <div class="filter-title">Category <span class="filter-clear" onclick="clearFilter('cat')">Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="c1" checked/><label for="c1">Headphones</label><span class="count">48</span></div>
+      <div class="filter-option"><input type="checkbox" id="c2"/><label for="c2">Earbuds</label><span class="count">32</span></div>
+      <div class="filter-option"><input type="checkbox" id="c3"/><label for="c3">Speakers</label><span class="count">21</span></div>
+      <div class="filter-option"><input type="checkbox" id="c4"/><label for="c4">Accessories</label><span class="count">15</span></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">Price Range <span class="filter-clear" onclick="clearFilter('price')">Clear</span></div>
+      <div class="price-range">
+        <div class="price-inputs">
+          <input type="number" id="priceMin" placeholder="₹ Min" value="0"/>
+          <input type="number" id="priceMax" placeholder="₹ Max" value="50000"/>
+        </div>
+        <input type="range" class="range-slider" min="0" max="50000" value="50000" oninput="updatePrice(this.value)"/>
+      </div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">Brand <span class="filter-clear" onclick="clearFilter('brand')">Clear</span></div>
+      <div class="filter-option"><input type="checkbox" id="b1" checked/><label for="b1">Sony</label><span class="count">12</span></div>
+      <div class="filter-option"><input type="checkbox" id="b2"/><label for="b2">Bose</label><span class="count">9</span></div>
+      <div class="filter-option"><input type="checkbox" id="b3"/><label for="b3">Apple</label><span class="count">7</span></div>
+      <div class="filter-option"><input type="checkbox" id="b4"/><label for="b4">Sennheiser</label><span class="count">6</span></div>
+      <div class="filter-option"><input type="checkbox" id="b5"/><label for="b5">JBL</label><span class="count">11</span></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">Rating <span class="filter-clear" onclick="clearFilter('rating')">Clear</span></div>
+      <div class="rating-option"><input type="checkbox" id="r5"/><label for="r5"><span class="stars">★★★★★</span> 5 stars</label></div>
+      <div class="rating-option"><input type="checkbox" id="r4" checked/><label for="r4"><span class="stars">★★★★</span>+ 4 stars</label></div>
+      <div class="rating-option"><input type="checkbox" id="r3"/><label for="r3"><span class="stars">★★★</span>+ 3 stars</label></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">Features</div>
+      <div class="filter-option"><input type="checkbox" id="f1" checked/><label for="f1">Noise Cancelling</label><span class="count">24</span></div>
+      <div class="filter-option"><input type="checkbox" id="f2"/><label for="f2">Wireless / BT</label><span class="count">38</span></div>
+      <div class="filter-option"><input type="checkbox" id="f3"/><label for="f3">Foldable</label><span class="count">16</span></div>
+      <div class="filter-option"><input type="checkbox" id="f4"/><label for="f4">Voice Assistant</label><span class="count">19</span></div>
+    </div>
+    <div class="filter-section">
+      <div class="filter-title">Availability</div>
+      <div class="filter-option"><input type="checkbox" id="a1" checked/><label for="a1">In Stock</label></div>
+      <div class="filter-option"><input type="checkbox" id="a2"/><label for="a2">Same-day Delivery</label></div>
+      <div class="filter-option"><input type="checkbox" id="a3"/><label for="a3">On Sale</label></div>
+    </div>
+    <button class="ai-filter-btn" onclick="applyAIFilters()">🤖 Let Atlas AI Filter for Me</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="active-filters" id="activeFilters">
+      <div class="filter-tag">Headphones <span onclick="removeTag(this)">×</span></div>
+      <div class="filter-tag">4★+ Rating <span onclick="removeTag(this)">×</span></div>
+      <div class="filter-tag">Noise Cancelling <span onclick="removeTag(this)">×</span></div>
+      <div class="filter-tag">In Stock <span onclick="removeTag(this)">×</span></div>
+    </div>
+
+    <div class="ai-insights">
+      <div class="ai-insight-item">
+        <div class="ai-insight-icon luna">🤖</div>
+        <div class="ai-insight-text"><strong>Luna AI</strong> found 3 price drops today</div>
+      </div>
+      <div class="ai-divider"></div>
+      <div class="ai-insight-item">
+        <div class="ai-insight-icon atlas">🎯</div>
+        <div class="ai-insight-text"><strong>Atlas AI</strong> best match: Sony WH-1000XM5</div>
+      </div>
+      <div class="ai-divider"></div>
+      <div class="ai-insight-item">
+        <div class="ai-insight-icon aria">⚡</div>
+        <div class="ai-insight-text"><strong>Aria AI</strong>: 12 people viewing similar items</div>
+      </div>
+    </div>
+
+    <div class="results-header">
+      <div class="results-meta">Showing <strong>48 results</strong> for "wireless headphones"</div>
+      <div class="sort-row">
+        <div class="view-toggle">
+          <button class="view-btn active" id="gridBtn" onclick="setView('grid')" title="Grid">⊞</button>
+          <button class="view-btn" id="listBtn" onclick="setView('list')" title="List">☰</button>
+        </div>
+        <select class="sort-select" onchange="sortProducts(this.value)">
+          <option value="ai">🤖 AI Recommended</option>
+          <option value="popular">Most Popular</option>
+          <option value="price-low">Price: Low to High</option>
+          <option value="price-high">Price: High to Low</option>
+          <option value="rating">Highest Rated</option>
+          <option value="new">Newest First</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="products-grid" id="productsGrid"></div>
+
+    <div class="pagination">
+      <button class="page-btn">‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn" onclick="this.parentElement.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">2</button>
+      <button class="page-btn" onclick="this.parentElement.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">3</button>
+      <span style="color:var(--muted);font-size:0.85rem">...</span>
+      <button class="page-btn" onclick="this.parentElement.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));this.classList.add('active')">12</button>
+      <button class="page-btn">›</button>
+    </div>
+  </main>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-hdr"><h3>🛒 Your Cart</h3><span class="cart-close" onclick="closeCart()">✕</span></div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="btn-checkout" onclick="window.location.href='checkout.html'">Proceed to Checkout →</button>
+  </div>
+</div>
+
+<script src="rex-chat.js"></script>
+<script>
+const PRODUCTS = [
+  {id:'p1',name:'Sony WH-1000XM5',brand:'Sony',price:29990,old:34990,rating:4.9,reviews:2847,emoji:'🎧',badge:'AI Pick',ai:'Atlas AI matched to your taste'},
+  {id:'p2',name:'Bose QuietComfort 45',brand:'Bose',price:24990,old:32990,rating:4.8,reviews:1923,emoji:'🎵',badge:'Best Seller',ai:'Top rated noise cancelling'},
+  {id:'p3',name:'Apple AirPods Max',brand:'Apple',price:49900,old:59900,rating:4.7,reviews:3201,emoji:'🎼',badge:'Premium',ai:'Aria AI: trending this week'},
+  {id:'p4',name:'Sennheiser HD 660S',brand:'Sennheiser',price:34990,old:39990,rating:4.8,reviews:892,emoji:'🎙️',badge:'Studio',ai:'Echo AI: audiophile choice'},
+  {id:'p5',name:'JBL Tune 770NC',brand:'JBL',price:7999,old:12999,rating:4.5,reviews:4127,emoji:'🎤',badge:'Value',ai:'Luna AI: best value today'},
+  {id:'p6',name:'Sony WF-1000XM5',brand:'Sony',price:19990,old:24990,rating:4.8,reviews:1567,emoji:'🎶',badge:'Wireless',ai:'Top earbuds for commute'},
+  {id:'p7',name:'Bose Sport Earbuds',brand:'Bose',price:12990,old:16990,rating:4.6,reviews:743,emoji:'🏃',badge:'Sport',ai:'Atlas AI: active lifestyle'},
+  {id:'p8',name:'Sennheiser Momentum 4',brand:'Sennheiser',price:26990,old:31990,rating:4.7,reviews:612,emoji:'🎵',badge:'New',ai:'60hr battery life'},
+];
+
+let cart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+let currentView = 'grid';
+
+function renderProducts() {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = PRODUCTS.map(p => {
+    const save = Math.round((1 - p.price/p.old)*100);
+    const inCart = cart.find(c=>c.id===p.id);
+    return `<div class="product-card${currentView==='list'?' list':''}" onclick="goProduct('${p.id}')">
+      ${currentView!=='list'?`<div class="product-img">${p.emoji}</div>`:''}
+      ${p.badge?`<div class="product-badge">${p.badge}</div>`:''}
+      <div class="wishlist-btn" onclick="event.stopPropagation();wishlist(this)">♡</div>
+      ${currentView==='list'?`<div class="product-img">${p.emoji}</div>`:''}
+      <div class="product-info">
+        <div class="p-name">${p.name}</div>
+        <div class="p-ai">${p.ai}</div>
+        <div class="p-rating"><span class="p-stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span><span class="p-reviews">(${p.reviews.toLocaleString()})</span></div>
+        <div class="p-price">
+          <span class="p-price-main">₹${p.price.toLocaleString()}</span>
+          <span class="p-price-old">₹${p.old.toLocaleString()}</span>
+          <span class="p-price-save">${save}% off</span>
+        </div>
+        <div class="p-actions">
+          <button class="btn-cart" onclick="event.stopPropagation();addCart('${p.id}')">${inCart?'✓ Added':'Add to Cart'}</button>
+          <button class="btn-buy" onclick="event.stopPropagation();window.location.href='checkout.html'">Buy Now</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function goProduct(id) { window.location.href = 'product.html?id=' + id; }
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('gridBtn').classList.toggle('active', v==='grid');
+  document.getElementById('listBtn').classList.toggle('active', v==='list');
+  document.getElementById('productsGrid').className = 'products-grid' + (v==='list'?' list':'');
+  renderProducts();
+}
+
+function addCart(id) {
+  const p = PRODUCTS.find(x=>x.id===id);
+  const existing = cart.find(c=>c.id===id);
+  if (existing) existing.qty++;
+  else cart.push({id:p.id,name:p.name,price:p.price,emoji:p.emoji,qty:1});
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  updateCartCount();
+  renderProducts();
+  renderCart();
+  openCart();
+}
+
+function updateCartCount() {
+  const total = cart.reduce((s,c)=>s+c.qty,0);
+  document.getElementById('cartCount').textContent = total;
+}
+
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  if (!cart.length) { body.innerHTML = '<div class="cart-empty">🛒<br/>Your cart is empty</div>'; return; }
+  body.innerHTML = cart.map(item => `
+    <div class="cart-item">
+      <div class="cart-item-img">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString()}</div>
+        <div class="cart-qty">
+          <button class="qty-btn" onclick="changeQty('${item.id}',-1)">−</button>
+          <span class="qty-val">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${item.id}',1)">+</button>
+        </div>
+        <div class="cart-remove" onclick="removeItem('${item.id}')">Remove</div>
+      </div>
+    </div>`).join('');
+  const total = cart.reduce((s,c)=>s+c.price*c.qty,0);
+  document.getElementById('cartTotal').textContent = '₹' + total.toLocaleString();
+}
+
+function changeQty(id, d) {
+  const item = cart.find(c=>c.id===id);
+  if (!item) return;
+  item.qty += d;
+  if (item.qty <= 0) cart = cart.filter(c=>c.id!==id);
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  updateCartCount(); renderCart();
+}
+
+function removeItem(id) {
+  cart = cart.filter(c=>c.id!==id);
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  updateCartCount(); renderCart();
+}
+
+function openCart() {
+  document.getElementById('cartOverlay').classList.add('open');
+  document.getElementById('cartDrawer').classList.add('open');
+}
+function closeCart() {
+  document.getElementById('cartOverlay').classList.remove('open');
+  document.getElementById('cartDrawer').classList.remove('open');
+}
+
+function wishlist(btn) { btn.textContent = btn.textContent==='♡'?'♥':'♡'; }
+function removeTag(span) { span.parentElement.remove(); }
+function clearFilter(type) {}
+function updatePrice(val) { document.getElementById('priceMax').value = val; }
+function doSearch() { document.querySelector('.nav-search input').value; renderProducts(); }
+function searchFor(q) { document.getElementById('searchInput').value = q; }
+function applyAIFilters() {
+  document.querySelectorAll('.sidebar input[type=checkbox]').forEach(cb => cb.checked = Math.random() > 0.5);
+  renderProducts();
+}
+function sortProducts(val) { renderProducts(); }
+
+updateCartCount();
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>

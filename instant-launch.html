@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Launching Your Store — VibeStore AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Inter',sans-serif;
+  background:#0a0a14;
+  color:#fff;
+  min-height:100vh;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+
+/* PARTICLE CANVAS */
+canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
+
+/* GLOW BLOBS */
+.blob{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.blob1{width:600px;height:600px;background:radial-gradient(circle,rgba(124,58,237,0.18),transparent);top:-200px;left:-200px;}
+.blob2{width:500px;height:500px;background:radial-gradient(circle,rgba(6,182,212,0.12),transparent);bottom:-150px;right:-150px;}
+.blob3{width:400px;height:400px;background:radial-gradient(circle,rgba(5,150,105,0.1),transparent);top:50%;left:50%;transform:translate(-50%,-50%);}
+
+/* MAIN CONTAINER */
+.container{position:relative;z-index:10;width:100%;max-width:700px;padding:40px 24px;text-align:center;}
+
+/* LOGO */
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:white;margin-bottom:40px;opacity:0;animation:fadeUp 0.6s ease 0.2s forwards;}
+.logo span{background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* PHASE: INTRO */
+#phase-intro{opacity:0;animation:fadeUp 0.6s ease 0.4s forwards;}
+.intro-title{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;color:white;line-height:1.2;margin-bottom:14px;}
+.intro-title em{font-style:normal;background:linear-gradient(135deg,#a78bfa,#4ade80);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.intro-sub{font-size:0.95rem;color:rgba(255,255,255,0.55);margin-bottom:32px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;}
+.vs-shopify{display:flex;gap:12px;justify-content:center;margin-bottom:36px;flex-wrap:wrap;}
+.cmp-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px 20px;min-width:200px;}
+.cmp-card.theirs{border-color:rgba(239,68,68,0.25);background:rgba(239,68,68,0.04);}
+.cmp-card.ours{border-color:rgba(5,150,105,0.35);background:rgba(5,150,105,0.06);}
+.cmp-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;}
+.cmp-card.theirs .cmp-title{color:rgba(239,68,68,0.7);}
+.cmp-card.ours .cmp-title{color:#4ade80;}
+.cmp-row{font-size:0.8rem;display:flex;align-items:center;gap:6px;padding:3px 0;color:rgba(255,255,255,0.7);}
+.cmp-row .x{color:#ef4444;font-weight:700;}
+.cmp-row .check{color:#4ade80;font-weight:700;}
+.btn-start{background:linear-gradient(135deg,#059669,#0d9488);border:none;border-radius:12px;padding:16px 40px;color:white;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(5,150,105,0.4);position:relative;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;}
+.btn-start::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.12),transparent);transform:translateX(-100%);animation:shim 2s infinite;}
+@keyframes shim{to{transform:translateX(100%)}}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(5,150,105,0.55);}
+.skip-note{margin-top:14px;font-size:0.78rem;color:rgba(255,255,255,0.3);}
+.skip-note a{color:rgba(255,255,255,0.5);text-decoration:underline;cursor:pointer;}
+
+/* PHASE: SCANNING */
+#phase-scan{display:none;opacity:0;}
+#phase-scan.show{display:block;animation:fadeUp 0.5s ease forwards;}
+.scan-title{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;margin-bottom:8px;}
+.scan-sub{font-size:0.85rem;color:rgba(255,255,255,0.5);margin-bottom:32px;}
+.scan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:28px;}
+.scan-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:14px 12px;text-align:center;transition:all 0.4s;position:relative;overflow:hidden;}
+.scan-item.active{border-color:rgba(124,58,237,0.5);background:rgba(124,58,237,0.08);}
+.scan-item.done{border-color:rgba(5,150,105,0.4);background:rgba(5,150,105,0.06);}
+.scan-item.done::after{content:'✓';position:absolute;top:6px;right:8px;font-size:0.65rem;font-weight:700;color:#4ade80;}
+.scan-item-icon{font-size:1.6rem;margin-bottom:6px;}
+.scan-item-name{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.8);}
+.scan-item-status{font-size:0.65rem;color:rgba(255,255,255,0.35);margin-top:3px;}
+.scan-item.active .scan-item-status{color:#a78bfa;}
+.scan-item.done .scan-item-status{color:#4ade80;}
+.scan-pulse{position:absolute;inset:0;border-radius:10px;border:1px solid rgba(124,58,237,0.6);animation:scanpulse 1s ease-out infinite;pointer-events:none;}
+@keyframes scanpulse{0%{opacity:0.8;transform:scale(1)}100%{opacity:0;transform:scale(1.04)}}
+
+/* PHASE: BUILDING */
+#phase-build{display:none;opacity:0;}
+#phase-build.show{display:block;animation:fadeUp 0.5s ease forwards;}
+.build-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;margin-bottom:8px;}
+.build-sub{font-size:0.83rem;color:rgba(255,255,255,0.5);margin-bottom:28px;}
+
+/* AGENT QUEUE */
+.agent-queue{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;}
+.aq-row{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;transition:all 0.4s;}
+.aq-row.active{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.07);}
+.aq-row.done{border-color:rgba(5,150,105,0.3);background:rgba(5,150,105,0.05);}
+.aq-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;background:rgba(255,255,255,0.06);}
+.aq-row.active .aq-icon{background:rgba(124,58,237,0.2);}
+.aq-row.done .aq-icon{background:rgba(5,150,105,0.15);}
+.aq-body{flex:1;}
+.aq-name{font-size:0.85rem;font-weight:700;color:rgba(255,255,255,0.9);}
+.aq-row.done .aq-name{color:white;}
+.aq-task{font-size:0.73rem;color:rgba(255,255,255,0.4);margin-top:2px;transition:color 0.3s;}
+.aq-row.active .aq-task{color:#a78bfa;}
+.aq-row.done .aq-task{color:#4ade80;}
+.aq-status{flex-shrink:0;}
+.aq-spinner{width:18px;height:18px;border:2px solid rgba(124,58,237,0.3);border-top-color:#7c3aed;border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.aq-check{font-size:0.9rem;color:#4ade80;font-weight:700;}
+.aq-wait{width:18px;height:18px;border:2px solid rgba(255,255,255,0.1);border-radius:50%;}
+
+/* BIG PROGRESS BAR */
+.big-progress-wrap{margin-bottom:12px;}
+.big-bar{height:6px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;}
+.big-fill{height:100%;background:linear-gradient(90deg,#7c3aed,#06b6d4,#4ade80);border-radius:3px;transition:width 0.6s ease;width:0%;}
+.big-pct{display:flex;justify-content:space-between;margin-top:8px;font-size:0.75rem;color:rgba(255,255,255,0.35);}
+
+/* PHASE: REVEAL */
+#phase-reveal{display:none;opacity:0;}
+#phase-reveal.show{display:block;animation:fadeUp 0.6s ease forwards;}
+.reveal-icon{font-size:4rem;margin-bottom:16px;animation:bounceIn 0.6s ease;}
+@keyframes bounceIn{0%{transform:scale(0.4);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.reveal-title{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;margin-bottom:8px;}
+.reveal-sub{font-size:0.9rem;color:rgba(255,255,255,0.55);margin-bottom:28px;line-height:1.7;}
+.reveal-config{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:28px;text-align:left;}
+.rc-item{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:12px 14px;}
+.rc-label{font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.35);margin-bottom:4px;}
+.rc-val{font-size:0.9rem;font-weight:600;color:white;}
+.rc-val em{font-style:normal;background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.reveal-agents{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin-bottom:28px;}
+.ra-tag{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:5px 12px;font-size:0.73rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:5px;}
+.ra-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:rp 1.5s infinite;}
+@keyframes rp{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn-enter{background:linear-gradient(135deg,#7c3aed,#06b6d4);border:none;border-radius:12px;padding:16px 44px;color:white;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:10px;box-shadow:0 8px 32px rgba(124,58,237,0.45);transition:all 0.25s;margin-bottom:10px;}
+.btn-enter:hover{transform:translateY(-2px);box-shadow:0 12px 44px rgba(124,58,237,0.6);}
+.reveal-links{display:flex;gap:12px;justify-content:center;margin-top:6px;}
+.reveal-link{font-size:0.78rem;color:rgba(255,255,255,0.4);cursor:pointer;text-decoration:underline;}
+.reveal-link:hover{color:rgba(255,255,255,0.7);}
+
+/* CONFETTI */
+.confetti-piece{position:fixed;width:8px;height:8px;top:-10px;border-radius:2px;animation:fall linear forwards;pointer-events:none;z-index:20;}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .intro-title{font-size:1.7rem;}
+  .vs-shopify{flex-direction:column;align-items:center;}
+  .scan-grid{grid-template-columns:repeat(2,1fr);}
+  .reveal-config{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="blob blob1"></div>
+<div class="blob blob2"></div>
+<div class="blob blob3"></div>
+
+<div class="container">
+
+  <div class="logo">Vibe<span>Store</span></div>
+
+  <!-- PHASE 1: INTRO -->
+  <div id="phase-intro">
+    <div class="intro-title">Your store, built in<br/><em>one click.</em></div>
+    <div class="intro-sub">Our 8 AI agents will analyse market trends, pick your category, choose a theme, configure pricing, and launch your fully operational store — in under 10 seconds.</div>
+
+    <div class="vs-shopify">
+      <div class="cmp-card theirs">
+        <div class="cmp-title">Shopify Setup</div>
+        <div class="cmp-row"><span class="x">✕</span> 14-step signup process</div>
+        <div class="cmp-row"><span class="x">✕</span> Credit card required</div>
+        <div class="cmp-row"><span class="x">✕</span> Manual theme selection</div>
+        <div class="cmp-row"><span class="x">✕</span> You configure everything</div>
+        <div class="cmp-row"><span class="x">✕</span> Avg 3 hours to first sale</div>
+      </div>
+      <div class="cmp-card ours">
+        <div class="cmp-title">VibeStore AI</div>
+        <div class="cmp-row"><span class="check">✓</span> One click — no forms</div>
+        <div class="cmp-row"><span class="check">✓</span> No credit card ever</div>
+        <div class="cmp-row"><span class="check">✓</span> AI selects optimal theme</div>
+        <div class="cmp-row"><span class="check">✓</span> 8 agents configure for you</div>
+        <div class="cmp-row"><span class="check">✓</span> Live in under 10 seconds</div>
+      </div>
+    </div>
+
+    <button class="btn-start" onclick="startLaunch()">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      Launch My Store Now — It's Free
+    </button>
+    <div class="skip-note">No account needed &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Live in seconds &nbsp;·&nbsp; <a onclick="window.location.href='setup.html'">Prefer to customise?</a></div>
+  </div>
+
+  <!-- PHASE 2: SCANNING -->
+  <div id="phase-scan">
+    <div class="scan-title">AI scanning your market...</div>
+    <div class="scan-sub">Our agents are reading real-time trend data to configure the perfect store for today.</div>
+    <div class="scan-grid" id="scanGrid">
+      <div class="scan-item" id="sc0"><div class="scan-item-icon">📈</div><div class="scan-item-name">Trend Analysis</div><div class="scan-item-status">Queued</div></div>
+      <div class="scan-item" id="sc1"><div class="scan-item-icon">🛍️</div><div class="scan-item-name">Category Match</div><div class="scan-item-status">Queued</div></div>
+      <div class="scan-item" id="sc2"><div class="scan-item-icon">🎨</div><div class="scan-item-name">Theme Selection</div><div class="scan-item-status">Queued</div></div>
+      <div class="scan-item" id="sc3"><div class="scan-item-icon">💰</div><div class="scan-item-name">Price Intelligence</div><div class="scan-item-status">Queued</div></div>
+      <div class="scan-item" id="sc4"><div class="scan-item-icon">🔍</div><div class="scan-item-name">SEO Optimisation</div><div class="scan-item-status">Queued</div></div>
+      <div class="scan-item" id="sc5"><div class="scan-item-icon">🤖</div><div class="scan-item-name">Agent Config</div><div class="scan-item-status">Queued</div></div>
+    </div>
+    <div class="big-progress-wrap">
+      <div class="big-bar"><div class="big-fill" id="scanBar"></div></div>
+      <div class="big-pct"><span id="scanPct">Initialising...</span><span id="scanPercent">0%</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 3: BUILDING -->
+  <div id="phase-build">
+    <div class="build-title">Agents are building your store...</div>
+    <div class="build-sub">Each AI agent is configuring its domain. Watch them work.</div>
+    <div class="agent-queue" id="agentQueue"></div>
+    <div class="big-progress-wrap">
+      <div class="big-bar"><div class="big-fill" id="buildBar"></div></div>
+      <div class="big-pct"><span id="buildStatus">Starting agents...</span><span id="buildPct">0%</span></div>
+    </div>
+  </div>
+
+  <!-- PHASE 4: REVEAL -->
+  <div id="phase-reveal">
+    <div class="reveal-icon">🚀</div>
+    <div class="reveal-title">Your store is live!</div>
+    <div class="reveal-sub">All 8 AI agents are active and running your store autonomously. You didn't fill a single form.</div>
+    <div class="reveal-config" id="revealConfig"></div>
+    <div class="reveal-agents">
+      <div class="ra-tag"><div class="ra-dot"></div>Zen AI — Operations</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Luna AI — Pricing</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Aria AI — Marketing</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Atlas AI — Search</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Rex AI — Support</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Nova AI — Merch</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Sage AI — Content</div>
+      <div class="ra-tag"><div class="ra-dot"></div>Echo AI — Reviews</div>
+    </div>
+    <button class="btn-enter" id="enterBtn" onclick="window.location.href='mystore.html'">
+      Enter My Store →
+    </button>
+    <div class="reveal-links">
+      <span class="reveal-link" onclick="window.location.href='app.html'">Open Admin Dashboard</span>
+      <span class="reveal-link" onclick="window.location.href='setup.html'">Change store settings</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// PARTICLE BG
+// ============================================================
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+function resize(){ canvas.width=innerWidth; canvas.height=innerHeight; }
+resize(); window.addEventListener('resize', resize);
+const pts = Array.from({length:55},()=>({
+  x:Math.random()*innerWidth, y:Math.random()*innerHeight,
+  vx:(Math.random()-.5)*.3, vy:(Math.random()-.5)*.3,
+  r:Math.random()*1.5+.5,
+  hue: Math.random()>0.5 ? 265 : 190,
+}));
+function drawParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  pts.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy;
+    if(p.x<0||p.x>canvas.width) p.vx*=-1;
+    if(p.y<0||p.y>canvas.height) p.vy*=-1;
+    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle=`hsla(${p.hue},80%,75%,0.35)`; ctx.fill();
+  });
+  // draw faint lines between close particles
+  for(let i=0;i<pts.length;i++) for(let j=i+1;j<pts.length;j++){
+    const dx=pts[i].x-pts[j].x, dy=pts[i].y-pts[j].y;
+    const dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<100){
+      ctx.beginPath(); ctx.moveTo(pts[i].x,pts[i].y); ctx.lineTo(pts[j].x,pts[j].y);
+      ctx.strokeStyle=`rgba(167,139,250,${0.06*(1-dist/100)})`; ctx.lineWidth=0.5; ctx.stroke();
+    }
+  }
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// ============================================================
+// AI AUTO-SELECTION LOGIC
+// ============================================================
+const CATEGORIES = [
+  'Fashion & Apparel','Electronics','Beauty & Wellness','Food & Grocery',
+  'Home & Living','Sports & Fitness','Books & Education','Jewellery & Accessories',
+  'Art & Handmade','Toys & Kids','Digital Products',
+];
+const THEMES = ['Vibe Dark','Clean Light','Bold Gradient','Natural Earth','Luxury Black','Playful Pastel'];
+const STORE_NAMES = [
+  'NovaNest','LunaCart','VibeMart','TrendHive','AuraStore','ZenShop',
+  'AtlasGoods','EchoMarket','AriaStore','PrimeVibe','SageShop','StarCart',
+];
+
+// "AI picks" based on time-of-day and pseudo-random seed
+function aiPick(){
+  const h = new Date().getHours();
+  const seed = (h * 37 + new Date().getDay() * 13) % CATEGORIES.length;
+  const cat = CATEGORIES[seed];
+  // Theme matching
+  const themeMap = {
+    'Fashion & Apparel':'Clean Light','Electronics':'Vibe Dark','Beauty & Wellness':'Playful Pastel',
+    'Food & Grocery':'Natural Earth','Home & Living':'Clean Light','Sports & Fitness':'Bold Gradient',
+    'Books & Education':'Clean Light','Jewellery & Accessories':'Luxury Black',
+    'Art & Handmade':'Natural Earth','Toys & Kids':'Playful Pastel','Digital Products':'Vibe Dark',
+  };
+  const theme = themeMap[cat] || 'Vibe Dark';
+  const name  = STORE_NAMES[(seed + h) % STORE_NAMES.length];
+  return { cat, theme, name };
+}
+
+let chosen = {};
+
+// ============================================================
+// PHASE CONTROLLER
+// ============================================================
+function show(id){ document.getElementById(id).classList.add('show'); }
+function hide(el){ el.style.display='none'; }
+function delay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function startLaunch(){
+  chosen = aiPick();
+  hide(document.getElementById('phase-intro'));
+  await delay(100);
+  show('phase-scan');
+  await runScan();
+  show('phase-build');
+  await runBuild();
+  saveConfig();
+  runConfetti();
+  show('phase-reveal');
+  buildReveal();
+  // auto-enter after 4s
+  let t = 4;
+  const btn = document.getElementById('enterBtn');
+  const intv = setInterval(()=>{
+    t--;
+    btn.textContent = t>0 ? `Enter My Store → (${t})` : 'Enter My Store →';
+    if(t<=0){ clearInterval(intv); window.location.href='mystore.html'; }
+  },1000);
+}
+
+// ============================================================
+// SCAN PHASE
+// ============================================================
+const SCAN_LABELS = [
+  {active:'Reading market trends...',done:'Trends analysed'},
+  {active:'Matching best category...',done:`Category: ${()=>chosen.cat}`},
+  {active:'Selecting optimal theme...',done:`Theme: ${()=>chosen.theme}`},
+  {active:'Configuring price engine...',done:'Pricing live'},
+  {active:'Generating SEO metadata...',done:'SEO ready'},
+  {active:'Booting 8 AI agents...',done:'All agents ready'},
+];
+async function runScan(){
+  const bar = document.getElementById('scanBar');
+  const pct = document.getElementById('scanPercent');
+  const status = document.getElementById('scanPct');
+  for(let i=0;i<6;i++){
+    const el = document.getElementById('sc'+i);
+    el.classList.add('active');
+    el.querySelector('.scan-item-status').textContent = SCAN_LABELS[i].active;
+    el.innerHTML += '<div class="scan-pulse"></div>';
+    const p = Math.round(((i+0.5)/6)*100);
+    bar.style.width = p+'%'; pct.textContent = p+'%';
+    status.textContent = SCAN_LABELS[i].active;
+    await delay(480);
+    el.classList.remove('active'); el.classList.add('done');
+    const pulse = el.querySelector('.scan-pulse'); if(pulse) pulse.remove();
+    const lbl = typeof SCAN_LABELS[i].done === 'function' ? SCAN_LABELS[i].done() : SCAN_LABELS[i].done;
+    el.querySelector('.scan-item-status').textContent = lbl;
+    bar.style.width = Math.round(((i+1)/6)*100)+'%';
+    pct.textContent = Math.round(((i+1)/6)*100)+'%';
+    await delay(120);
+  }
+  status.textContent = 'Scan complete.';
+  await delay(500);
+  hide(document.getElementById('phase-scan'));
+}
+
+// ============================================================
+// BUILD PHASE
+// ============================================================
+const AGENTS = [
+  {icon:'🚀',name:'Zen AI',task:'Setting up order management & fulfilment routes',done:'Order system configured'},
+  {icon:'💰',name:'Luna AI',task:'Calibrating price tracking for your category',done:'Price monitoring active — 8,000 items'},
+  {icon:'✍️',name:'Sage AI',task:'Writing your homepage copy and product descriptions',done:'Homepage copy published'},
+  {icon:'🎨',name:'Nova AI',task:'Applying your theme and curating product catalogue',done:`Theme "${()=>chosen.theme}" applied`},
+  {icon:'🔍',name:'Atlas AI',task:'Indexing catalogue and building search relevance',done:'Search index ready'},
+  {icon:'💬',name:'Rex AI',task:'Activating 24/7 chat support widget',done:'Chat support live on all pages'},
+  {icon:'🎯',name:'Aria AI',task:'Scheduling your launch week promotions',done:'Launch campaign ready — LAUNCH20 code live'},
+  {icon:'⭐',name:'Echo AI',task:'Collecting product reviews from similar stores',done:'Review data imported'},
+];
+
+async function runBuild(){
+  const queueEl = document.getElementById('agentQueue');
+  const bar = document.getElementById('buildBar');
+  const pct = document.getElementById('buildPct');
+  const status = document.getElementById('buildStatus');
+
+  // Render all rows as waiting
+  queueEl.innerHTML = AGENTS.map((a,i)=>`
+    <div class="aq-row" id="aq${i}">
+      <div class="aq-icon">${a.icon}</div>
+      <div class="aq-body">
+        <div class="aq-name">${a.name}</div>
+        <div class="aq-task" id="aqt${i}">${a.task}</div>
+      </div>
+      <div class="aq-status"><div class="aq-wait"></div></div>
+    </div>`).join('');
+
+  for(let i=0;i<AGENTS.length;i++){
+    const row = document.getElementById('aq'+i);
+    row.classList.add('active');
+    row.querySelector('.aq-status').innerHTML = '<div class="aq-spinner"></div>';
+    const p = Math.round(((i+0.5)/AGENTS.length)*100);
+    bar.style.width = p+'%'; pct.textContent = p+'%';
+    status.textContent = AGENTS[i].name + ' — ' + AGENTS[i].task;
+    await delay(600 + Math.random()*300);
+    row.classList.remove('active'); row.classList.add('done');
+    row.querySelector('.aq-status').innerHTML = '<div class="aq-check">✓</div>';
+    const doneText = typeof AGENTS[i].done === 'function' ? AGENTS[i].done() : AGENTS[i].done;
+    document.getElementById('aqt'+i).textContent = doneText;
+    bar.style.width = Math.round(((i+1)/AGENTS.length)*100)+'%';
+    pct.textContent = Math.round(((i+1)/AGENTS.length)*100)+'%';
+  }
+  status.textContent = 'All agents active. Store is live.';
+  await delay(600);
+  hide(document.getElementById('phase-build'));
+}
+
+// ============================================================
+// SAVE CONFIG & REVEAL
+// ============================================================
+function saveConfig(){
+  const config = {
+    name: chosen.name,
+    category: chosen.cat,
+    theme: chosen.theme,
+    tagline: 'Powered by 8 AI agents — running 24/7',
+    country: 'India',
+    currency: 'INR (₹)',
+    autoLaunched: true,
+  };
+  localStorage.setItem('vs_store_config', JSON.stringify(config));
+}
+
+function buildReveal(){
+  document.getElementById('revealConfig').innerHTML = [
+    {l:'Store Name',v:`<em>${chosen.name}</em>`},
+    {l:'Category',v:chosen.cat},
+    {l:'Theme',v:chosen.theme},
+    {l:'AI Agents',v:'All 8 active'},
+    {l:'Currency',v:'INR (₹)'},
+    {l:'Launch Promo',v:'LAUNCH20 — 20% off'},
+  ].map(r=>`<div class="rc-item"><div class="rc-label">${r.l}</div><div class="rc-val">${r.v}</div></div>`).join('');
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function runConfetti(){
+  const colors = ['#7c3aed','#06b6d4','#4ade80','#f59e0b','#ec4899','#a78bfa'];
+  for(let i=0;i<90;i++){
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.cssText = `
+      left:${Math.random()*100}vw;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      width:${6+Math.random()*6}px;height:${6+Math.random()*6}px;
+      border-radius:${Math.random()>0.5?'50%':'2px'};
+      animation-duration:${2+Math.random()*2}s;
+      animation-delay:${Math.random()*0.8}s;
+    `;
+    document.body.appendChild(el);
+    el.addEventListener('animationend',()=>el.remove());
+  }
+}
+</script>
+</body>
+</html>
