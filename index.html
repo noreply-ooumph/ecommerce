@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VibeStore — AI-Powered Commerce</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  :root {
+    --navy: #06060f;
+    --navy2: #0d0d1f;
+    --purple: #7c3aed;
+    --purple-light: #9d5cf5;
+    --cyan: #06b6d4;
+    --cyan-light: #22d3ee;
+    --lavender: #c4b5fd;
+    --white: #f8f7ff;
+    --gray: #94a3b8;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --glow-purple: rgba(124,58,237,0.35);
+    --glow-cyan: rgba(6,182,212,0.35);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ===== CANVAS BG ===== */
+  #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: rgba(6,6,15,0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--card-border);
+    transition: all 0.3s;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.4rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--purple-light), var(--cyan));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+  .nav-logo .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+    animation: pulse 2s infinite;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a {
+    color: var(--gray); text-decoration: none; font-size: 0.9rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: var(--white) !important; padding: 8px 20px;
+    border-radius: 8px; font-weight: 600 !important;
+    transition: opacity 0.2s, transform 0.2s !important;
+  }
+  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
+  .mobile-menu {
+    display: none; position: fixed; top: 70px; left: 0; right: 0;
+    background: var(--navy2); padding: 24px 5%;
+    border-bottom: 1px solid var(--card-border); z-index: 999;
+    flex-direction: column; gap: 20px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a { color: var(--gray); text-decoration: none; font-size: 1rem; }
+
+  /* ===== SECTIONS ===== */
+  section { position: relative; z-index: 1; }
+
+  /* ===== HERO ===== */
+  #hero {
+    min-height: 100vh; display: flex; align-items: center;
+    padding: 120px 5% 80px;
+    overflow: hidden;
+  }
+  .hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; max-width: 1300px; margin: 0 auto; width: 100%; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
+    border-radius: 100px; padding: 6px 16px; font-size: 0.8rem;
+    color: var(--lavender); margin-bottom: 24px;
+  }
+  .hero-badge span { width: 7px; height: 7px; background: var(--purple-light); border-radius: 50%; animation: pulse 1.5s infinite; }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 800; line-height: 1.1;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  h1 .grad { background: linear-gradient(135deg, #c4b5fd 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .hero-sub { font-size: 1.1rem; color: var(--gray); max-width: 500px; margin-bottom: 36px; line-height: 1.7; }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--purple), #5b21b6);
+    color: white; padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.3s; box-shadow: 0 0 30px rgba(124,58,237,0.4);
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(124,58,237,0.6); }
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    padding: 14px 28px; border-radius: 10px;
+    font-weight: 600; font-size: 0.95rem;
+    border: 1px solid var(--card-border); cursor: pointer;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.3s; backdrop-filter: blur(10px);
+  }
+  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
+
+  /* Hero visual */
+  .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+  .hero-card-main {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px); border-radius: 20px;
+    padding: 24px; width: 100%; max-width: 400px;
+    box-shadow: 0 0 60px rgba(124,58,237,0.2);
+  }
+  .hero-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .hero-card-title { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
+  .live-badge {
+    background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3);
+    color: var(--cyan); font-size: 0.7rem; padding: 3px 10px; border-radius: 100px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .live-badge::before { content: ''; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; animation: pulse 1s infinite; }
+  .agent-feed { display: flex; flex-direction: column; gap: 10px; }
+  .feed-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: rgba(255,255,255,0.03); border-radius: 10px;
+    padding: 10px 12px; border: 1px solid rgba(255,255,255,0.05);
+    animation: slideIn 0.4s ease;
+  }
+  .feed-icon { font-size: 1.1rem; }
+  .feed-text { flex: 1; }
+  .feed-agent { font-size: 0.75rem; color: var(--lavender); font-weight: 600; }
+  .feed-action { font-size: 0.78rem; color: var(--gray); }
+  .feed-time { font-size: 0.68rem; color: rgba(255,255,255,0.3); white-space: nowrap; }
+  .floating-stat {
+    position: absolute; background: var(--card-bg);
+    border: 1px solid var(--card-border); backdrop-filter: blur(16px);
+    border-radius: 12px; padding: 12px 16px;
+    animation: float 3s ease-in-out infinite;
+  }
+  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; }
+  .stat-label { font-size: 0.7rem; color: var(--gray); }
+
+  /* ===== MARQUEE ===== */
+  .marquee-section { padding: 30px 0; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); overflow: hidden; }
+  .marquee-track { display: flex; gap: 60px; animation: marquee 25s linear infinite; width: max-content; }
+  .marquee-item { display: flex; align-items: center; gap: 10px; color: var(--gray); font-size: 0.85rem; white-space: nowrap; font-weight: 500; }
+
+  /* ===== STATS ===== */
+  #stats { padding: 100px 5%; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .stat-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 16px; padding: 32px 24px; text-align: center;
+    backdrop-filter: blur(10px); transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 80%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--purple), transparent);
+  }
+  .stat-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
+  .stat-big { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 800; margin-bottom: 6px; }
+  .stat-desc { font-size: 0.9rem; color: var(--gray); }
+  .purple-text { color: var(--purple-light); }
+  .cyan-text { color: var(--cyan); }
+
+  /* ===== AGENTS ===== */
+  #agents { padding: 100px 5%; }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-tag {
+    display: inline-block; background: rgba(6,182,212,0.1);
+    border: 1px solid rgba(6,182,212,0.25); color: var(--cyan);
+    border-radius: 100px; padding: 5px 16px; font-size: 0.78rem;
+    font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700;
+    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  .section-sub { color: var(--gray); font-size: 1rem; max-width: 600px; margin: 0 auto; }
+  .agents-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1200px; margin: 0 auto; }
+  .agent-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 20px; padding: 28px 20px;
+    backdrop-filter: blur(10px); transition: all 0.3s; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .agent-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: 20px;
+    background: linear-gradient(135deg, var(--glow-purple), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .agent-card:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.4); }
+  .agent-card:hover::after { opacity: 1; }
+  .agent-emoji { font-size: 2.2rem; margin-bottom: 14px; display: block; }
+  .agent-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+  .agent-role { font-size: 0.75rem; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+  .agent-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.5; }
+  .agent-status {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 14px; font-size: 0.72rem; color: #4ade80;
+  }
+  .agent-status::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 1.5s infinite; }
+
+  /* ===== DASHBOARD ===== */
+  #demo { padding: 100px 5%; }
+  .demo-wrapper { max-width: 1200px; margin: 0 auto; }
+  .dashboard {
+    background: #0d0d1f; border: 1px solid var(--card-border);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 0 80px rgba(124,58,237,0.15);
+  }
+  .dash-titlebar {
+    background: rgba(255,255,255,0.03); padding: 14px 20px;
+    display: flex; align-items: center; gap: 8px;
+    border-bottom: 1px solid var(--card-border);
+  }
+  .dot-red { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+  .dot-yellow { width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; }
+  .dot-green { width: 12px; height: 12px; border-radius: 50%; background: #28c840; }
+  .dash-url { margin-left: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 4px 16px; font-size: 0.78rem; color: var(--gray); }
+  .dash-body { display: grid; grid-template-columns: 220px 1fr 260px; height: 520px; }
+  .dash-sidebar {
+    background: rgba(255,255,255,0.02); border-right: 1px solid var(--card-border);
+    padding: 20px 0;
+  }
+  .dash-brand { padding: 0 20px 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .dash-brand .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulse 2s infinite; }
+  .dash-nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 20px; font-size: 0.83rem; color: var(--gray);
+    cursor: pointer; transition: all 0.2s; border-left: 2px solid transparent;
+  }
+  .dash-nav-item:hover, .dash-nav-item.active {
+    background: rgba(124,58,237,0.1); color: var(--white);
+    border-left-color: var(--purple-light);
+  }
+  .dash-nav-item .icon { font-size: 1rem; }
+  .dash-main { overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  .dash-main::-webkit-scrollbar { width: 4px; }
+  .dash-main::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+  .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .metric-card {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 16px;
+  }
+  .metric-label { font-size: 0.72rem; color: var(--gray); margin-bottom: 6px; }
+  .metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; }
+  .metric-change { font-size: 0.7rem; color: #4ade80; margin-top: 4px; }
+  .chart-card {
+    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: 16px; flex: 1;
+  }
+  .chart-title { font-size: 0.78rem; font-weight: 600; color: var(--gray); margin-bottom: 12px; }
+  .dash-ai-feed {
+    border-left: 1px solid var(--card-border); padding: 20px;
+    overflow-y: auto; display: flex; flex-direction: column; gap: 0;
+  }
+  .dash-ai-feed::-webkit-scrollbar { width: 4px; }
+  .dash-ai-feed::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
+  .feed-header { font-size: 0.8rem; font-weight: 700; color: var(--lavender); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .feed-entry {
+    display: flex; flex-direction: column; gap: 3px;
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .fe-agent { font-size: 0.72rem; color: var(--purple-light); font-weight: 600; }
+  .fe-action { font-size: 0.75rem; color: var(--gray); }
+  .fe-time { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
+  .orders-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+  .orders-table th { text-align: left; padding: 8px 10px; color: var(--gray); font-weight: 500; border-bottom: 1px solid var(--card-border); }
+  .orders-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 600; }
+  .badge-green { background: rgba(74,222,128,0.15); color: #4ade80; }
+  .badge-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+
+  /* ===== COMPARISON ===== */
+  #compare { padding: 100px 5%; }
+  .compare-table-wrap { max-width: 1000px; margin: 0 auto; }
+  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .compare-table th {
+    padding: 20px 24px; font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700;
+    border-bottom: 2px solid var(--card-border);
+  }
+  .compare-table th:nth-child(2) { color: var(--gray); }
+  .compare-table th:nth-child(3) { background: rgba(124,58,237,0.1); color: var(--lavender); border-radius: 12px 12px 0 0; border-left: 1px solid rgba(124,58,237,0.2); border-right: 1px solid rgba(124,58,237,0.2); border-top: 1px solid rgba(124,58,237,0.2); }
+  .compare-table td { padding: 16px 24px; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
+  .compare-table td:nth-child(3) { background: rgba(124,58,237,0.05); border-left: 1px solid rgba(124,58,237,0.15); border-right: 1px solid rgba(124,58,237,0.15); }
+  .compare-table tr:last-child td:nth-child(3) { border-radius: 0 0 12px 12px; border-bottom: 1px solid rgba(124,58,237,0.2); }
+  .check { color: #4ade80; font-size: 1.1rem; }
+  .cross { color: #f87171; font-size: 1.1rem; }
+  .compare-label { color: var(--gray); }
+
+  /* ===== PRICING ===== */
+  #pricing { padding: 100px 5%; }
+  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+  .pricing-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 20px; padding: 36px 28px; transition: all 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .pricing-card:hover { transform: translateY(-6px); }
+  .pricing-card.popular {
+    background: linear-gradient(145deg, rgba(124,58,237,0.12), rgba(6,182,212,0.08));
+    border-color: rgba(124,58,237,0.4);
+    box-shadow: 0 0 60px rgba(124,58,237,0.2);
+  }
+  .popular-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: white; font-size: 0.72rem; font-weight: 700;
+    padding: 4px 20px; border-radius: 0 0 10px 10px; white-space: nowrap;
+  }
+  .plan-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
+  .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 16px 0 4px; }
+  .plan-price sup { font-size: 1.2rem; vertical-align: super; }
+  .plan-period { font-size: 0.8rem; color: var(--gray); margin-bottom: 28px; }
+  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+  .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--gray); }
+  .plan-features li::before { content: '✓'; color: var(--cyan); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .plan-btn {
+    width: 100%; padding: 13px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; border: none; transition: all 0.3s;
+  }
+  .plan-btn-outline {
+    background: transparent; color: var(--white); border: 1px solid var(--card-border);
+  }
+  .plan-btn-outline:hover { border-color: var(--purple-light); color: var(--purple-light); }
+  .plan-btn-filled {
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    color: white; box-shadow: 0 0 30px rgba(124,58,237,0.4);
+  }
+  .plan-btn-filled:hover { box-shadow: 0 0 50px rgba(124,58,237,0.6); transform: translateY(-1px); }
+
+  /* ===== TESTIMONIALS ===== */
+  #testimonials { padding: 100px 5%; }
+  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1100px; margin: 0 auto; }
+  .testi-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 18px; padding: 28px; transition: all 0.3s; backdrop-filter: blur(10px);
+  }
+  .testi-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
+  .stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 14px; }
+  .testi-text { font-size: 0.9rem; color: var(--gray); line-height: 1.7; margin-bottom: 20px; }
+  .testi-author { display: flex; align-items: center; gap: 12px; }
+  .testi-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--purple), var(--cyan));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+  }
+  .testi-name { font-weight: 600; font-size: 0.88rem; }
+  .testi-role { font-size: 0.75rem; color: var(--gray); }
+
+  /* ===== CTA ===== */
+  #cta {
+    padding: 100px 5%; text-align: center;
+  }
+  .cta-box {
+    max-width: 700px; margin: 0 auto;
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1));
+    border: 1px solid rgba(124,58,237,0.25); border-radius: 28px; padding: 72px 48px;
+    position: relative; overflow: hidden;
+  }
+  .cta-box::before {
+    content: ''; position: absolute; top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 60%);
+    animation: rotateBg 15s linear infinite;
+  }
+  .cta-box h2 { position: relative; z-index: 1; }
+  .cta-box p { position: relative; z-index: 1; color: var(--gray); margin: 16px 0 36px; font-size: 1.05rem; }
+  .cta-btns { position: relative; z-index: 1; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--card-border);
+    padding: 60px 5% 30px;
+    position: relative; z-index: 1;
+  }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 60px; margin-bottom: 50px; }
+  .footer-brand p { color: var(--gray); font-size: 0.85rem; margin: 16px 0 24px; max-width: 280px; line-height: 1.7; }
+  .newsletter { display: flex; gap: 8px; }
+  .newsletter input {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
+    border-radius: 8px; padding: 10px 14px; color: var(--white); font-size: 0.85rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .newsletter input:focus { border-color: var(--purple-light); }
+  .newsletter input::placeholder { color: var(--gray); }
+  .newsletter button {
+    background: linear-gradient(135deg, var(--purple), var(--cyan)); color: white;
+    border: none; border-radius: 8px; padding: 10px 18px; font-size: 0.85rem;
+    font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .footer-col h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 18px; color: var(--white); }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-col ul li a { color: var(--gray); text-decoration: none; font-size: 0.83rem; transition: color 0.2s; }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding-top: 30px; border-top: 1px solid var(--card-border); }
+  .footer-bottom p { font-size: 0.8rem; color: var(--gray); }
+  .social-links { display: flex; gap: 12px; }
+  .social-link {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+  }
+  .social-link:hover { border-color: var(--purple-light); transform: translateY(-2px); }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rotateBg {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1024px) {
+    .agents-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .testi-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .dash-body { grid-template-columns: 180px 1fr; }
+    .dash-ai-feed { display: none; }
+  }
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { margin-top: 40px; }
+    .hero-card-main { max-width: 100%; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+    .testi-grid { grid-template-columns: 1fr; }
+    .dash-body { grid-template-columns: 1fr; height: auto; }
+    .dash-sidebar { display: none; }
+    .metrics-row { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    .compare-table-wrap { overflow-x: auto; }
+  }
+  @media (max-width: 480px) {
+    .agents-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .metrics-row { grid-template-columns: 1fr; }
+    .hero-btns { flex-direction: column; }
+    h1 { font-size: 2rem; }
+    .cta-box { padding: 48px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">
+    <div class="dot"></div>
+    VibeStore
+  </a>
+  <div class="nav-links">
+    <a href="#agents">AI Agents</a>
+    <a href="#demo">Platform</a>
+    <a href="#compare">Compare</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#pricing" class="nav-cta">Get Started Free</a>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#agents" onclick="toggleMenu()">AI Agents</a>
+  <a href="#demo" onclick="toggleMenu()">Platform</a>
+  <a href="#compare" onclick="toggleMenu()">Compare</a>
+  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
+  <a href="#testimonials" onclick="toggleMenu()">Reviews</a>
+  <a href="#pricing" class="nav-cta" onclick="toggleMenu()">Get Started Free</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-badge"><span></span> 8 AI Agents. Zero Human Intervention.</div>
+      <h1>The Future of<br/><span class="grad">Commerce is</span><br/>Autonomous.</h1>
+      <p class="hero-sub">VibeStore replaces every manual task with intelligent AI agents. From inventory to marketing — your store runs itself, 24/7, at 10× the speed.</p>
+      <div class="hero-btns">
+        <a href="setup.html" class="btn-primary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          Launch Your VibeStore for Free
+        </a>
+        <a href="store.html" class="btn-secondary">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          See Example Store
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-main">
+        <div class="hero-card-header">
+          <span class="hero-card-title">AI Agent Activity Feed</span>
+          <span class="live-badge">LIVE</span>
+        </div>
+        <div class="agent-feed" id="heroFeed"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track" id="marquee">
+    <div class="marquee-item">🤖 Fully Autonomous Commerce</div>
+    <div class="marquee-item">⚡ 10× Faster Operations</div>
+    <div class="marquee-item">💰 80% Cost Reduction</div>
+    <div class="marquee-item">🔄 24/7 AI Agents Active</div>
+    <div class="marquee-item">📈 Smart Pricing Engine</div>
+    <div class="marquee-item">🎯 AI-Driven Marketing</div>
+    <div class="marquee-item">📦 Autonomous Inventory</div>
+    <div class="marquee-item">💬 Instant AI Support</div>
+    <div class="marquee-item">🔍 Auto SEO Optimization</div>
+    <div class="marquee-item">📊 Predictive Analytics</div>
+    <!-- duplicate for infinite -->
+    <div class="marquee-item">🤖 Fully Autonomous Commerce</div>
+    <div class="marquee-item">⚡ 10× Faster Operations</div>
+    <div class="marquee-item">💰 80% Cost Reduction</div>
+    <div class="marquee-item">🔄 24/7 AI Agents Active</div>
+    <div class="marquee-item">📈 Smart Pricing Engine</div>
+    <div class="marquee-item">🎯 AI-Driven Marketing</div>
+    <div class="marquee-item">📦 Autonomous Inventory</div>
+    <div class="marquee-item">💬 Instant AI Support</div>
+    <div class="marquee-item">🔍 Auto SEO Optimization</div>
+    <div class="marquee-item">📊 Predictive Analytics</div>
+  </div>
+</div>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-big purple-text" data-target="10" data-suffix="×">0</div>
+      <div class="stat-desc">Faster than traditional stores</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-big cyan-text" data-target="80" data-suffix="%">0</div>
+      <div class="stat-desc">Reduction in operational costs</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-big purple-text" data-target="24" data-suffix="/7">0</div>
+      <div class="stat-desc">Autonomous AI operation</div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-big cyan-text" data-target="99.9" data-suffix="%">0</div>
+      <div class="stat-desc">Platform uptime guarantee</div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENTS -->
+<section id="agents">
+  <div class="section-header reveal">
+    <div class="section-tag">Meet Your Team</div>
+    <h2>8 AI Agents. <span class="grad">Every Role Covered.</span></h2>
+    <p class="section-sub">Each agent is purpose-built, always learning, and never calls in sick. Your autonomous workforce starts day one.</p>
+  </div>
+  <div class="agents-grid">
+    <div class="agent-card reveal">
+      <span class="agent-emoji">📦</span>
+      <div class="agent-name">Aria</div>
+      <div class="agent-role">Inventory Agent</div>
+      <div class="agent-desc">Monitors stock levels in real-time, predicts demand using ML forecasts, and auto-triggers restock orders before you run out.</div>
+      <div class="agent-status">Active — monitoring 1,247 SKUs</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">📣</span>
+      <div class="agent-name">Nova</div>
+      <div class="agent-role">Marketing Agent</div>
+      <div class="agent-desc">Writes compelling ad copy, designs campaigns, A/B tests creatives, and optimizes ad spend across Google, Meta, and TikTok automatically.</div>
+      <div class="agent-status">Active — running 12 campaigns</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">💬</span>
+      <div class="agent-name">Rex</div>
+      <div class="agent-role">Support Agent</div>
+      <div class="agent-desc">Resolves customer queries instantly with full context awareness. Handles returns, complaints, and upsells — 24/7, zero wait time.</div>
+      <div class="agent-status">Active — 34 chats open</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">💲</span>
+      <div class="agent-name">Luna</div>
+      <div class="agent-role">Pricing Agent</div>
+      <div class="agent-desc">Dynamically adjusts prices based on competitor data, demand signals, and margin targets. Always optimized for maximum revenue.</div>
+      <div class="agent-status">Active — optimizing 380 prices</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">📊</span>
+      <div class="agent-name">Atlas</div>
+      <div class="agent-role">Analytics Agent</div>
+      <div class="agent-desc">Surfaces actionable insights, forecasts revenue, identifies churn risks, and delivers weekly intelligence reports without you asking.</div>
+      <div class="agent-status">Active — 3 new insights ready</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">🔍</span>
+      <div class="agent-name">Sage</div>
+      <div class="agent-role">SEO Agent</div>
+      <div class="agent-desc">Auto-generates product descriptions, meta tags, and blog posts. Continuously updates listings based on keyword trends and ranking data.</div>
+      <div class="agent-status">Active — 89 listings optimized</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">📱</span>
+      <div class="agent-name">Echo</div>
+      <div class="agent-role">Social Agent</div>
+      <div class="agent-desc">Schedules posts, writes captions, replies to comments, and grows your social presence across Instagram, X, and LinkedIn autonomously.</div>
+      <div class="agent-status">Active — 6 posts scheduled</div>
+    </div>
+    <div class="agent-card reveal">
+      <span class="agent-emoji">🚚</span>
+      <div class="agent-name">Zen</div>
+      <div class="agent-role">Operations Agent</div>
+      <div class="agent-desc">Manages vendor communications, shipment tracking, returns logistics, and fulfilment workflows end-to-end — no human needed.</div>
+      <div class="agent-status">Active — 17 shipments tracked</div>
+    </div>
+  </div>
+</section>
+
+<!-- DEMO DASHBOARD -->
+<section id="demo">
+  <div class="demo-wrapper">
+    <div class="section-header reveal" style="margin-bottom:40px">
+      <div class="section-tag">Live Platform</div>
+      <h2>Your Store. <span class="grad">Running Itself.</span></h2>
+      <p class="section-sub">A unified dashboard where every metric moves autonomously. No manual intervention. Just results.</p>
+    </div>
+    <div class="dashboard reveal">
+      <div class="dash-titlebar">
+        <div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div>
+        <div class="dash-url">app.vibestore.ai/dashboard</div>
+      </div>
+      <div class="dash-body">
+        <div class="dash-sidebar">
+          <div class="dash-brand"><div class="brand-dot"></div>VibeStore</div>
+          <div class="dash-nav-item active"><span class="icon">🏠</span> Dashboard</div>
+          <div class="dash-nav-item"><span class="icon">📦</span> Orders <span style="margin-left:auto;background:rgba(124,58,237,0.2);color:var(--lavender);font-size:0.65rem;padding:2px 6px;border-radius:4px">47</span></div>
+          <div class="dash-nav-item"><span class="icon">🏷️</span> Products</div>
+          <div class="dash-nav-item"><span class="icon">👥</span> Customers</div>
+          <div class="dash-nav-item"><span class="icon">📊</span> Analytics</div>
+          <div class="dash-nav-item"><span class="icon">📣</span> Marketing</div>
+          <div class="dash-nav-item"><span class="icon">🤖</span> AI Agents</div>
+          <div class="dash-nav-item"><span class="icon">⚙️</span> Settings</div>
+        </div>
+        <div class="dash-main">
+          <div class="metrics-row">
+            <div class="metric-card">
+              <div class="metric-label">Today's Revenue</div>
+              <div class="metric-value cyan-text" id="revenue">$12,849</div>
+              <div class="metric-change">↑ 23.4% vs yesterday</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Orders Processed</div>
+              <div class="metric-value purple-text" id="orders">347</div>
+              <div class="metric-change">↑ 18.2% vs yesterday</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Conversion Rate</div>
+              <div class="metric-value" style="color:#4ade80">4.8%</div>
+              <div class="metric-change">↑ 0.6% vs yesterday</div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Revenue — Last 7 Days (AI Optimized)</div>
+            <canvas id="revenueChart" height="110"></canvas>
+          </div>
+          <div style="font-size:0.78rem;font-weight:600;color:var(--gray);margin-bottom:8px;">Recent Orders</div>
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>Order</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>#4821</td><td>Sarah K.</td><td>Wireless Earbuds Pro</td><td>$89</td><td><span class="badge badge-green">Shipped</span></td></tr>
+              <tr><td>#4820</td><td>Mike R.</td><td>Smart Watch Ultra</td><td>$249</td><td><span class="badge badge-yellow">Processing</span></td></tr>
+              <tr><td>#4819</td><td>Priya S.</td><td>Laptop Stand Bundle</td><td>$67</td><td><span class="badge badge-green">Delivered</span></td></tr>
+              <tr><td>#4818</td><td>James L.</td><td>Mechanical Keyboard</td><td>$139</td><td><span class="badge badge-purple">AI Review</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="dash-ai-feed">
+          <div class="feed-header">
+            <span style="width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block"></span>
+            Agent Activity
+          </div>
+          <div id="dashFeed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <div class="section-header reveal">
+    <div class="section-tag">Comparison</div>
+    <h2>VibeStore vs <span class="grad">Traditional Shopify</span></h2>
+    <p class="section-sub">Everything Shopify does — plus an autonomous AI layer that handles the work for you.</p>
+  </div>
+  <div class="compare-table-wrap reveal">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:40%">Feature</th>
+          <th style="width:30%;text-align:center">Shopify</th>
+          <th style="width:30%;text-align:center">VibeStore ✦</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="compare-label">Product management</td><td style="text-align:center"><span class="check">✓</span> Manual</td><td style="text-align:center"><span class="check">✓</span> AI Automated</td></tr>
+        <tr><td class="compare-label">Inventory tracking</td><td style="text-align:center"><span class="check">✓</span> Manual alerts</td><td style="text-align:center"><span class="check">✓</span> Auto-restocked by Aria</td></tr>
+        <tr><td class="compare-label">Customer support</td><td style="text-align:center"><span class="check">✓</span> Human agents</td><td style="text-align:center"><span class="check">✓</span> Rex responds instantly</td></tr>
+        <tr><td class="compare-label">Dynamic pricing</td><td style="text-align:center"><span class="cross">✗</span> Static only</td><td style="text-align:center"><span class="check">✓</span> Luna optimizes live</td></tr>
+        <tr><td class="compare-label">Marketing campaigns</td><td style="text-align:center"><span class="check">✓</span> Manual setup</td><td style="text-align:center"><span class="check">✓</span> Nova creates & runs</td></tr>
+        <tr><td class="compare-label">SEO optimization</td><td style="text-align:center"><span class="check">✓</span> Manual edits</td><td style="text-align:center"><span class="check">✓</span> Sage auto-optimizes</td></tr>
+        <tr><td class="compare-label">Social media posting</td><td style="text-align:center"><span class="cross">✗</span> 3rd party app</td><td style="text-align:center"><span class="check">✓</span> Echo posts & engages</td></tr>
+        <tr><td class="compare-label">Vendor management</td><td style="text-align:center"><span class="check">✓</span> Manual emails</td><td style="text-align:center"><span class="check">✓</span> Zen handles end-to-end</td></tr>
+        <tr><td class="compare-label">Analytics & insights</td><td style="text-align:center"><span class="check">✓</span> View only</td><td style="text-align:center"><span class="check">✓</span> Atlas acts on insights</td></tr>
+        <tr><td class="compare-label">Revenue per employee</td><td style="text-align:center"><span class="compare-label">$180K avg</span></td><td style="text-align:center" style="color:var(--cyan)"><strong>Unlimited — no staff needed</strong></td></tr>
+        <tr><td class="compare-label">24/7 autonomous operation</td><td style="text-align:center"><span class="cross">✗</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
+        <tr><td class="compare-label">Operational cost</td><td style="text-align:center"><span class="compare-label">High (human salaries)</span></td><td style="text-align:center"><strong style="color:#4ade80">80% lower</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-header reveal">
+    <div class="section-tag">Pricing</div>
+    <h2>Simple. <span class="grad">Transparent. Autonomous.</span></h2>
+    <p class="section-sub">Start free. Scale with your store. Every plan includes all 8 AI agents.</p>
+  </div>
+  <div class="pricing-grid">
+    <div class="pricing-card reveal">
+      <div class="plan-name">Starter</div>
+      <div class="plan-price"><sup>$</sup>0</div>
+      <div class="plan-period">per month · forever free</div>
+      <ul class="plan-features">
+        <li>Up to 50 products</li>
+        <li>All 8 AI agents (limited)</li>
+        <li>Basic analytics dashboard</li>
+        <li>2% transaction fee</li>
+        <li>Community support</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Get Started Free</button>
+    </div>
+    <div class="pricing-card popular reveal">
+      <div class="popular-badge">MOST POPULAR</div>
+      <div class="plan-name" style="color:var(--lavender)">Growth</div>
+      <div class="plan-price"><sup>$</sup>49</div>
+      <div class="plan-period">per month · billed monthly</div>
+      <ul class="plan-features">
+        <li>Unlimited products</li>
+        <li>All 8 AI agents (full power)</li>
+        <li>Advanced analytics + forecasting</li>
+        <li>0.5% transaction fee</li>
+        <li>Priority AI support</li>
+        <li>Custom storefront design</li>
+        <li>Multi-channel selling</li>
+      </ul>
+      <button class="plan-btn plan-btn-filled">Start 14-Day Trial</button>
+    </div>
+    <div class="pricing-card reveal">
+      <div class="plan-name">Enterprise</div>
+      <div class="plan-price"><sup>$</sup>199</div>
+      <div class="plan-period">per month · billed monthly</div>
+      <ul class="plan-features">
+        <li>Everything in Growth</li>
+        <li>Custom AI agent training</li>
+        <li>Dedicated success manager</li>
+        <li>0% transaction fee</li>
+        <li>SLA guarantee + uptime</li>
+        <li>White-label option</li>
+        <li>API + webhook access</li>
+      </ul>
+      <button class="plan-btn plan-btn-outline">Contact Sales</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-header reveal">
+    <div class="section-tag">Reviews</div>
+    <h2>Founders <span class="grad">Love VibeStore</span></h2>
+    <p class="section-sub">From solo entrepreneurs to VC-backed startups — VibeStore is the operating system for modern commerce.</p>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"We replaced our 3-person ops team on day one. Nova runs our entire ad budget, Rex handles every ticket, and Zen manages all our vendors. We saved $18K/month and revenue went up 40%."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">AK</div>
+        <div>
+          <div class="testi-name">Aryan Kapoor</div>
+          <div class="testi-role">Founder, ThreadCo — Raised $2M seed</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"I showed VibeStore to our Series A investors and they were floored. The autonomous pricing alone increased our margins by 22%. This is the future — and we're early."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">SM</div>
+        <div>
+          <div class="testi-name">Sofia Martinez</div>
+          <div class="testi-role">CEO, LumeBeauty — $5M ARR</div>
+        </div>
+      </div>
+    </div>
+    <div class="testi-card reveal">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"The AI agents are legitimately smarter than our previous team at repetitive tasks. Sage rewrote 800 product listings overnight and our organic traffic tripled in 60 days."</div>
+      <div class="testi-author">
+        <div class="testi-avatar">JP</div>
+        <div>
+          <div class="testi-name">James Park</div>
+          <div class="testi-role">Co-founder, GearNest — Shopify $1M store</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="cta-box reveal">
+    <h2>Ready to run your store on autopilot?</h2>
+    <p>Join 1,200+ founders already using VibeStore. Free to start, powerful from day one.</p>
+    <div class="cta-btns">
+      <a href="setup.html" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Launch Your VibeStore for Free
+      </a>
+      <a href="store.html" class="btn-secondary">See Example Store</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="nav-logo" style="display:inline-flex;text-decoration:none">
+        <div class="dot"></div>
+        VibeStore
+      </div>
+      <p>The only e-commerce platform where AI agents handle everything — so you can focus on building your brand.</p>
+      <div class="newsletter">
+        <input type="email" placeholder="Enter your email" />
+        <button>Subscribe</button>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Platform</h4>
+      <ul>
+        <li><a href="#">AI Agents</a></li>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Storefront</a></li>
+        <li><a href="#">Analytics</a></li>
+        <li><a href="#">Integrations</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Press Kit</a></li>
+        <li><a href="#">Investors</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Documentation</a></li>
+        <li><a href="#">API Reference</a></li>
+        <li><a href="#">Status Page</a></li>
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 VibeStore · Powered by AI Agents · MyOoumph Networks Pvt Ltd</p>
+    <div class="social-links">
+      <a class="social-link" href="#">𝕏</a>
+      <a class="social-link" href="#">in</a>
+      <a class="social-link" href="#">▶</a>
+      <a class="social-link" href="#">📘</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== PARTICLES =====
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.3;
+    this.vy = (Math.random() - 0.5) * 0.3;
+    this.r = Math.random() * 1.5 + 0.5;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    this.color = Math.random() > 0.5 ? '124,58,237' : '6,182,212';
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 80; i++) particles.push(new Particle());
+
+function animateParticles() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  // draw connections
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(124,58,237,${0.08 * (1 - dist/100)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ===== MOBILE MENU =====
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// ===== NAV SCROLL =====
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  nav.style.background = window.scrollY > 50 ? 'rgba(6,6,15,0.95)' : 'rgba(6,6,15,0.8)';
+});
+
+// ===== REVEAL ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== ANIMATED COUNTERS =====
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const el = entry.target;
+      const target = parseFloat(el.dataset.target);
+      const suffix = el.dataset.suffix || '';
+      let current = 0;
+      const step = target / 60;
+      const timer = setInterval(() => {
+        current = Math.min(current + step, target);
+        el.textContent = (Number.isInteger(target) ? Math.round(current) : current.toFixed(1)) + suffix;
+        if (current >= target) clearInterval(timer);
+      }, 25);
+      counterObserver.unobserve(el);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+// ===== HERO AGENT FEED =====
+const heroEvents = [
+  { emoji: '📦', agent: 'Aria', action: 'Restock triggered: "USB-C Hub Pro" — 200 units ordered from supplier', time: 'just now' },
+  { emoji: '💲', agent: 'Luna', action: 'Price updated: "Wireless Earbuds" $89→$94 (+5.6% margin gain)', time: '12s ago' },
+  { emoji: '📣', agent: 'Nova', action: 'New campaign launched: "Summer Sale" targeting 25K users on Meta', time: '31s ago' },
+  { emoji: '💬', agent: 'Rex', action: 'Resolved ticket #5821: Refund processed in 4.2s', time: '45s ago' },
+  { emoji: '🔍', agent: 'Sage', action: 'SEO updated 14 listings — avg keyword rank improved by 8 positions', time: '1m ago' },
+  { emoji: '📱', agent: 'Echo', action: 'Instagram post scheduled: 9AM product drop — 12K estimated reach', time: '1m ago' },
+  { emoji: '📊', agent: 'Atlas', action: 'Revenue forecast: $18,200 today (+42% above target)', time: '2m ago' },
+  { emoji: '🚚', agent: 'Zen', action: 'Vendor invoice auto-approved: ₹1,24,000 — Sunrise Logistics', time: '2m ago' },
+];
+
+let feedIndex = 0;
+function renderHeroFeed() {
+  const feed = document.getElementById('heroFeed');
+  feed.innerHTML = '';
+  const visible = [heroEvents[feedIndex % heroEvents.length], heroEvents[(feedIndex+1) % heroEvents.length], heroEvents[(feedIndex+2) % heroEvents.length]];
+  visible.forEach(ev => {
+    const div = document.createElement('div');
+    div.className = 'feed-item';
+    div.innerHTML = `<span class="feed-icon">${ev.emoji}</span><div class="feed-text"><div class="feed-agent">${ev.agent}</div><div class="feed-action">${ev.action}</div></div><div class="feed-time">${ev.time}</div>`;
+    feed.appendChild(div);
+  });
+  feedIndex++;
+}
+renderHeroFeed();
+setInterval(renderHeroFeed, 2800);
+
+// ===== DASHBOARD FEED =====
+const dashEvents = [
+  { agent: 'Aria', action: 'Stock alert: "Laptop Stand" — 8 units left. Reorder initiated.', time: 'now' },
+  { agent: 'Nova', action: 'Ad spend optimised: Meta budget shifted to top 3 performing creatives.', time: '15s' },
+  { agent: 'Rex', action: 'Chat #1284 resolved — customer upgraded to premium plan.', time: '32s' },
+  { agent: 'Luna', action: '"Smart Watch" price drop detected on Amazon — adjusting -3%.', time: '47s' },
+  { agent: 'Atlas', action: 'Churn risk detected for 3 customers — retention flow triggered.', time: '1m' },
+  { agent: 'Sage', action: '"Wireless Mouse" product page rewritten — CTR +12% projected.', time: '1m' },
+  { agent: 'Echo', action: 'Reply sent to 14 Instagram comments on today\'s product post.', time: '2m' },
+  { agent: 'Zen', action: 'DHL shipment #98421 delayed — customer notified automatically.', time: '2m' },
+];
+
+let dFeedIndex = 0;
+function renderDashFeed() {
+  const feed = document.getElementById('dashFeed');
+  if (!feed) return;
+  const ev = dashEvents[dFeedIndex % dashEvents.length];
+  const div = document.createElement('div');
+  div.className = 'feed-entry';
+  div.style.animation = 'slideIn 0.3s ease';
+  div.innerHTML = `<div class="fe-agent">🤖 ${ev.agent}</div><div class="fe-action">${ev.action}</div><div class="fe-time">${ev.time} ago</div>`;
+  feed.insertBefore(div, feed.firstChild);
+  if (feed.children.length > 6) feed.removeChild(feed.lastChild);
+  dFeedIndex++;
+}
+renderDashFeed();
+setInterval(renderDashFeed, 2200);
+
+// ===== LIVE DASHBOARD NUMBERS =====
+function jitter(base, pct) {
+  return Math.round(base * (1 + (Math.random() - 0.5) * pct));
+}
+setInterval(() => {
+  const r = document.getElementById('revenue');
+  const o = document.getElementById('orders');
+  if (r) { const v = jitter(12849, 0.02); r.textContent = '$' + v.toLocaleString(); }
+  if (o) { const v = jitter(347, 0.02); o.textContent = v; }
+}, 3000);
+
+// ===== REVENUE CHART =====
+const chartEl = document.getElementById('revenueChart');
+if (chartEl) {
+  new Chart(chartEl, {
+    type: 'line',
+    data: {
+      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      datasets: [{
+        label: 'Revenue',
+        data: [8200, 9800, 7600, 11200, 10400, 13900, 12849],
+        borderColor: '#7c3aed',
+        backgroundColor: 'rgba(124,58,237,0.1)',
+        borderWidth: 2,
+        pointBackgroundColor: '#7c3aed',
+        pointRadius: 4,
+        fill: true,
+        tension: 0.4,
+      }, {
+        label: 'AI Forecast',
+        data: [8000, 10200, 7800, 11500, 10800, 14200, 14800],
+        borderColor: '#06b6d4',
+        backgroundColor: 'transparent',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointBackgroundColor: '#06b6d4',
+        pointRadius: 3,
+        fill: false,
+        tension: 0.4,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { labels: { color: '#94a3b8', font: { size: 11 }, boxWidth: 20 } }
+      },
+      scales: {
+        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: { ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.04)' } }
+      }
+    }
+  });
+}
+
+// ===== SMOOTH CLOSE MOBILE MENU ON LINK CLICK =====
+document.querySelectorAll('.mobile-menu a').forEach(a => a.addEventListener('click', () => {
+  document.getElementById('mobileMenu').classList.remove('open');
+}));
+</script>
+</body>
+</html>

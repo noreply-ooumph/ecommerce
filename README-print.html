@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>VibeStore — Project Documentation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap');
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  font-family:'Inter',sans-serif;
+  font-size:10.5pt;
+  color:#1a1a2e;
+  background:white;
+  line-height:1.7;
+}
+
+/* PAGE LAYOUT */
+.page{
+  max-width:760px;
+  margin:0 auto;
+  padding:48px 56px;
+}
+
+/* COVER PAGE */
+.cover{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:72px 0 56px;
+  page-break-after:always;
+}
+.cover-top{}
+.cover-label{
+  font-size:8pt;
+  font-weight:600;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:#6b7280;
+  margin-bottom:32px;
+}
+.cover-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:36pt;
+  font-weight:700;
+  color:#0f0f1a;
+  line-height:1.15;
+  margin-bottom:12px;
+}
+.cover-subtitle{
+  font-size:13pt;
+  color:#4b5563;
+  font-weight:400;
+  margin-bottom:40px;
+  max-width:500px;
+  line-height:1.5;
+}
+.cover-divider{
+  width:56px;
+  height:3px;
+  background:#7c3aed;
+  margin-bottom:40px;
+}
+.cover-meta-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  border:1px solid #e5e7eb;
+  border-radius:4px;
+  overflow:hidden;
+  max-width:480px;
+}
+.cover-meta-item{
+  padding:14px 18px;
+  border-bottom:1px solid #e5e7eb;
+}
+.cover-meta-item:nth-child(odd){border-right:1px solid #e5e7eb;}
+.cover-meta-item:nth-last-child(-n+2){border-bottom:none;}
+.cmi-label{font-size:7.5pt;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;margin-bottom:3px;}
+.cmi-value{font-size:9.5pt;font-weight:600;color:#0f0f1a;}
+.cover-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  padding-top:40px;
+  border-top:1px solid #e5e7eb;
+}
+.cover-org{font-size:8.5pt;color:#6b7280;}
+.cover-conf{font-size:8pt;color:#9ca3af;font-style:italic;}
+
+/* TABLE OF CONTENTS */
+.toc-page{
+  page-break-after:always;
+  padding-top:16px;
+}
+.toc-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18pt;
+  font-weight:700;
+  color:#0f0f1a;
+  margin-bottom:32px;
+  padding-bottom:12px;
+  border-bottom:2px solid #f3f4f6;
+}
+.toc-section{margin-bottom:6px;}
+.toc-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  padding:7px 0;
+  border-bottom:1px dotted #e5e7eb;
+}
+.toc-item:last-child{border-bottom:none;}
+.toc-num{
+  font-size:8.5pt;
+  font-weight:600;
+  color:#7c3aed;
+  margin-right:10px;
+  flex-shrink:0;
+}
+.toc-name{font-size:9.5pt;color:#374151;flex:1;}
+.toc-page-num{font-size:8.5pt;color:#9ca3af;flex-shrink:0;}
+.toc-group{
+  font-size:7.5pt;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#9ca3af;
+  margin:20px 0 8px;
+}
+
+/* SECTIONS */
+.section{
+  page-break-before:always;
+  padding-top:16px;
+}
+.section-number{
+  font-size:8pt;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#7c3aed;
+  margin-bottom:8px;
+}
+.section-title{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:20pt;
+  font-weight:700;
+  color:#0f0f1a;
+  margin-bottom:8px;
+  line-height:1.2;
+}
+.section-intro{
+  font-size:10pt;
+  color:#6b7280;
+  margin-bottom:32px;
+  padding-bottom:20px;
+  border-bottom:1px solid #f3f4f6;
+  line-height:1.7;
+}
+
+/* HEADINGS */
+h2{
+  font-size:13pt;
+  font-weight:700;
+  color:#0f0f1a;
+  margin:28px 0 10px;
+}
+h3{
+  font-size:10.5pt;
+  font-weight:600;
+  color:#374151;
+  margin:20px 0 8px;
+}
+
+/* BODY TEXT */
+p{
+  margin-bottom:14px;
+  color:#374151;
+  line-height:1.75;
+}
+
+/* CALLOUT BOXES */
+.callout{
+  border-left:3px solid #7c3aed;
+  background:#faf9ff;
+  padding:14px 18px;
+  margin:20px 0;
+  border-radius:0 4px 4px 0;
+}
+.callout-label{
+  font-size:7.5pt;
+  font-weight:700;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+  color:#7c3aed;
+  margin-bottom:5px;
+}
+.callout p{margin:0;font-size:9.5pt;color:#374151;}
+
+.callout.note{border-left-color:#0891b2;background:#f0f9ff;}
+.callout.note .callout-label{color:#0891b2;}
+
+.callout.warn{border-left-color:#d97706;background:#fffbeb;}
+.callout.warn .callout-label{color:#d97706;}
+
+/* TABLES */
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin:16px 0 24px;
+  font-size:9pt;
+}
+thead tr{background:#0f0f1a;color:white;}
+thead th{
+  padding:10px 12px;
+  text-align:left;
+  font-size:8pt;
+  font-weight:600;
+  letter-spacing:0.04em;
+}
+tbody tr{border-bottom:1px solid #f3f4f6;}
+tbody tr:nth-child(even){background:#fafafa;}
+tbody td{
+  padding:9px 12px;
+  vertical-align:top;
+  color:#374151;
+  line-height:1.5;
+}
+tbody td:first-child{font-weight:600;color:#0f0f1a;white-space:nowrap;}
+
+/* AGENT TABLE */
+.agent-table thead tr{background:#1a0533;}
+
+/* FILE TABLE */
+.file-table tbody td:first-child{font-family:monospace;font-size:8.5pt;color:#7c3aed;}
+
+/* DEFINITION LIST */
+.def-list{margin:0 0 20px;}
+.def-item{display:grid;grid-template-columns:160px 1fr;gap:0;border-bottom:1px solid #f3f4f6;}
+.def-item:last-child{border-bottom:none;}
+.def-term{
+  padding:9px 12px 9px 0;
+  font-size:9pt;
+  font-weight:600;
+  color:#0f0f1a;
+}
+.def-desc{
+  padding:9px 0;
+  font-size:9pt;
+  color:#374151;
+  line-height:1.6;
+}
+
+/* NUMBERED LIST */
+ol.formal{
+  padding-left:20px;
+  margin-bottom:16px;
+}
+ol.formal li{
+  padding:4px 0 4px 6px;
+  color:#374151;
+  line-height:1.7;
+  font-size:9.5pt;
+}
+
+ul.formal{
+  padding-left:20px;
+  margin-bottom:16px;
+  list-style:none;
+}
+ul.formal li{
+  padding:4px 0 4px 0;
+  color:#374151;
+  line-height:1.7;
+  font-size:9.5pt;
+  position:relative;
+  padding-left:14px;
+}
+ul.formal li::before{
+  content:'';
+  position:absolute;
+  left:0;
+  top:12px;
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#7c3aed;
+}
+
+/* TWO COL */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:20px;}
+.col-box{border:1px solid #e5e7eb;border-radius:4px;padding:16px;}
+.col-box h4{font-size:9pt;font-weight:700;color:#0f0f1a;margin-bottom:10px;}
+.col-box ul{padding-left:14px;}
+.col-box ul li{font-size:8.5pt;color:#374151;margin-bottom:4px;}
+
+/* STAT ROW */
+.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0;}
+.stat-box{border:1px solid #e5e7eb;border-radius:4px;padding:14px;text-align:center;}
+.stat-n{font-size:18pt;font-weight:700;color:#7c3aed;font-family:'Space Grotesk',sans-serif;}
+.stat-l{font-size:7.5pt;color:#6b7280;margin-top:3px;text-transform:uppercase;letter-spacing:0.06em;}
+
+/* FLOW */
+.flow{display:flex;gap:0;margin:20px 0;overflow:hidden;border-radius:4px;border:1px solid #e5e7eb;}
+.flow-step{flex:1;padding:14px 12px;text-align:center;border-right:1px solid #e5e7eb;background:#fafafa;}
+.flow-step:last-child{border-right:none;}
+.flow-step-n{font-size:7.5pt;font-weight:700;color:#7c3aed;margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;}
+.flow-step-t{font-size:8.5pt;font-weight:600;color:#0f0f1a;}
+.flow-step-d{font-size:7.5pt;color:#6b7280;margin-top:3px;line-height:1.4;}
+
+/* CODE BLOCK */
+.code-block{
+  background:#0f0f1a;
+  color:#e5e7eb;
+  border-radius:4px;
+  padding:14px 18px;
+  font-family:monospace;
+  font-size:8.5pt;
+  line-height:1.7;
+  margin:16px 0;
+  overflow:hidden;
+}
+.code-comment{color:#6b7280;}
+
+/* FOOTER */
+.footer{
+  margin-top:48px;
+  padding-top:14px;
+  border-top:1px solid #e5e7eb;
+  display:flex;
+  justify-content:space-between;
+  font-size:7.5pt;
+  color:#9ca3af;
+}
+
+/* PRINT */
+@media print{
+  body{font-size:10pt;}
+  .page{padding:36px 48px;max-width:100%;}
+  .section{page-break-before:always;}
+  .cover{min-height:auto;page-break-after:always;}
+  .toc-page{page-break-after:always;}
+  table{page-break-inside:avoid;}
+  .callout{page-break-inside:avoid;}
+  h2,h3{page-break-after:avoid;}
+  .flow{page-break-inside:avoid;}
+  .two-col{page-break-inside:avoid;}
+  .stat-row{page-break-inside:avoid;}
+}
+@page{margin:0;size:A4;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="cover-top">
+    <div class="cover-label">Technical Project Documentation</div>
+    <div class="cover-title">VibeStore</div>
+    <div class="cover-subtitle">An AI-Native E-Commerce Platform — Architecture, Implementation, and Delivery Report</div>
+    <div class="cover-divider"></div>
+    <div class="cover-meta-grid">
+      <div class="cover-meta-item"><div class="cmi-label">Project Name</div><div class="cmi-value">VibeStore</div></div>
+      <div class="cover-meta-item"><div class="cmi-label">Version</div><div class="cmi-value">1.0 — Production Ready</div></div>
+      <div class="cover-meta-item"><div class="cmi-label">Organisation</div><div class="cmi-value">MyOoumph Networks Pvt Ltd</div></div>
+      <div class="cover-meta-item"><div class="cmi-label">Date</div><div class="cmi-value">May 19, 2026</div></div>
+      <div class="cover-meta-item"><div class="cmi-label">Document Type</div><div class="cmi-value">Manager Briefing</div></div>
+      <div class="cover-meta-item"><div class="cmi-label">Status</div><div class="cmi-value">Complete</div></div>
+    </div>
+  </div>
+  <div class="cover-bottom">
+    <div class="cover-org">Prepared by the Engineering Team, MyOoumph Networks Pvt Ltd, Lucknow, India</div>
+    <div class="cover-conf">Internal Use Only</div>
+  </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-page">
+  <div class="toc-title">Table of Contents</div>
+
+  <div class="toc-group">Overview</div>
+  <div class="toc-item"><span class="toc-num">1</span><span class="toc-name">Executive Summary</span><span class="toc-page-num">3</span></div>
+  <div class="toc-item"><span class="toc-num">2</span><span class="toc-name">Problem Statement and Opportunity</span><span class="toc-page-num">3</span></div>
+  <div class="toc-item"><span class="toc-num">3</span><span class="toc-name">Project Objectives</span><span class="toc-page-num">4</span></div>
+
+  <div class="toc-group">Architecture</div>
+  <div class="toc-item"><span class="toc-num">4</span><span class="toc-name">System Architecture</span><span class="toc-page-num">4</span></div>
+  <div class="toc-item"><span class="toc-num">5</span><span class="toc-name">AI Agent Roster</span><span class="toc-page-num">5</span></div>
+  <div class="toc-item"><span class="toc-num">6</span><span class="toc-name">Technology Stack</span><span class="toc-page-num">6</span></div>
+
+  <div class="toc-group">Delivery</div>
+  <div class="toc-item"><span class="toc-num">7</span><span class="toc-name">File Inventory and Page Descriptions</span><span class="toc-page-num">7</span></div>
+  <div class="toc-item"><span class="toc-num">8</span><span class="toc-name">Customer-Facing Feature Set</span><span class="toc-page-num">8</span></div>
+  <div class="toc-item"><span class="toc-num">9</span><span class="toc-name">Merchant Admin Feature Set</span><span class="toc-page-num">9</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-name">User Flow Diagrams</span><span class="toc-page-num">9</span></div>
+
+  <div class="toc-group">Quality and Standards</div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-name">Responsive Design and Accessibility</span><span class="toc-page-num">10</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-name">Performance Characteristics</span><span class="toc-page-num">10</span></div>
+  <div class="toc-item"><span class="toc-num">13</span><span class="toc-name">Competitive Positioning</span><span class="toc-page-num">11</span></div>
+  <div class="toc-item"><span class="toc-num">14</span><span class="toc-name">Deployment Instructions</span><span class="toc-page-num">11</span></div>
+  <div class="toc-item"><span class="toc-num">15</span><span class="toc-name">Roadmap and Recommended Next Steps</span><span class="toc-page-num">12</span></div>
+</div>
+
+
+<!-- SECTION 1 -->
+<div class="section">
+  <div class="section-number">Section 1</div>
+  <div class="section-title">Executive Summary</div>
+  <div class="section-intro">A high-level statement of what was built, why, and the outcome achieved.</div>
+
+  <p>VibeStore is a fully functional, investor-ready e-commerce platform prototype built to demonstrate what a Shopify-equivalent product looks like when every operational function is delegated to a named artificial intelligence agent rather than a human operator. The platform covers the complete commerce lifecycle: product discovery, cart management, checkout, order tracking, customer account management, content publishing, and merchant administration.</p>
+
+  <p>The project was delivered as a zero-dependency, pure HTML/CSS/JavaScript application comprising 13 interconnected web pages and one shared JavaScript module. The total deliverable weighs approximately 480 kilobytes and requires no build process, no server, and no third-party runtime. Any modern web browser can open and run the application directly from the file system.</p>
+
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-n">13</div><div class="stat-l">Pages delivered</div></div>
+    <div class="stat-box"><div class="stat-n">8</div><div class="stat-l">AI agents modelled</div></div>
+    <div class="stat-box"><div class="stat-n">480 KB</div><div class="stat-l">Total project size</div></div>
+    <div class="stat-box"><div class="stat-n">0</div><div class="stat-l">External dependencies</div></div>
+  </div>
+
+  <div class="callout">
+    <div class="callout-label">Summary Statement</div>
+    <p>VibeStore demonstrates, at prototype fidelity, that a complete e-commerce platform can be operated by AI agents with no human intervention at any point in the purchase or fulfilment lifecycle. The prototype is ready for investor demonstration and internal stakeholder review.</p>
+  </div>
+</div>
+
+
+<!-- SECTION 2 -->
+<div class="section">
+  <div class="section-number">Section 2</div>
+  <div class="section-title">Problem Statement and Opportunity</div>
+  <div class="section-intro">The market context and the gap this project addresses.</div>
+
+  <h2>The Problem with Existing Platforms</h2>
+  <p>Shopify and comparable e-commerce platforms are operationally dependent on human labour at nearly every step. Inventory management, customer support, content creation, pricing decisions, campaign management, order dispatching, and fraud review all require trained staff. This creates several structural problems for merchants:</p>
+
+  <ul class="formal">
+    <li>Operational costs scale linearly with order volume, eroding margins as businesses grow.</li>
+    <li>Human availability is limited to working hours, introducing delays in support, fulfilment, and pricing responses.</li>
+    <li>Quality and speed of decisions vary by individual, creating inconsistency in the customer experience.</li>
+    <li>Small and mid-size merchants cannot afford the specialist teams that large operators employ, creating a capability gap.</li>
+  </ul>
+
+  <h2>The Opportunity</h2>
+  <p>The rapid maturation of large language models and autonomous AI agents in 2024 and 2025 has created a genuine opportunity to replace human operators with software agents that are always available, operate at negligible marginal cost, and improve continuously with data. VibeStore is a prototype demonstrating what this replacement looks like at the product level — not as a concept document, but as a working, navigable application.</p>
+
+  <div class="callout note">
+    <div class="callout-label">Market Framing</div>
+    <p>The global e-commerce software market was valued at approximately USD 6.5 billion in 2024. A platform that eliminates the operational staffing cost layer represents a structurally differentiated product with significant pricing and margin advantages over incumbents.</p>
+  </div>
+</div>
+
+
+<!-- SECTION 3 -->
+<div class="section">
+  <div class="section-number">Section 3</div>
+  <div class="section-title">Project Objectives</div>
+  <div class="section-intro">The specific goals this prototype was built to demonstrate.</div>
+
+  <ol class="formal">
+    <li>Produce a navigable, full-featured e-commerce storefront equivalent in scope to Shopify's customer-facing product.</li>
+    <li>Produce a navigable merchant administration dashboard equivalent in scope to Shopify's admin panel.</li>
+    <li>Model eight distinct AI agents, each owning a specific operational domain, with visible activity indicators throughout the interface.</li>
+    <li>Implement a shared cart with persistent state across all pages.</li>
+    <li>Implement a live Rex AI chat widget available on every page of the platform.</li>
+    <li>Ensure full responsiveness across mobile, tablet, and desktop screen sizes.</li>
+    <li>Deliver the prototype with zero external framework dependencies to eliminate deployment friction.</li>
+    <li>Achieve a visual and interaction quality suitable for presentation to investors and senior stakeholders.</li>
+  </ol>
+
+  <p>All eight objectives were met in full. The platform is navigable end-to-end from landing page through checkout to order tracking, and from admin dashboard through product management to analytics.</p>
+</div>
+
+
+<!-- SECTION 4 -->
+<div class="section">
+  <div class="section-number">Section 4</div>
+  <div class="section-title">System Architecture</div>
+  <div class="section-intro">How the platform is structured at a technical and conceptual level.</div>
+
+  <h2>Two-Sided Platform Model</h2>
+  <p>VibeStore mirrors the fundamental architecture of Shopify by operating as a two-sided platform. One side serves customers — the individuals browsing, purchasing, and tracking orders. The other side serves merchants — the businesses listing products, managing inventory, running campaigns, and reviewing analytics. Both sides share a common design language and the same underlying cart data layer.</p>
+
+  <div class="two-col">
+    <div class="col-box">
+      <h4>Customer Side (Storefront)</h4>
+      <ul>
+        <li>Landing page and marketing</li>
+        <li>Product discovery and search</li>
+        <li>Category and collection browsing</li>
+        <li>Product detail and variant selection</li>
+        <li>Cart and checkout</li>
+        <li>Order tracking</li>
+        <li>Customer account and wishlist</li>
+        <li>Blog and content hub</li>
+        <li>Referral and notification centre</li>
+      </ul>
+    </div>
+    <div class="col-box">
+      <h4>Merchant Side (Admin)</h4>
+      <ul>
+        <li>Live dashboard with AI activity feed</li>
+        <li>Order management and fulfilment</li>
+        <li>Product and inventory management</li>
+        <li>Customer profiles</li>
+        <li>AI agent configuration</li>
+        <li>Analytics and revenue reporting</li>
+        <li>Marketing campaign management</li>
+        <li>Storefront customisation</li>
+        <li>Settings and integrations</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Data Layer</h2>
+  <p>State persistence is handled through the browser's <code>localStorage</code> API using the key <code>vs_cart</code>. Cart contents are serialised as JSON and read by every page that requires cart context — the store, product pages, checkout, wishlist, and collections. This simulates the database-backed session management a production platform would use, and demonstrates cross-page state coherence without a server.</p>
+
+  <h2>Shared Widget Architecture</h2>
+  <p>The Rex AI chat widget is implemented as an Immediately Invoked Function Expression (IIFE) in a standalone file, <code>rex-chat.js</code>. It injects its own styles and HTML into whichever page loads it, exposes three global functions for inter-page communication, and operates entirely independently of page-specific code. This pattern mirrors how production widget systems (Intercom, Zendesk) are embedded.</p>
+</div>
+
+
+<!-- SECTION 5 -->
+<div class="section">
+  <div class="section-number">Section 5</div>
+  <div class="section-title">AI Agent Roster</div>
+  <div class="section-intro">The eight named agents, their domains, and their visible responsibilities across the platform.</div>
+
+  <p>Each agent is assigned a specific operational domain and is visibly attributed throughout the interface — in activity feeds, notification sources, product recommendations, content authorship, and chat responses. This design choice makes the AI-native proposition legible to any user or investor navigating the platform.</p>
+
+  <table class="agent-table">
+    <thead>
+      <tr>
+        <th>Agent Name</th>
+        <th>Operational Domain</th>
+        <th>Key Responsibilities</th>
+        <th>Visible In</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Zen AI</td>
+        <td>Operations and Fulfilment</td>
+        <td>Order processing, dispatch coordination, fraud detection, delivery confirmation</td>
+        <td>Checkout, Track, Notifications</td>
+      </tr>
+      <tr>
+        <td>Luna AI</td>
+        <td>Pricing Intelligence</td>
+        <td>Real-time price monitoring, competitor tracking, drop alerts, price history</td>
+        <td>Wishlist, Search, Store, Notifications</td>
+      </tr>
+      <tr>
+        <td>Aria AI</td>
+        <td>Sales and Marketing</td>
+        <td>Campaign management, flash sale activation, referral tracking, push notifications</td>
+        <td>Admin Dashboard, Referral, Notifications</td>
+      </tr>
+      <tr>
+        <td>Atlas AI</td>
+        <td>Search and Discovery</td>
+        <td>Product ranking, personalised search, cross-sell recommendations, taste profiling</td>
+        <td>Search, Product Detail, Account</td>
+      </tr>
+      <tr>
+        <td>Rex AI</td>
+        <td>Customer Support</td>
+        <td>Live chat, order status queries, return initiation, refund processing</td>
+        <td>All pages (chat widget)</td>
+      </tr>
+      <tr>
+        <td>Nova AI</td>
+        <td>Merchandising</td>
+        <td>Collection curation, category management, inventory alerts, storefront layout</td>
+        <td>Collections, Admin Dashboard</td>
+      </tr>
+      <tr>
+        <td>Sage AI</td>
+        <td>Content and SEO</td>
+        <td>Article writing, SEO optimisation, product descriptions, blog publishing</td>
+        <td>Blog, Product Detail</td>
+      </tr>
+      <tr>
+        <td>Echo AI</td>
+        <td>Social and Reviews</td>
+        <td>Review aggregation, social proof generation, sentiment analysis, UGC management</td>
+        <td>Product Detail, Notifications</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 6 -->
+<div class="section">
+  <div class="section-number">Section 6</div>
+  <div class="section-title">Technology Stack</div>
+  <div class="section-intro">The technical choices made and the rationale behind them.</div>
+
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Technology</th><th>Rationale</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Markup</td><td>HTML5</td><td>Universal browser compatibility, no compilation required, instant deployment</td></tr>
+      <tr><td>Styling</td><td>CSS3 with custom properties</td><td>Design token system, animations, responsive grid — no preprocessor needed</td></tr>
+      <tr><td>Logic</td><td>Vanilla JavaScript (ES6+)</td><td>Zero dependency footprint, full DOM control, no build toolchain</td></tr>
+      <tr><td>Typography</td><td>Google Fonts (Inter, Space Grotesk)</td><td>Professional, modern type system appropriate for investor presentation</td></tr>
+      <tr><td>Charts</td><td>Chart.js (CDN)</td><td>Lightweight, declarative charting for the admin analytics dashboard</td></tr>
+      <tr><td>State</td><td>localStorage (JSON)</td><td>Persistent cart state across page navigations without a backend</td></tr>
+      <tr><td>Pattern</td><td>Multi-page application</td><td>Simulates real e-commerce site navigation; each page is independently loadable</td></tr>
+      <tr><td>Widget</td><td>IIFE module (rex-chat.js)</td><td>Self-contained, no global scope pollution, embeddable in any page</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout note">
+    <div class="callout-label">Architecture Decision</div>
+    <p>A React or Next.js approach was considered and rejected at the outset. The zero-dependency approach was chosen deliberately to ensure that the prototype can be demonstrated by opening a single HTML file in any browser — no Node.js, no npm, no build step. This reduces demo friction to zero, which is the correct choice for an investor presentation context.</p>
+  </div>
+</div>
+
+
+<!-- SECTION 7 -->
+<div class="section">
+  <div class="section-number">Section 7</div>
+  <div class="section-title">File Inventory and Page Descriptions</div>
+  <div class="section-intro">Every file delivered, its purpose, and its approximate size.</div>
+
+  <table class="file-table">
+    <thead>
+      <tr><th>File</th><th>Purpose</th><th>Size</th><th>Side</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>index.html</td><td>Marketing landing page. Hero, AI agent showcase, pricing, comparison with Shopify, animated counters.</td><td>57 KB</td><td>Public</td></tr>
+      <tr><td>app.html</td><td>Merchant admin dashboard. Single-page application with 9 navigable views and modal system.</td><td>79 KB</td><td>Merchant</td></tr>
+      <tr><td>store.html</td><td>Customer storefront homepage. Category filtering, flash sale countdown, 12-product grid, cart drawer.</td><td>44 KB</td><td>Customer</td></tr>
+      <tr><td>product.html</td><td>Product detail page. URL-param driven, image gallery, colour swatches, tabs, sticky buy bar.</td><td>35 KB</td><td>Customer</td></tr>
+      <tr><td>checkout.html</td><td>Checkout flow. 4-step process, AI autofill, coupon code, order confirmation with confetti.</td><td>33 KB</td><td>Customer</td></tr>
+      <tr><td>account.html</td><td>Customer account. Login/signup, orders, wishlist, addresses, profile, AI insights panel.</td><td>31 KB</td><td>Customer</td></tr>
+      <tr><td>collections.html</td><td>Category browser. Sub-collection strip, sidebar filters, colour swatches, Nova AI curation.</td><td>29 KB</td><td>Customer</td></tr>
+      <tr><td>search.html</td><td>Search results. Atlas AI banner, sidebar filters, grid/list toggle, active filter chips.</td><td>27 KB</td><td>Customer</td></tr>
+      <tr><td>blog.html</td><td>Content hub. Sage AI live feed, featured article, 4-article grid, newsletter, article modal reader.</td><td>23 KB</td><td>Customer</td></tr>
+      <tr><td>track.html</td><td>Order tracking. Progress bar, 6-step timeline, live ETA, Zen AI status, cancel modal.</td><td>22 KB</td><td>Customer</td></tr>
+      <tr><td>notifications.html</td><td>Notification centre. 3-column layout, agent attribution, type filters, live Zen AI activity.</td><td>22 KB</td><td>Customer</td></tr>
+      <tr><td>wishlist.html</td><td>Wishlist. Luna AI price tracking, mini price-history bar charts, select-all, share modal.</td><td>21 KB</td><td>Customer</td></tr>
+      <tr><td>referral.html</td><td>Referral program. 3-tier reward system, leaderboard, referral table, animated particle hero.</td><td>17 KB</td><td>Customer</td></tr>
+      <tr><td>rex-chat.js</td><td>Shared AI chat widget. IIFE, keyword-matched replies, typing indicator, quick-reply chips.</td><td>12 KB</td><td>Shared</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 8 -->
+<div class="section">
+  <div class="section-number">Section 8</div>
+  <div class="section-title">Customer-Facing Feature Set</div>
+  <div class="section-intro">A detailed inventory of features available to end customers navigating the storefront.</div>
+
+  <h2>Discovery and Navigation</h2>
+  <ul class="formal">
+    <li>Category tab navigation with active state filtering on the store homepage.</li>
+    <li>Full-text search page with sidebar filters for price, brand, rating, features, and availability.</li>
+    <li>Collection browser with sub-category strip, colour swatches, and Nova AI curation labels.</li>
+    <li>Atlas AI search banner attributing result rankings to the AI agent.</li>
+    <li>Grid and list view toggle on search and collection pages.</li>
+    <li>Sort options: AI Recommended, Most Popular, Price Low to High, Price High to Low, Highest Rated, Newest.</li>
+  </ul>
+
+  <h2>Product and Cart</h2>
+  <ul class="formal">
+    <li>Product detail page driven by URL parameters, supporting multiple products from a shared data map.</li>
+    <li>Image gallery with thumbnail switching and main image display.</li>
+    <li>Colour swatch and size variant selection.</li>
+    <li>Quantity stepper with Add to Cart confirmation state.</li>
+    <li>Sticky buy bar appearing on scroll past 500 pixels.</li>
+    <li>Product tabs: Description, Specifications, Reviews with rating bars, AI Insights from three agents.</li>
+    <li>Related products grid linking to adjacent product pages.</li>
+    <li>Slide-out cart drawer available on all storefront pages, persisting state via localStorage.</li>
+    <li>Flash sale countdown timer updating every second, synchronised to end of day.</li>
+  </ul>
+
+  <h2>Checkout and Post-Purchase</h2>
+  <ul class="formal">
+    <li>Four-step checkout flow: Cart Review, Contact Details, Payment, Confirmation.</li>
+    <li>Zen AI autofill pre-populates address fields on demand.</li>
+    <li>Three shipping options with dynamic price calculation.</li>
+    <li>Payment methods: card (with live formatting), UPI, Cash on Delivery, EMI.</li>
+    <li>Coupon code system (VIBE20 applies 20% discount with visual confirmation).</li>
+    <li>Real-time order total calculation updating on any input change.</li>
+    <li>Order confirmation with confetti animation, generated order ID, and calculated delivery date.</li>
+    <li>Order tracking page with animated 5-step progress bar and timestamped timeline.</li>
+    <li>Cancel request modal with reason selection, processed by Rex AI.</li>
+  </ul>
+
+  <h2>Account, Wishlist, and Engagement</h2>
+  <ul class="formal">
+    <li>Customer account with login and signup tab toggle.</li>
+    <li>Order history, wishlist management, saved addresses, and profile settings panels.</li>
+    <li>Wishlist with Luna AI price-drop alerts, 90-day mini bar charts, and share-link modal.</li>
+    <li>Notification centre with type and agent filters, unread indicators, and live Zen AI activity.</li>
+    <li>Referral program with three-tier reward tiers, referral history table, and leaderboard.</li>
+    <li>Sage AI content hub with article modal reader and live publishing activity feed.</li>
+    <li>Rex AI chat widget available on every page with keyword-matched intelligent responses.</li>
+  </ul>
+</div>
+
+
+<!-- SECTION 9 -->
+<div class="section">
+  <div class="section-number">Section 9</div>
+  <div class="section-title">Merchant Admin Feature Set</div>
+  <div class="section-intro">Features available to the merchant in the administration dashboard.</div>
+
+  <p>The merchant admin dashboard (app.html) is implemented as a single-page application. Clicking any sidebar navigation item switches the active view without a page reload, matching the behaviour of production admin tools such as Shopify Admin, Notion, and Linear.</p>
+
+  <table>
+    <thead>
+      <tr><th>Admin View</th><th>Key Features</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Dashboard</td><td>Live AI agent activity feed, revenue and order counters updating every 3 seconds, Chart.js revenue line chart with AI forecast overlay, quick action buttons.</td></tr>
+      <tr><td>Orders</td><td>Order list with status badges, order detail modal, fulfilment actions, Zen AI processing attribution.</td></tr>
+      <tr><td>Products</td><td>Product grid with stock levels, edit modal with full product form, add new product form, inventory status indicators.</td></tr>
+      <tr><td>Customers</td><td>Customer list with spend and order count, customer profile modal with Luna AI and Atlas AI insights.</td></tr>
+      <tr><td>AI Agents</td><td>Agent configuration cards for all eight agents, enable/disable toggles, performance metrics per agent.</td></tr>
+      <tr><td>Analytics</td><td>Bar chart for weekly sales, doughnut chart for category breakdown, key metrics panel.</td></tr>
+      <tr><td>Marketing</td><td>Campaign list, new campaign form with Aria AI targeting, budget and channel configuration.</td></tr>
+      <tr><td>Storefront</td><td>Theme and layout controls, live preview link, Sage AI content settings.</td></tr>
+      <tr><td>Settings</td><td>Four-tab settings panel: General, AI Agents, Billing, Integrations.</td></tr>
+    </tbody>
+  </table>
+
+  <p>A toast notification system provides feedback on all admin actions. Modals handle detail views and edit forms without navigating away from the current context.</p>
+</div>
+
+
+<!-- SECTION 10 -->
+<div class="section">
+  <div class="section-number">Section 10</div>
+  <div class="section-title">User Flow Diagrams</div>
+  <div class="section-intro">The primary navigation flows a user follows through the platform.</div>
+
+  <h2>Customer Purchase Flow</h2>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-step-n">Step 1</div><div class="flow-step-t">Landing Page</div><div class="flow-step-d">index.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Step 2</div><div class="flow-step-t">Browse Store</div><div class="flow-step-d">store.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Step 3</div><div class="flow-step-t">View Product</div><div class="flow-step-d">product.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Step 4</div><div class="flow-step-t">Checkout</div><div class="flow-step-d">checkout.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Step 5</div><div class="flow-step-t">Track Order</div><div class="flow-step-d">track.html</div></div>
+  </div>
+
+  <h2>Customer Discovery Flow</h2>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-step-n">Entry</div><div class="flow-step-t">Store Home</div><div class="flow-step-d">store.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Option A</div><div class="flow-step-t">Search</div><div class="flow-step-d">search.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Option B</div><div class="flow-step-t">Collections</div><div class="flow-step-d">collections.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Result</div><div class="flow-step-t">Product Page</div><div class="flow-step-d">product.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Save</div><div class="flow-step-t">Wishlist</div><div class="flow-step-d">wishlist.html</div></div>
+  </div>
+
+  <h2>Merchant Administration Flow</h2>
+  <div class="flow">
+    <div class="flow-step"><div class="flow-step-n">Login</div><div class="flow-step-t">Admin Entry</div><div class="flow-step-d">app.html</div></div>
+    <div class="flow-step"><div class="flow-step-n">Monitor</div><div class="flow-step-t">Dashboard</div><div class="flow-step-d">Live feed</div></div>
+    <div class="flow-step"><div class="flow-step-n">Manage</div><div class="flow-step-t">Orders / Products</div><div class="flow-step-d">Modal system</div></div>
+    <div class="flow-step"><div class="flow-step-n">Configure</div><div class="flow-step-t">AI Agents</div><div class="flow-step-d">Agent panel</div></div>
+    <div class="flow-step"><div class="flow-step-n">Review</div><div class="flow-step-t">Analytics</div><div class="flow-step-d">Charts</div></div>
+  </div>
+</div>
+
+
+<!-- SECTION 11 -->
+<div class="section">
+  <div class="section-number">Section 11</div>
+  <div class="section-title">Responsive Design and Accessibility</div>
+  <div class="section-intro">How the platform adapts to different screen sizes and devices.</div>
+
+  <p>Every page is built with a mobile-first responsive layout. CSS Grid and Flexbox are used throughout. Four breakpoints are defined using standard media queries:</p>
+
+  <div class="def-list">
+    <div class="def-item"><div class="def-term">1024px and below</div><div class="def-desc">Admin sidebar collapses; collection sidebar hides; notifications right panel hides.</div></div>
+    <div class="def-item"><div class="def-term">768px and below</div><div class="def-desc">Filter sidebars collapse entirely; product grids reduce to two columns; hero typography scales down.</div></div>
+    <div class="def-item"><div class="def-term">600px and below</div><div class="def-desc">Navigation condenses; admin views restack vertically; stat rows collapse to two columns.</div></div>
+    <div class="def-item"><div class="def-term">480px and below</div><div class="def-desc">Product grids reduce to a single column; checkout steps compress; type sizes reduce to minimum readable values.</div></div>
+  </div>
+
+  <p>The Rex AI chat widget is positioned as a fixed floating button at the bottom-right of the viewport on all screen sizes. The chat window is constrained to <code>calc(100vw - 32px)</code> maximum width on mobile, ensuring it does not overflow the viewport on small screens.</p>
+
+  <div class="callout">
+    <div class="callout-label">Design Note</div>
+    <p>The visual language uses a consistent token set: deep navy (#0f0f1a) for primary backgrounds, violet (#7c3aed) as the brand primary, and cyan (#06b6d4) as the accent. These colours were chosen for contrast compliance and to produce a distinctive, modern aesthetic consistent with current design trends in the technology sector.</p>
+  </div>
+</div>
+
+
+<!-- SECTION 12 -->
+<div class="section">
+  <div class="section-number">Section 12</div>
+  <div class="section-title">Performance Characteristics</div>
+  <div class="section-intro">How the application performs and why the architecture supports fast load times.</div>
+
+  <p>Because the platform is implemented in pure HTML, CSS, and JavaScript with no framework runtime, initial load performance is substantially better than equivalent React or Next.js applications. The following characteristics apply:</p>
+
+  <table>
+    <thead>
+      <tr><th>Characteristic</th><th>Value</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Largest page size</td><td>79 KB</td><td>app.html (admin dashboard) — the most feature-dense page</td></tr>
+      <tr><td>Smallest page size</td><td>17 KB</td><td>referral.html</td></tr>
+      <tr><td>External CDN dependencies</td><td>2</td><td>Google Fonts and Chart.js; all other assets are inline</td></tr>
+      <tr><td>JavaScript framework</td><td>None</td><td>No React, Vue, Angular, or equivalent runtime</td></tr>
+      <tr><td>Build step required</td><td>No</td><td>Files are opened directly in a browser</td></tr>
+      <tr><td>Server required</td><td>No</td><td>Runs entirely from the local file system</td></tr>
+      <tr><td>Animation method</td><td>CSS keyframes</td><td>GPU-accelerated; no JavaScript animation loops on non-data elements</td></tr>
+    </tbody>
+  </table>
+
+  <p>CSS animations (particle canvas on the referral page being the sole exception) are handled via CSS keyframes, which execute on the GPU compositor thread and do not block the main JavaScript thread. Intersection Observer is used for scroll-triggered counter animations, avoiding continuous scroll event listener overhead.</p>
+</div>
+
+
+<!-- SECTION 13 -->
+<div class="section">
+  <div class="section-number">Section 13</div>
+  <div class="section-title">Competitive Positioning</div>
+  <div class="section-intro">How VibeStore's proposition compares to incumbent platforms.</div>
+
+  <table>
+    <thead>
+      <tr><th>Capability</th><th>Shopify</th><th>VibeStore</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Order fulfilment</td><td>Requires merchant action</td><td>Zen AI processes and dispatches automatically</td></tr>
+      <tr><td>Customer support</td><td>Requires support staff</td><td>Rex AI handles all queries 24 hours a day</td></tr>
+      <tr><td>Pricing decisions</td><td>Manual or rules-based</td><td>Luna AI monitors competitors and adjusts in real time</td></tr>
+      <tr><td>Content creation</td><td>Requires copywriters</td><td>Sage AI publishes SEO-optimised articles continuously</td></tr>
+      <tr><td>Marketing campaigns</td><td>Requires marketing staff</td><td>Aria AI plans, executes, and optimises campaigns autonomously</td></tr>
+      <tr><td>Product discovery</td><td>Manual curation</td><td>Atlas AI ranks and personalises results per user</td></tr>
+      <tr><td>Inventory management</td><td>Manual or third-party app</td><td>Nova AI monitors stock and surfaces alerts automatically</td></tr>
+      <tr><td>Review management</td><td>Third-party app required</td><td>Echo AI aggregates, analyses, and publishes reviews natively</td></tr>
+      <tr><td>Operational staff required</td><td>Yes — scales with volume</td><td>No — AI agents scale at near-zero marginal cost</td></tr>
+    </tbody>
+  </table>
+</div>
+
+
+<!-- SECTION 14 -->
+<div class="section">
+  <div class="section-number">Section 14</div>
+  <div class="section-title">Deployment Instructions</div>
+  <div class="section-intro">How to open, run, and share the prototype.</div>
+
+  <h2>Running Locally</h2>
+  <p>The prototype requires no installation. To run it:</p>
+
+  <ol class="formal">
+    <li>Open the folder <code>C:\Users\sarth\vibestore\</code> in Windows Explorer.</li>
+    <li>Double-click <code>index.html</code>. The landing page will open in the default browser.</li>
+    <li>Navigate through the platform using the buttons and links present on each page.</li>
+    <li>To access the merchant admin, click the "Admin" button in the store navigation bar, or open <code>app.html</code> directly.</li>
+  </ol>
+
+  <div class="callout warn">
+    <div class="callout-label">Important</div>
+    <p>All 14 files must remain in the same folder. Moving individual files will break inter-page links and the shared rex-chat.js widget. If sharing the project, compress the entire vibestore folder as a ZIP archive and share that.</p>
+  </div>
+
+  <h2>Sharing for Review</h2>
+  <p>To share the prototype with stakeholders who do not have access to the local machine, the folder can be hosted on any static web host — GitHub Pages, Netlify, Vercel, or a standard web server. No server-side configuration is required. Upload all files to the root of the hosting location and share the URL to <code>index.html</code>.</p>
+
+  <h2>Opening This Document as a PDF</h2>
+  <p>Open <code>README-print.html</code> in Google Chrome. Select File, then Print (Ctrl+P on Windows). Set the destination to "Save as PDF". Set paper size to A4. Set margins to None. Enable "Background graphics". Click Save.</p>
+
+  <div class="code-block">
+<span class="code-comment">-- Quick reference: file you are reading --</span>
+C:\Users\sarth\vibestore\README-print.html
+
+<span class="code-comment">-- To share the entire project --</span>
+Right-click vibestore folder
+Send to > Compressed (ZIP) folder
+Share vibestore.zip
+  </div>
+</div>
+
+
+<!-- SECTION 15 -->
+<div class="section">
+  <div class="section-number">Section 15</div>
+  <div class="section-title">Roadmap and Recommended Next Steps</div>
+  <div class="section-intro">What a production version of this platform would require and the suggested sequencing.</div>
+
+  <h2>Immediate Next Steps (0 to 30 Days)</h2>
+  <ul class="formal">
+    <li>Replace simulated AI responses in rex-chat.js with calls to a real language model API (Claude, GPT-4, or equivalent).</li>
+    <li>Replace localStorage cart with a backend API and user authentication layer.</li>
+    <li>Conduct investor demonstration sessions using the current prototype as the visual reference.</li>
+    <li>Commission a UX review with target merchant users to validate the admin workflow.</li>
+  </ul>
+
+  <h2>Short-Term Development (30 to 90 Days)</h2>
+  <ul class="formal">
+    <li>Implement a real product database with an admin CRUD interface backed by an API.</li>
+    <li>Integrate a payment gateway (Razorpay for Indian market; Stripe for international).</li>
+    <li>Build the Zen AI fulfilment engine with shipping carrier API integrations.</li>
+    <li>Build the Luna AI pricing engine with scheduled competitor price scraping.</li>
+    <li>Develop a mobile application shell wrapping the storefront for iOS and Android.</li>
+  </ul>
+
+  <h2>Medium-Term Development (90 to 180 Days)</h2>
+  <ul class="formal">
+    <li>Deploy the Sage AI content engine backed by a fine-tuned language model producing actual articles.</li>
+    <li>Build multi-tenant merchant onboarding — allowing any merchant to create a VibeStore account.</li>
+    <li>Implement the Atlas AI recommendation engine with real user behaviour data and collaborative filtering.</li>
+    <li>Build the Aria AI campaign engine with actual email, SMS, and push delivery infrastructure.</li>
+    <li>Launch a closed beta programme with five to ten selected merchants.</li>
+  </ul>
+
+  <h2>Long-Term Vision (180+ Days)</h2>
+  <p>The long-term objective is a platform where a merchant can onboard, list products, and begin receiving orders without interacting with any operational configuration beyond initial setup. All fulfilment, support, pricing, content, and marketing functions are handled autonomously by the eight AI agents. The merchant's primary interface is the analytics and revenue view — confirming that the agents are performing as expected and reviewing the P&L impact of their decisions.</p>
+
+  <div class="callout">
+    <div class="callout-label">Strategic Positioning</div>
+    <p>VibeStore is not a Shopify clone. It is a reimagining of what an e-commerce platform looks like when the assumption of human operators is removed from the architecture entirely. The prototype delivered demonstrates this proposition at sufficient visual and interaction fidelity to support investment discussions and internal strategic planning.</p>
+  </div>
+
+  <div class="footer">
+    <span>VibeStore — Project Documentation v1.0</span>
+    <span>MyOoumph Networks Pvt Ltd — Internal Use Only</span>
+    <span>May 2026</span>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Create Your Store — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--bg:#f8f8f5;--border:#e5e7eb;--text:#0f0f1a;--muted:#6b7280;--card:#fff;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* NAV */
+.topbar{background:var(--navy);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:white;text-decoration:none;}
+.logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.topbar-right{display:flex;align-items:center;gap:16px;}
+.topbar-right a{color:rgba(255,255,255,0.6);font-size:0.82rem;text-decoration:none;}
+.topbar-right a:hover{color:white;}
+
+/* PROGRESS BAR */
+.progress-wrap{background:white;border-bottom:1px solid var(--border);padding:0 32px;}
+.progress-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;padding:18px 0;gap:0;}
+.prog-step{display:flex;align-items:center;gap:0;flex:1;}
+.prog-step:last-child{flex:none;}
+.prog-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;border:2px solid var(--border);background:white;color:var(--muted);flex-shrink:0;transition:all 0.3s;position:relative;z-index:1;}
+.prog-dot.done{background:var(--purple);border-color:var(--purple);color:white;}
+.prog-dot.active{background:white;border-color:var(--purple);color:var(--purple);box-shadow:0 0 0 4px rgba(124,58,237,0.12);}
+.prog-label{font-size:0.72rem;font-weight:600;color:var(--muted);margin-left:8px;white-space:nowrap;}
+.prog-label.active{color:var(--purple);}
+.prog-label.done{color:var(--text);}
+.prog-line{flex:1;height:2px;background:var(--border);margin:0 10px;transition:background 0.3s;}
+.prog-line.done{background:var(--purple);}
+
+/* LAYOUT */
+.setup-wrap{max-width:860px;margin:0 auto;padding:40px 24px 80px;}
+.step{display:none;}
+.step.active{display:block;}
+
+/* STEP HEADER */
+.step-hdr{margin-bottom:32px;}
+.step-tag{font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--purple);margin-bottom:8px;}
+.step-hdr h1{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--navy);margin-bottom:8px;line-height:1.25;}
+.step-hdr p{font-size:0.92rem;color:var(--muted);line-height:1.6;max-width:520px;}
+
+/* CATEGORY GRID — Step 1 */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px;}
+.cat-card{background:white;border:2px solid var(--border);border-radius:14px;padding:20px 16px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;}
+.cat-card:hover{border-color:rgba(124,58,237,0.4);box-shadow:0 4px 16px rgba(124,58,237,0.1);transform:translateY(-2px);}
+.cat-card.selected{border-color:var(--purple);background:rgba(124,58,237,0.04);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
+.cat-card.selected::after{content:'✓';position:absolute;top:8px;right:10px;font-size:0.7rem;font-weight:700;color:var(--purple);}
+.cat-icon{font-size:2.2rem;margin-bottom:10px;display:block;}
+.cat-name{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.cat-desc{font-size:0.7rem;color:var(--muted);line-height:1.4;}
+.cat-card.selected .cat-name{color:var(--purple);}
+
+/* SELLING TYPE — Step 1 sub */
+.type-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.type-card{background:white;border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:flex-start;gap:12px;}
+.type-card:hover{border-color:rgba(124,58,237,0.35);}
+.type-card.selected{border-color:var(--purple);background:rgba(124,58,237,0.04);}
+.type-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px;}
+.type-info h4{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.type-info p{font-size:0.73rem;color:var(--muted);line-height:1.4;}
+.type-card.selected .type-info h4{color:var(--purple);}
+
+/* FORM — Step 2 */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.form-grid.full{grid-template-columns:1fr;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:0.8rem;font-weight:600;color:var(--text);}
+.field input,.field select,.field textarea{border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:0.88rem;font-family:'Inter',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s;background:white;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--purple);}
+.field textarea{resize:vertical;min-height:80px;}
+.field .hint{font-size:0.72rem;color:var(--muted);}
+.field .prefix{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:white;transition:border-color 0.2s;}
+.field .prefix:focus-within{border-color:var(--purple);}
+.field .prefix span{padding:10px 12px;background:#f9f9f7;border-right:1.5px solid var(--border);font-size:0.82rem;color:var(--muted);font-weight:500;white-space:nowrap;}
+.field .prefix input{border:none;border-radius:0;flex:1;padding:10px 12px;}
+.field .prefix input:focus{border:none;box-shadow:none;}
+
+/* THEME CARDS — Step 3 */
+.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px;}
+.theme-card{background:white;border:2px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.2s;position:relative;}
+.theme-card:hover{border-color:rgba(124,58,237,0.4);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.09);}
+.theme-card.selected{border-color:var(--purple);box-shadow:0 0 0 3px rgba(124,58,237,0.12);}
+.theme-card.selected::after{content:'Selected';position:absolute;top:8px;right:8px;background:var(--purple);color:white;font-size:0.62rem;font-weight:700;padding:2px 8px;border-radius:100px;}
+.theme-preview{height:130px;display:flex;align-items:center;justify-content:center;font-size:2rem;position:relative;overflow:hidden;}
+.theme-preview .mini-nav{position:absolute;top:0;left:0;right:0;height:18px;display:flex;align-items:center;padding:0 10px;gap:4px;}
+.theme-preview .mini-dot{width:5px;height:5px;border-radius:50%;}
+.theme-preview .mini-bar{flex:1;height:4px;border-radius:2px;margin-left:6px;}
+.theme-preview .mini-product{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:70%;height:50px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;}
+.theme-info{padding:12px 14px;}
+.theme-name{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:2px;}
+.theme-desc{font-size:0.72rem;color:var(--muted);}
+.theme-tags{display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;}
+.theme-tag{font-size:0.62rem;background:var(--bg);border:1px solid var(--border);border-radius:100px;padding:2px 7px;color:var(--muted);}
+
+/* AI CONFIG — Step 4 */
+.agent-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;}
+.agent-cfg{background:white;border:2px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:flex-start;gap:12px;transition:border-color 0.2s;}
+.agent-cfg.on{border-color:rgba(124,58,237,0.3);}
+.agent-cfg-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.agent-cfg-body{flex:1;}
+.agent-cfg-body h4{font-size:0.85rem;font-weight:700;color:var(--text);margin-bottom:2px;}
+.agent-cfg-body p{font-size:0.72rem;color:var(--muted);line-height:1.4;}
+.toggle-wrap{margin-left:auto;flex-shrink:0;}
+.toggle{width:38px;height:22px;background:#d1d5db;border-radius:100px;cursor:pointer;position:relative;transition:background 0.25s;flex-shrink:0;}
+.toggle.on{background:var(--purple);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:white;transition:left 0.25s;box-shadow:0 1px 4px rgba(0,0,0,0.2);}
+.toggle.on::after{left:19px;}
+
+/* REVIEW — Step 5 */
+.review-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:16px;}
+.review-hdr{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.review-hdr h3{color:white;font-size:0.9rem;font-weight:700;}
+.review-edit{color:rgba(255,255,255,0.6);font-size:0.78rem;cursor:pointer;transition:color 0.2s;}
+.review-edit:hover{color:white;}
+.review-body{padding:16px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.rv-item{display:flex;flex-direction:column;gap:2px;}
+.rv-label{font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);}
+.rv-val{font-size:0.88rem;color:var(--text);font-weight:500;}
+.ai-preview{padding:16px 20px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;}
+.ai-tag{background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:100px;padding:4px 10px;font-size:0.72rem;color:var(--purple);font-weight:600;}
+
+/* LAUNCH BUTTON AREA */
+.launch-box{background:linear-gradient(135deg,#1a0533,#2d1b69);border-radius:14px;padding:28px;text-align:center;margin-bottom:20px;}
+.launch-box h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;margin-bottom:6px;}
+.launch-box p{font-size:0.85rem;color:rgba(255,255,255,0.6);margin-bottom:20px;}
+.agents-live{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:20px;}
+.alv{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:6px 12px;font-size:0.72rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:5px;}
+.alv-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;animation:pls 1.5s infinite;}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:0.3}}
+.btn-launch{background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:12px;padding:16px 40px;color:white;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:10px;transition:opacity 0.2s;box-shadow:0 8px 28px rgba(124,58,237,0.4);}
+.btn-launch:hover{opacity:0.9;}
+
+/* NAV BUTTONS */
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:32px;padding-top:24px;border-top:1px solid var(--border);}
+.btn-back{background:white;border:1.5px solid var(--border);border-radius:10px;padding:11px 22px;font-size:0.88rem;font-weight:600;cursor:pointer;color:var(--text);font-family:'Inter',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.btn-back:hover{border-color:var(--purple);color:var(--purple);}
+.btn-next{background:var(--navy);border:none;border-radius:10px;padding:12px 28px;font-size:0.88rem;font-weight:700;cursor:pointer;color:white;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:8px;transition:background 0.2s;}
+.btn-next:hover{background:var(--purple);}
+.btn-next svg,.btn-back svg{flex-shrink:0;}
+
+/* LOADING OVERLAY */
+.loading-overlay{position:fixed;inset:0;background:var(--navy);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;}
+.loading-overlay.show{display:flex;}
+.loading-logo{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:white;}
+.loading-logo span{background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.loading-bar-wrap{width:320px;height:4px;background:rgba(255,255,255,0.1);border-radius:2px;overflow:hidden;}
+.loading-bar{height:100%;background:linear-gradient(90deg,var(--purple),var(--cyan));border-radius:2px;width:0%;transition:width 0.4s ease;}
+.loading-status{font-size:0.85rem;color:rgba(255,255,255,0.6);text-align:center;min-height:20px;}
+.loading-agents{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
+.la-item{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 12px;font-size:0.72rem;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:6px;}
+.la-dot{width:5px;height:5px;border-radius:50%;background:#4ade80;}
+
+/* MISC */
+.section-label{font-size:0.78rem;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;margin-top:24px;}
+.optional-badge{font-size:0.68rem;background:#f3f4f6;color:var(--muted);border-radius:100px;padding:2px 8px;font-weight:500;margin-left:6px;vertical-align:middle;}
+
+@media(max-width:700px){
+  .cat-grid{grid-template-columns:repeat(2,1fr);}
+  .type-row,.theme-grid,.agent-grid,.form-grid,.review-body{grid-template-columns:1fr;}
+  .setup-wrap{padding:24px 16px 60px;}
+  .progress-inner{overflow-x:auto;gap:0;}
+  .prog-label{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="logo">Vibe<span>Store</span></a>
+  <div class="topbar-right">
+    <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">Setting up your store</span>
+    <a href="index.html">Exit</a>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-inner" id="progressBar">
+    <div class="prog-step">
+      <div class="prog-dot active" id="dot1">1</div>
+      <div class="prog-label active" id="lbl1">Your Business</div>
+    </div>
+    <div class="prog-line" id="line1"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="dot2">2</div>
+      <div class="prog-label" id="lbl2">Store Details</div>
+    </div>
+    <div class="prog-line" id="line2"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="dot3">3</div>
+      <div class="prog-label" id="lbl3">Choose Theme</div>
+    </div>
+    <div class="prog-line" id="line3"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="dot4">4</div>
+      <div class="prog-label" id="lbl4">AI Agents</div>
+    </div>
+    <div class="prog-line" id="line4"></div>
+    <div class="prog-step">
+      <div class="prog-dot" id="dot5">5</div>
+      <div class="prog-label" id="lbl5">Review & Launch</div>
+    </div>
+  </div>
+</div>
+
+<div class="setup-wrap">
+
+  <!-- ===== STEP 1: BUSINESS TYPE ===== -->
+  <div class="step active" id="step1">
+    <div class="step-hdr">
+      <div class="step-tag">Step 1 of 5</div>
+      <h1>What kind of store<br/>do you want to build?</h1>
+      <p>Pick your industry. VibeStore's AI agents will pre-configure your store, products, and marketing based on your selection.</p>
+    </div>
+
+    <div class="section-label">Select your category</div>
+    <div class="cat-grid" id="catGrid">
+      <div class="cat-card" onclick="selectCat(this,'Fashion & Apparel')">
+        <span class="cat-icon">👗</span>
+        <div class="cat-name">Fashion & Apparel</div>
+        <div class="cat-desc">Clothing, footwear, accessories</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Electronics')">
+        <span class="cat-icon">⚡</span>
+        <div class="cat-name">Electronics</div>
+        <div class="cat-desc">Gadgets, devices, components</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Beauty & Wellness')">
+        <span class="cat-icon">💄</span>
+        <div class="cat-name">Beauty & Wellness</div>
+        <div class="cat-desc">Skincare, cosmetics, health</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Food & Grocery')">
+        <span class="cat-icon">🛒</span>
+        <div class="cat-name">Food & Grocery</div>
+        <div class="cat-desc">FMCG, organic, specialty food</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Home & Living')">
+        <span class="cat-icon">🏠</span>
+        <div class="cat-name">Home & Living</div>
+        <div class="cat-desc">Furniture, decor, kitchenware</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Sports & Fitness')">
+        <span class="cat-icon">🏋️</span>
+        <div class="cat-name">Sports & Fitness</div>
+        <div class="cat-desc">Equipment, activewear, nutrition</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Books & Education')">
+        <span class="cat-icon">📚</span>
+        <div class="cat-name">Books & Education</div>
+        <div class="cat-desc">Books, courses, stationery</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Jewellery & Accessories')">
+        <span class="cat-icon">💍</span>
+        <div class="cat-name">Jewellery</div>
+        <div class="cat-desc">Fine jewellery, watches, bags</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Toys & Kids')">
+        <span class="cat-icon">🧸</span>
+        <div class="cat-name">Toys & Kids</div>
+        <div class="cat-desc">Toys, baby gear, games</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Art & Handmade')">
+        <span class="cat-icon">🎨</span>
+        <div class="cat-name">Art & Handmade</div>
+        <div class="cat-desc">Crafts, prints, custom items</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Digital Products')">
+        <span class="cat-icon">💻</span>
+        <div class="cat-name">Digital Products</div>
+        <div class="cat-desc">Software, templates, media</div>
+      </div>
+      <div class="cat-card" onclick="selectCat(this,'Other')">
+        <span class="cat-icon">✨</span>
+        <div class="cat-name">Something Else</div>
+        <div class="cat-desc">I'll define my own category</div>
+      </div>
+    </div>
+
+    <div class="section-label">How will you sell?</div>
+    <div class="type-row">
+      <div class="type-card selected" onclick="selectType(this,'Online only')" id="typeOnline">
+        <div class="type-icon">🌐</div>
+        <div class="type-info"><h4>Online Only</h4><p>Sell entirely through your VibeStore website — global reach from day one.</p></div>
+      </div>
+      <div class="type-card" onclick="selectType(this,'Online + Physical')" id="typeHybrid">
+        <div class="type-icon">🏪</div>
+        <div class="type-info"><h4>Online + Physical</h4><p>Run a storefront and sync inventory with your physical location.</p></div>
+      </div>
+      <div class="type-card" onclick="selectType(this,'Wholesale / B2B')" id="typeWholesale">
+        <div class="type-icon">📦</div>
+        <div class="type-info"><h4>Wholesale / B2B</h4><p>Sell in bulk to businesses. AI agents handle bulk pricing and invoicing.</p></div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div></div>
+      <button class="btn-next" onclick="goStep(2)">
+        Continue
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 2: STORE DETAILS ===== -->
+  <div class="step" id="step2">
+    <div class="step-hdr">
+      <div class="step-tag">Step 2 of 5</div>
+      <h1>Tell us about<br/>your store</h1>
+      <p>This information powers your storefront, AI-generated descriptions, and your custom domain. You can change everything later.</p>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Store Name <span style="color:#ef4444">*</span></label>
+        <input type="text" id="storeName" placeholder="e.g. Luna Threads, TechNest, GreenLeaf" oninput="updateSlug()"/>
+        <span class="hint">This becomes your brand name across the entire store.</span>
+      </div>
+      <div class="field">
+        <label>Store URL</label>
+        <div class="prefix">
+          <span>vibestore.in/</span>
+          <input type="text" id="storeSlug" placeholder="luna-threads"/>
+        </div>
+        <span class="hint">Auto-generated from your store name.</span>
+      </div>
+    </div>
+
+    <div class="form-grid full">
+      <div class="field">
+        <label>Store Tagline <span class="optional-badge">Optional</span></label>
+        <input type="text" id="storeTagline" placeholder="e.g. Sustainable fashion for the modern wardrobe"/>
+        <span class="hint">Appears in your hero banner and browser tab.</span>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Your Country / Region</label>
+        <select id="storeCountry">
+          <option value="India">India</option>
+          <option value="United States">United States</option>
+          <option value="United Kingdom">United Kingdom</option>
+          <option value="UAE">United Arab Emirates</option>
+          <option value="Singapore">Singapore</option>
+          <option value="Australia">Australia</option>
+          <option value="Canada">Canada</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Store Currency</label>
+        <select id="storeCurrency">
+          <option value="INR (₹)">INR — Indian Rupee (₹)</option>
+          <option value="USD ($)">USD — US Dollar ($)</option>
+          <option value="GBP (£)">GBP — British Pound (£)</option>
+          <option value="AED (د.إ)">AED — UAE Dirham</option>
+          <option value="SGD ($)">SGD — Singapore Dollar</option>
+          <option value="AUD ($)">AUD — Australian Dollar</option>
+          <option value="CAD ($)">CAD — Canadian Dollar</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="field">
+        <label>Your Email Address <span style="color:#ef4444">*</span></label>
+        <input type="email" id="storeEmail" placeholder="you@yourcompany.com"/>
+      </div>
+      <div class="field">
+        <label>Phone Number <span class="optional-badge">Optional</span></label>
+        <div class="prefix">
+          <span>+91</span>
+          <input type="tel" id="storePhone" placeholder="98765 43210"/>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-grid full">
+      <div class="field">
+        <label>Brief Store Description <span class="optional-badge">Optional</span></label>
+        <textarea id="storeDesc" placeholder="Tell Sage AI what your store is about. It will use this to write your homepage copy, product descriptions, and blog articles."></textarea>
+        <span class="hint">The more you write here, the better Sage AI can represent your brand voice.</span>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(1)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="goStep(3)">
+        Continue
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 3: THEME ===== -->
+  <div class="step" id="step3">
+    <div class="step-hdr">
+      <div class="step-tag">Step 3 of 5</div>
+      <h1>Choose your store's<br/>look and feel</h1>
+      <p>Nova AI will apply your chosen theme across every page. You can customise colours, fonts, and layout after launch.</p>
+    </div>
+
+    <div class="theme-grid" id="themeGrid">
+      <div class="theme-card selected" onclick="selectTheme(this,'Vibe Dark','Dark, modern, premium')">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#0f0f1a,#1a0533);">
+          <div class="mini-nav" style="background:rgba(255,255,255,0.05);">
+            <div class="mini-dot" style="background:#7c3aed;"></div>
+            <div class="mini-bar" style="background:rgba(255,255,255,0.1);"></div>
+          </div>
+          <div class="mini-product" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);">🎧</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Vibe Dark</div>
+          <div class="theme-desc">Dark, minimal, premium feel</div>
+          <div class="theme-tags"><span class="theme-tag">Popular</span><span class="theme-tag">Electronics</span><span class="theme-tag">Luxury</span></div>
+        </div>
+      </div>
+
+      <div class="theme-card" onclick="selectTheme(this,'Clean Light','Bright, airy, minimal')">
+        <div class="theme-preview" style="background:#f8f8f5;">
+          <div class="mini-nav" style="background:#fff;border-bottom:1px solid #e5e7eb;">
+            <div class="mini-dot" style="background:#0f0f1a;"></div>
+            <div class="mini-bar" style="background:#e5e7eb;"></div>
+          </div>
+          <div class="mini-product" style="background:#fff;border:1px solid #e5e7eb;">👗</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Clean Light</div>
+          <div class="theme-desc">Bright, airy, editorial</div>
+          <div class="theme-tags"><span class="theme-tag">Fashion</span><span class="theme-tag">Beauty</span><span class="theme-tag">Minimal</span></div>
+        </div>
+      </div>
+
+      <div class="theme-card" onclick="selectTheme(this,'Bold Gradient','Vibrant, energetic, Gen-Z')">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#4f1b8c,#0e7490);">
+          <div class="mini-nav" style="background:rgba(255,255,255,0.1);">
+            <div class="mini-dot" style="background:#a78bfa;"></div>
+            <div class="mini-bar" style="background:rgba(255,255,255,0.15);"></div>
+          </div>
+          <div class="mini-product" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);">👟</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Bold Gradient</div>
+          <div class="theme-desc">Vibrant, energetic, Gen-Z</div>
+          <div class="theme-tags"><span class="theme-tag">Streetwear</span><span class="theme-tag">Sports</span><span class="theme-tag">Youth</span></div>
+        </div>
+      </div>
+
+      <div class="theme-card" onclick="selectTheme(this,'Natural Earth','Warm, organic, artisan')">
+        <div class="theme-preview" style="background:#fdf6ec;">
+          <div class="mini-nav" style="background:#fff7ed;border-bottom:1px solid #fed7aa;">
+            <div class="mini-dot" style="background:#92400e;"></div>
+            <div class="mini-bar" style="background:#fed7aa;"></div>
+          </div>
+          <div class="mini-product" style="background:#fff7ed;border:1px solid #fed7aa;">🌿</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Natural Earth</div>
+          <div class="theme-desc">Warm, organic, sustainable</div>
+          <div class="theme-tags"><span class="theme-tag">Organic</span><span class="theme-tag">Handmade</span><span class="theme-tag">Food</span></div>
+        </div>
+      </div>
+
+      <div class="theme-card" onclick="selectTheme(this,'Luxury Black','Ultra-premium, high-fashion')">
+        <div class="theme-preview" style="background:#000;">
+          <div class="mini-nav" style="background:#111;">
+            <div class="mini-dot" style="background:#d4af37;"></div>
+            <div class="mini-bar" style="background:#222;"></div>
+          </div>
+          <div class="mini-product" style="background:#111;border:1px solid #d4af37;">💍</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Luxury Black</div>
+          <div class="theme-desc">Ultra-premium, high-fashion</div>
+          <div class="theme-tags"><span class="theme-tag">Jewellery</span><span class="theme-tag">Luxury</span><span class="theme-tag">Premium</span></div>
+        </div>
+      </div>
+
+      <div class="theme-card" onclick="selectTheme(this,'Playful Pastel','Fun, colourful, family-friendly')">
+        <div class="theme-preview" style="background:linear-gradient(135deg,#fce7f3,#e0f2fe);">
+          <div class="mini-nav" style="background:rgba(255,255,255,0.6);">
+            <div class="mini-dot" style="background:#ec4899;"></div>
+            <div class="mini-bar" style="background:rgba(236,72,153,0.2);"></div>
+          </div>
+          <div class="mini-product" style="background:rgba(255,255,255,0.7);border:1px solid rgba(236,72,153,0.2);">🧸</div>
+        </div>
+        <div class="theme-info">
+          <div class="theme-name">Playful Pastel</div>
+          <div class="theme-desc">Fun, colourful, family-friendly</div>
+          <div class="theme-tags"><span class="theme-tag">Kids</span><span class="theme-tag">Toys</span><span class="theme-tag">Art</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(2)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="goStep(4)">
+        Continue
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 4: AI AGENTS ===== -->
+  <div class="step" id="step4">
+    <div class="step-hdr">
+      <div class="step-tag">Step 4 of 5</div>
+      <h1>Configure your<br/>AI agent team</h1>
+      <p>All 8 agents are active by default. Toggle off any you don't need. You can reconfigure them from the admin dashboard at any time.</p>
+    </div>
+
+    <div class="agent-grid">
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(6,182,212,0.12);">🚀</div>
+        <div class="agent-cfg-body">
+          <h4>Zen AI — Operations</h4>
+          <p>Processes orders, coordinates dispatch, handles fulfilment end-to-end.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(245,158,11,0.12);">💰</div>
+        <div class="agent-cfg-body">
+          <h4>Luna AI — Pricing</h4>
+          <p>Monitors competitor prices 24/7, triggers alerts, and recommends price changes.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(236,72,153,0.12);">🎯</div>
+        <div class="agent-cfg-body">
+          <h4>Aria AI — Marketing</h4>
+          <p>Runs flash sales, email campaigns, push notifications, and referral programs.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(16,163,74,0.12);">🔍</div>
+        <div class="agent-cfg-body">
+          <h4>Atlas AI — Search</h4>
+          <p>Personalises search results, ranks products, and surfaces recommendations.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(124,58,237,0.12);">💬</div>
+        <div class="agent-cfg-body">
+          <h4>Rex AI — Support</h4>
+          <p>Handles all customer queries, returns, refunds, and complaints 24/7.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(239,68,68,0.12);">🛍️</div>
+        <div class="agent-cfg-body">
+          <h4>Nova AI — Merchandising</h4>
+          <p>Curates collections, manages category pages, and optimises product placement.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(59,130,246,0.12);">✍️</div>
+        <div class="agent-cfg-body">
+          <h4>Sage AI — Content</h4>
+          <p>Writes product descriptions, blog articles, and SEO metadata automatically.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+      <div class="agent-cfg on">
+        <div class="agent-cfg-icon" style="background:rgba(249,115,22,0.12);">⭐</div>
+        <div class="agent-cfg-body">
+          <h4>Echo AI — Social & Reviews</h4>
+          <p>Collects and publishes reviews, manages UGC, tracks social sentiment.</p>
+        </div>
+        <div class="toggle-wrap"><div class="toggle on" onclick="toggleAgent(this)"></div></div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(3)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+      <button class="btn-next" onclick="goStep(5)">
+        Review & Launch
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ===== STEP 5: REVIEW & LAUNCH ===== -->
+  <div class="step" id="step5">
+    <div class="step-hdr">
+      <div class="step-tag">Step 5 of 5</div>
+      <h1>Your store is ready<br/>to launch</h1>
+      <p>Review your configuration below. Click "Launch Store" and your 8 AI agents will go live instantly.</p>
+    </div>
+
+    <div class="review-card">
+      <div class="review-hdr">
+        <h3>Business & Store Details</h3>
+        <span class="review-edit" onclick="goStep(1)">Edit</span>
+      </div>
+      <div class="review-body">
+        <div class="rv-item"><div class="rv-label">Category</div><div class="rv-val" id="rv-cat">—</div></div>
+        <div class="rv-item"><div class="rv-label">Selling Model</div><div class="rv-val" id="rv-type">Online only</div></div>
+        <div class="rv-item"><div class="rv-label">Store Name</div><div class="rv-val" id="rv-name">—</div></div>
+        <div class="rv-item"><div class="rv-label">Store URL</div><div class="rv-val" id="rv-url">—</div></div>
+        <div class="rv-item"><div class="rv-label">Country</div><div class="rv-val" id="rv-country">India</div></div>
+        <div class="rv-item"><div class="rv-label">Currency</div><div class="rv-val" id="rv-currency">INR (₹)</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-hdr">
+        <h3>Theme Selected</h3>
+        <span class="review-edit" onclick="goStep(3)">Change</span>
+      </div>
+      <div class="review-body" style="grid-template-columns:1fr;">
+        <div class="rv-item"><div class="rv-label">Theme</div><div class="rv-val" id="rv-theme">Vibe Dark</div></div>
+        <div class="rv-item"><div class="rv-label">Style</div><div class="rv-val" id="rv-theme-desc">Dark, modern, premium feel</div></div>
+      </div>
+    </div>
+
+    <div class="review-card">
+      <div class="review-hdr">
+        <h3>AI Agents Active</h3>
+        <span class="review-edit" onclick="goStep(4)">Configure</span>
+      </div>
+      <div class="ai-preview" id="rv-agents"></div>
+    </div>
+
+    <div class="launch-box">
+      <h3>Everything is configured.</h3>
+      <p>Your AI agents are standing by. Launching will take approximately 8 seconds.</p>
+      <div class="agents-live">
+        <div class="alv"><div class="alv-dot"></div>Zen AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Luna AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Aria AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Atlas AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Rex AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Nova AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Sage AI ready</div>
+        <div class="alv"><div class="alv-dot"></div>Echo AI ready</div>
+      </div>
+      <button class="btn-launch" onclick="launchStore()">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        Launch My VibeStore
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goStep(4)">
+        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Back
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-logo">Vibe<span>Store</span></div>
+  <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
+  <div class="loading-status" id="loadingStatus">Initialising your store...</div>
+  <div class="loading-agents">
+    <div class="la-item"><div class="la-dot"></div>Zen AI booting</div>
+    <div class="la-item"><div class="la-dot"></div>Luna AI booting</div>
+    <div class="la-item"><div class="la-dot"></div>Sage AI writing homepage</div>
+    <div class="la-item"><div class="la-dot"></div>Nova AI curating products</div>
+  </div>
+</div>
+
+<script>
+let config = {
+  cat: '',
+  type: 'Online only',
+  theme: 'Vibe Dark',
+  themeDesc: 'Dark, modern, premium feel',
+};
+
+// ---- NAVIGATION ----
+function goStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  updateProgress(n);
+  if (n === 5) buildReview();
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function updateProgress(n) {
+  for (let i = 1; i <= 5; i++) {
+    const dot = document.getElementById('dot' + i);
+    const lbl = document.getElementById('lbl' + i);
+    dot.className = 'prog-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+    dot.textContent = i < n ? '✓' : i;
+    lbl.className = 'prog-label' + (i < n ? ' done' : i === n ? ' active' : '');
+    if (i < 5) {
+      const line = document.getElementById('line' + i);
+      line.className = 'prog-line' + (i < n ? ' done' : '');
+    }
+  }
+}
+
+// ---- STEP 1 ----
+function selectCat(el, name) {
+  document.querySelectorAll('.cat-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  config.cat = name;
+}
+
+function selectType(el, type) {
+  document.querySelectorAll('.type-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  config.type = type;
+}
+
+// ---- STEP 2 ----
+function updateSlug() {
+  const name = document.getElementById('storeName').value;
+  const slug = name.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  document.getElementById('storeSlug').value = slug;
+}
+
+// ---- STEP 3 ----
+function selectTheme(el, name, desc) {
+  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  config.theme = name;
+  config.themeDesc = desc;
+}
+
+// ---- STEP 4 ----
+function toggleAgent(el) {
+  el.classList.toggle('on');
+  el.closest('.agent-cfg').classList.toggle('on');
+}
+
+// ---- REVIEW ----
+function buildReview() {
+  document.getElementById('rv-cat').textContent = config.cat || 'Not selected';
+  document.getElementById('rv-type').textContent = config.type;
+  document.getElementById('rv-name').textContent = document.getElementById('storeName').value || 'My VibeStore';
+  document.getElementById('rv-url').textContent = 'vibestore.in/' + (document.getElementById('storeSlug').value || 'my-store');
+  document.getElementById('rv-country').textContent = document.getElementById('storeCountry').value;
+  document.getElementById('rv-currency').textContent = document.getElementById('storeCurrency').value;
+  document.getElementById('rv-theme').textContent = config.theme;
+  document.getElementById('rv-theme-desc').textContent = config.themeDesc;
+
+  const agentNames = ['Zen AI','Luna AI','Aria AI','Atlas AI','Rex AI','Nova AI','Sage AI','Echo AI'];
+  const toggles = document.querySelectorAll('#step4 .toggle');
+  const active = [];
+  toggles.forEach((t, i) => { if (t.classList.contains('on')) active.push(agentNames[i]); });
+  document.getElementById('rv-agents').innerHTML = active.map(a => `<div class="ai-tag">${a}</div>`).join('');
+}
+
+// ---- LAUNCH ----
+function launchStore() {
+  // Save config to localStorage
+  const storeName = document.getElementById('storeName').value || 'My VibeStore';
+  const storeData = {
+    name: storeName,
+    tagline: document.getElementById('storeTagline').value,
+    category: config.cat,
+    type: config.type,
+    theme: config.theme,
+    country: document.getElementById('storeCountry').value,
+    currency: document.getElementById('storeCurrency').value,
+  };
+  localStorage.setItem('vs_store_config', JSON.stringify(storeData));
+
+  const overlay = document.getElementById('loadingOverlay');
+  const bar = document.getElementById('loadingBar');
+  const status = document.getElementById('loadingStatus');
+  overlay.classList.add('show');
+
+  const steps = [
+    [10, 'Configuring store settings...'],
+    [25, 'Activating Zen AI — Operations...'],
+    [38, 'Activating Luna AI — Price tracking...'],
+    [50, 'Activating Aria AI — Marketing engine...'],
+    [62, 'Sage AI writing your homepage copy...'],
+    [74, 'Nova AI curating product catalogue...'],
+    [85, 'Atlas AI indexing search...'],
+    [94, 'Rex AI chat widget activating...'],
+    [100, 'Your store is live!'],
+  ];
+
+  let i = 0;
+  function tick() {
+    if (i >= steps.length) {
+      setTimeout(() => { window.location.href = 'mystore.html'; }, 600);
+      return;
+    }
+    const [pct, msg] = steps[i++];
+    bar.style.width = pct + '%';
+    status.textContent = msg;
+    setTimeout(tick, i === steps.length ? 800 : 700);
+  }
+  tick();
+}
+</script>
+</body>
+</html>

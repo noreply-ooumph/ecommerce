@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Collections — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--bg:#f8f8f5;--border:#e5e5e0;--text:#0f0f1a;--muted:#6b7280;}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+
+/* NAV */
+.nav{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;}
+.nav-logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
+.nav-links a:hover{color:white;}
+.nav-search-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 14px;color:rgba(255,255,255,0.6);font-size:0.83rem;cursor:pointer;display:flex;align-items:center;gap:8px;}
+.nav-cart{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 14px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;position:relative;}
+.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* CATEGORY NAV */
+.cat-nav{background:white;border-bottom:1px solid var(--border);padding:0 24px;display:flex;gap:0;overflow-x:auto;}
+.cat-nav::-webkit-scrollbar{display:none;}
+.cat-tab{padding:14px 20px;font-size:0.85rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.cat-tab:hover{color:var(--text);}
+.cat-tab.active{color:var(--purple);border-bottom-color:var(--purple);}
+
+/* COLLECTION HERO */
+.col-hero{background:linear-gradient(135deg,#1a0533,#0c1a3a);padding:40px 32px;position:relative;overflow:hidden;}
+.col-hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.col-breadcrumb{font-size:0.75rem;color:rgba(255,255,255,0.4);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.col-breadcrumb a{color:rgba(255,255,255,0.4);text-decoration:none;}
+.col-breadcrumb a:hover{color:rgba(255,255,255,0.7);}
+.col-hero h1{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:700;color:white;margin-bottom:8px;}
+.col-hero p{color:rgba(255,255,255,0.6);font-size:0.9rem;max-width:500px;margin-bottom:20px;}
+.col-hero-stats{display:flex;gap:24px;flex-wrap:wrap;}
+.col-stat{display:flex;align-items:center;gap:8px;}
+.col-stat-icon{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
+.col-stat-text{font-size:0.8rem;color:rgba(255,255,255,0.7);}
+.col-stat-text strong{color:white;display:block;font-size:0.95rem;}
+.col-hero-badges{position:absolute;right:32px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;}
+.hero-badge{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:8px 14px;font-size:0.75rem;color:rgba(255,255,255,0.8);display:flex;align-items:center;gap:8px;}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* SUB-COLLECTIONS STRIP */
+.sub-strip{background:white;border-bottom:1px solid var(--border);padding:16px 24px;}
+.sub-strip-inner{display:flex;gap:10px;overflow-x:auto;}
+.sub-strip-inner::-webkit-scrollbar{display:none;}
+.sub-card{flex-shrink:0;background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 16px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:10px;min-width:140px;}
+.sub-card:hover,.sub-card.active{background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.25);}
+.sub-card.active .sub-name{color:var(--purple);}
+.sub-icon{font-size:1.4rem;}
+.sub-name{font-size:0.8rem;font-weight:600;color:var(--text);}
+.sub-count{font-size:0.7rem;color:var(--muted);}
+
+/* LAYOUT */
+.page{display:flex;min-height:calc(100vh - 220px);}
+.sidebar{width:256px;flex-shrink:0;background:white;border-right:1px solid var(--border);padding:20px;position:sticky;top:120px;height:fit-content;}
+.main{flex:1;padding:24px;}
+
+/* SIDEBAR */
+.sb-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
+.sb-section:last-child{border-bottom:none;margin-bottom:0;}
+.sb-title{font-size:0.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;display:flex;justify-content:space-between;}
+.sb-clear{font-size:0.7rem;color:var(--purple);cursor:pointer;font-weight:500;text-transform:none;letter-spacing:0;}
+.sb-opt{display:flex;align-items:center;gap:8px;padding:4px 0;cursor:pointer;}
+.sb-opt input{accent-color:var(--purple);}
+.sb-opt label{font-size:0.82rem;color:var(--text);cursor:pointer;flex:1;}
+.sb-opt .cnt{font-size:0.7rem;color:var(--muted);background:var(--bg);border-radius:100px;padding:1px 6px;}
+
+/* PRICE RANGE */
+.price-row{display:flex;gap:6px;margin-bottom:10px;}
+.price-row input{flex:1;border:1px solid var(--border);border-radius:7px;padding:6px 9px;font-size:0.78rem;outline:none;}
+.price-row input:focus{border-color:var(--purple);}
+.price-slider{-webkit-appearance:none;width:100%;height:4px;border-radius:2px;background:linear-gradient(to right,var(--purple) 60%,var(--border) 60%);outline:none;}
+.price-slider::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--purple);cursor:pointer;}
+
+/* COLOR SWATCHES */
+.color-swatches{display:flex;gap:8px;flex-wrap:wrap;}
+.swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all 0.2s;}
+.swatch:hover,.swatch.active{border-color:var(--navy);transform:scale(1.15);}
+
+/* AI FILTER */
+.ai-filter-btn{width:100%;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:9px;padding:10px;color:white;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;margin-top:4px;}
+
+/* TOOLBAR */
+.toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;}
+.toolbar-left{font-size:0.85rem;color:var(--muted);}
+.toolbar-left strong{color:var(--text);}
+.toolbar-right{display:flex;align-items:center;gap:10px;}
+.view-btns{display:flex;gap:4px;}
+.vbtn{width:30px;height:30px;border:1px solid var(--border);border-radius:6px;background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem;transition:all 0.2s;}
+.vbtn.active{background:var(--purple);border-color:var(--purple);color:white;}
+.sort-sel{border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:0.8rem;color:var(--text);background:white;outline:none;}
+
+/* PROMO BANNER */
+.promo-banner{background:linear-gradient(135deg,rgba(124,58,237,0.08),rgba(6,182,212,0.08));border:1px solid rgba(124,58,237,0.15);border-radius:12px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+.promo-icon{font-size:1.4rem;}
+.promo-text{font-size:0.83rem;color:var(--text);flex:1;}
+.promo-text strong{color:var(--purple);}
+.promo-chip{background:var(--purple);color:white;border:none;border-radius:7px;padding:6px 12px;font-size:0.75rem;font-weight:700;cursor:pointer;}
+
+/* PRODUCT GRID */
+.grid-3{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;}
+.grid-3.list-view{grid-template-columns:1fr;}
+.pcard{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;transition:all 0.25s;position:relative;cursor:pointer;}
+.pcard:hover{box-shadow:0 8px 30px rgba(0,0,0,0.1);transform:translateY(-3px);}
+.pcard-img{height:190px;display:flex;align-items:center;justify-content:center;font-size:3.8rem;background:linear-gradient(135deg,#f3f0ff,#e0f7fa);}
+.pcard.list-view{display:flex;gap:0;}
+.pcard.list-view .pcard-img{width:150px;height:auto;flex-shrink:0;border-radius:0;}
+.pbadge{position:absolute;top:10px;left:10px;font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:100px;color:white;}
+.pbadge.sale{background:#ef4444;}
+.pbadge.new{background:#8b5cf6;}
+.pbadge.hot{background:#f97316;}
+.pbadge.ai{background:linear-gradient(135deg,var(--purple),var(--cyan));}
+.pwish{position:absolute;top:10px;right:10px;background:white;border:1px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;transition:all 0.2s;}
+.pwish:hover{background:var(--purple);border-color:var(--purple);}
+.pinfo{padding:14px;}
+.pcard.list-view .pinfo{padding:16px;display:flex;flex-direction:column;justify-content:center;}
+.pbrand{font-size:0.68rem;font-weight:600;color:var(--purple);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+.pname{font-size:0.87rem;font-weight:600;color:var(--text);margin-bottom:4px;line-height:1.4;}
+.pai{font-size:0.7rem;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:3px;}
+.prat{display:flex;align-items:center;gap:4px;margin-bottom:8px;}
+.pstars{color:#f59e0b;font-size:0.78rem;}
+.prev{font-size:0.7rem;color:var(--muted);}
+.pprice{display:flex;align-items:center;gap:6px;margin-bottom:10px;}
+.pprice-main{font-size:0.98rem;font-weight:700;color:var(--navy);}
+.pprice-old{font-size:0.77rem;color:var(--muted);text-decoration:line-through;}
+.pprice-save{font-size:0.67rem;font-weight:700;color:#16a34a;background:#dcfce7;border-radius:100px;padding:2px 5px;}
+.pbtns{display:flex;gap:7px;}
+.btn-c{flex:1;background:var(--navy);color:white;border:none;border-radius:8px;padding:8px;font-size:0.77rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
+.btn-c:hover{background:var(--purple);}
+.btn-c.added{background:#16a34a;}
+.btn-b{background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;border:none;border-radius:8px;padding:8px 12px;font-size:0.77rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* LOAD MORE */
+.load-more{text-align:center;margin-top:32px;}
+.load-btn{background:white;border:2px solid var(--border);border-radius:10px;padding:12px 32px;font-size:0.87rem;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.2s;font-family:'Inter',sans-serif;}
+.load-btn:hover{border-color:var(--purple);color:var(--purple);}
+
+/* CART */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:900;display:none;}
+.cart-overlay.open{display:block;}
+.cart-drawer{position:fixed;right:0;top:0;height:100%;width:370px;max-width:100vw;background:white;z-index:901;transform:translateX(100%);transition:transform 0.3s;display:flex;flex-direction:column;}
+.cart-drawer.open{transform:translateX(0);}
+.cart-hdr{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-hdr h3{font-size:0.95rem;font-weight:700;}
+.cart-close{cursor:pointer;font-size:1.1rem;color:var(--muted);}
+.cart-body{flex:1;overflow-y:auto;padding:14px;}
+.ci{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);}
+.ci-img{width:50px;height:50px;background:linear-gradient(135deg,#f3f0ff,#e0f7fa);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.ci-info{flex:1;}
+.ci-name{font-size:0.8rem;font-weight:600;margin-bottom:3px;}
+.ci-price{font-size:0.88rem;font-weight:700;color:var(--purple);}
+.ci-qty{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.qb{width:22px;height:22px;border:1px solid var(--border);border-radius:5px;background:white;cursor:pointer;font-weight:700;}
+.qv{font-size:0.82rem;font-weight:600;min-width:18px;text-align:center;}
+.ci-rm{color:var(--muted);font-size:0.7rem;cursor:pointer;margin-top:3px;}
+.cart-ft{padding:14px;border-top:1px solid var(--border);}
+.cart-tot{display:flex;justify-content:space-between;font-weight:700;margin-bottom:10px;}
+.btn-co{width:100%;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;border:none;border-radius:10px;padding:12px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.cart-empty{text-align:center;padding:40px;color:var(--muted);font-size:0.85rem;}
+
+@media(max-width:900px){.col-hero-badges{display:none;}}
+@media(max-width:768px){.sidebar{display:none;}.col-hero h1{font-size:1.6rem;}}
+@media(max-width:480px){.grid-3{grid-template-columns:repeat(2,1fr);}.pcard-img{height:150px;font-size:2.8rem;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="store.html" class="nav-logo">Vibe<span>Store</span></a>
+  <div class="nav-search-btn" onclick="window.location.href='search.html'">🔍 <span style="color:rgba(255,255,255,0.4)">Search products...</span></div>
+  <div class="nav-links">
+    <a href="store.html">Home</a>
+    <a href="account.html">👤</a>
+    <a href="track.html">📦</a>
+    <button class="nav-cart" onclick="openCart()">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<div class="cat-nav">
+  <div class="cat-tab active" onclick="switchCat(this,'Electronics')">⚡ Electronics</div>
+  <div class="cat-tab" onclick="switchCat(this,'Audio')">🎧 Audio</div>
+  <div class="cat-tab" onclick="switchCat(this,'Wearables')">⌚ Wearables</div>
+  <div class="cat-tab" onclick="switchCat(this,'Cameras')">📷 Cameras</div>
+  <div class="cat-tab" onclick="switchCat(this,'Gaming')">🎮 Gaming</div>
+  <div class="cat-tab" onclick="switchCat(this,'Accessories')">🔌 Accessories</div>
+  <div class="cat-tab" onclick="switchCat(this,'Home Tech')">🏠 Home Tech</div>
+  <div class="cat-tab" onclick="switchCat(this,'Fashion')">👗 Fashion</div>
+</div>
+
+<div class="col-hero">
+  <div class="col-breadcrumb">
+    <a href="store.html">Home</a> › <a href="#">Collections</a> › Electronics
+  </div>
+  <h1>Electronics</h1>
+  <p>Curated by <strong style="color:#a78bfa">Nova AI</strong> — 2,847 products analysed, best-in-class picks refreshed daily for you.</p>
+  <div class="col-hero-stats">
+    <div class="col-stat">
+      <div class="col-stat-icon">📦</div>
+      <div class="col-stat-text"><strong id="heroCount">247</strong> Products</div>
+    </div>
+    <div class="col-stat">
+      <div class="col-stat-icon">🏷️</div>
+      <div class="col-stat-text"><strong>Up to 60%</strong> Off</div>
+    </div>
+    <div class="col-stat">
+      <div class="col-stat-icon">⚡</div>
+      <div class="col-stat-text"><strong>Same-day</strong> Available</div>
+    </div>
+    <div class="col-stat">
+      <div class="col-stat-icon">🤖</div>
+      <div class="col-stat-text"><strong>Nova AI</strong> Curated</div>
+    </div>
+  </div>
+  <div class="col-hero-badges">
+    <div class="hero-badge"><div class="dot"></div> Nova AI updating picks...</div>
+    <div class="hero-badge">🔥 Flash Sale: 4h 23m left</div>
+    <div class="hero-badge">📦 Free shipping above ₹999</div>
+  </div>
+</div>
+
+<div class="sub-strip">
+  <div class="sub-strip-inner" id="subStrip"></div>
+</div>
+
+<div class="page">
+  <aside class="sidebar">
+    <div class="sb-section">
+      <div class="sb-title">Price Range <span class="sb-clear">Clear</span></div>
+      <div class="price-row">
+        <input type="number" placeholder="₹ Min" value="0"/>
+        <input type="number" placeholder="₹ Max" value="100000"/>
+      </div>
+      <input type="range" class="price-slider" min="0" max="100000" value="100000"/>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">Brand <span class="sb-clear">Clear</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br1" checked/><label for="br1">Sony</label><span class="cnt">42</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br2"/><label for="br2">Samsung</label><span class="cnt">38</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br3"/><label for="br3">Apple</label><span class="cnt">31</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br4"/><label for="br4">LG</label><span class="cnt">22</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br5"/><label for="br5">Bosch</label><span class="cnt">18</span></div>
+      <div class="sb-opt"><input type="checkbox" id="br6"/><label for="br6">Philips</label><span class="cnt">15</span></div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">Rating <span class="sb-clear">Clear</span></div>
+      <div class="sb-opt"><input type="checkbox" id="rt5"/><label for="rt5">★★★★★ 5 stars</label></div>
+      <div class="sb-opt"><input type="checkbox" id="rt4" checked/><label for="rt4">★★★★ 4+ stars</label></div>
+      <div class="sb-opt"><input type="checkbox" id="rt3"/><label for="rt3">★★★ 3+ stars</label></div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">Colour</div>
+      <div class="color-swatches">
+        <div class="swatch active" style="background:#0f0f1a" title="Black"></div>
+        <div class="swatch" style="background:#fff;border-color:var(--border)" title="White"></div>
+        <div class="swatch" style="background:#c0c0c0" title="Silver"></div>
+        <div class="swatch" style="background:#b45309" title="Gold"></div>
+        <div class="swatch" style="background:#1e40af" title="Blue"></div>
+        <div class="swatch" style="background:#7c3aed" title="Purple"></div>
+        <div class="swatch" style="background:#ef4444" title="Red"></div>
+        <div class="swatch" style="background:#16a34a" title="Green"></div>
+      </div>
+    </div>
+    <div class="sb-section">
+      <div class="sb-title">Offers</div>
+      <div class="sb-opt"><input type="checkbox" id="o1"/><label for="o1">On Sale</label></div>
+      <div class="sb-opt"><input type="checkbox" id="o2" checked/><label for="o2">In Stock</label></div>
+      <div class="sb-opt"><input type="checkbox" id="o3"/><label for="o3">Same-day Delivery</label></div>
+      <div class="sb-opt"><input type="checkbox" id="o4"/><label for="o4">Free Delivery</label></div>
+      <div class="sb-opt"><input type="checkbox" id="o5"/><label for="o5">No Cost EMI</label></div>
+    </div>
+    <button class="ai-filter-btn" onclick="aiFilter()">🤖 Nova AI: Personalise for Me</button>
+  </aside>
+
+  <main class="main">
+    <div class="promo-banner">
+      <div class="promo-icon">🤖</div>
+      <div class="promo-text"><strong>Nova AI Deal Alert:</strong> Sony WH-1000XM5 just dropped ₹3,000. Price may rise in 2h based on demand trends.</div>
+      <button class="promo-chip">Grab It</button>
+    </div>
+
+    <div class="toolbar">
+      <div class="toolbar-left">Showing <strong id="resultCount">247 products</strong> in Electronics</div>
+      <div class="toolbar-right">
+        <div class="view-btns">
+          <button class="vbtn active" id="gb" onclick="setView('grid')" title="Grid">⊞</button>
+          <button class="vbtn" id="lb" onclick="setView('list')" title="List">☰</button>
+        </div>
+        <select class="sort-sel" onchange="renderGrid()">
+          <option>🤖 AI Recommended</option>
+          <option>Most Popular</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Highest Rated</option>
+          <option>Newest</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid-3" id="productGrid"></div>
+    <div class="load-more"><button class="load-btn" onclick="loadMore()">Load More Products</button></div>
+  </main>
+</div>
+
+<!-- CART -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-hdr"><h3>🛒 Cart</h3><span class="cart-close" onclick="closeCart()">✕</span></div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-ft">
+    <div class="cart-tot"><span>Total</span><span id="cartTotal">₹0</span></div>
+    <button class="btn-co" onclick="window.location.href='checkout.html'">Checkout →</button>
+  </div>
+</div>
+
+<script src="rex-chat.js"></script>
+<script>
+const CATS = {
+  'Electronics': {icon:'⚡',count:247,sub:[
+    {icon:'🎧',name:'Audio',count:48},{icon:'📱',name:'Phones',count:62},{icon:'💻',name:'Laptops',count:34},
+    {icon:'📺',name:'TVs',count:28},{icon:'📷',name:'Cameras',count:19},{icon:'🖨️',name:'Printers',count:14}
+  ]},
+  'Audio':       {icon:'🎧',count:96,sub:[{icon:'🎵',name:'Headphones',count:48},{icon:'🔊',name:'Speakers',count:31},{icon:'🎙️',name:'Mics',count:17}]},
+  'Wearables':   {icon:'⌚',count:78,sub:[{icon:'⌚',name:'Smartwatches',count:42},{icon:'💍',name:'Rings',count:15},{icon:'🏃',name:'Fitness',count:21}]},
+  'Gaming':      {icon:'🎮',count:112,sub:[{icon:'🕹️',name:'Consoles',count:8},{icon:'🖱️',name:'Controllers',count:24},{icon:'🎧',name:'Headsets',count:30}]},
+  'Cameras':     {icon:'📷',count:54,sub:[{icon:'📷',name:'DSLR',count:18},{icon:'📸',name:'Mirrorless',count:16},{icon:'🤳',name:'Action',count:20}]},
+  'Accessories': {icon:'🔌',count:183,sub:[{icon:'🔋',name:'Chargers',count:62},{icon:'📦',name:'Cases',count:54},{icon:'🔌',name:'Cables',count:67}]},
+  'Home Tech':   {icon:'🏠',count:89,sub:[{icon:'💡',name:'Smart Lights',count:32},{icon:'🔒',name:'Security',count:28},{icon:'🤖',name:'Robots',count:29}]},
+  'Fashion':     {icon:'👗',count:324,sub:[{icon:'👕',name:'Tops',count:98},{icon:'👟',name:'Footwear',count:76},{icon:'👜',name:'Bags',count:54}]},
+};
+
+const ALL_PRODUCTS = [
+  {id:'p1',name:'Sony WH-1000XM5',brand:'Sony',price:29990,old:34990,rating:4.9,reviews:2847,emoji:'🎧',badge:'ai',badgeText:'AI Pick',ai:'Atlas matched to taste'},
+  {id:'p2',name:'Samsung Galaxy S24 Ultra',brand:'Samsung',price:134999,old:149999,rating:4.8,reviews:5421,emoji:'📱',badge:'hot',badgeText:'Hot',ai:'Aria: #1 seller today'},
+  {id:'p3',name:'Apple MacBook Air M3',brand:'Apple',price:114900,old:129900,rating:4.9,reviews:3102,emoji:'💻',badge:'new',badgeText:'New',ai:'Nova: top pick laptops'},
+  {id:'p4',name:'LG OLED 55" 4K TV',brand:'LG',price:89990,old:119990,rating:4.7,reviews:1892,emoji:'📺',badge:'sale',badgeText:'Sale',ai:'Echo: price drop alert'},
+  {id:'p5',name:'Sony Alpha A7 IV',brand:'Sony',price:259990,old:279990,rating:4.8,reviews:743,emoji:'📷',badge:'ai',badgeText:'AI Pick',ai:'Luna: best camera 2025'},
+  {id:'p6',name:'Apple Watch Ultra 2',brand:'Apple',price:89900,old:99900,rating:4.9,reviews:2341,emoji:'⌚',badge:'hot',badgeText:'Hot',ai:'Atlas: trending now'},
+  {id:'p7',name:'JBL Charge 5',brand:'JBL',price:12999,old:16999,rating:4.6,reviews:4127,emoji:'🔊',badge:'sale',badgeText:'38% off',ai:'Luna: best value pick'},
+  {id:'p8',name:'Bose QuietComfort 45',brand:'Bose',price:24990,old:32990,rating:4.8,reviews:1923,emoji:'🎵',badge:'ai',badgeText:'AI Pick',ai:'Top noise cancelling'},
+  {id:'p9',name:'Samsung 49" Ultrawide',brand:'Samsung',price:64990,old:79990,rating:4.7,reviews:892,emoji:'🖥️',badge:'new',badgeText:'New',ai:'Nova: pro display choice'},
+  {id:'p10',name:'Logitech MX Master 3S',brand:'Logitech',price:8995,old:10995,rating:4.9,reviews:6723,emoji:'🖱️',badge:'hot',badgeText:'Bestseller',ai:'Aria: 10k+ sold'},
+  {id:'p11',name:'iPad Pro 13" M4',brand:'Apple',price:108900,old:119900,rating:4.8,reviews:2108,emoji:'📱',badge:'ai',badgeText:'AI Pick',ai:'Atlas: creative top pick'},
+  {id:'p12',name:'Philips Hue Starter Kit',brand:'Philips',price:12499,old:16999,rating:4.6,reviews:3401,emoji:'💡',badge:'sale',badgeText:'26% off',ai:'Echo: smart home starter'},
+];
+
+let cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+let currentView = 'grid';
+let currentCat = 'Electronics';
+
+function switchCat(el, cat) {
+  document.querySelectorAll('.cat-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  currentCat = cat;
+  const data = CATS[cat] || CATS['Electronics'];
+  document.getElementById('heroCount').textContent = data.count;
+  renderSubs(data.sub);
+  renderGrid();
+}
+
+function renderSubs(subs) {
+  document.getElementById('subStrip').innerHTML = subs.map((s,i) =>
+    `<div class="sub-card${i===0?' active':''}" onclick="activateSub(this)">
+      <div class="sub-icon">${s.icon}</div>
+      <div><div class="sub-name">${s.name}</div><div class="sub-count">${s.count} items</div></div>
+    </div>`
+  ).join('');
+}
+
+function activateSub(el) {
+  document.querySelectorAll('.sub-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function renderGrid() {
+  const grid = document.getElementById('productGrid');
+  grid.className = 'grid-3' + (currentView==='list' ? ' list-view' : '');
+  grid.innerHTML = ALL_PRODUCTS.map(p => {
+    const save = Math.round((1-p.price/p.old)*100);
+    const inCart = cart.find(c=>c.id===p.id);
+    return `<div class="pcard${currentView==='list'?' list-view':''}" onclick="window.location.href='product.html?id=${p.id}'">
+      ${currentView!=='list'?`<div class="pcard-img">${p.emoji}</div>`:''}
+      <div class="pbadge ${p.badge}">${p.badgeText}</div>
+      <div class="pwish" onclick="event.stopPropagation();toggleWish(this)">♡</div>
+      ${currentView==='list'?`<div class="pcard-img">${p.emoji}</div>`:''}
+      <div class="pinfo">
+        <div class="pbrand">${p.brand}</div>
+        <div class="pname">${p.name}</div>
+        <div class="pai">🤖 ${p.ai}</div>
+        <div class="prat"><span class="pstars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span><span class="prev">(${p.reviews.toLocaleString()})</span></div>
+        <div class="pprice">
+          <span class="pprice-main">₹${p.price.toLocaleString()}</span>
+          <span class="pprice-old">₹${p.old.toLocaleString()}</span>
+          <span class="pprice-save">${save}% off</span>
+        </div>
+        <div class="pbtns">
+          <button class="btn-c${inCart?' added':''}" onclick="event.stopPropagation();addCart('${p.id}')">${inCart?'✓ Added':'Add to Cart'}</button>
+          <button class="btn-b" onclick="event.stopPropagation();window.location.href='checkout.html'">Buy</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('gb').classList.toggle('active', v==='grid');
+  document.getElementById('lb').classList.toggle('active', v==='list');
+  renderGrid();
+}
+
+function addCart(id) {
+  const p = ALL_PRODUCTS.find(x=>x.id===id);
+  const ex = cart.find(c=>c.id===id);
+  if (ex) ex.qty++;
+  else cart.push({id:p.id,name:p.name,price:p.price,emoji:p.emoji,qty:1});
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  updateCount(); renderGrid(); renderCart(); openCart();
+}
+
+function updateCount() {
+  document.getElementById('cartCount').textContent = cart.reduce((s,c)=>s+c.qty,0);
+}
+
+function renderCart() {
+  const b = document.getElementById('cartBody');
+  if (!cart.length) { b.innerHTML = '<div class="cart-empty">🛒 Cart is empty</div>'; return; }
+  b.innerHTML = cart.map(item=>`
+    <div class="ci">
+      <div class="ci-img">${item.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">₹${(item.price*item.qty).toLocaleString()}</div>
+        <div class="ci-qty">
+          <button class="qb" onclick="cq('${item.id}',-1)">−</button>
+          <span class="qv">${item.qty}</span>
+          <button class="qb" onclick="cq('${item.id}',1)">+</button>
+        </div>
+        <div class="ci-rm" onclick="rm('${item.id}')">Remove</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent = '₹' + cart.reduce((s,c)=>s+c.price*c.qty,0).toLocaleString();
+}
+
+function cq(id,d) {
+  const i = cart.find(c=>c.id===id); if (!i) return;
+  i.qty+=d; if(i.qty<=0) cart=cart.filter(c=>c.id!==id);
+  localStorage.setItem('vs_cart',JSON.stringify(cart)); updateCount(); renderCart();
+}
+function rm(id) { cart=cart.filter(c=>c.id!==id); localStorage.setItem('vs_cart',JSON.stringify(cart)); updateCount(); renderCart(); }
+function openCart() { document.getElementById('cartOverlay').classList.add('open'); document.getElementById('cartDrawer').classList.add('open'); }
+function closeCart() { document.getElementById('cartOverlay').classList.remove('open'); document.getElementById('cartDrawer').classList.remove('open'); }
+function toggleWish(b) { b.textContent = b.textContent==='♡'?'♥':'♡'; }
+function aiFilter() { document.querySelectorAll('.sidebar input[type=checkbox]').forEach(cb=>cb.checked=Math.random()>0.4); }
+function loadMore() { alert('Nova AI is loading more curated picks...'); }
+
+const initCat = CATS['Electronics'];
+renderSubs(initCat.sub);
+updateCount(); renderGrid(); renderCart();
+</script>
+</body>
+</html>

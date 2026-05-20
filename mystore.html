@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>My VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+/* THEME TOKENS — overridden by JS */
+:root{
+  --bg:#f8f8f5;
+  --card:#ffffff;
+  --nav-bg:#0f0f1a;
+  --nav-text:#ffffff;
+  --accent:#7c3aed;
+  --accent2:#06b6d4;
+  --text:#0f0f1a;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --hero-bg:linear-gradient(135deg,#1a0533,#0c1a3a);
+  --hero-text:#ffffff;
+  --btn-text:#ffffff;
+  --card-hover:rgba(0,0,0,0.05);
+  --badge-bg:linear-gradient(135deg,#7c3aed,#06b6d4);
+}
+
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);transition:background 0.4s,color 0.4s;}
+
+/* ========= WELCOME BANNER ========= */
+.welcome-banner{background:linear-gradient(135deg,#065f46,#047857);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.wb-left{display:flex;align-items:center;gap:12px;}
+.wb-icon{width:32px;height:32px;background:rgba(255,255,255,0.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+.wb-text{color:white;}
+.wb-text strong{display:block;font-size:0.88rem;font-weight:700;}
+.wb-text span{font-size:0.75rem;opacity:0.8;}
+.wb-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.wb-btn{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:7px;padding:6px 13px;color:white;font-size:0.77rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:background 0.2s;}
+.wb-btn:hover{background:rgba(255,255,255,0.25);}
+.wb-btn.primary{background:white;color:#065f46;}
+.wb-btn.primary:hover{background:#f0fdf4;}
+.wb-close{color:rgba(255,255,255,0.6);cursor:pointer;font-size:1rem;padding:4px;flex-shrink:0;}
+.wb-close:hover{color:white;}
+
+/* ========= SETUP CHECKLIST (Shopify-style) ========= */
+.setup-bar{background:var(--card);border-bottom:1px solid var(--border);padding:0 24px;}
+.setup-bar-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0;overflow-x:auto;padding:12px 0;}
+.setup-bar-inner::-webkit-scrollbar{display:none;}
+.setup-task{display:flex;align-items:center;gap:7px;padding:7px 16px;border-radius:8px;cursor:pointer;white-space:nowrap;font-size:0.78rem;font-weight:600;color:var(--muted);transition:all 0.2s;border:1px solid transparent;flex-shrink:0;}
+.setup-task:hover{background:var(--bg);color:var(--text);}
+.setup-task.done{color:#16a34a;}
+.setup-task.done .st-circle{background:#16a34a;border-color:#16a34a;color:white;}
+.setup-task.active{background:rgba(124,58,237,0.07);border-color:rgba(124,58,237,0.2);color:var(--accent);}
+.setup-task.active .st-circle{border-color:var(--accent);color:var(--accent);}
+.st-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;flex-shrink:0;}
+.setup-progress{margin-left:auto;flex-shrink:0;padding-left:20px;display:flex;align-items:center;gap:10px;}
+.sp-bar{width:80px;height:5px;background:var(--border);border-radius:3px;overflow:hidden;}
+.sp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px;transition:width 0.4s;}
+.sp-text{font-size:0.72rem;color:var(--muted);white-space:nowrap;}
+
+/* ========= NAV ========= */
+.site-nav{background:var(--nav-bg);padding:0 24px;position:sticky;top:0;z-index:400;}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;height:58px;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:var(--nav-text);text-decoration:none;flex-shrink:0;}
+.nav-search{flex:1;max-width:420px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;gap:8px;padding:8px 14px;}
+.nav-search input{background:none;border:none;outline:none;color:var(--nav-text);font-size:0.83rem;font-family:'Inter',sans-serif;flex:1;}
+.nav-search input::placeholder{color:rgba(255,255,255,0.35);}
+.nav-icons{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-icon-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:7px 12px;color:var(--nav-text);font-size:0.78rem;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;white-space:nowrap;position:relative;transition:background 0.2s;}
+.nav-icon-btn:hover{background:rgba(255,255,255,0.16);}
+.nav-cart-count{position:absolute;top:-5px;right:-5px;background:var(--accent);color:white;width:16px;height:16px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
+.nav-admin{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:8px;padding:7px 14px;color:white;font-size:0.78rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+
+/* ========= ANNOUNCEMENT BAR ========= */
+.announce-bar{background:var(--accent);padding:8px 24px;text-align:center;font-size:0.78rem;font-weight:600;color:white;display:flex;align-items:center;justify-content:center;gap:12px;}
+.announce-bar a{color:white;font-weight:700;text-decoration:underline;cursor:pointer;}
+
+/* ========= HERO ========= */
+.hero{background:var(--hero-bg);padding:64px 24px;position:relative;overflow:hidden;}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;}
+.hero-content{}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:100px;padding:5px 14px;font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.9);margin-bottom:16px;}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:p 1.5s infinite;}
+@keyframes p{0%,100%{opacity:1}50%{opacity:0.4}}
+.hero-content h1{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;color:var(--hero-text);line-height:1.2;margin-bottom:14px;}
+.hero-content h1 em{font-style:normal;background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hero-content p{color:rgba(255,255,255,0.65);font-size:0.95rem;line-height:1.7;margin-bottom:24px;max-width:440px;}
+.hero-btns{display:flex;gap:10px;flex-wrap:wrap;}
+.btn-primary{background:var(--accent);color:white;border:none;border-radius:10px;padding:13px 24px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:7px;transition:opacity 0.2s;}
+.btn-primary:hover{opacity:0.88;}
+.btn-ghost{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:white;border-radius:10px;padding:13px 22px;font-size:0.9rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
+.btn-ghost:hover{background:rgba(255,255,255,0.18);}
+.hero-visual{display:flex;align-items:center;justify-content:center;}
+.hero-product-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:340px;}
+.hero-prod-card{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:16px;text-align:center;backdrop-filter:blur(10px);}
+.hero-prod-emoji{font-size:2rem;display:block;margin-bottom:6px;}
+.hero-prod-name{font-size:0.72rem;font-weight:600;color:rgba(255,255,255,0.85);}
+.hero-prod-price{font-size:0.8rem;font-weight:700;color:white;margin-top:3px;}
+.hero-stats{display:flex;gap:24px;margin-top:24px;flex-wrap:wrap;}
+.hstat{display:flex;align-items:center;gap:8px;}
+.hstat-n{font-size:1rem;font-weight:700;color:white;}
+.hstat-l{font-size:0.72rem;color:rgba(255,255,255,0.5);}
+
+/* ========= MAIN CONTENT ========= */
+.main-content{max-width:1200px;margin:0 auto;padding:40px 24px;}
+
+/* SECTION HEADER */
+.section-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:20px;}
+.section-hdr h2{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text);}
+.section-hdr .ai-note{font-size:0.75rem;color:var(--muted);display:flex;align-items:center;gap:5px;}
+.view-all{font-size:0.8rem;font-weight:600;color:var(--accent);cursor:pointer;text-decoration:none;border:none;background:none;}
+
+/* CATEGORY PILLS */
+.cat-pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:28px;}
+.cat-pills::-webkit-scrollbar{display:none;}
+.cat-pill{background:var(--card);border:1.5px solid var(--border);border-radius:100px;padding:7px 16px;font-size:0.8rem;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all 0.2s;flex-shrink:0;}
+.cat-pill:hover{border-color:var(--accent);color:var(--accent);}
+.cat-pill.active{background:var(--accent);border-color:var(--accent);color:white;}
+
+/* PRODUCT GRID */
+.prod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px;margin-bottom:40px;}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.25s;position:relative;}
+.prod-card:hover{box-shadow:0 8px 28px rgba(0,0,0,0.1);transform:translateY(-3px);}
+.prod-img{height:180px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;}
+.prod-badge{position:absolute;top:8px;left:8px;font-size:0.62rem;font-weight:700;padding:3px 8px;border-radius:100px;color:white;background:var(--badge-bg);}
+.prod-wish{position:absolute;top:8px;right:8px;width:28px;height:28px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;transition:all 0.2s;}
+.prod-wish:hover{background:var(--accent);border-color:var(--accent);}
+.prod-info{padding:14px;}
+.prod-brand{font-size:0.68rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px;}
+.prod-name{font-size:0.87rem;font-weight:600;color:var(--text);margin-bottom:6px;line-height:1.4;}
+.prod-rat{display:flex;align-items:center;gap:4px;margin-bottom:8px;}
+.prod-stars{color:#f59e0b;font-size:0.78rem;}
+.prod-revs{font-size:0.7rem;color:var(--muted);}
+.prod-price{display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+.prod-price-main{font-size:0.97rem;font-weight:700;color:var(--text);}
+.prod-price-old{font-size:0.77rem;color:var(--muted);text-decoration:line-through;}
+.prod-price-save{font-size:0.67rem;font-weight:700;color:#16a34a;background:#dcfce7;border-radius:100px;padding:2px 6px;}
+.prod-btns{display:flex;gap:7px;}
+.btn-add{flex:1;background:var(--text);color:white;border:none;border-radius:8px;padding:8px;font-size:0.77rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
+.btn-add:hover,.btn-add.added{background:var(--accent);}
+.btn-add.added{background:#16a34a;}
+.btn-buy{background:var(--badge-bg);color:white;border:none;border-radius:8px;padding:8px 12px;font-size:0.77rem;font-weight:700;cursor:pointer;}
+
+/* FLASH SALE BANNER */
+.flash-banner{background:linear-gradient(135deg,#1a0533,#0c1a3a);border-radius:16px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:40px;flex-wrap:wrap;}
+.fb-left h3{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;margin-bottom:4px;}
+.fb-left p{font-size:0.83rem;color:rgba(255,255,255,0.6);}
+.fb-timer{display:flex;gap:10px;}
+.fb-unit{background:rgba(255,255,255,0.1);border-radius:8px;padding:10px 14px;text-align:center;}
+.fb-unit-n{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:white;line-height:1;}
+.fb-unit-l{font-size:0.6rem;color:rgba(255,255,255,0.5);text-transform:uppercase;margin-top:3px;}
+.fb-btn{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;border-radius:10px;padding:12px 24px;color:white;font-size:0.85rem;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* TRUST BAR */
+.trust-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px;}
+.trust-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center;}
+.trust-icon{font-size:1.5rem;margin-bottom:8px;}
+.trust-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.trust-desc{font-size:0.72rem;color:var(--muted);line-height:1.4;}
+
+/* CART DRAWER */
+.cart-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;display:none;}
+.cart-overlay.open{display:block;}
+.cart-drawer{position:fixed;right:0;top:0;height:100%;width:370px;max-width:100vw;background:var(--card);z-index:801;transform:translateX(100%);transition:transform 0.3s;display:flex;flex-direction:column;border-left:1px solid var(--border);}
+.cart-drawer.open{transform:translateX(0);}
+.cart-hdr{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.cart-hdr h3{font-size:0.95rem;font-weight:700;color:var(--text);}
+.cart-close{cursor:pointer;font-size:1.1rem;color:var(--muted);}
+.cart-body{flex:1;overflow-y:auto;padding:14px;}
+.ci{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
+.ci-img{width:52px;height:52px;background:var(--bg);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0;}
+.ci-info{flex:1;}
+.ci-name{font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:3px;}
+.ci-price{font-size:0.88rem;font-weight:700;color:var(--accent);}
+.ci-qty{display:flex;align-items:center;gap:6px;margin-top:4px;}
+.qb{width:22px;height:22px;border:1px solid var(--border);border-radius:5px;background:var(--card);cursor:pointer;font-weight:700;color:var(--text);}
+.qv{font-size:0.82rem;font-weight:600;min-width:18px;text-align:center;color:var(--text);}
+.ci-rm{color:var(--muted);font-size:0.7rem;cursor:pointer;margin-top:3px;}
+.cart-ft{padding:16px;border-top:1px solid var(--border);}
+.cart-tot{display:flex;justify-content:space-between;font-weight:700;margin-bottom:12px;color:var(--text);}
+.btn-co{width:100%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:white;border:none;border-radius:10px;padding:13px;font-size:0.9rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;}
+.cart-empty{text-align:center;padding:40px;color:var(--muted);}
+
+/* FOOTER */
+.site-footer{background:var(--nav-bg);padding:40px 24px 24px;margin-top:40px;}
+.footer-inner{max-width:1200px;margin:0 auto;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:32px;}
+.footer-brand p{font-size:0.82rem;color:rgba(255,255,255,0.5);margin-top:10px;line-height:1.6;max-width:240px;}
+.footer-col h4{font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,255,0.4);margin-bottom:14px;}
+.footer-col a{display:block;font-size:0.82rem;color:rgba(255,255,255,0.6);text-decoration:none;margin-bottom:8px;transition:color 0.2s;}
+.footer-col a:hover{color:white;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(255,255,255,0.35);flex-wrap:wrap;gap:8px;}
+.footer-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:white;}
+
+/* AI AGENT TICKER */
+.ai-ticker{background:rgba(124,58,237,0.07);border:1px solid rgba(124,58,237,0.15);border-radius:12px;padding:14px 18px;margin-bottom:40px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.at-badge{background:var(--accent);color:white;font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:100px;flex-shrink:0;}
+.at-text{font-size:0.8rem;color:var(--text);flex:1;min-width:200px;}
+.at-text strong{color:var(--accent);}
+
+/* ADMIN FLOATING BUTTON */
+.admin-fab{position:fixed;bottom:100px;left:20px;z-index:700;background:var(--nav-bg);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 16px;display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.3);transition:all 0.2s;}
+.admin-fab:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.4);}
+.admin-fab-text{font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.8);}
+
+@media(max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-visual{display:none;}.footer-grid{grid-template-columns:1fr 1fr;}.trust-bar{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.prod-grid{grid-template-columns:repeat(2,1fr);}.hero-content h1{font-size:1.8rem;}.trust-bar{grid-template-columns:1fr 1fr;}.setup-bar-inner{gap:0;}.fb-timer{display:none;}}
+@media(max-width:400px){.prod-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<!-- WELCOME BANNER -->
+<div class="welcome-banner" id="welcomeBanner">
+  <div class="wb-left">
+    <div class="wb-icon">🎉</div>
+    <div class="wb-text">
+      <strong id="wbTitle">Your store is live!</strong>
+      <span id="wbSub">8 AI agents are now running your store automatically.</span>
+    </div>
+  </div>
+  <div class="wb-actions">
+    <button class="wb-btn" onclick="window.location.href='app.html'">Go to Admin</button>
+    <button class="wb-btn primary" onclick="dismissWelcome()">Got it</button>
+  </div>
+  <span class="wb-close" onclick="dismissWelcome()">✕</span>
+</div>
+
+<!-- SETUP CHECKLIST (Shopify-style) -->
+<div class="setup-bar" id="setupBar">
+  <div class="setup-bar-inner">
+    <div class="setup-task done" onclick="markTask(this)">
+      <div class="st-circle">✓</div>Store created
+    </div>
+    <div class="setup-task active" onclick="markTask(this)">
+      <div class="st-circle">2</div>Add products
+    </div>
+    <div class="setup-task" onclick="markTask(this)">
+      <div class="st-circle">3</div>Set up payments
+    </div>
+    <div class="setup-task" onclick="markTask(this)">
+      <div class="st-circle">4</div>Configure shipping
+    </div>
+    <div class="setup-task" onclick="markTask(this)">
+      <div class="st-circle">5</div>Connect domain
+    </div>
+    <div class="setup-task" onclick="markTask(this)">
+      <div class="st-circle">6</div>Launch campaign
+    </div>
+    <div class="setup-progress">
+      <div class="sp-bar"><div class="sp-fill" id="setupFill" style="width:16%"></div></div>
+      <div class="sp-text" id="setupPct">1 of 6 done</div>
+    </div>
+  </div>
+</div>
+
+<!-- SITE NAV -->
+<nav class="site-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo" id="navLogo">VibeStore</a>
+    <div class="nav-search">
+      <span style="color:rgba(255,255,255,0.35);font-size:0.9rem;">🔍</span>
+      <input type="text" placeholder="Search products..." id="searchInput"/>
+    </div>
+    <div class="nav-icons">
+      <a href="account.html" class="nav-icon-btn">👤 Account</a>
+      <a href="track.html" class="nav-icon-btn">📦 Orders</a>
+      <a href="wishlist.html" class="nav-icon-btn">♡</a>
+      <button class="nav-icon-btn" onclick="openCart()" style="position:relative;">
+        🛒 Cart
+        <span class="nav-cart-count" id="cartCount">0</span>
+      </button>
+      <button class="nav-admin" onclick="window.location.href='app.html'">Admin ↗</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar" id="announceBar">
+  Free shipping on orders above <span id="freeShipMin">₹999</span> &nbsp;·&nbsp;
+  Use code <strong>LAUNCH20</strong> for 20% off your launch week &nbsp;·&nbsp;
+  <a>Shop Now →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge"><div class="hero-badge-dot"></div><span id="heroAgent">Nova AI</span> — Curated for you</div>
+      <h1 id="heroTitle">Welcome to <em id="heroStoreName">Your Store</em></h1>
+      <p id="heroSubtitle">Discover our curated collection, powered by AI agents that work 24/7 to bring you the best deals, recommendations, and service.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">
+          Shop Now →
+        </button>
+        <button class="btn-ghost" onclick="window.location.href='collections.html'">
+          View All Collections
+        </button>
+      </div>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-n" id="heroProductCount">120+</div><div class="hstat-l">Products</div></div>
+        <div class="hstat"><div class="hstat-n">8</div><div class="hstat-l">AI Agents</div></div>
+        <div class="hstat"><div class="hstat-n">24/7</div><div class="hstat-l">Support</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-product-grid" id="heroProductGrid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-content">
+
+  <!-- AI TICKER -->
+  <div class="ai-ticker" id="aiTicker">
+    <div class="at-badge">🤖 Live</div>
+    <div class="at-text" id="atText"><strong>Luna AI</strong> found 3 price drops in your category today.</div>
+  </div>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar" id="trustBar"></div>
+
+  <!-- FLASH SALE -->
+  <div class="flash-banner">
+    <div class="fb-left">
+      <h3>Launch Week Flash Sale</h3>
+      <p>Aria AI is running exclusive launch discounts — up to 40% off for your first customers.</p>
+    </div>
+    <div class="fb-timer" id="fbTimer"></div>
+    <button class="fb-btn" onclick="document.getElementById('products-section').scrollIntoView({behavior:'smooth'})">Shop Sale →</button>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div id="products-section">
+    <div class="section-hdr">
+      <div>
+        <h2 id="prodSectionTitle">Featured Products</h2>
+        <div class="ai-note">🤖 Curated by <span id="prodAgent">Atlas AI</span></div>
+      </div>
+      <a class="view-all" href="collections.html">View all →</a>
+    </div>
+
+    <div class="cat-pills" id="catPills"></div>
+    <div class="prod-grid" id="prodGrid"></div>
+  </div>
+
+  <!-- SECOND SECTION -->
+  <div class="section-hdr">
+    <h2 id="section2Title">New Arrivals</h2>
+    <a class="view-all" href="collections.html">View all →</a>
+  </div>
+  <div class="prod-grid" id="prodGrid2"></div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo" id="footerLogo">VibeStore</div>
+        <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-top:10px;max-width:240px;line-height:1.6;" id="footerTagline">Your AI-powered store, running 24/7.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="collections.html">All Products</a>
+        <a href="collections.html">New Arrivals</a>
+        <a href="store.html">Sale</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <a href="track.html">Track Order</a>
+        <a href="account.html">My Account</a>
+        <a href="#">Returns</a>
+        <a href="#">Contact Rex AI</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="index.html">About VibeStore</a>
+        <a href="referral.html">Refer & Earn</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span id="footerCopy">© 2026 VibeStore. All rights reserved.</span>
+      <span>Powered by VibeStore AI · 8 agents running</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ADMIN FAB -->
+<div class="admin-fab" onclick="window.location.href='app.html'">
+  <span style="font-size:1rem;">⚙️</span>
+  <div class="admin-fab-text">Admin Panel</div>
+</div>
+
+<!-- CART DRAWER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-hdr"><h3>🛒 Cart</h3><span class="cart-close" onclick="closeCart()">✕</span></div>
+  <div class="cart-body" id="cartBody"></div>
+  <div class="cart-ft">
+    <div class="cart-tot"><span>Total</span><span id="cartTotal">—</span></div>
+    <button class="btn-co" onclick="window.location.href='checkout.html'">Checkout →</button>
+  </div>
+</div>
+
+<script src="rex-chat.js"></script>
+<script>
+// ============================================================
+// THEME CONFIGURATIONS
+// ============================================================
+const THEMES = {
+  'Vibe Dark': {
+    '--bg':'#0f0f1a','--card':'#1a1a2e','--nav-bg':'#0f0f1a','--nav-text':'#ffffff',
+    '--accent':'#7c3aed','--accent2':'#06b6d4','--text':'#f1f5f9','--muted':'#94a3b8',
+    '--border':'rgba(255,255,255,0.1)','--hero-bg':'linear-gradient(135deg,#1a0533,#0c1a3a)',
+    '--hero-text':'#ffffff','--badge-bg':'linear-gradient(135deg,#7c3aed,#06b6d4)',
+    heroProdBg:'rgba(255,255,255,0.07)',heroProdBorder:'rgba(255,255,255,0.12)',heroProdText:'rgba(255,255,255,0.85)',
+  },
+  'Clean Light': {
+    '--bg':'#f8f8f5','--card':'#ffffff','--nav-bg':'#ffffff','--nav-text':'#0f0f1a',
+    '--accent':'#0f0f1a','--accent2':'#374151','--text':'#0f0f1a','--muted':'#6b7280',
+    '--border':'#e5e7eb','--hero-bg':'linear-gradient(135deg,#f1f5f9,#e2e8f0)',
+    '--hero-text':'#0f0f1a','--badge-bg':'linear-gradient(135deg,#0f0f1a,#374151)',
+    heroProdBg:'#fff',heroProdBorder:'#e5e7eb',heroProdText:'#0f0f1a',
+  },
+  'Bold Gradient': {
+    '--bg':'#0e0920','--card':'#1a0f35','--nav-bg':'#0e0920','--nav-text':'#ffffff',
+    '--accent':'#a855f7','--accent2':'#ec4899','--text':'#f1f5f9','--muted':'#94a3b8',
+    '--border':'rgba(168,85,247,0.2)','--hero-bg':'linear-gradient(135deg,#4c1d95,#0e7490)',
+    '--hero-text':'#ffffff','--badge-bg':'linear-gradient(135deg,#a855f7,#ec4899)',
+    heroProdBg:'rgba(168,85,247,0.1)',heroProdBorder:'rgba(168,85,247,0.25)',heroProdText:'rgba(255,255,255,0.9)',
+  },
+  'Natural Earth': {
+    '--bg':'#fdf6ec','--card':'#ffffff','--nav-bg':'#1c1917','--nav-text':'#ffffff',
+    '--accent':'#92400e','--accent2':'#16a34a','--text':'#1c1917','--muted':'#78716c',
+    '--border':'#e7d9c8','--hero-bg':'linear-gradient(135deg,#1c1917,#292524)',
+    '--hero-text':'#ffffff','--badge-bg':'linear-gradient(135deg,#92400e,#16a34a)',
+    heroProdBg:'rgba(255,255,255,0.1)',heroProdBorder:'rgba(255,255,255,0.15)',heroProdText:'rgba(255,255,255,0.9)',
+  },
+  'Luxury Black': {
+    '--bg':'#0a0a0a','--card':'#111111','--nav-bg':'#000000','--nav-text':'#ffffff',
+    '--accent':'#d4af37','--accent2':'#b8860b','--text':'#f5f5f5','--muted':'#9ca3af',
+    '--border':'rgba(212,175,55,0.2)','--hero-bg':'linear-gradient(135deg,#000,#111)',
+    '--hero-text':'#ffffff','--badge-bg':'linear-gradient(135deg,#d4af37,#b8860b)',
+    heroProdBg:'rgba(212,175,55,0.06)',heroProdBorder:'rgba(212,175,55,0.2)',heroProdText:'rgba(255,255,255,0.85)',
+  },
+  'Playful Pastel': {
+    '--bg':'#fdf4ff','--card':'#ffffff','--nav-bg':'#ffffff','--nav-text':'#1f1235',
+    '--accent':'#ec4899','--accent2':'#8b5cf6','--text':'#1f1235','--muted':'#6b7280',
+    '--border':'#f3e8ff','--hero-bg':'linear-gradient(135deg,#fce7f3,#ede9fe)',
+    '--hero-text':'#1f1235','--badge-bg':'linear-gradient(135deg,#ec4899,#8b5cf6)',
+    heroProdBg:'rgba(236,72,153,0.07)',heroProdBorder:'rgba(236,72,153,0.15)',heroProdText:'#1f1235',
+  },
+};
+
+// ============================================================
+// CATEGORY PRODUCTS
+// ============================================================
+const CAT_DATA = {
+  'Fashion & Apparel': {
+    hero:'Dress to impress — every piece curated by <em>Nova AI</em>',
+    sub:'AI-selected styles based on global fashion trends and your local weather.',
+    pills:['All','Women','Men','Kids','Footwear','Accessories'],
+    products:[
+      {n:'Silk Wrap Dress',brand:'Zara Studio',e:'👗',p:4499,o:6999,r:4.8,rv:1203},
+      {n:'Classic White Tee',brand:'H&M Premium',e:'👕',p:899,o:1299,r:4.6,rv:3421},
+      {n:'Denim Jacket',brand:'Levi\'s',e:'🧥',p:3299,o:4999,r:4.9,rv:2108},
+      {n:'Running Sneakers',brand:'Nike',e:'👟',p:5999,o:8499,r:4.7,rv:4320},
+      {n:'Leather Tote Bag',brand:'Coach',e:'👜',p:8999,o:12999,r:4.8,rv:892},
+      {n:'Linen Trousers',brand:'Uniqlo',e:'👖',p:1999,o:2799,r:4.5,rv:1876},
+      {n:'Floral Sundress',brand:'Anthropologie',e:'🌸',p:3499,o:4999,r:4.7,rv:1024},
+      {n:'Aviator Sunglasses',brand:'Ray-Ban',e:'🕶️',p:7999,o:9999,r:4.9,rv:3201},
+    ],
+    trust:['Free returns','Size AI','Style Advice','Next-day Delivery'],
+    agentNote:'Echo AI collected 12,400 outfit reviews to rank these styles.',
+    section2:'Trending This Week',
+  },
+  'Electronics': {
+    hero:'Next-gen tech, <em>AI-priced</em> for you',
+    sub:'Luna AI monitors 8,000 competitor prices daily to guarantee you the lowest price.',
+    pills:['All','Phones','Laptops','Audio','Wearables','Smart Home'],
+    products:[
+      {n:'Sony WH-1000XM5',brand:'Sony',e:'🎧',p:29990,o:34990,r:4.9,rv:2847},
+      {n:'MacBook Air M3',brand:'Apple',e:'💻',p:114900,o:129900,r:4.9,rv:3102},
+      {n:'Samsung S24 Ultra',brand:'Samsung',e:'📱',p:134999,o:149999,r:4.8,rv:5421},
+      {n:'Apple Watch Ultra 2',brand:'Apple',e:'⌚',p:89900,o:99900,r:4.9,rv:2341},
+      {n:'iPad Pro M4',brand:'Apple',e:'📱',p:108900,o:119900,r:4.8,rv:2108},
+      {n:'JBL Charge 5',brand:'JBL',e:'🔊',p:9999,o:16999,r:4.6,rv:4127},
+      {n:'Logitech MX Master 3S',brand:'Logitech',e:'🖱️',p:8995,o:10995,r:4.9,rv:6723},
+      {n:'LG OLED 55" TV',brand:'LG',e:'📺',p:89990,o:119990,r:4.7,rv:1892},
+    ],
+    trust:['Price Match','1-yr Warranty','Certified Tech','EMI Available'],
+    agentNote:'Atlas AI matched products to your Electronics store category.',
+    section2:'Best Sellers This Month',
+  },
+  'Beauty & Wellness': {
+    hero:'Glow up with <em>AI-curated</em> beauty',
+    sub:'Echo AI analysed 50,000 reviews so only the highest-rated products reach your shelves.',
+    pills:['All','Skincare','Makeup','Haircare','Fragrance','Wellness'],
+    products:[
+      {n:'Hyaluronic Acid Serum',brand:'The Ordinary',e:'💧',p:699,o:999,r:4.8,rv:8901},
+      {n:'Vitamin C Moisturiser',brand:'Olay',e:'🌟',p:1299,o:1799,r:4.7,rv:4320},
+      {n:'Matte Liquid Lipstick',brand:'MAC',e:'💄',p:1899,o:2499,r:4.9,rv:3201},
+      {n:'Rose Quartz Roller',brand:'Herbivore',e:'🌹',p:1199,o:1699,r:4.6,rv:2108},
+      {n:'Niacinamide 10%',brand:'Paula\'s Choice',e:'✨',p:2499,o:3299,r:4.8,rv:5640},
+      {n:'Perfume — Bloom',brand:'Gucci',e:'🌸',p:7999,o:9999,r:4.9,rv:1823},
+      {n:'Hair Mask Deep Repair',brand:'Kérastase',e:'💆',p:2899,o:3999,r:4.7,rv:2341},
+      {n:'SPF 50 Sunscreen',brand:'Neutrogena',e:'☀️',p:599,o:899,r:4.8,rv:12400},
+    ],
+    trust:['Cruelty Free','Skin AI Match','Lab Certified','Easy Returns'],
+    agentNote:'Sage AI wrote detailed ingredient analyses for each product.',
+    section2:'Editor\'s Picks',
+  },
+  'Food & Grocery': {
+    hero:'Farm-fresh, <em>AI-sourced</em> goodness',
+    sub:'Zen AI coordinates directly with farms and suppliers to ensure freshness at every delivery.',
+    pills:['All','Organic','Beverages','Snacks','Pantry','Health Food'],
+    products:[
+      {n:'Raw Forest Honey 500g',brand:'Organic India',e:'🍯',p:449,o:649,r:4.9,rv:5430},
+      {n:'Arabica Cold Brew',brand:'Blue Tokai',e:'☕',p:599,o:799,r:4.8,rv:3201},
+      {n:'Extra Virgin Olive Oil',brand:'Borges',e:'🫒',p:899,o:1199,r:4.7,rv:2108},
+      {n:'Granola Crunch Mix',brand:'True Elements',e:'🥣',p:349,o:499,r:4.6,rv:4320},
+      {n:'Dark Chocolate 85%',brand:'Amul',e:'🍫',p:199,o:279,r:4.8,rv:8901},
+      {n:'Chia Seeds 500g',brand:'Organic Tattva',e:'🌱',p:299,o:449,r:4.7,rv:3412},
+      {n:'Green Tea Matcha',brand:'Tata Tea',e:'🍵',p:499,o:699,r:4.8,rv:2341},
+      {n:'Himalayan Pink Salt',brand:'Tata',e:'🧂',p:149,o:219,r:4.5,rv:6723},
+    ],
+    trust:['Farm Fresh','Cold Chain','100% Natural','Same-day Delivery'],
+    agentNote:'Zen AI verifies freshness and sourcing for every batch.',
+    section2:'Bestsellers',
+  },
+  'Home & Living': {
+    hero:'Design your space with <em>AI flair</em>',
+    sub:'Nova AI curates home décor based on interior design trends and your room style.',
+    pills:['All','Furniture','Décor','Kitchen','Lighting','Bedding'],
+    products:[
+      {n:'Minimalist Table Lamp',brand:'IKEA',e:'💡',p:1299,o:1799,r:4.7,rv:3201},
+      {n:'Velvet Throw Cushion',brand:'H&M Home',e:'🛋️',p:799,o:1199,r:4.8,rv:2108},
+      {n:'Ceramic Vase Set',brand:'Pottery Barn',e:'🏺',p:2499,o:3499,r:4.9,rv:1023},
+      {n:'Chunky Knit Blanket',brand:'Bombay Dyeing',e:'🧶',p:1899,o:2799,r:4.7,rv:1876},
+      {n:'Scented Soy Candle',brand:'Bath & Body',e:'🕯️',p:699,o:999,r:4.8,rv:4320},
+      {n:'Bamboo Organiser Set',brand:'Umbra',e:'🪴',p:1499,o:2199,r:4.6,rv:3412},
+      {n:'Abstract Wall Print',brand:'Society6',e:'🖼️',p:2999,o:4499,r:4.8,rv:892},
+      {n:'Cast Iron Skillet',brand:'Lodge',e:'🍳',p:3499,o:4999,r:4.9,rv:2341},
+    ],
+    trust:['White Glove Delivery','Interior AI','Easy Returns','EMI 0%'],
+    agentNote:'Atlas AI matched home styles to trending interior design data.',
+    section2:'Room Inspiration Picks',
+  },
+  'Sports & Fitness': {
+    hero:'Train smarter with <em>AI-selected</em> gear',
+    sub:'Atlas AI analyses performance data and expert reviews to pick only top-rated fitness products.',
+    pills:['All','Equipment','Activewear','Nutrition','Yoga','Running'],
+    products:[
+      {n:'Non-slip Yoga Mat',brand:'Liforme',e:'🧘',p:4999,o:6999,r:4.9,rv:5430},
+      {n:'Adjustable Dumbbells',brand:'Bowflex',e:'💪',p:12999,o:17999,r:4.8,rv:2341},
+      {n:'Running Shoes Pro',brand:'ASICS',e:'🏃',p:7999,o:10999,r:4.7,rv:4320},
+      {n:'Stainless Water Bottle',brand:'Hydro Flask',e:'🫙',p:2499,o:3499,r:4.8,rv:8901},
+      {n:'Whey Protein 1kg',brand:'MuscleBlaze',e:'💊',p:1999,o:2799,r:4.6,rv:6723},
+      {n:'Resistance Band Set',brand:'Boldfit',e:'🎯',p:799,o:1299,r:4.7,rv:3412},
+      {n:'Smart Jump Rope',brand:'Tangram',e:'⚡',p:2999,o:4499,r:4.8,rv:1823},
+      {n:'Foam Roller Recovery',brand:'TriggerPoint',e:'🔵',p:1499,o:2199,r:4.7,rv:2108},
+    ],
+    trust:['Performance AI','Free Delivery','Easy Exchanges','Expert Support'],
+    agentNote:'Echo AI tracked 40,000 athlete reviews to curate this list.',
+    section2:'Top Rated by Athletes',
+  },
+  'Books & Education': {
+    hero:'Learn more, earn more — <em>Sage AI</em> picks your reads',
+    sub:'Sage AI analyses reading trends and bestseller data to surface the books that matter most right now.',
+    pills:['All','Fiction','Non-fiction','Courses','Stationery','Children'],
+    products:[
+      {n:'Atomic Habits',brand:'James Clear',e:'📗',p:399,o:599,r:4.9,rv:28401},
+      {n:'The Psychology of Money',brand:'Morgan Housel',e:'📘',p:349,o:499,r:4.9,rv:19302},
+      {n:'Deep Work',brand:'Cal Newport',e:'📙',p:299,o:449,r:4.8,rv:12304},
+      {n:'Zero to One',brand:'Peter Thiel',e:'📕',p:399,o:599,r:4.8,rv:8923},
+      {n:'UI Design Masterclass',brand:'VibeLearn',e:'💻',p:1999,o:3999,r:4.9,rv:4320},
+      {n:'Premium Bullet Journal',brand:'Leuchtturm',e:'📓',p:899,o:1299,r:4.7,rv:3412},
+      {n:'Financial Freedom',brand:'Grant Sabatier',e:'💰',p:349,o:499,r:4.7,rv:5430},
+      {n:'The Almanack of Naval',brand:'Naval Ravikant',e:'⚓',p:299,o:449,r:4.9,rv:14320},
+    ],
+    trust:['E-book included','Fast Shipping','Bulk Discount','Gift Wrapping'],
+    agentNote:'Sage AI cross-referenced bestseller data across 12 platforms.',
+    section2:'Top Courses This Month',
+  },
+  'Jewellery & Accessories': {
+    hero:'Timeless elegance, <em>AI-authenticated</em>',
+    sub:'Every piece is authenticity-verified by Echo AI and certified for quality before listing.',
+    pills:['All','Gold','Silver','Diamonds','Watches','Handbags'],
+    products:[
+      {n:'14K Gold Ring',brand:'Tanishq',e:'💍',p:18999,o:24999,r:4.9,rv:1023},
+      {n:'Pearl Drop Earrings',brand:'Mia by Tanishq',e:'🤍',p:3999,o:5499,r:4.8,rv:2108},
+      {n:'Diamond Solitaire',brand:'CaratLane',e:'💎',p:42999,o:54999,r:4.9,rv:892},
+      {n:'Rose Gold Bracelet',brand:'Voylla',e:'✨',p:1999,o:2999,r:4.7,rv:3412},
+      {n:'Analog Watch Classic',brand:'Titan',e:'⌚',p:7999,o:11999,r:4.8,rv:4320},
+      {n:'Leather Clutch Bag',brand:'Hidesign',e:'👛',p:4999,o:6999,r:4.7,rv:1876},
+      {n:'Silver Anklet Set',brand:'Silvershine',e:'🌙',p:899,o:1299,r:4.6,rv:2341},
+      {n:'Gemstone Pendant',brand:'Bluestone',e:'💜',p:5999,o:8499,r:4.8,rv:1203},
+    ],
+    trust:['BIS Hallmarked','Easy EMI','Lifetime Exchange','Free Insurance'],
+    agentNote:'Echo AI verified authenticity certificates for every item.',
+    section2:'Festival Gifting Edit',
+  },
+  'Art & Handmade': {
+    hero:'Crafted with soul — <em>discovered by AI</em>',
+    sub:'Atlas AI surfaces independent artists and handmade creators who would otherwise go unnoticed.',
+    pills:['All','Prints','Pottery','Textile','Illustrations','Custom'],
+    products:[
+      {n:'Abstract Canvas Print',brand:'Studio Puja',e:'🎨',p:2499,o:3499,r:4.9,rv:892},
+      {n:'Handthrown Ceramic Mug',brand:'Clay & Co',e:'☕',p:899,o:1299,r:4.8,rv:1203},
+      {n:'Macramé Wall Hanging',brand:'Knotted Dreams',e:'🪢',p:1999,o:2799,r:4.7,rv:1023},
+      {n:'Watercolour Landscape',brand:'Aryan Arts',e:'🖼️',p:3499,o:4999,r:4.9,rv:712},
+      {n:'Block Print Tote',brand:'Jaipuri Crafts',e:'👜',p:699,o:999,r:4.6,rv:2341},
+      {n:'Resin Coaster Set',brand:'Resin Haus',e:'🌊',p:1299,o:1799,r:4.8,rv:1876},
+      {n:'Custom Name Illustration',brand:'Draw My Name',e:'✍️',p:1499,o:1999,r:4.9,rv:3412},
+      {n:'Terracotta Planter',brand:'Mitti Matters',e:'🏺',p:599,o:899,r:4.7,rv:4320},
+    ],
+    trust:['Handmade Verified','Artist Support','Gift Ready','Tracked Shipping'],
+    agentNote:'Atlas AI discovered 240 independent creators for your store.',
+    section2:'Artist Spotlight',
+  },
+  'Toys & Kids': {
+    hero:'Play, learn, grow — <em>safely curated</em>',
+    sub:'Every product is safety-certified by Echo AI and age-verified before listing.',
+    pills:['All','0-2 Years','3-5 Years','6-10 Years','Board Games','Outdoors'],
+    products:[
+      {n:'LEGO City Set',brand:'LEGO',e:'🧱',p:2999,o:3999,r:4.9,rv:8901},
+      {n:'Coding Robot Kit',brand:'Botley',e:'🤖',p:4999,o:6999,r:4.8,rv:2341},
+      {n:'Wooden Block Set',brand:'Melissa & Doug',e:'🪵',p:999,o:1499,r:4.7,rv:5430},
+      {n:'Catan Board Game',brand:'Catan Studio',e:'🎲',p:2799,o:3799,r:4.9,rv:4320},
+      {n:'Stuffed Elephant',brand:'Steiff',e:'🐘',p:1499,o:2199,r:4.8,rv:3412},
+      {n:'Jigsaw Puzzle 1000pc',brand:'Ravensburger',e:'🧩',p:1299,o:1799,r:4.7,rv:2108},
+      {n:'Art & Craft Kit',brand:'Faber-Castell',e:'🖍️',p:799,o:1199,r:4.8,rv:6723},
+      {n:'RC Monster Truck',brand:'Traxxas',e:'🚗',p:5999,o:8499,r:4.7,rv:1823},
+    ],
+    trust:['BIS Safety Certified','Age Verified','Free Gift Wrap','Easy Returns'],
+    agentNote:'Echo AI checked safety certifications for every product.',
+    section2:'Learning Through Play',
+  },
+  'Digital Products': {
+    hero:'Download, create, <em>ship faster</em>',
+    sub:'Sage AI verifies quality and updates digital products continuously to keep them current.',
+    pills:['All','UI Kits','Templates','Courses','E-books','Plugins'],
+    products:[
+      {n:'Premium UI Kit — 500 screens',brand:'DesignLab',e:'🎨',p:1999,o:3999,r:4.9,rv:4320},
+      {n:'Notion Business Bundle',brand:'NotionPro',e:'📋',p:499,o:999,r:4.8,rv:8901},
+      {n:'React Component Library',brand:'UIcomponents',e:'⚛️',p:2999,o:4999,r:4.7,rv:2341},
+      {n:'Stock Photo Pack 500',brand:'Unsplash Pro',e:'📸',p:1499,o:2499,r:4.8,rv:5430},
+      {n:'Figma Icon Set 2000',brand:'Heroicons',e:'✏️',p:799,o:1499,r:4.9,rv:3412},
+      {n:'Python for Data Science',brand:'VibeLearn',e:'🐍',p:1999,o:3999,r:4.8,rv:6723},
+      {n:'SEO Templates Pack',brand:'SurferSEO',e:'📈',p:999,o:1999,r:4.7,rv:2108},
+      {n:'Social Media Kit',brand:'CreativeMarket',e:'📱',p:699,o:1299,r:4.8,rv:4320},
+    ],
+    trust:['Instant Download','Lifetime Access','Free Updates','Money-back 30d'],
+    agentNote:'Sage AI reviews and updates digital product quality monthly.',
+    section2:'Top Selling Bundles',
+  },
+  'Other': {
+    hero:'Your unique store — <em>powered by AI</em>',
+    sub:'VibeStore\'s 8 AI agents are configured for your business. Start adding your products.',
+    pills:['All','Featured','New','On Sale','Best Sellers'],
+    products:[
+      {n:'Premium Product',brand:'Your Brand',e:'✨',p:999,o:1499,r:4.8,rv:120},
+      {n:'Featured Item',brand:'Your Brand',e:'🌟',p:1499,o:1999,r:4.9,rv:84},
+      {n:'New Arrival',brand:'Your Brand',e:'🆕',p:799,o:1199,r:4.7,rv:56},
+      {n:'Best Seller',brand:'Your Brand',e:'🏆',p:2499,o:3499,r:4.9,rv:240},
+      {n:'Limited Edition',brand:'Your Brand',e:'💎',p:4999,o:6999,r:4.8,rv:36},
+      {n:'Bundle Deal',brand:'Your Brand',e:'📦',p:1999,o:2999,r:4.7,rv:92},
+      {n:'Seasonal Pick',brand:'Your Brand',e:'🌿',p:699,o:999,r:4.6,rv:148},
+      {n:'Staff Favourite',brand:'Your Brand',e:'❤️',p:1299,o:1799,r:4.8,rv:174},
+    ],
+    trust:['Free Returns','AI Support','Secure Checkout','Fast Delivery'],
+    agentNote:'Atlas AI is ready to curate products once you add your catalogue.',
+    section2:'Recently Added',
+  },
+};
+
+// ============================================================
+// AI TICKER MESSAGES
+// ============================================================
+const TICKER_MSGS = [
+  t => `<strong>Luna AI</strong> found 3 price drops in your category today. <strong>Aria AI</strong> has scheduled a flash sale.`,
+  t => `<strong>Rex AI</strong> answered 12 customer queries in the last hour — response time: 1.2 seconds.`,
+  t => `<strong>Sage AI</strong> is writing product descriptions for your catalogue. 8 items completed.`,
+  t => `<strong>Atlas AI</strong> ranked your products by demand score. Top pick: <strong>${t}</strong>.`,
+  t => `<strong>Zen AI</strong> has your store fully operational. Shipping routes pre-configured.`,
+  t => `<strong>Echo AI</strong> collected 240 reviews across competitor products in your category.`,
+  t => `<strong>Nova AI</strong> updated your collection pages based on today's trending searches.`,
+  t => `<strong>Aria AI</strong> detected high traffic — auto-activating flash sale discounts.`,
+];
+
+// ============================================================
+// BOOT — read config and render
+// ============================================================
+const cfg = JSON.parse(localStorage.getItem('vs_store_config') || '{}');
+const storeName  = cfg.name     || 'My VibeStore';
+const category   = cfg.category || 'Electronics';
+const theme      = cfg.theme    || 'Vibe Dark';
+const tagline    = cfg.tagline  || '';
+const currency   = (cfg.currency || 'INR (₹)').includes('₹') ? '₹' :
+                   (cfg.currency || '').includes('$') ? '$' :
+                   (cfg.currency || '').includes('£') ? '£' : '₹';
+const catData    = CAT_DATA[category] || CAT_DATA['Other'];
+
+// Apply theme
+const themeVars  = THEMES[theme] || THEMES['Vibe Dark'];
+Object.entries(themeVars).forEach(([k, v]) => {
+  if (k.startsWith('--')) document.documentElement.style.setProperty(k, v);
+});
+
+// Title
+document.title = storeName + ' — VibeStore';
+
+// ---- Welcome banner ----
+document.getElementById('wbTitle').textContent = storeName + ' is live!';
+document.getElementById('wbSub').textContent   = '8 AI agents are now running your store automatically.';
+
+// ---- Nav logo ----
+document.getElementById('navLogo').textContent = storeName;
+
+// ---- Hero ----
+document.getElementById('heroTitle').innerHTML = 'Welcome to <em>' + storeName + '</em>';
+document.getElementById('heroSubtitle').textContent = tagline || catData.sub;
+document.getElementById('heroStoreName').textContent = storeName;
+
+// Hero product grid
+const hpg = document.getElementById('heroProductGrid');
+catData.products.slice(0, 4).forEach(p => {
+  const card = document.createElement('div');
+  card.className = 'hero-prod-card';
+  card.style.background = themeVars.heroProdBg;
+  card.style.border = '1px solid ' + themeVars.heroProdBorder;
+  card.innerHTML = `<span class="hero-prod-emoji">${p.e}</span>
+    <div class="hero-prod-name" style="color:${themeVars.heroProdText}">${p.n}</div>
+    <div class="hero-prod-price">${currency}${p.p.toLocaleString()}</div>`;
+  hpg.appendChild(card);
+});
+
+// ---- Announce bar currency ----
+const minShip = currency === '₹' ? '₹999' : currency === '$' ? '$50' : currency + '50';
+document.getElementById('freeShipMin').textContent = minShip;
+
+// ---- Trust bar ----
+const trustIcons = ['🚚','🤖','🔒','↩️'];
+document.getElementById('trustBar').innerHTML = catData.trust.map((t, i) => `
+  <div class="trust-item">
+    <div class="trust-icon">${trustIcons[i]}</div>
+    <div class="trust-title">${t}</div>
+    <div class="trust-desc">Handled automatically by our AI agents 24/7.</div>
+  </div>`).join('');
+
+// ---- Category pills ----
+document.getElementById('catPills').innerHTML = catData.pills.map((p, i) =>
+  `<div class="cat-pill${i===0?' active':''}" onclick="setPill(this)">${p}</div>`
+).join('');
+
+// ---- Products section ----
+document.getElementById('prodSectionTitle').textContent = 'Featured ' + category;
+document.getElementById('prodAgent').textContent = 'Atlas AI';
+document.getElementById('heroProductCount').textContent = catData.products.length * 15 + '+';
+document.getElementById('section2Title').textContent = catData.section2;
+
+let cart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+
+function renderGrid(containerId, products) {
+  document.getElementById(containerId).innerHTML = products.map((p, idx) => {
+    const save = Math.round((1 - p.p/p.o) * 100);
+    const inCart = cart.find(c => c.id === 'ms-' + idx);
+    return `<div class="prod-card" onclick="goProduct(${idx})">
+      <div class="prod-img" style="background:var(--bg)">${p.e}
+        <div class="prod-badge">AI Pick</div>
+        <div class="prod-wish" onclick="event.stopPropagation();this.textContent=this.textContent=='♡'?'♥':'♡'">♡</div>
+      </div>
+      <div class="prod-info">
+        <div class="prod-brand">${p.brand}</div>
+        <div class="prod-name">${p.n}</div>
+        <div class="prod-rat"><span class="prod-stars">${'★'.repeat(Math.floor(p.r))}${'☆'.repeat(5-Math.floor(p.r))}</span><span class="prod-revs">(${p.rv.toLocaleString()})</span></div>
+        <div class="prod-price">
+          <span class="prod-price-main">${currency}${p.p.toLocaleString()}</span>
+          <span class="prod-price-old">${currency}${p.o.toLocaleString()}</span>
+          <span class="prod-price-save">${save}% off</span>
+        </div>
+        <div class="prod-btns">
+          <button class="btn-add${inCart?' added':''}" onclick="event.stopPropagation();addCart(${idx})">${inCart?'✓ Added':'Add to Cart'}</button>
+          <button class="btn-buy" onclick="event.stopPropagation();window.location.href='checkout.html'">Buy</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+renderGrid('prodGrid', catData.products);
+renderGrid('prodGrid2', [...catData.products].reverse());
+
+// ---- Footer ----
+document.getElementById('footerLogo').textContent = storeName;
+document.getElementById('footerTagline').textContent = tagline || catData.sub.slice(0, 80) + '...';
+document.getElementById('footerCopy').textContent = '© 2026 ' + storeName + '. All rights reserved.';
+
+// ---- AI Ticker ----
+let tickerIdx = 0;
+const topProd = catData.products[0].n;
+function rotateTicker() {
+  const el = document.getElementById('atText');
+  el.style.opacity = '0';
+  setTimeout(() => {
+    el.innerHTML = TICKER_MSGS[tickerIdx % TICKER_MSGS.length](topProd);
+    el.style.opacity = '1';
+    tickerIdx++;
+  }, 300);
+}
+document.getElementById('atText').style.transition = 'opacity 0.3s';
+setInterval(rotateTicker, 5000);
+
+// ---- Flash sale timer ----
+function updateTimer() {
+  const now = new Date();
+  const end = new Date(); end.setHours(23,59,59,999);
+  const diff = end - now;
+  const h = Math.floor(diff / 3600000);
+  const m = Math.floor((diff % 3600000) / 60000);
+  const s = Math.floor((diff % 60000) / 1000);
+  document.getElementById('fbTimer').innerHTML = [
+    {n:String(h).padStart(2,'0'),l:'Hours'},
+    {n:String(m).padStart(2,'0'),l:'Mins'},
+    {n:String(s).padStart(2,'0'),l:'Secs'},
+  ].map(u=>`<div class="fb-unit"><div class="fb-unit-n">${u.n}</div><div class="fb-unit-l">${u.l}</div></div>`).join('');
+}
+updateTimer();
+setInterval(updateTimer, 1000);
+
+// ---- Cart ----
+function addCart(idx) {
+  const p = catData.products[idx];
+  const id = 'ms-' + idx;
+  const ex = cart.find(c => c.id === id);
+  if (ex) ex.qty++;
+  else cart.push({id, name: p.n, price: p.p, emoji: p.e, qty: 1});
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  updateCartCount(); renderGrid('prodGrid', catData.products); renderGrid('prodGrid2', [...catData.products].reverse());
+  renderCartBody(); openCart();
+}
+
+function updateCartCount() {
+  document.getElementById('cartCount').textContent = cart.reduce((s,c)=>s+c.qty,0);
+}
+
+function renderCartBody() {
+  const b = document.getElementById('cartBody');
+  if (!cart.length) { b.innerHTML = '<div class="cart-empty">Your cart is empty</div>'; document.getElementById('cartTotal').textContent = currency + '0'; return; }
+  b.innerHTML = cart.map(item => `
+    <div class="ci">
+      <div class="ci-img">${item.emoji}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-price">${currency}${(item.price*item.qty).toLocaleString()}</div>
+        <div class="ci-qty">
+          <button class="qb" onclick="cq('${item.id}',-1)">−</button>
+          <span class="qv">${item.qty}</span>
+          <button class="qb" onclick="cq('${item.id}',1)">+</button>
+        </div>
+        <div class="ci-rm" onclick="rm('${item.id}')">Remove</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('cartTotal').textContent = currency + cart.reduce((s,c)=>s+c.price*c.qty,0).toLocaleString();
+}
+
+function cq(id,d){const i=cart.find(c=>c.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(c=>c.id!==id);localStorage.setItem('vs_cart',JSON.stringify(cart));updateCartCount();renderCartBody();}
+function rm(id){cart=cart.filter(c=>c.id!==id);localStorage.setItem('vs_cart',JSON.stringify(cart));updateCartCount();renderCartBody();}
+function openCart(){document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartDrawer').classList.add('open');}
+function closeCart(){document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartDrawer').classList.remove('open');}
+function goProduct(idx){window.location.href='product.html?id=p1';}
+function setPill(el){document.querySelectorAll('.cat-pill').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function dismissWelcome(){document.getElementById('welcomeBanner').style.display='none';}
+
+// Setup checklist tracker
+let doneTasks = 1;
+function markTask(el) {
+  if (el.classList.contains('done')) return;
+  el.classList.remove('active');
+  el.classList.add('done');
+  el.querySelector('.st-circle').textContent = '✓';
+  doneTasks++;
+  const pct = Math.round((doneTasks / 6) * 100);
+  document.getElementById('setupFill').style.width = pct + '%';
+  document.getElementById('setupPct').textContent = doneTasks + ' of 6 done';
+  const next = el.nextElementSibling;
+  if (next && next.classList.contains('setup-task')) next.classList.add('active');
+  if (doneTasks >= 6) { setTimeout(()=>{ document.getElementById('setupBar').style.display='none'; }, 1000); }
+}
+
+updateCartCount();
+renderCartBody();
+</script>
+</body>
+</html>
