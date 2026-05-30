@@ -759,6 +759,26 @@ function fmtExpiry(el) {
   el.value = v;
 }
 
+// ===== SUBMIT ORDER TO FIRESTORE =====
+async function submitOrderToDB() {
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  const cartItems = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+  for (const item of cartItems) {
+    await dbPlaceOrder({
+      buyerEmail:   auth?.email || 'guest@vibestore.com',
+      buyerName:    auth?.name  || 'Guest',
+      sellerId:     item.sellerId    || 'unknown',
+      sellerName:   item.sellerName  || 'VibeStore Seller',
+      productId:    item.id,
+      productName:  item.name,
+      productEmoji: item.emoji || '📦',
+      qty:          item.qty || 1,
+      amount:       item.price * (item.qty||1)
+    });
+  }
+  localStorage.removeItem('vs_cart');
+}
+
 // ===== PLACE ORDER =====
 function placeOrder() {
   const btn = document.getElementById('placeBtn');
@@ -767,8 +787,12 @@ function placeOrder() {
     btn.disabled = true;
   }
   setTimeout(() => {
-    showSuccess();
-    localStorage.removeItem('vs_cart');
+    submitOrderToDB().then(() => {
+      showSuccess();
+    }).catch(e => {
+      console.warn('Order save error:', e);
+      showSuccess(); // still show success even if DB write fails
+    });
   }, 2000);
 }
 
@@ -798,25 +822,6 @@ function showSuccess() {
     </div>`;
   }).join('');
 
-  // Record order in vs_store
-  if(typeof vsPlaceOrder==='function' && typeof vsGetAuth==='function') {
-    const auth = vsGetAuth();
-    const cartItems = JSON.parse(localStorage.getItem('vs_cart')||'[]');
-    cartItems.forEach(item => {
-      vsPlaceOrder({
-        buyerEmail:   auth?.email || 'guest',
-        buyerName:    auth?.name  || 'Guest',
-        sellerId:     item.sellerId || 'unknown',
-        sellerName:   item.sellerName || 'VibeStore Seller',
-        productId:    item.id,
-        productName:  item.name,
-        productEmoji: item.emoji || '📦',
-        qty:          item.qty || 1,
-        amount:       item.price * (item.qty||1)
-      });
-    });
-    localStorage.removeItem('vs_cart'); // clear cart after order
-  }
   document.getElementById('success-screen').style.display = 'block';
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.body.style.overflow = '', 100);
@@ -843,6 +848,10 @@ function toast(msg) {
 
 window.addEventListener('load', init);
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
 <script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script src="rex-chat.js"></script>

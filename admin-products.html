@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Products — VibeStore Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
 <script src="vs_store.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -221,81 +225,78 @@ function updateMetric(id, value) {
   if (el) el.textContent = value;
 }
 
+let _unsubAdmin = null;
 let currentFilter = 'all';
 
 function loadAdminProducts(filter) {
-  filter = filter || 'all';
-  const products = vsGetProducts(filter === 'all' ? 'all' : filter);
+  currentFilter = filter || 'all';
   const tbody = document.getElementById('products-tbody') || document.querySelector('table tbody');
   if (!tbody) return;
 
-  // Update metric cards
-  const allP = vsGetProducts('all');
-  updateMetric('total-listings', allP.length);
-  updateMetric('pending-count', vsGetProducts('pending').length);
-  updateMetric('active-count', vsGetProducts('active').length);
-  updateMetric('flagged-count', vsGetProducts('rejected').length);
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#999;">⏳ Loading listings...</td></tr>';
 
-  // Update pending badge in tab
-  const pendingBadge = document.getElementById('pending-tab-badge');
-  if (pendingBadge) pendingBadge.textContent = vsGetProducts('pending').length;
+  if (_unsubAdmin) _unsubAdmin();
 
-  if (products.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">No products in this category.</td></tr>';
-    return;
-  }
+  _unsubAdmin = dbListenProducts(currentFilter, function(products) {
+    // Update metric cards live
+    dbGetProducts('all').then(all => {
+      const updateEl = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+      updateEl('total-listings', all.length);
+      updateEl('pending-count', all.filter(p=>p.status==='pending').length);
+      updateEl('active-count', all.filter(p=>p.status==='active'||p.status==='featured').length);
+      updateEl('flagged-count', all.filter(p=>p.status==='rejected').length);
+      // Update pending tab badge
+      const badge = document.getElementById('pending-tab-badge');
+      if(badge) badge.textContent = all.filter(p=>p.status==='pending').length;
+    });
 
-  tbody.innerHTML = products.map(p => {
+    if (products.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">No products in this category.</td></tr>';
+      return;
+    }
     const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
     const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
-    return `<tr>
-      <td><input type="checkbox" onchange="updateBulk()"></td>
+    const auth = vsGetAuth ? vsGetAuth() : null;
+    tbody.innerHTML = products.map(p => `<tr>
+      <td><input type="checkbox"></td>
       <td style="font-size:22px;text-align:center;">${p.emoji}</td>
       <td style="font-weight:600;max-width:160px;">${p.name}</td>
       <td><a href="seller-profile.html" style="color:#007185;font-size:12px;">${p.sellerName}</a></td>
       <td>${p.category}</td>
-      <td>₹${p.price.toLocaleString()}</td>
+      <td>₹${Number(p.price).toLocaleString()}</td>
       <td style="color:${p.stock<10?'#CC0C39':'#333'}">${p.stock}</td>
       <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">${p.status}</span></td>
       <td style="white-space:nowrap;">
-        ${p.status==='pending' ? `
-          <button onclick="approveProduct('${p.id}')" style="background:#e6f9f2;color:#067D62;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✓ Approve</button>
-          <button onclick="rejectProduct('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✗ Reject</button>
-        ` : ''}
-        ${p.status==='active' ? `<button onclick="featureProduct('${p.id}')" style="background:#e8f4ff;color:#1565C0;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px;">★ Feature</button>` : ''}
-        <button onclick="deleteAdminProduct('${p.id}')" style="background:#f5f5f5;color:#666;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;">Delete</button>
+        ${p.status==='pending'?`
+          <button onclick="approveProductDB('${p.id}')" style="background:#e6f9f2;color:#067D62;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✓ Approve</button>
+          <button onclick="rejectProductDB('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✗ Reject</button>`:''}
+        ${p.status==='active'?`<button onclick="featureProductDB('${p.id}')" style="background:#e8f4ff;color:#1565C0;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px;">★ Feature</button>`:''}
+        <button onclick="deleteAdminProductDB('${p.id}')" style="background:#f5f5f5;color:#666;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;">Delete</button>
       </td>
-    </tr>`;
-  }).join('');
+    </tr>`).join('');
+  });
 }
 
-function approveProduct(id) {
-  vsUpdateProductStatus(id, 'active', auth?.email);
-  showToast('Product approved — now visible in buyer marketplace');
-  loadAdminProducts(currentFilter);
+async function approveProductDB(id) {
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  await dbUpdateProductStatus(id, 'active', auth?.email);
+  showToast('✅ Product approved — now live in buyer marketplace');
 }
-
-function rejectProduct(id) {
-  const reason = prompt('Reason for rejection (optional):') || 'Does not meet marketplace standards';
-  vsUpdateProductStatus(id, 'rejected', auth?.email, reason);
-  showToast('Product rejected — seller has been notified');
-  loadAdminProducts(currentFilter);
+async function rejectProductDB(id) {
+  const reason = prompt('Reason for rejection (optional):') || 'Does not meet standards';
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  await dbUpdateProductStatus(id, 'rejected', auth?.email, reason);
+  showToast('❌ Product rejected');
 }
-
-function featureProduct(id) {
-  vsUpdateProductStatus(id, 'featured', auth?.email);
-  showToast('Product featured — shown prominently in buyer marketplace');
-  loadAdminProducts(currentFilter);
+async function featureProductDB(id) {
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  await dbUpdateProductStatus(id, 'featured', auth?.email);
+  showToast('⭐ Product featured in marketplace');
 }
-
-function deleteAdminProduct(id) {
-  if (confirm('Permanently delete this product?')) {
-    vsDeleteProduct(id);
-    loadAdminProducts(currentFilter);
-  }
+async function deleteAdminProductDB(id) {
+  if (confirm('Permanently delete?')) await dbDeleteProduct(id);
 }
-
-function setFilter(f) { currentFilter = f; loadAdminProducts(f); }
+function setFilter(f) { currentFilter=f; loadAdminProducts(f); }
 
 function switchTab(el, tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -319,7 +320,7 @@ function clearSelection(){
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadAdminProducts('all');
+  dbSeedDemo().then(() => loadAdminProducts('all'));
 });
 </script>
 </body>

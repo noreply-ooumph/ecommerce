@@ -728,6 +728,53 @@ footer a{color:#ccc}
 
 <script>
 if(typeof vsSeedDemoData==='function') vsSeedDemoData();
+
+// ─── LOAD REAL PRODUCT FROM FIRESTORE ───
+async function loadProductFromDB() {
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get('id');
+  if (!productId) return; // no id param — show static demo product
+  try {
+    const p = await dbGetProductById(productId);
+    if (!p) return;
+    // Update page with real product data
+    const titleEl = document.querySelector('h1.product-title, .product-title, h1');
+    if(titleEl) titleEl.textContent = p.name;
+    const priceEl = document.querySelector('.price-main, .product-price, .buy-price');
+    if(priceEl) priceEl.textContent = '₹' + Number(p.price).toLocaleString();
+    const emojiEl = document.querySelector('.product-emoji-main, .main-image-emoji, .product-main-emoji');
+    if(emojiEl) emojiEl.textContent = p.emoji;
+    const sellerEl = document.querySelector('.seller-name-link, .sold-by-name');
+    if(sellerEl) sellerEl.textContent = p.sellerName;
+    const descEl = document.querySelector('.product-description-text, .product-desc-content');
+    if(descEl) descEl.textContent = p.description;
+    // Increment view count
+    dbGetProductById && vsIncrementProductView && vsIncrementProductView(productId);
+    document.title = p.name + ' — VibeStore';
+    // Add to cart button
+    const cartBtn = document.querySelector('#add-to-cart-btn, .add-to-cart-main');
+    if(cartBtn) cartBtn.onclick = () => addToCartDB(p.id, p.name, p.price, p.emoji, p.sellerName, p.sellerId);
+  } catch(e) { console.warn('Product load error:', e); }
+}
+
+function addToCartDB(id, name, price, emoji, sellerName, sellerId) {
+  const cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+  const i = cart.findIndex(x=>x.id===id);
+  if(i>-1) cart[i].qty++; else cart.push({id,name,price,emoji,sellerName,sellerId,qty:1});
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  const countEl = document.querySelector('.cart-count,#cart-count,.nav-cart-count');
+  if(countEl) countEl.textContent = cart.reduce((a,x)=>a+x.qty,0);
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  t.innerHTML='✅ Added to cart — <a href="cart.html" style="color:#FF9900;text-decoration:none;font-weight:700;">View Cart →</a>';
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),3000);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadProductFromDB();
+});
+
 // ─── CART ───
 function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem('vs_cart',JSON.stringify(c))}
@@ -880,6 +927,10 @@ function showToast(msg){
   t._timer=setTimeout(function(){t.classList.remove('show')},2800);
 }
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
 <script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script>

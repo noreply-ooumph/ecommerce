@@ -6,6 +6,10 @@
 <title>My Listings — ⚡ Seller Central</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="vs_store.js"></script>
 <style>
@@ -494,43 +498,55 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
   const storeNameEl = document.querySelector('.sidebar-store-name');
   if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
-  loadSellerListings();
+  dbSeedDemo().then(() => loadSellerListings());
 });
 
 function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
 function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
 
-// ---- VS_STORE DYNAMIC LISTINGS ----
+// ---- FIRESTORE DYNAMIC LISTINGS ----
+let _unsubListings = null;
+
 function loadSellerListings() {
+  const auth = vsGetAuth ? vsGetAuth() : null;
   const sellerId = auth ? auth.email : '';
-  const products = vsGetProducts(sellerId); // gets only this seller's products
-  const tbody = document.getElementById('listings-tbody') || document.querySelector('.listings-table tbody') || document.querySelector('table tbody');
+  const tbody = document.getElementById('listings-tbody') || document.querySelector('table tbody');
   if (!tbody) return;
-  if (products.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;">No listings yet. Add your first product above.</td></tr>';
-    return;
-  }
-  tbody.innerHTML = products.map(p => {
-    const savings = p.mrp > p.price ? Math.round((1 - p.price/p.mrp)*100) : 0;
+
+  // Show loading state
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#999;">⏳ Loading your listings...</td></tr>';
+
+  // Unsubscribe previous listener
+  if (_unsubListings) _unsubListings();
+
+  // Use realtime listener — updates automatically when admin approves/rejects
+  _unsubListings = dbListenProducts(sellerId, function(products) {
+    if (products.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;">No listings yet. Add your first product above.</td></tr>';
+      return;
+    }
     const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
     const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
-    return `<tr>
+    tbody.innerHTML = products.map(p => `<tr>
       <td><input type="checkbox" class="row-check" value="${p.id}"></td>
       <td style="font-size:24px;text-align:center;">${p.emoji}</td>
       <td style="font-weight:600;max-width:180px;">${p.name}<br><small style="color:#999;font-weight:400;">${p.category}</small></td>
-      <td>₹${p.price.toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${p.mrp.toLocaleString()}</small></td>
+      <td>₹${Number(p.price).toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${Number(p.mrp).toLocaleString()}</small></td>
       <td style="color:${p.stock<10?'#CC0C39':p.stock<20?'#e65c00':'#067D62'};font-weight:600;">${p.stock} units</td>
-      <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;">${p.status}</span></td>
-      <td style="color:#888;font-size:12px;">${p.orders} sold · ${p.views} views</td>
-      <td>
-        <button onclick="deleteProduct('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Delete</button>
+      <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;">${p.status}</span>
+        ${p.status==='rejected'&&p.rejectedReason?`<br><small style="color:#CC0C39;font-size:10px;">${p.rejectedReason}</small>`:''}
       </td>
-    </tr>`;
-  }).join('');
+      <td style="color:#888;font-size:12px;">${p.orders||0} sold · ${p.views||0} views</td>
+      <td><button onclick="deleteProductDB('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Delete</button></td>
+    </tr>`).join('');
+  });
 }
 
-function deleteProduct(id) {
-  if (confirm('Delete this listing?')) { vsDeleteProduct(id); loadSellerListings(); }
+async function deleteProductDB(id) {
+  if (confirm('Delete this listing?')) {
+    await dbDeleteProduct(id);
+    // listener auto-updates the table
+  }
 }
 
 function showToast(msg) {
@@ -580,23 +596,25 @@ function approveListing(btn) {
 
 // ---- ADD PRODUCT HANDLER ----
 // Wire to your Add Product form submit button. Call this after validation:
-function handleAddProduct() {
-  const newProduct = vsAddProduct({
+async function handleAddProduct() {
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  // ... existing validation code stays ...
+  const newProduct = await dbAddProduct({
     sellerId:    auth.email,
     sellerName:  auth.storeName || auth.name,
     sellerEmail: auth.email,
-    name:        document.getElementById('prod-name')?.value || document.querySelector('[name="prod-name"]')?.value || '',
+    name:        document.getElementById('prod-name')?.value || '',
     category:    document.getElementById('prod-category')?.value || '',
     price:       document.getElementById('prod-price')?.value || 0,
     mrp:         document.getElementById('prod-mrp')?.value || 0,
     stock:       document.getElementById('prod-stock')?.value || 0,
     description: document.getElementById('prod-desc')?.value || '',
-    emoji:       document.getElementById('selected-emoji')?.textContent || document.querySelector('.selected-emoji')?.textContent || '📦',
+    emoji:       document.getElementById('selected-emoji')?.textContent || '📦',
     sku:         document.getElementById('prod-sku')?.value || '',
     weight:      document.getElementById('prod-weight')?.value || ''
   });
-  showToast('Product submitted for review — Admin will approve within 24h');
-  loadSellerListings();
+  showToast('✅ Product submitted — Admin will review within 24h');
+  // listener auto-refreshes the table
 }
 </script>
 </body>
