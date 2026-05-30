@@ -10,12 +10,13 @@
 // ─────────────────────────────────────────────────────
 
 const firebaseConfig = {
-  apiKey:            "YOUR_API_KEY",
-  authDomain:        "YOUR_PROJECT.firebaseapp.com",
-  projectId:         "YOUR_PROJECT_ID",
-  storageBucket:     "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId:             "YOUR_APP_ID"
+  apiKey:            "AIzaSyB912DkZ-5DcBxTKAeE8I_TBeQvawAKbJg",
+  authDomain:        "ooumphapp.firebaseapp.com",
+  projectId:         "ooumphapp",
+  storageBucket:     "ooumphapp.firebasestorage.app",
+  messagingSenderId: "964549387783",
+  appId:             "1:964549387783:web:e66a1e626b206619cc6ca2",
+  measurementId:     "G-6ZPSP5F1RR"
 };
 
 // Initialize Firebase
