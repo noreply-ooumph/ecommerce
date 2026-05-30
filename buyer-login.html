@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — VibeStore Buyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    background: #f0f2f5;
+  }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    width: 40%;
+    background: linear-gradient(160deg, #131921, #1a2332);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 52px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .left-panel::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(255,153,0,0.1) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -80px;
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(0,113,133,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .panel-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #FF9900;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+  .panel-tagline {
+    font-size: 20px;
+    font-weight: 500;
+    color: #e8eaed;
+    line-height: 1.4;
+    margin-bottom: 44px;
+  }
+
+  .benefits {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    flex: 1;
+  }
+  .benefit-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .check-icon {
+    width: 28px; height: 28px;
+    background: rgba(255,153,0,0.2);
+    border: 1px solid rgba(255,153,0,0.4);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+    color: #FF9900;
+    font-weight: 700;
+  }
+  .benefit-text {
+    font-size: 14px;
+    color: #c0c8d4;
+    line-height: 1.4;
+  }
+
+  .panel-bottom {
+    margin-top: 44px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    font-size: 13px;
+    color: #8d96a0;
+  }
+  .panel-bottom a {
+    color: #FF9900;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .panel-bottom a:hover { text-decoration: underline; }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    background: #f0f2f5;
+    overflow-y: auto;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.06);
+    padding: 40px 36px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .card-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #FF9900;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .card h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f1111;
+    margin-bottom: 4px;
+  }
+  .card .subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 28px;
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .input-wrap { position: relative; }
+  .input-wrap input {
+    width: 100%;
+    padding: 11px 42px 11px 14px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #0f1111;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+  }
+  .input-wrap input:focus {
+    border-color: #FF9900;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(255,153,0,0.1);
+  }
+  .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 16px; color: #888;
+    display: flex; align-items: center;
+  }
+
+  .row-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .remember-wrap {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 13px; color: #444; cursor: pointer;
+  }
+  .remember-wrap input[type=checkbox] { accent-color: #FF9900; width: 15px; height: 15px; }
+  .link-teal { font-size: 13px; color: #007185; text-decoration: none; font-weight: 500; }
+  .link-teal:hover { text-decoration: underline; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: #FF9900;
+    color: #0f1111;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 14px;
+  }
+  .btn-primary:hover { background: #e68a00; }
+  .btn-primary:active { transform: scale(0.99); }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 13px; color: #aaa; margin: 4px 0 14px;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e5e5e5; }
+
+  .btn-google {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    color: #333;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 20px;
+  }
+  .btn-google:hover { background: #f5f5f5; border-color: #bbb; }
+  .g-icon {
+    width: 20px; height: 20px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Cpath fill='%234285F4' d='M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z'/%3E%3Cpath fill='%2334A853' d='M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.32-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z'/%3E%3Cpath fill='%23FBBC05' d='M11.68 28.18A13.95 13.95 0 0 1 11 24c0-1.45.25-2.86.68-4.18v-5.7H4.34A23.93 23.93 0 0 0 0 24c0 3.86.92 7.51 2.56 10.74l7.12-5.55z'/%3E%3Cpath fill='%23EA4335' d='M24 9.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 3.19 29.93 1 24 1 15.4 1 7.96 5.93 4.34 13.26l7.34 5.7C13.42 13.62 18.27 9.75 24 9.75z'/%3E%3C/svg%3E") center/contain no-repeat;
+  }
+
+  .section-divider {
+    border: none; border-top: 1px solid #eee;
+    margin: 4px 0 20px;
+  }
+  .new-user-row {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 12px;
+  }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #0f1111;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 20px;
+  }
+  .btn-secondary:hover { background: #f5f5f5; border-color: #aaa; }
+
+  /* Register form (toggle) */
+  .register-form { display: none; }
+  .register-form.show { display: block; }
+  .register-header {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f1111;
+    margin-bottom: 4px;
+  }
+  .register-subheader {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 22px;
+  }
+
+  /* Sign in form */
+  .signin-form { display: block; }
+  .signin-form.hidden { display: none; }
+
+  .terms-note {
+    text-align: center;
+    font-size: 11px;
+    color: #999;
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .terms-note a { color: #007185; text-decoration: none; }
+
+  .msg {
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 14px;
+    display: none;
+  }
+  .msg.show { display: block; }
+  .msg.error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  .msg.success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+  .back-link {
+    font-size: 13px;
+    color: #007185;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+  .back-link:hover { text-decoration: underline; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    body { flex-direction: column; }
+    .left-panel {
+      width: 100%;
+      padding: 20px 20px 18px;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      min-height: unset;
+    }
+    .left-panel::before, .left-panel::after { display: none; }
+    .panel-logo { font-size: 20px; margin-bottom: 0; }
+    .panel-tagline, .benefits, .panel-bottom { display: none; }
+    .right-panel {
+      width: 100%;
+      padding: 20px 16px 40px;
+      align-items: flex-start;
+    }
+    .card {
+      padding: 24px 20px;
+      box-shadow: none;
+      border-radius: 0;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .left-panel { padding: 40px 32px; }
+    .card { padding: 32px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── LEFT PANEL ── -->
+<div class="left-panel">
+  <div>
+    <div class="panel-logo">🛍️ VibeStore</div>
+    <p class="panel-tagline">Millions of products.<br>Delivered to your door.</p>
+
+    <div class="benefits">
+      <div class="benefit-row">
+        <div class="check-icon">✓</div>
+        <div class="benefit-text">Free delivery on orders over ₹499</div>
+      </div>
+      <div class="benefit-row">
+        <div class="check-icon">✓</div>
+        <div class="benefit-text">Easy 30-day returns</div>
+      </div>
+      <div class="benefit-row">
+        <div class="check-icon">✓</div>
+        <div class="benefit-text">Secure payments — UPI, Cards, Wallets</div>
+      </div>
+      <div class="benefit-row">
+        <div class="check-icon">✓</div>
+        <div class="benefit-text">Exclusive deals for members</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-bottom">
+    New seller? <a href="seller-login.html">Start selling →</a>
+  </div>
+</div>
+
+<!-- ── RIGHT PANEL ── -->
+<div class="right-panel">
+  <div class="card">
+    <span class="card-logo">⚡ VibeStore</span>
+
+    <div id="msg" class="msg"></div>
+
+    <!-- SIGN IN FORM -->
+    <div class="signin-form" id="signin-section">
+      <h1>Sign in to your account</h1>
+      <p class="subtitle">Welcome back</p>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <div class="input-wrap">
+          <input type="email" id="email" placeholder="your@email.com" autocomplete="email">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+          <button class="eye-btn" type="button" id="eye-btn" title="Show/hide password">👁️</button>
+        </div>
+      </div>
+
+      <div class="row-between">
+        <label class="remember-wrap">
+          <input type="checkbox" id="remember-me"> Remember me
+        </label>
+        <a href="#" class="link-teal">Forgot password?</a>
+      </div>
+
+      <button class="btn-primary" id="signin-btn">Sign In</button>
+
+      <div class="divider">or</div>
+
+      <button class="btn-google" id="google-btn">
+        <span class="g-icon"></span>
+        Continue with Google
+      </button>
+
+      <hr class="section-divider">
+      <div class="new-user-row">New to VibeStore?</div>
+
+      <button class="btn-secondary" id="create-account-btn">Create account</button>
+
+      <p class="terms-note">By signing in, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
+    </div>
+
+    <!-- REGISTER FORM (hidden by default) -->
+    <div class="register-form" id="register-section">
+      <a class="back-link" id="back-to-signin">← Back to Sign In</a>
+      <div class="register-header">Create your account</div>
+      <p class="register-subheader">Join millions of VibeStore shoppers</p>
+
+      <div class="form-group">
+        <label for="reg-name">Full Name</label>
+        <div class="input-wrap">
+          <input type="text" id="reg-name" placeholder="Your full name" autocomplete="name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="reg-email">Email</label>
+        <div class="input-wrap">
+          <input type="email" id="reg-email" placeholder="your@email.com" autocomplete="email">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="reg-pass">Password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-pass" placeholder="Create a password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="reg-pass2">Confirm Password</label>
+        <div class="input-wrap">
+          <input type="password" id="reg-pass2" placeholder="Repeat your password">
+        </div>
+      </div>
+
+      <button class="btn-primary" id="register-btn">Create Account</button>
+      <p class="terms-note">By creating an account, you agree to our <a href="#">Terms</a> &amp; <a href="#">Privacy Policy</a></p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  // Auto-redirect if already logged in as buyer
+  const existing = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
+  if (existing && existing.role === 'buyer') {
+    window.location.href = 'index.html';
+    return;
+  }
+
+  const msgEl = document.getElementById('msg');
+
+  function showError(text) {
+    msgEl.className = 'msg show error';
+    msgEl.textContent = text;
+  }
+  function showSuccess(text) {
+    msgEl.className = 'msg show success';
+    msgEl.textContent = text;
+  }
+  function clearMsg() {
+    msgEl.className = 'msg';
+    msgEl.textContent = '';
+  }
+
+  // Toggle show/hide password
+  const passInput = document.getElementById('password');
+  const eyeBtn = document.getElementById('eye-btn');
+  eyeBtn.addEventListener('click', function() {
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    eyeBtn.textContent = passInput.type === 'password' ? '👁️' : '🙈';
+  });
+
+  // Toggle between sign in and register views
+  document.getElementById('create-account-btn').addEventListener('click', function() {
+    document.getElementById('signin-section').classList.add('hidden');
+    document.getElementById('register-section').classList.add('show');
+    clearMsg();
+  });
+
+  document.getElementById('back-to-signin').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('register-section').classList.remove('show');
+    document.getElementById('signin-section').classList.remove('hidden');
+    clearMsg();
+  });
+
+  // Sign In
+  function doSignIn() {
+    const email = document.getElementById('email').value.trim();
+    const name = email.split('@')[0]; // use email prefix as name
+    if (!email) { showError('Please enter your email'); return; }
+    if (typeof vsLogin === 'function') {
+      vsLogin(email, name, 'buyer'); // force role = buyer always
+    }
+    showSuccess('Welcome back! Redirecting…');
+    setTimeout(function() { window.location.href = 'index.html'; }, 700);
+  }
+
+  document.getElementById('signin-btn').addEventListener('click', doSignIn);
+  document.getElementById('email').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSignIn();
+  });
+  document.getElementById('password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doSignIn();
+  });
+
+  // Google Sign In (demo)
+  document.getElementById('google-btn').addEventListener('click', function() {
+    const email = document.getElementById('email').value.trim() || 'googleuser@gmail.com';
+    const name = email.split('@')[0];
+    if (typeof vsLogin === 'function') vsLogin(email, name, 'buyer');
+    showSuccess('Signed in with Google! Redirecting…');
+    setTimeout(function() { window.location.href = 'index.html'; }, 700);
+  });
+
+  // Register
+  function doRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const pass = document.getElementById('reg-pass').value;
+    const pass2 = document.getElementById('reg-pass2').value;
+    if (!name || !email) { showError('Please fill all fields'); return; }
+    if (pass && pass !== pass2) { showError('Passwords do not match'); return; }
+    if (typeof vsLogin === 'function') vsLogin(email, name, 'buyer');
+    showSuccess('Account created! Redirecting…');
+    setTimeout(function() { window.location.href = 'index.html'; }, 700);
+  }
+
+  document.getElementById('register-btn').addEventListener('click', doRegister);
+})();
+</script>
+</body>
+</html>

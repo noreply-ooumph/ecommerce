@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sign In — ⚡ Seller Central</title>
+<title>Seller Sign In — VibeStore Seller Central</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="auth.js"></script>
@@ -337,6 +337,9 @@
 
 <!-- RIGHT PANEL -->
 <div class="right-panel">
+  <div style="width:100%;max-width:400px;margin-bottom:12px;">
+    <a href="login.html" style="font-size:12px;color:#007185;text-decoration:none;font-weight:500;">← Choose different portal</a>
+  </div>
   <div class="login-card">
     <h2>Sign in to Seller Central</h2>
     <p class="subtitle">Welcome back! Your AI agents are standing by.</p>
@@ -359,7 +362,7 @@
       </div>
     </div>
 
-    <button class="btn-orange" onclick="window.location.href='seller-dashboard.html'">
+    <button class="btn-orange" onclick="handleSellerSignIn()">
       Sign In →
     </button>
 
@@ -375,7 +378,7 @@
     </div>
 
     <div class="buyer-link">
-      <a href="index.html">← Go to VibeStore (buyer portal)</a>
+      <a href="login.html">← Back to VibeStore</a>
     </div>
   </div>
 
@@ -394,9 +397,8 @@
   // Auto-redirect if already authenticated as seller
   (function() {
     const existing = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
-    if (existing && existing.role === 'seller') {
-      window.location.href = 'seller-dashboard.html';
-    }
+    if (existing && existing.role === 'seller') window.location.href = 'seller-dashboard.html';
+    else if (existing && existing.role !== 'seller') vsLogout(); // clear wrong role session
   })();
 
   function togglePw() {
@@ -411,9 +413,15 @@
     }
   }
 
+  function handleSellerSignIn() {
+    const email = document.getElementById('email').value;
+    const name = email ? email.split('@')[0] : '';
+    vsLogin(email, name, 'seller');
+  }
+
   // Enter key → sign in
   document.getElementById('password').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') window.location.href = 'seller-dashboard.html';
+    if (e.key === 'Enter') handleSellerSignIn();
   });
 </script>
 </body>

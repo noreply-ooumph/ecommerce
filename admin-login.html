@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Sign In — VibeStore Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0d0f12 0%, #131921 50%, #1a2332 100%);
+    padding: 40px 20px;
+    position: relative;
+  }
+
+  /* Ambient glow effects */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(204,12,57,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(255,153,0,0.05) 0%, transparent 40%);
+    pointer-events: none;
+  }
+
+  .card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow:
+      0 4px 20px rgba(0,0,0,0.4),
+      0 20px 60px rgba(0,0,0,0.3),
+      0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 1;
+  }
+
+  .card-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #FF9900;
+    text-align: center;
+    display: block;
+    margin-bottom: 20px;
+    letter-spacing: -0.3px;
+  }
+
+  .shield-icon {
+    font-size: 48px;
+    text-align: center;
+    display: block;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .card h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f1111;
+    text-align: center;
+    margin-bottom: 6px;
+  }
+
+  .restricted-note {
+    text-align: center;
+    font-size: 12px;
+    color: #CC0C39;
+    font-weight: 500;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .card-divider {
+    border: none;
+    border-top: 1px solid #eee;
+    margin-bottom: 24px;
+  }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .input-wrap { position: relative; }
+  .prefix-icon {
+    position: absolute;
+    left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 11px 44px 11px 40px;
+    border: 1.5px solid #d0d5dd;
+    border-radius: 8px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    color: #0f1111;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafafa;
+  }
+  .input-wrap input:focus {
+    border-color: #131921;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(19,25,33,0.1);
+  }
+  .input-wrap input.no-right { padding-right: 14px; }
+  .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 16px; color: #888;
+    display: flex; align-items: center;
+  }
+
+  .error-msg {
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+
+  .success-msg {
+    padding: 10px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .success-msg.show { display: block; }
+
+  .btn-admin {
+    width: 100%;
+    padding: 14px;
+    background: #131921;
+    color: #FF9900;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    letter-spacing: 0.2px;
+  }
+  .btn-admin:hover { background: #232f3e; }
+  .btn-admin:active { transform: scale(0.99); }
+
+  .back-portal {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .back-portal a {
+    font-size: 13px;
+    color: #007185;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .back-portal a:hover { text-decoration: underline; }
+
+  /* Security note outside card */
+  .security-note {
+    position: relative;
+    z-index: 1;
+    margin-top: 28px;
+    text-align: center;
+    font-size: 11px;
+    color: #4a5568;
+    max-width: 360px;
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+  }
+
+  /* Subtle lock pattern background texture */
+  .bg-pattern {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.015;
+    background-image: repeating-linear-gradient(
+      45deg,
+      #ffffff 0,
+      #ffffff 1px,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 20px 20px;
+  }
+
+  @media (max-width: 480px) {
+    .card {
+      padding: 28px 20px;
+      border-radius: 12px;
+    }
+    .card h1 { font-size: 21px; }
+    .shield-icon { font-size: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+
+<div class="card">
+  <span class="card-logo">⚡ VibeStore</span>
+  <span class="shield-icon">🔐</span>
+
+  <h1>Platform Admin</h1>
+  <p class="restricted-note">Restricted access — authorized personnel only</p>
+
+  <hr class="card-divider">
+
+  <div class="error-msg" id="error-msg"></div>
+  <div class="success-msg" id="success-msg"></div>
+
+  <div class="form-group">
+    <label for="email">Admin Email</label>
+    <div class="input-wrap">
+      <span class="prefix-icon">📧</span>
+      <input type="email" id="email" placeholder="admin@vibestore.com" autocomplete="email" class="no-right">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="password">Password</label>
+    <div class="input-wrap">
+      <span class="prefix-icon">🔑</span>
+      <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password">
+      <button class="eye-btn" type="button" id="eye-btn" title="Show/hide password">👁️</button>
+    </div>
+  </div>
+
+  <button class="btn-admin" id="admin-signin-btn">Sign In to Admin Panel</button>
+
+  <div class="back-portal">
+    <a href="login.html">← Back to portal selection</a>
+  </div>
+</div>
+
+<p class="security-note">
+  All admin sessions are logged. Unauthorized access is prohibited.
+</p>
+
+<script>
+(function() {
+  // Auto-redirect if already logged in as admin
+  const existing = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
+  if (existing && existing.role === 'admin') {
+    window.location.href = 'app.html';
+    return;
+  }
+
+  const errorEl = document.getElementById('error-msg');
+  const successEl = document.getElementById('success-msg');
+
+  function showError(text) {
+    errorEl.textContent = text;
+    errorEl.classList.add('show');
+    successEl.classList.remove('show');
+  }
+  function showSuccess(text) {
+    successEl.textContent = text;
+    successEl.classList.add('show');
+    errorEl.classList.remove('show');
+  }
+
+  // Password toggle
+  const passInput = document.getElementById('password');
+  const eyeBtn = document.getElementById('eye-btn');
+  eyeBtn.addEventListener('click', function() {
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    eyeBtn.textContent = passInput.type === 'password' ? '👁️' : '🙈';
+  });
+
+  function doAdminLogin() {
+    const email = document.getElementById('email').value.trim();
+    const pass = document.getElementById('password').value;
+    if (!email || !pass) { showError('Enter email and password'); return; }
+    // Simple demo check — admin@vibestore.com or any @vibestore.com
+    const rawName = email.split('@')[0];
+    const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+    if (typeof vsLogin === 'function') {
+      vsLogin(email, name, 'admin'); // force role = admin always
+    }
+    showSuccess('Access granted. Redirecting to admin panel…');
+    setTimeout(function() { window.location.href = 'app.html'; }, 800);
+  }
+
+  document.getElementById('admin-signin-btn').addEventListener('click', doAdminLogin);
+
+  // Enter key support
+  document.getElementById('email').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') document.getElementById('password').focus();
+  });
+  document.getElementById('password').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doAdminLogin();
+  });
+})();
+</script>
+</body>
+</html>
