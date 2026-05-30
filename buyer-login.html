@@ -342,6 +342,14 @@
     .left-panel { padding: 40px 32px; }
     .card { padding: 32px 28px; }
   }
+@media(max-width:768px){
+  .login-layout,.auth-layout{grid-template-columns:1fr!important;}
+  .login-left,.auth-left{display:none!important;}
+  .login-right,.auth-right{padding:24px 16px!important;width:100%!important;}
+  .login-card,.auth-card{padding:24px 20px!important;max-width:100%!important;}
+  .form-row{grid-template-columns:1fr!important;}
+  .login-heading{font-size:1.3rem!important;}
+}
 </style>
 </head>
 <body>

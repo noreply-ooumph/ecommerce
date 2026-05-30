@@ -175,6 +175,21 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
   .tile-grid{grid-template-columns:repeat(2,1fr);}
   .hello-row,.account-header{flex-direction:column;align-items:flex-start;}
 }
+@media(max-width:768px){
+  .account-layout,.account-grid{grid-template-columns:1fr!important;}
+  .account-tiles,.tiles-grid{grid-template-columns:repeat(3,1fr)!important;gap:10px!important;}
+  .tile-card{padding:14px 8px!important;}
+  .tile-icon{font-size:1.6rem!important;}
+  .tile-label{font-size:0.7rem!important;}
+  .membership-card{padding:16px!important;}
+  .orders-table{overflow-x:auto!important;}
+  table{min-width:500px!important;}
+  .account-header{flex-direction:column!important;gap:10px!important;}
+}
+@media(max-width:480px){
+  .account-tiles,.tiles-grid{grid-template-columns:repeat(3,1fr)!important;}
+  .membership-tier-row{flex-wrap:wrap!important;gap:8px!important;}
+}
 </style>
 </head>
 <body>

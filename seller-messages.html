@@ -139,6 +139,38 @@ a{text-decoration:none;color:inherit;}
   .thread-back-btn{display:flex !important;}
 }
 .thread-back-btn{display:none;background:none;border:none;font-size:.85rem;color:#007185;font-weight:600;cursor:pointer;padding:4px 8px;align-items:center;gap:4px;}
+@media(max-width:1024px){
+  .sidebar{width:180px!important;}
+  .main,.main-content{margin-left:180px!important;}
+  .topbar{left:180px!important;}
+  .agent-chips,.topbar-chips{display:none!important;}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)!important;}
+}
+@media(max-width:768px){
+  .sidebar{
+    position:fixed!important;left:-240px!important;top:0!important;bottom:0!important;
+    width:220px!important;z-index:1000!important;transition:left .3s ease!important;
+    overflow-y:auto!important;
+  }
+  .sidebar.open{left:0!important;}
+  .main,.main-content{margin-left:0!important;padding:12px!important;}
+  .topbar{left:0!important;padding:0 12px!important;}
+  .topbar-hamburger{display:flex!important;}
+  .metrics-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+  .two-col,.section-row,.dashboard-grid{grid-template-columns:1fr!important;gap:12px!important;}
+  .table-wrap,.table-container{overflow-x:auto!important;}
+  table{min-width:600px!important;}
+  .slide-panel,.detail-panel{width:100%!important;max-width:100%!important;}
+  .chart-body,.chart-wrap{height:200px!important;}
+  .card-header h3{font-size:0.9rem!important;}
+  .metric-value{font-size:1.4rem!important;}
+}
+@media(max-width:480px){
+  .metrics-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .metric-value{font-size:1.2rem!important;}
+  .topbar .seller-info{display:none!important;}
+}
+@media(max-width:768px){ .messages-layout,.msg-layout{grid-template-columns:1fr!important;} .msg-thread{display:none!important;} .msg-thread.active{display:flex!important;} .msg-list{display:block!important;} .msg-list.hidden{display:none!important;} }
 </style>
 </head>
 <body>

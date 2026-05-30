@@ -222,6 +222,22 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 @media(max-width:480px){
   .deals-grid{grid-template-columns:repeat(2,1fr)}
 }
+@media(max-width:1024px){
+  .deals-grid,.sale-grid{grid-template-columns:repeat(3,1fr)!important;}
+}
+@media(max-width:768px){
+  .deals-grid,.sale-grid,.lightning-grid{grid-template-columns:repeat(2,1fr)!important;gap:10px!important;}
+  .deal-of-day,.dotd-banner{flex-direction:column!important;padding:16px 12px!important;}
+  .dotd-img{width:100%!important;height:160px!important;font-size:4rem!important;}
+  .filter-tabs{flex-wrap:wrap!important;gap:6px!important;}
+  .cat-chips{flex-wrap:wrap!important;gap:6px!important;}
+  .coupon-grid{grid-template-columns:1fr!important;}
+  .section-pad{padding:16px 12px!important;}
+}
+@media(max-width:480px){
+  .deals-grid,.sale-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .deal-card-sale{padding:10px!important;}
+}
 </style>
 </head>
 <body>

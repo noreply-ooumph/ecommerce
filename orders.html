@@ -150,6 +150,16 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
   .order-item{padding:14px}
   .item-emoji{font-size:2rem;width:44px;height:44px}
 }
+@media(max-width:768px){
+  .orders-layout{grid-template-columns:1fr!important;}
+  .orders-filters{flex-wrap:wrap!important;gap:8px!important;}
+  .order-card{flex-direction:column!important;gap:10px!important;}
+  .order-card-img{width:60px!important;height:60px!important;font-size:2rem!important;}
+  .order-actions{flex-wrap:wrap!important;gap:6px!important;}
+  .order-table{overflow-x:auto!important;}
+  table{min-width:500px!important;}
+  .filter-tabs{flex-wrap:wrap!important;gap:6px!important;}
+}
 </style>
 </head>
 <body>
