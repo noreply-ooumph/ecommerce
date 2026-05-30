@@ -377,6 +377,8 @@
 
       <button class="btn-primary" id="signin-btn">Sign In</button>
 
+      <div id="new-seller-cta" style="display:none;text-align:center;font-size:0.82rem;color:#555;margin-bottom:10px;">New seller? → <a href="seller-onboarding.html" style="color:#ea580c;font-weight:600;">Start your seller journey</a></div>
+
       <div class="divider">— OR —</div>
 
       <button class="btn-google" id="google-btn">
@@ -409,7 +411,7 @@
       </div>
 
       <div class="register-seller-note" id="seller-note">
-        Want to sell on VibeStore? <a href="become-seller.html">Register as a Seller →</a>
+        Want to sell on VibeStore? <a href="seller-onboarding.html">Register as a Seller →</a>
       </div>
 
     </div><!-- /view-signin -->
@@ -555,6 +557,8 @@
       nameField.className = 'form-group name-field';
       sellerNote.className = 'register-seller-note';
       bottomLinks.style.display = '';
+      const newSellerCtaClear = document.getElementById('new-seller-cta');
+      if (newSellerCtaClear) newSellerCtaClear.style.display = 'none';
       return;
     }
     detectedRole = vsDetectRole(val);
@@ -569,13 +573,16 @@
     nameField.className = 'form-group name-field show';
 
     // Show seller register note or buyer register link
+    const newSellerCta = document.getElementById('new-seller-cta');
     if (detectedRole === 'seller') {
       sellerNote.className = 'register-seller-note show';
       bottomLinks.style.display = 'none';
+      if (newSellerCta) newSellerCta.style.display = 'block';
     } else {
       sellerNote.className = 'register-seller-note';
       bottomLinks.style.display = '';
       registerLink.textContent = detectedRole === 'buyer' ? 'Register as buyer →' : 'Create account →';
+      if (newSellerCta) newSellerCta.style.display = 'none';
     }
   }
 

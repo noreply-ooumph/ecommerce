@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Become a Seller — VibeStore Seller Central</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #FF9900;
+    --orange-dark: #e68a00;
+    --orange-light: #fff7e6;
+    --dark: #0f1111;
+    --bg: #f0f2f5;
+    --white: #fff;
+    --border: #e0e0e0;
+    --text: #222;
+    --muted: #666;
+    --error: #c0392b;
+    --success: #27ae60;
+    --radius: 12px;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ===== TOP NAV ===== */
+  .top-nav {
+    background: var(--dark);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--orange);
+    text-decoration: none;
+    letter-spacing: -0.5px;
+  }
+  .nav-logo span { color: #fff; }
+  .nav-help {
+    color: #ccc;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .nav-help:hover { color: var(--orange); }
+
+  /* ===== PROGRESS BAR ===== */
+  .progress-wrapper {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px;
+  }
+  .progress-inner {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .step-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    flex: 1;
+  }
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background: #fff;
+    color: #aaa;
+    font-size: 0.78rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+  .step-item.completed .step-circle {
+    background: var(--orange);
+    border-color: var(--orange);
+    color: #fff;
+  }
+  .step-item.active .step-circle {
+    border-color: var(--orange);
+    color: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255,153,0,0.2);
+  }
+  .step-label {
+    font-size: 0.68rem;
+    color: #aaa;
+    margin-top: 4px;
+    text-align: center;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .step-item.completed .step-label,
+  .step-item.active .step-label { color: var(--orange); }
+  .step-connector {
+    flex: 1;
+    height: 2px;
+    background: #e0e0e0;
+    margin-top: -20px;
+    transition: background 0.3s;
+  }
+  .step-connector.filled { background: var(--orange); }
+
+  /* Mobile progress */
+  .progress-mobile {
+    display: none;
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .progress-mobile strong { color: var(--orange); }
+  .progress-bar-strip {
+    height: 4px;
+    background: #e0e0e0;
+    border-radius: 2px;
+    margin-top: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* ===== MAIN LAYOUT ===== */
+  .wizard-container {
+    padding: 32px 16px 64px;
+    display: flex;
+    justify-content: center;
+  }
+  .wizard-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    width: 100%;
+    max-width: 720px;
+    overflow: hidden;
+  }
+  .wizard-header {
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-badge {
+    display: inline-block;
+    background: var(--orange-light);
+    color: var(--orange-dark);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .wizard-header h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 6px;
+  }
+  .wizard-header p {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .wizard-body { padding: 32px 40px; }
+  .wizard-footer {
+    padding: 20px 40px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn-orange {
+    background: var(--orange);
+    color: #fff;
+  }
+  .btn-orange:hover:not(:disabled) { background: var(--orange-dark); }
+  .btn-orange:disabled { background: #ffd080; cursor: not-allowed; }
+  .btn-gray {
+    background: #f5f5f5;
+    color: #555;
+    border: 1px solid var(--border);
+  }
+  .btn-gray:hover { background: #ececec; }
+  .btn-lg { padding: 15px 32px; font-size: 1.05rem; width: 100%; border-radius: 10px; }
+  .btn-icon { display: inline-flex; align-items: center; gap: 6px; }
+
+  /* ===== FORM ELEMENTS ===== */
+  .form-group { margin-bottom: 20px; }
+  .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 6px;
+  }
+  .form-label .req { color: var(--error); }
+  .form-control {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.92rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--text);
+    background: #fff;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-control:focus { border-color: var(--orange); }
+  .form-control.error { border-color: var(--error); }
+  .form-control::placeholder { color: #aaa; }
+  .error-msg {
+    color: var(--error);
+    font-size: 0.78rem;
+    margin-top: 4px;
+    display: none;
+  }
+  .error-msg.show { display: block; }
+  .hint {
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: 4px;
+  }
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .form-row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  select.form-control { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+  textarea.form-control { resize: vertical; min-height: 90px; }
+
+  /* ===== INLINE INPUT GROUP ===== */
+  .input-group {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .input-group .form-control { flex: 1; }
+  .btn-sm {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    white-space: nowrap;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s;
+  }
+  .btn-outline-orange {
+    border: 1.5px solid var(--orange);
+    color: var(--orange);
+    background: transparent;
+  }
+  .btn-outline-orange:hover { background: var(--orange-light); }
+  .verified-badge {
+    color: var(--success);
+    font-size: 0.82rem;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* ===== STEP 1: ACCOUNT TYPE CARDS ===== */
+  .type-cards { display: flex; flex-direction: column; gap: 14px; }
+  .type-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .type-card:hover { border-color: #ffbb55; background: var(--orange-light); }
+  .type-card.selected { border-color: var(--orange); background: var(--orange-light); }
+  .type-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .type-info h4 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 3px;
+  }
+  .type-info p { color: var(--muted); font-size: 0.85rem; margin-bottom: 6px; }
+  .type-best {
+    font-size: 0.75rem;
+    color: var(--orange-dark);
+    font-weight: 600;
+    background: rgba(255,153,0,0.12);
+    padding: 2px 8px;
+    border-radius: 10px;
+    display: inline-block;
+  }
+  .type-radio {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .type-card.selected .type-radio { border-color: var(--orange); }
+  .type-card.selected .type-radio::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--orange);
+  }
+
+  /* ===== STORE PREVIEW ===== */
+  .store-preview {
+    background: #f8f8f8;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .store-preview-icon { font-size: 2rem; }
+  .store-preview-text { flex: 1; }
+  .store-preview-text .preview-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--dark);
+  }
+  .store-preview-text .preview-sub { color: var(--muted); font-size: 0.78rem; }
+  .preview-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--orange);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ===== DRAG DROP FILE ===== */
+  .file-drop {
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .file-drop:hover, .file-drop.dragover { border-color: var(--orange); background: var(--orange-light); }
+  .file-drop input[type=file] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+  .file-drop-icon { font-size: 2rem; margin-bottom: 6px; }
+  .file-drop-text { font-size: 0.85rem; color: var(--muted); }
+  .file-drop-text strong { color: var(--orange); }
+  .file-selected { color: var(--success); font-size: 0.82rem; font-weight: 600; margin-top: 6px; }
+
+  /* ===== INFO BOX ===== */
+  .info-box {
+    background: #f0f7ff;
+    border: 1.5px solid #b3d7ff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 0.85rem;
+    color: #1a5276;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 16px 0;
+  }
+  .info-box-orange {
+    background: var(--orange-light);
+    border-color: #ffcc66;
+    color: #7d4e00;
+  }
+  .info-box-green {
+    background: #f0fff4;
+    border-color: #a8e6c1;
+    color: #1a6b3a;
+  }
+  .info-box .info-icon { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+
+  /* ===== RADIO PILLS ===== */
+  .radio-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .radio-pill {
+    padding: 8px 18px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .radio-pill.active { border-color: var(--orange); background: var(--orange-light); color: var(--orange-dark); }
+  .radio-pill input { display: none; }
+
+  /* ===== SHIPPING CARDS ===== */
+  .shipping-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .shipping-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .shipping-card.selected { border-color: var(--orange); background: var(--orange-light); }
+  .shipping-card h5 { font-size: 0.92rem; font-weight: 700; margin-bottom: 4px; }
+  .shipping-card p { font-size: 0.78rem; color: var(--muted); }
+
+  /* ===== EMOJI PICKER ===== */
+  .emoji-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .emoji-cell {
+    width: 100%;
+    aspect-ratio: 1;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: #f8f8f8;
+  }
+  .emoji-cell:hover { background: var(--orange-light); }
+  .emoji-cell.selected { border-color: var(--orange); background: var(--orange-light); }
+
+  /* ===== STEP 5 TWO-COL ===== */
+  .step5-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+  .step5-preview-panel { position: sticky; top: 180px; }
+  .live-store-card {
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  }
+  .live-store-card .ls-logo { font-size: 3rem; text-align: center; margin-bottom: 8px; }
+  .live-store-card .ls-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--dark);
+  }
+  .live-store-card .ls-tagline { text-align: center; color: var(--muted); font-size: 0.82rem; margin-top: 3px; }
+  .live-store-card .ls-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; justify-content: center; }
+  .pill {
+    background: #f0f0f0;
+    color: #555;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .pill-green { background: #e8f8ee; color: var(--success); }
+  .preview-badge {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ===== STEP 6 ===== */
+  .aria-panel {
+    border: 1.5px solid var(--orange);
+    border-radius: 10px;
+    padding: 16px 18px;
+    background: var(--orange-light);
+    margin: 16px 0;
+  }
+  .aria-panel h5 { font-size: 0.9rem; font-weight: 700; color: var(--orange-dark); margin-bottom: 8px; }
+  .aria-panel ul { list-style: none; }
+  .aria-panel ul li { font-size: 0.82rem; color: #7d4e00; padding: 2px 0; }
+  .aria-panel ul li::before { content: '✨ '; }
+  .product-images-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .product-image-slot {
+    aspect-ratio: 1;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    font-size: 0.75rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  .product-image-slot:hover { border-color: var(--orange); background: var(--orange-light); }
+  .product-image-slot input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+  .product-image-slot .slot-icon { font-size: 1.8rem; margin-bottom: 4px; }
+  .savings-badge {
+    display: inline-block;
+    background: #e8f8ee;
+    color: var(--success);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 8px;
+  }
+
+  /* ===== STEP 7 ===== */
+  .checklist { list-style: none; }
+  .checklist li {
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #333;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: all 0.4s ease;
+  }
+  .checklist li.visible { opacity: 1; transform: translateX(0); }
+  .checklist li .check-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--success);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+  .store-summary-card {
+    border: 2px solid var(--orange);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+    margin: 24px 0;
+    background: var(--orange-light);
+  }
+  .store-summary-card .ss-logo { font-size: 3.5rem; margin-bottom: 8px; }
+  .store-summary-card .ss-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--dark);
+  }
+  .store-summary-card .ss-category { color: var(--muted); font-size: 0.85rem; margin: 4px 0; }
+  .store-summary-card .ss-tagline { color: #555; font-size: 0.88rem; font-style: italic; }
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--success);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-top: 10px;
+  }
+  .live-badge::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #a8ffc4;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ===== TIMELINE ===== */
+  .timeline {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    margin: 20px 0;
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+  .timeline-step { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 80px; }
+  .timeline-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--orange-light);
+    border: 2px solid var(--orange);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .timeline-label { font-size: 0.7rem; color: var(--muted); text-align: center; margin-top: 6px; font-weight: 600; }
+  .timeline-connector { flex: 1; height: 2px; background: var(--orange); margin-top: 18px; opacity: 0.3; }
+
+  /* ===== SHARE BUTTONS ===== */
+  .share-row { display: flex; gap: 10px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
+  .share-btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .share-wa { background: #25d366; color: #fff; }
+  .share-tw { background: #1da1f2; color: #fff; }
+  .share-copy { background: #f5f5f5; color: #333; border: 1px solid var(--border); }
+
+  /* ===== IFSC RESULT ===== */
+  .ifsc-result {
+    background: #f0fff4;
+    border: 1px solid #a8e6c1;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    color: var(--success);
+    font-weight: 600;
+    margin-top: 6px;
+    display: none;
+  }
+  .ifsc-result.show { display: block; }
+
+  /* ===== SIGN IN LINK ===== */
+  .signin-link {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .signin-link a { color: var(--orange); font-weight: 600; text-decoration: none; }
+  .signin-link a:hover { text-decoration: underline; }
+
+  /* ===== PAYOUT SCHEDULE ===== */
+  .payout-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* ===== SKIP LINK ===== */
+  .skip-link {
+    text-align: center;
+    margin-top: 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .skip-link:hover { color: var(--orange); text-decoration: underline; }
+
+  /* ===== STEP PANELS ===== */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  /* ===== GST INDIVIDUAL NOTE ===== */
+  .individual-note {
+    background: #fffbe6;
+    border: 1.5px solid #ffe066;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: #7d6200;
+    display: none;
+    margin-bottom: 16px;
+  }
+  .individual-note.show { display: block; }
+
+  /* ===== PASSWORD TOGGLE ===== */
+  .pw-wrap { position: relative; }
+  .pw-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1rem;
+    color: var(--muted);
+    user-select: none;
+  }
+
+  /* ===== ARIA SUGGEST ===== */
+  .aria-suggest {
+    background: var(--orange-light);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    color: var(--orange-dark);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .char-counter { font-size: 0.75rem; color: var(--muted); text-align: right; margin-top: 3px; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .top-nav { padding: 12px 16px; }
+    .wizard-body { padding: 20px 20px; }
+    .wizard-header { padding: 24px 20px 16px; }
+    .wizard-footer { padding: 16px 20px; }
+    .progress-steps { display: none; }
+    .progress-mobile { display: block; }
+    .form-row, .form-row-3 { grid-template-columns: 1fr; }
+    .step5-layout { grid-template-columns: 1fr; }
+    .step5-preview-panel { position: static; }
+    .emoji-grid { grid-template-columns: repeat(7, 1fr); }
+    .product-images-grid { grid-template-columns: repeat(2, 1fr); }
+    .shipping-cards { grid-template-columns: 1fr; }
+    .wizard-footer { flex-direction: column-reverse; }
+    .wizard-footer .btn { width: 100%; text-align: center; }
+    .timeline { padding-bottom: 12px; }
+  }
+  @media (max-width: 1024px) and (min-width: 769px) {
+    .wizard-card { max-width: 90%; }
+  }
+
+  /* ===== STEP 7 GO BUTTON WRAPPER ===== */
+  .go-btn-wrapper { margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-nav">
+  <a href="index.html" class="nav-logo">⚡ VibeStore <span>Seller Central</span></a>
+  <span class="nav-help" onclick="alert('Rex AI chat coming soon! 🤖')">Need help? Chat with Rex 💬</span>
+</nav>
+
+<!-- PROGRESS BAR -->
+<div class="progress-wrapper">
+  <div class="progress-inner">
+    <!-- Desktop steps -->
+    <div class="progress-steps" id="progressSteps">
+      <div class="step-item active" id="ps1">
+        <div class="step-circle" id="pc1">1</div>
+        <div class="step-label">Account Type</div>
+      </div>
+      <div class="step-connector" id="sc1"></div>
+      <div class="step-item" id="ps2">
+        <div class="step-circle" id="pc2">2</div>
+        <div class="step-label">Business</div>
+      </div>
+      <div class="step-connector" id="sc2"></div>
+      <div class="step-item" id="ps3">
+        <div class="step-circle" id="pc3">3</div>
+        <div class="step-label">Tax & Legal</div>
+      </div>
+      <div class="step-connector" id="sc3"></div>
+      <div class="step-item" id="ps4">
+        <div class="step-circle" id="pc4">4</div>
+        <div class="step-label">Bank Account</div>
+      </div>
+      <div class="step-connector" id="sc4"></div>
+      <div class="step-item" id="ps5">
+        <div class="step-circle" id="pc5">5</div>
+        <div class="step-label">Store Identity</div>
+      </div>
+      <div class="step-connector" id="sc5"></div>
+      <div class="step-item" id="ps6">
+        <div class="step-circle" id="pc6">6</div>
+        <div class="step-label">First Product</div>
+      </div>
+      <div class="step-connector" id="sc6"></div>
+      <div class="step-item" id="ps7">
+        <div class="step-circle" id="pc7">7</div>
+        <div class="step-label">Go Live!</div>
+      </div>
+    </div>
+    <!-- Mobile progress -->
+    <div class="progress-mobile">
+      Step <strong id="mobileStepNum">1</strong> of 7 — <strong id="mobileStepName">Account Type</strong>
+      <div class="progress-bar-strip"><div class="progress-bar-fill" id="mobileProgressFill" style="width:14.28%"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- WIZARD -->
+<div class="wizard-container">
+  <div class="wizard-card">
+
+    <!-- =================== STEP 1 =================== -->
+    <div class="step-panel active" id="step1">
+      <div class="wizard-header">
+        <div class="step-badge">Step 1 of 7</div>
+        <h2>What type of seller are you?</h2>
+        <p>This helps us set up the right account for you</p>
+      </div>
+      <div class="wizard-body">
+        <div class="type-cards">
+          <div class="type-card" id="tc-individual" onclick="selectType('individual')">
+            <div class="type-icon">🧑</div>
+            <div class="type-info">
+              <h4>Individual Seller</h4>
+              <p>I sell personally, no GST registration</p>
+              <span class="type-best">Best for: Handmade, Used items, Small scale</span>
+            </div>
+            <div class="type-radio" id="tr-individual"></div>
+          </div>
+          <div class="type-card" id="tc-business" onclick="selectType('business')">
+            <div class="type-icon">🏢</div>
+            <div class="type-info">
+              <h4>Registered Business</h4>
+              <p>I have a GST-registered business</p>
+              <span class="type-best">Best for: Growing businesses, Brands</span>
+            </div>
+            <div class="type-radio" id="tr-business"></div>
+          </div>
+          <div class="type-card" id="tc-enterprise" onclick="selectType('enterprise')">
+            <div class="type-icon">🏭</div>
+            <div class="type-info">
+              <h4>Enterprise / Brand</h4>
+              <p>I'm a manufacturer or large brand</p>
+              <span class="type-best">Best for: Bulk sellers, D2C brands</span>
+            </div>
+            <div class="type-radio" id="tr-enterprise"></div>
+          </div>
+        </div>
+        <div class="signin-link">Already have an account? <a href="seller-login.html">Sign in →</a></div>
+      </div>
+      <div class="wizard-footer">
+        <div></div>
+        <button class="btn btn-orange btn-icon" id="step1NextBtn" onclick="nextStep()" disabled>Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 2 =================== -->
+    <div class="step-panel" id="step2">
+      <div class="wizard-header">
+        <div class="step-badge">Step 2 of 7</div>
+        <h2>Tell us about your business</h2>
+        <p>This information will appear on your seller profile</p>
+      </div>
+      <div class="wizard-body">
+        <div class="form-group">
+          <label class="form-label">Business / Store Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="storeName" placeholder="e.g. Radha Electronics" oninput="updateStorePreview()">
+          <div class="error-msg" id="err-storeName">Please enter your store name</div>
+          <span class="preview-label" style="margin-top:10px;">Live preview:</span>
+          <div class="store-preview" id="storePreview">
+            <div class="store-preview-icon" id="previewEmoji">🏪</div>
+            <div class="store-preview-text">
+              <div class="preview-name" id="previewName">Your Store Name</div>
+              <div class="preview-sub">on VibeStore Marketplace</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Legal Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="legalName" placeholder="As per PAN / Aadhaar">
+          <div class="error-msg" id="err-legalName">Please enter your full legal name</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Business Email <span class="req">*</span></label>
+            <input type="email" class="form-control" id="bizEmail" placeholder="you@business.com">
+            <div class="error-msg" id="err-bizEmail">Enter a valid email address</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mobile Number <span class="req">*</span></label>
+            <div class="input-group">
+              <input type="tel" class="form-control" id="mobile" placeholder="10-digit number" maxlength="10">
+              <button class="btn-sm btn-outline-orange" id="otpBtn" onclick="sendOTP()">+ Send OTP</button>
+              <span class="verified-badge" id="mobileVerified" style="display:none">✅ Verified</span>
+            </div>
+            <div class="error-msg" id="err-mobile">Enter a valid 10-digit mobile number</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Address <span class="req">*</span></label>
+          <textarea class="form-control" id="bizAddress" placeholder="Flat/Shop No., Street, Area"></textarea>
+          <div class="error-msg" id="err-bizAddress">Please enter your business address</div>
+        </div>
+        <div class="form-row-3">
+          <div class="form-group">
+            <label class="form-label">City <span class="req">*</span></label>
+            <input type="text" class="form-control" id="city" placeholder="City">
+            <div class="error-msg" id="err-city">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">State <span class="req">*</span></label>
+            <select class="form-control" id="state">
+              <option value="">Select State</option>
+              <option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option>
+              <option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option>
+              <option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option>
+              <option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option>
+              <option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option>
+              <option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option>
+              <option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option>
+              <option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option>
+              <option>Uttarakhand</option><option>West Bengal</option>
+              <option>Delhi</option><option>Jammu &amp; Kashmir</option><option>Ladakh</option>
+              <option>Puducherry</option><option>Chandigarh</option>
+            </select>
+            <div class="error-msg" id="err-state">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pincode <span class="req">*</span></label>
+            <input type="text" class="form-control" id="pincode" placeholder="6-digit" maxlength="6">
+            <div class="error-msg" id="err-pincode">Enter a valid 6-digit pincode</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <input type="text" class="form-control" value="India" readonly style="background:#f5f5f5; color:#888;">
+        </div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-gray" onclick="prevStep()">← Back</button>
+        <button class="btn btn-orange btn-icon" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 3 =================== -->
+    <div class="step-panel" id="step3">
+      <div class="wizard-header">
+        <div class="step-badge">Step 3 of 7</div>
+        <h2>Tax information &amp; documents</h2>
+        <p>Required by Indian government for marketplace sellers</p>
+      </div>
+      <div class="wizard-body">
+        <div class="individual-note" id="individualNote">
+          ℹ️ GST is optional for individual sellers with annual turnover below ₹40 lakhs. PAN is still required.
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">GST Number <span id="gstOptionalLabel" style="color:#aaa; font-weight:400;">(Optional)</span></label>
+            <input type="text" class="form-control" id="gstNumber" placeholder="22AAAAA0000A1Z5" maxlength="15" oninput="validateGST()" style="text-transform:uppercase;">
+            <div class="hint" id="gstFormatHint">Format: 22AAAAA0000A1Z5 (15 characters)</div>
+            <div class="error-msg" id="err-gst">Invalid GST format</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">PAN Number <span class="req">*</span></label>
+            <input type="text" class="form-control" id="panNumber" placeholder="ABCDE1234F" maxlength="10" oninput="validatePAN()" style="text-transform:uppercase;">
+            <div class="hint">Format: 5 letters + 4 digits + 1 letter</div>
+            <div class="error-msg" id="err-pan">Invalid PAN format (e.g. ABCDE1234F)</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Business Type <span class="req">*</span></label>
+          <select class="form-control" id="bizType">
+            <option value="">Select business type</option>
+            <option>Sole Proprietorship</option>
+            <option>Partnership</option>
+            <option>Private Limited (Pvt Ltd)</option>
+            <option>LLP (Limited Liability Partnership)</option>
+            <option>HUF (Hindu Undivided Family)</option>
+            <option>Individual</option>
+          </select>
+          <div class="error-msg" id="err-bizType">Please select business type</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Upload PAN Card <span class="req">*</span></label>
+            <div class="file-drop" id="panDrop" ondragover="fileDragOver(event,'panDrop')" ondragleave="fileDragLeave('panDrop')" ondrop="fileDrop(event,'panDrop','panFile')">
+              <input type="file" id="panFile" accept=".jpg,.jpeg,.png,.pdf" onchange="fileSelected('panDrop','panFile','panFileName')">
+              <div class="file-drop-icon">📄</div>
+              <div class="file-drop-text"><strong>Click to upload</strong> or drag &amp; drop<br>JPG, PNG, PDF (max 5MB)</div>
+              <div class="file-selected" id="panFileName"></div>
+            </div>
+            <div class="error-msg" id="err-panFile">Please upload your PAN card</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Upload Address Proof <span class="req">*</span></label>
+            <div class="file-drop" id="addrDrop" ondragover="fileDragOver(event,'addrDrop')" ondragleave="fileDragLeave('addrDrop')" ondrop="fileDrop(event,'addrDrop','addrFile')">
+              <input type="file" id="addrFile" accept=".jpg,.jpeg,.png,.pdf" onchange="fileSelected('addrDrop','addrFile','addrFileName')">
+              <div class="file-drop-icon">🏠</div>
+              <div class="file-drop-text"><strong>Click to upload</strong> or drag &amp; drop<br>Aadhaar / Utility Bill / Rent Agreement</div>
+              <div class="file-selected" id="addrFileName"></div>
+            </div>
+            <div class="error-msg" id="err-addrFile">Please upload address proof</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Upload GST Certificate <span style="color:#aaa; font-weight:400;">(Optional)</span></label>
+          <div class="file-drop" id="gstDrop" ondragover="fileDragOver(event,'gstDrop')" ondragleave="fileDragLeave('gstDrop')" ondrop="fileDrop(event,'gstDrop','gstFile')">
+            <input type="file" id="gstFile" accept=".jpg,.jpeg,.png,.pdf" onchange="fileSelected('gstDrop','gstFile','gstFileName')">
+            <div class="file-drop-icon">📋</div>
+            <div class="file-drop-text"><strong>Click to upload</strong> or drag &amp; drop<br>GST Registration Certificate</div>
+            <div class="file-selected" id="gstFileName"></div>
+          </div>
+        </div>
+        <div class="info-box">
+          <span class="info-icon">🔒</span>
+          <span>Your documents are encrypted with AES-256 and reviewed within 24 hours by our dedicated verification team. We never share your documents with third parties.</span>
+        </div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-gray" onclick="prevStep()">← Back</button>
+        <button class="btn btn-orange btn-icon" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 4 =================== -->
+    <div class="step-panel" id="step4">
+      <div class="wizard-header">
+        <div class="step-badge">Step 4 of 7</div>
+        <h2>Where should we send your earnings?</h2>
+        <p>Payouts processed every 7 days directly to your bank account</p>
+      </div>
+      <div class="wizard-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Account Holder Name <span class="req">*</span></label>
+            <input type="text" class="form-control" id="acHolderName" placeholder="As per bank records">
+            <div class="error-msg" id="err-acHolderName">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Bank Name <span class="req">*</span></label>
+            <select class="form-control" id="bankName">
+              <option value="">Select bank</option>
+              <option>HDFC Bank</option><option>SBI (State Bank of India)</option>
+              <option>ICICI Bank</option><option>Axis Bank</option><option>Kotak Mahindra Bank</option>
+              <option>PNB (Punjab National Bank)</option><option>Bank of Baroda</option>
+              <option>Canara Bank</option><option>Union Bank of India</option><option>Other</option>
+            </select>
+            <div class="error-msg" id="err-bankName">Please select your bank</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Account Number <span class="req">*</span></label>
+            <div class="pw-wrap">
+              <input type="password" class="form-control" id="accountNum" placeholder="Enter account number">
+              <span class="pw-toggle" onclick="togglePW('accountNum', this)">👁️</span>
+            </div>
+            <div class="error-msg" id="err-accountNum">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Account Number <span class="req">*</span></label>
+            <input type="text" class="form-control" id="confirmAccountNum" placeholder="Re-enter account number">
+            <div class="error-msg" id="err-confirmAccountNum">Account numbers do not match</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">IFSC Code <span class="req">*</span></label>
+          <div class="input-group">
+            <input type="text" class="form-control" id="ifscCode" placeholder="e.g. HDFC0001234" maxlength="11" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+            <button class="btn-sm btn-outline-orange" onclick="verifyIFSC()">🔍 Verify IFSC</button>
+          </div>
+          <div class="ifsc-result" id="ifscResult"></div>
+          <div class="error-msg" id="err-ifscCode">Enter a valid 11-character IFSC code</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Account Type <span class="req">*</span></label>
+          <div class="radio-pills" id="accountTypePills">
+            <label class="radio-pill active" onclick="selectPill('accountTypePills', this)"><input type="radio" name="accountType" value="Savings" checked> Savings</label>
+            <label class="radio-pill" onclick="selectPill('accountTypePills', this)"><input type="radio" name="accountType" value="Current"> Current</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">UPI ID <span style="color:#aaa; font-weight:400;">(Optional — for instant payouts)</span></label>
+          <input type="text" class="form-control" id="upiId" placeholder="yourname@upi">
+        </div>
+        <div class="info-box info-box-orange">
+          <span class="info-icon">⚡</span>
+          <span>Sage AI will automatically reconcile all your transactions and send you monthly GST-ready tax summaries directly to your email.</span>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payout Schedule</label>
+          <div class="radio-pills" id="payoutPills">
+            <label class="radio-pill active" onclick="selectPill('payoutPills', this)"><input type="radio" name="payout" value="7days" checked> Every 7 days</label>
+            <label class="radio-pill" onclick="selectPill('payoutPills', this)"><input type="radio" name="payout" value="14days"> Every 14 days</label>
+            <label class="radio-pill" onclick="selectPill('payoutPills', this)"><input type="radio" name="payout" value="monthly"> Monthly</label>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-gray" onclick="prevStep()">← Back</button>
+        <button class="btn btn-orange btn-icon" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 5 =================== -->
+    <div class="step-panel" id="step5">
+      <div class="wizard-header">
+        <div class="step-badge">Step 5 of 7</div>
+        <h2>Set up your store identity</h2>
+        <p>How your store looks to millions of VibeStore shoppers</p>
+      </div>
+      <div class="wizard-body">
+        <div class="step5-layout">
+          <!-- Left: Form -->
+          <div class="step5-form">
+            <div class="form-group">
+              <label class="form-label">Store Logo — Pick an emoji</label>
+              <div class="emoji-grid" id="logoEmojiGrid">
+                <!-- Populated by JS -->
+              </div>
+              <div style="font-size:0.78rem; color:var(--orange); cursor:pointer;" onclick="alert('Image upload coming soon!')">Or upload image →</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Display Name <span class="req">*</span></label>
+              <input type="text" class="form-control" id="storeDisplayName" placeholder="Your store name" oninput="updateLivePreview()">
+              <div class="error-msg" id="err-storeDisplayName">Required</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Tagline <span style="color:#aaa; font-weight:400;">(60 chars)</span></label>
+              <input type="text" class="form-control" id="storeTagline" placeholder="e.g. Premium electronics at unbeatable prices" maxlength="60" oninput="updateLivePreview(); countChars(this, 60, 'taglineCount')">
+              <div class="char-counter"><span id="taglineCount">0</span>/60</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Description <span style="color:#aaa; font-weight:400;">(300 chars)</span></label>
+              <textarea class="form-control" id="storeDesc" placeholder="Tell shoppers what makes your store special..." maxlength="300" oninput="countChars(this, 300, 'descCount')"></textarea>
+              <div class="char-counter"><span id="descCount">0</span>/300</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Primary Category <span class="req">*</span></label>
+              <select class="form-control" id="primaryCategory" onchange="updateLivePreview()">
+                <option value="">Select category</option>
+                <option>Electronics</option><option>Fashion</option><option>Home &amp; Living</option>
+                <option>Books</option><option>Sports &amp; Outdoors</option><option>Beauty &amp; Personal Care</option>
+                <option>Toys &amp; Games</option><option>Grocery</option><option>Handmade &amp; Crafts</option><option>Other</option>
+              </select>
+              <div class="error-msg" id="err-primaryCategory">Please select a category</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Return Policy</label>
+              <div class="radio-pills" id="returnPills">
+                <label class="radio-pill" onclick="selectPill('returnPills', this); updateLivePreview()"><input type="radio" name="returnPolicy" value="7days"> 7 days</label>
+                <label class="radio-pill active" onclick="selectPill('returnPills', this); updateLivePreview()"><input type="radio" name="returnPolicy" value="15days" checked> 15 days</label>
+                <label class="radio-pill" onclick="selectPill('returnPills', this); updateLivePreview()"><input type="radio" name="returnPolicy" value="30days"> 30 days</label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Shipping Method</label>
+              <div class="shipping-cards">
+                <div class="shipping-card selected" id="sc-self" onclick="selectShipping('self')">
+                  <h5>🚚 I'll ship myself</h5>
+                  <p>Use your own courier partner. Flexible but requires your management.</p>
+                </div>
+                <div class="shipping-card" id="sc-fbv" onclick="selectShipping('fbv')">
+                  <h5>⚡ VibeStore Fulfilled (FBV)</h5>
+                  <p>We store and ship for you. Faster delivery, Prime eligible.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Right: Live Preview -->
+          <div class="step5-preview-panel">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:8px;">Live Store Preview</div>
+            <div class="live-store-card">
+              <div class="ls-logo" id="lsLogo">🏪</div>
+              <div class="ls-name" id="lsName">Your Store Name</div>
+              <div class="ls-tagline" id="lsTagline">Your store tagline will appear here</div>
+              <div class="ls-pills">
+                <span class="pill" id="lsCategory">Category</span>
+                <span class="pill" id="lsReturn">15-day returns</span>
+              </div>
+              <div class="preview-badge">⭐ 5.0 · 0 reviews · Just launched!</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-gray" onclick="prevStep()">← Back</button>
+        <button class="btn btn-orange btn-icon" onclick="nextStep()">Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 6 =================== -->
+    <div class="step-panel" id="step6">
+      <div class="wizard-header">
+        <div class="step-badge">Step 6 of 7</div>
+        <h2>Add your first product</h2>
+        <p>Aria AI will help optimize your listing for maximum visibility</p>
+      </div>
+      <div class="wizard-body">
+        <div class="form-group">
+          <label class="form-label">Product Name <span class="req">*</span></label>
+          <input type="text" class="form-control" id="productName" placeholder="e.g. Sony WH-1000XM5 Wireless Headphones">
+          <div class="aria-suggest">💡 <span>Aria suggests: Add brand name and key feature for better searchability</span></div>
+          <div class="error-msg" id="err-productName">Please enter a product name</div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Category <span class="req">*</span></label>
+            <select class="form-control" id="productCategory">
+              <option value="">Select category</option>
+              <option>Electronics</option><option>Fashion</option><option>Home &amp; Living</option>
+              <option>Books</option><option>Sports &amp; Outdoors</option><option>Beauty &amp; Personal Care</option>
+              <option>Toys &amp; Games</option><option>Grocery</option><option>Handmade &amp; Crafts</option><option>Other</option>
+            </select>
+            <div class="error-msg" id="err-productCategory">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Stock Quantity <span class="req">*</span></label>
+            <input type="number" class="form-control" id="stockQty" placeholder="e.g. 50" min="1">
+            <div class="error-msg" id="err-stockQty">Required</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">MRP / Original Price <span class="req">*</span></label>
+            <div class="input-group">
+              <span style="padding:11px 10px; background:#f5f5f5; border:1.5px solid #e0e0e0; border-right:none; border-radius:8px 0 0 8px; font-size:0.9rem; color:#555;">₹</span>
+              <input type="number" class="form-control" id="mrpPrice" placeholder="0" style="border-radius:0 8px 8px 0;" oninput="calcSavings()">
+            </div>
+            <div class="error-msg" id="err-mrpPrice">Required</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Selling Price <span class="req">*</span></label>
+            <div class="input-group">
+              <span style="padding:11px 10px; background:#f5f5f5; border:1.5px solid #e0e0e0; border-right:none; border-radius:8px 0 0 8px; font-size:0.9rem; color:#555;">₹</span>
+              <input type="number" class="form-control" id="sellingPrice" placeholder="0" style="border-radius:0 8px 8px 0;" oninput="calcSavings()">
+            </div>
+            <span id="savingsBadge" class="savings-badge" style="display:none;"></span>
+            <div class="error-msg" id="err-sellingPrice">Required</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Product Description</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <span style="font-size:0.75rem; color:var(--muted);">Describe your product in detail</span>
+            <button class="btn-sm" style="background:var(--orange-light); color:var(--orange-dark); border:1px solid var(--orange);" onclick="ariaWriteDescription()">✨ Let Aria write this →</button>
+          </div>
+          <textarea class="form-control" id="productDesc" placeholder="Product features, specifications, what's in the box..." style="min-height:100px;"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Product Images</label>
+          <div class="product-images-grid">
+            <div class="product-image-slot">
+              <input type="file" accept="image/*">
+              <div class="slot-icon">📸</div>
+              <span>Main photo</span>
+            </div>
+            <div class="product-image-slot">
+              <input type="file" accept="image/*">
+              <div class="slot-icon">🖼️</div>
+              <span>Photo 2</span>
+            </div>
+            <div class="product-image-slot">
+              <input type="file" accept="image/*">
+              <div class="slot-icon">🖼️</div>
+              <span>Photo 3</span>
+            </div>
+            <div class="product-image-slot">
+              <input type="file" accept="image/*">
+              <div class="slot-icon">🖼️</div>
+              <span>Photo 4</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">SKU / Product Code <span style="color:#aaa; font-weight:400;">(Optional)</span></label>
+            <input type="text" class="form-control" id="sku" placeholder="e.g. ELEC-001">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Weight <span style="color:#aaa; font-weight:400;">(for shipping)</span></label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="weight" placeholder="0">
+              <span style="padding:11px 10px; background:#f5f5f5; border:1.5px solid #e0e0e0; border-left:none; border-radius:0 8px 8px 0; font-size:0.9rem; color:#555;">kg</span>
+            </div>
+          </div>
+        </div>
+        <div class="aria-panel">
+          <h5>🤖 Aria AI — Your listing optimizer</h5>
+          <ul>
+            <li>Automatically optimize your title for SEO & search rankings</li>
+            <li>Suggest competitive pricing based on market data</li>
+            <li>Enhance your product images with AI processing</li>
+            <li>Write bullet-point feature highlights for your listing</li>
+          </ul>
+        </div>
+        <div class="skip-link" onclick="skipToStep7()">Skip for now — I'll add products later</div>
+      </div>
+      <div class="wizard-footer">
+        <button class="btn btn-gray" onclick="prevStep()">← Back</button>
+        <button class="btn btn-orange btn-icon" onclick="nextStep()">Add Product &amp; Continue →</button>
+      </div>
+    </div>
+
+    <!-- =================== STEP 7 =================== -->
+    <div class="step-panel" id="step7">
+      <div class="wizard-header">
+        <div class="step-badge">Step 7 of 7</div>
+        <h2>You're all set! 🚀</h2>
+        <p>Your seller account is being activated. Welcome to VibeStore!</p>
+      </div>
+      <div class="wizard-body">
+        <ul class="checklist" id="launchChecklist">
+          <li><div class="check-icon">✓</div><span>Account created</span></li>
+          <li><div class="check-icon">✓</div><span>Business details saved</span></li>
+          <li><div class="check-icon">✓</div><span>Tax documents uploaded</span></li>
+          <li><div class="check-icon">✓</div><span>Bank account linked</span></li>
+          <li><div class="check-icon">✓</div><span>Store identity set</span></li>
+          <li><div class="check-icon">✓</div><span>First product listed</span></li>
+          <li><div class="check-icon">✓</div><span>Aria AI activated for your store</span></li>
+          <li><div class="check-icon">✓</div><span>Nova AI ready to fulfill orders</span></li>
+          <li><div class="check-icon">✓</div><span>Rex AI ready to handle buyer queries</span></li>
+        </ul>
+
+        <div class="store-summary-card" id="storeSummaryCard">
+          <div class="ss-logo" id="ss7Logo">🏪</div>
+          <div class="ss-name" id="ss7Name">Your Store</div>
+          <div class="ss-category" id="ss7Category">Category</div>
+          <div class="ss-tagline" id="ss7Tagline">Your tagline</div>
+          <div><span class="live-badge">Live on VibeStore</span></div>
+        </div>
+
+        <div style="font-size:0.9rem; font-weight:700; color:#333; margin-bottom:10px;">What happens next</div>
+        <div class="timeline">
+          <div class="timeline-step">
+            <div class="timeline-dot">📋</div>
+            <div class="timeline-label">Document<br>Verification<br><span style="color:var(--orange)">~24h</span></div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="timeline-dot">🔍</div>
+            <div class="timeline-label">Listing<br>Review<br><span style="color:var(--orange)">~2h</span></div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="timeline-dot">🟢</div>
+            <div class="timeline-label">Store<br>Goes Live<br><span style="color:var(--success)">Soon!</span></div>
+          </div>
+          <div class="timeline-connector"></div>
+          <div class="timeline-step">
+            <div class="timeline-dot">🚀</div>
+            <div class="timeline-label">First<br>Sale!<br><span style="color:var(--success)">🎉</span></div>
+          </div>
+        </div>
+
+        <div class="go-btn-wrapper">
+          <button class="btn btn-orange btn-lg" onclick="goToDashboard()">Go to Seller Dashboard →</button>
+        </div>
+
+        <div style="margin-top:20px; text-align:center; font-size:0.85rem; font-weight:600; color:#555;">Share your new store</div>
+        <div class="share-row">
+          <button class="share-btn share-wa" onclick="shareWhatsApp()">📱 WhatsApp</button>
+          <button class="share-btn share-tw" onclick="shareTwitter()">🐦 Twitter</button>
+          <button class="share-btn share-copy" onclick="copyLink()">🔗 Copy Link</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- .wizard-card -->
+</div><!-- .wizard-container -->
+
+<script src="auth.js"></script>
+<script>
+// ===================================================
+// STATE
+// ===================================================
+let currentStep = 1;
+const TOTAL_STEPS = 7;
+
+const stepNames = [
+  'Account Type', 'Business Details', 'Tax & Legal',
+  'Bank Account', 'Store Identity', 'First Product', 'Go Live!'
+];
+
+let onboardingData = {};
+try {
+  const saved = localStorage.getItem('vs_onboarding');
+  if (saved) onboardingData = JSON.parse(saved);
+} catch(e) {}
+
+let selectedType = onboardingData.accountType || null;
+let selectedLogoEmoji = onboardingData.logoEmoji || '🏪';
+let selectedShipping = onboardingData.shipping || 'self';
+let mobileVerified = false;
+
+// ===================================================
+// PROGRESS
+// ===================================================
+function updateProgress(step) {
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
+    const ps = document.getElementById('ps' + i);
+    const pc = document.getElementById('pc' + i);
+    ps.classList.remove('active', 'completed');
+    if (i < step) {
+      ps.classList.add('completed');
+      pc.innerHTML = '✓';
+    } else if (i === step) {
+      ps.classList.add('active');
+      pc.innerHTML = i;
+    } else {
+      pc.innerHTML = i;
+    }
+  }
+  // connectors
+  for (let i = 1; i <= TOTAL_STEPS - 1; i++) {
+    const sc = document.getElementById('sc' + i);
+    sc.classList.toggle('filled', i < step);
+  }
+  // mobile
+  document.getElementById('mobileStepNum').textContent = step;
+  document.getElementById('mobileStepName').textContent = stepNames[step - 1];
+  document.getElementById('mobileProgressFill').style.width = ((step / TOTAL_STEPS) * 100) + '%';
+}
+
+// ===================================================
+// SHOW STEP
+// ===================================================
+function showStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('step' + n).classList.add('active');
+  currentStep = n;
+  updateProgress(n);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  if (n === 5) {
+    initEmojiGrid();
+    prefillStep5();
+  }
+  if (n === 7) {
+    populateStep7();
+    startChecklist();
+  }
+  if (n === 3) {
+    document.getElementById('individualNote').classList.toggle('show', selectedType === 'individual');
+  }
+  saveProgress();
+}
+
+// ===================================================
+// NAVIGATION
+// ===================================================
+function nextStep() {
+  if (!validateStep(currentStep)) return;
+  collectStep(currentStep);
+  if (currentStep < TOTAL_STEPS) showStep(currentStep + 1);
+}
+
+function prevStep() {
+  if (currentStep > 1) showStep(currentStep - 1);
+}
+
+function skipToStep7() {
+  collectStep(6);
+  showStep(7);
+}
+
+// ===================================================
+// SAVE PROGRESS
+// ===================================================
+function saveProgress() {
+  try { localStorage.setItem('vs_onboarding', JSON.stringify(onboardingData)); } catch(e) {}
+}
+
+function collectStep(step) {
+  if (step === 1) {
+    onboardingData.accountType = selectedType;
+  } else if (step === 2) {
+    onboardingData.storeName = v('storeName');
+    onboardingData.legalName = v('legalName');
+    onboardingData.email = v('bizEmail');
+    onboardingData.mobile = v('mobile');
+    onboardingData.bizAddress = v('bizAddress');
+    onboardingData.city = v('city');
+    onboardingData.state = v('state');
+    onboardingData.pincode = v('pincode');
+  } else if (step === 3) {
+    onboardingData.gstNumber = v('gstNumber');
+    onboardingData.panNumber = v('panNumber');
+    onboardingData.bizType = v('bizType');
+  } else if (step === 4) {
+    onboardingData.acHolderName = v('acHolderName');
+    onboardingData.bankName = v('bankName');
+    onboardingData.ifscCode = v('ifscCode');
+    onboardingData.upiId = v('upiId');
+    const sel = document.querySelector('input[name="accountType"]:checked');
+    onboardingData.accountType2 = sel ? sel.value : 'Savings';
+    const ps = document.querySelector('input[name="payout"]:checked');
+    onboardingData.payoutSchedule = ps ? ps.value : '7days';
+  } else if (step === 5) {
+    onboardingData.logoEmoji = selectedLogoEmoji;
+    onboardingData.storeDisplayName = v('storeDisplayName') || onboardingData.storeName;
+    onboardingData.storeTagline = v('storeTagline');
+    onboardingData.storeDesc = v('storeDesc');
+    onboardingData.primaryCategory = v('primaryCategory');
+    const rp = document.querySelector('input[name="returnPolicy"]:checked');
+    onboardingData.returnPolicy = rp ? rp.value : '15days';
+    onboardingData.shipping = selectedShipping;
+  } else if (step === 6) {
+    onboardingData.productName = v('productName');
+    onboardingData.productCategory = v('productCategory');
+    onboardingData.mrpPrice = v('mrpPrice');
+    onboardingData.sellingPrice = v('sellingPrice');
+    onboardingData.stockQty = v('stockQty');
+    onboardingData.productDesc = v('productDesc');
+    onboardingData.sku = v('sku');
+    onboardingData.weight = v('weight');
+  }
+  saveProgress();
+}
+
+function v(id) {
+  const el = document.getElementById(id);
+  return el ? el.value.trim() : '';
+}
+
+// ===================================================
+// VALIDATION
+// ===================================================
+function validateStep(step) {
+  clearErrors();
+  let valid = true;
+
+  if (step === 1) {
+    if (!selectedType) { alert('Please select an account type to continue.'); return false; }
+  }
+
+  if (step === 2) {
+    if (!v('storeName')) { showErr('storeName'); valid = false; }
+    if (!v('legalName')) { showErr('legalName'); valid = false; }
+    if (!v('bizEmail') || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('bizEmail'))) { showErr('bizEmail'); valid = false; }
+    if (!v('mobile') || !/^\d{10}$/.test(v('mobile'))) { showErr('mobile'); valid = false; }
+    if (!v('bizAddress')) { showErr('bizAddress'); valid = false; }
+    if (!v('city')) { showErr('city'); valid = false; }
+    if (!v('state')) { showErr('state'); valid = false; }
+    if (!v('pincode') || !/^\d{6}$/.test(v('pincode'))) { showErr('pincode'); valid = false; }
+  }
+
+  if (step === 3) {
+    const gst = v('gstNumber');
+    if (gst && !/^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/i.test(gst)) {
+      showErr('gst'); valid = false;
+    }
+    const pan = v('panNumber');
+    if (!pan || !/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(pan)) { showErr('pan'); valid = false; }
+    if (!v('bizType')) { showErr('bizType'); valid = false; }
+    if (!document.getElementById('panFile').files.length) { showErr('panFile'); valid = false; }
+    if (!document.getElementById('addrFile').files.length) { showErr('addrFile'); valid = false; }
+  }
+
+  if (step === 4) {
+    if (!v('acHolderName')) { showErr('acHolderName'); valid = false; }
+    if (!v('bankName')) { showErr('bankName'); valid = false; }
+    if (!v('accountNum')) { showErr('accountNum'); valid = false; }
+    if (!v('confirmAccountNum') || v('confirmAccountNum') !== v('accountNum')) { showErr('confirmAccountNum'); valid = false; }
+    if (!v('ifscCode') || v('ifscCode').length !== 11 || !/^[A-Z]{4}/i.test(v('ifscCode'))) { showErr('ifscCode'); valid = false; }
+  }
+
+  if (step === 5) {
+    if (!v('storeDisplayName')) { showErr('storeDisplayName'); valid = false; }
+    if (!v('primaryCategory')) { showErr('primaryCategory'); valid = false; }
+  }
+
+  if (step === 6) {
+    if (!v('productName')) { showErr('productName'); valid = false; }
+    if (!v('productCategory')) { showErr('productCategory'); valid = false; }
+    if (!v('mrpPrice')) { showErr('mrpPrice'); valid = false; }
+    if (!v('sellingPrice')) { showErr('sellingPrice'); valid = false; }
+    if (!v('stockQty')) { showErr('stockQty'); valid = false; }
+  }
+
+  return valid;
+}
+
+function showErr(id) {
+  const fc = document.getElementById(id === 'pan' ? 'panNumber' : id === 'gst' ? 'gstNumber' : id === 'panFile' || id === 'addrFile' ? id : id);
+  if (fc && fc.classList) fc.classList.add('error');
+  const errEl = document.getElementById('err-' + id);
+  if (errEl) errEl.classList.add('show');
+}
+
+function clearErrors() {
+  document.querySelectorAll('.error-msg').forEach(e => e.classList.remove('show'));
+  document.querySelectorAll('.form-control').forEach(e => e.classList.remove('error'));
+}
+
+// ===================================================
+// STEP 1 — TYPE SELECTION
+// ===================================================
+function selectType(type) {
+  selectedType = type;
+  ['individual','business','enterprise'].forEach(t => {
+    document.getElementById('tc-' + t).classList.toggle('selected', t === type);
+  });
+  document.getElementById('step1NextBtn').disabled = false;
+  onboardingData.accountType = type;
+}
+
+// ===================================================
+// STEP 2 — STORE PREVIEW
+// ===================================================
+function updateStorePreview() {
+  const name = v('storeName') || 'Your Store Name';
+  document.getElementById('previewName').textContent = name;
+}
+
+// ===================================================
+// STEP 2 — OTP
+// ===================================================
+function sendOTP() {
+  const mob = v('mobile');
+  if (!mob || mob.length !== 10) { alert('Please enter a valid 10-digit mobile number first.'); return; }
+  const btn = document.getElementById('otpBtn');
+  btn.textContent = '⏳ Sending...';
+  setTimeout(() => {
+    btn.style.display = 'none';
+    document.getElementById('mobileVerified').style.display = 'inline-flex';
+    mobileVerified = true;
+  }, 1200);
+}
+
+// ===================================================
+// STEP 3 — FILE DROP
+// ===================================================
+function fileDragOver(e, dropId) {
+  e.preventDefault();
+  document.getElementById(dropId).classList.add('dragover');
+}
+function fileDragLeave(dropId) {
+  document.getElementById(dropId).classList.remove('dragover');
+}
+function fileDrop(e, dropId, inputId) {
+  e.preventDefault();
+  document.getElementById(dropId).classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById(inputId);
+    // For display purposes only (can't set files directly)
+    const nameEl = document.getElementById(inputId + 'Name');
+    if(nameEl) nameEl.textContent = '✅ ' + file.name;
+  }
+}
+function fileSelected(dropId, inputId, nameId) {
+  const input = document.getElementById(inputId);
+  const nameEl = document.getElementById(nameId);
+  if (input.files.length && nameEl) {
+    nameEl.textContent = '✅ ' + input.files[0].name;
+  }
+}
+
+// ===================================================
+// STEP 3 — VALIDATION INLINE
+// ===================================================
+function validateGST() {
+  const gst = v('gstNumber');
+  const errEl = document.getElementById('err-gst');
+  if (!gst) { errEl.classList.remove('show'); return; }
+  const valid = /^\d{2}[A-Z]{5}\d{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/i.test(gst);
+  errEl.classList.toggle('show', !valid);
+}
+function validatePAN() {
+  const pan = v('panNumber');
+  const errEl = document.getElementById('err-pan');
+  if (!pan) { errEl.classList.remove('show'); return; }
+  const valid = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/i.test(pan);
+  errEl.classList.toggle('show', !valid);
+}
+
+// ===================================================
+// STEP 4 — IFSC & UTILITIES
+// ===================================================
+function verifyIFSC() {
+  const ifsc = v('ifscCode');
+  if (!ifsc || ifsc.length !== 11) { alert('Please enter a valid 11-character IFSC code.'); return; }
+  const resultEl = document.getElementById('ifscResult');
+  resultEl.textContent = '⏳ Verifying...';
+  resultEl.classList.add('show');
+  setTimeout(() => {
+    const bankMap = { 'HDFC': 'HDFC Bank', 'SBIN': 'State Bank of India', 'ICIC': 'ICICI Bank', 'UTIB': 'Axis Bank', 'KKBK': 'Kotak Mahindra Bank', 'PUNB': 'Punjab National Bank', 'BARB': 'Bank of Baroda' };
+    const prefix = ifsc.substring(0, 4).toUpperCase();
+    const bankName = bankMap[prefix] || 'Your Bank';
+    resultEl.textContent = '✅ Branch: ' + bankName + ', verified successfully';
+  }, 900);
+}
+
+function togglePW(id, toggleEl) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; toggleEl.textContent = '🙈'; }
+  else { input.type = 'password'; toggleEl.textContent = '👁️'; }
+}
+
+// ===================================================
+// STEP 5 — EMOJI GRID
+// ===================================================
+const storeEmojis = ['🏪','🛍️','👗','💻','📱','🍕','🌿','📚','⚽','💄','🏠','🎮','🧴','🪴','🔧','🎵','🐾','🍰','💍','🎁'];
+
+function initEmojiGrid() {
+  const grid = document.getElementById('logoEmojiGrid');
+  if (grid.children.length > 0) return; // already initted
+  storeEmojis.forEach(emoji => {
+    const cell = document.createElement('div');
+    cell.className = 'emoji-cell' + (emoji === selectedLogoEmoji ? ' selected' : '');
+    cell.textContent = emoji;
+    cell.onclick = () => {
+      document.querySelectorAll('.emoji-cell').forEach(c => c.classList.remove('selected'));
+      cell.classList.add('selected');
+      selectedLogoEmoji = emoji;
+      updateLivePreview();
+    };
+    grid.appendChild(cell);
+  });
+}
+
+function prefillStep5() {
+  const dn = document.getElementById('storeDisplayName');
+  if (dn && !dn.value && onboardingData.storeName) dn.value = onboardingData.storeName;
+  updateLivePreview();
+}
+
+function updateLivePreview() {
+  document.getElementById('lsLogo').textContent = selectedLogoEmoji;
+  document.getElementById('lsName').textContent = v('storeDisplayName') || 'Your Store Name';
+  const tagline = v('storeTagline');
+  document.getElementById('lsTagline').textContent = tagline || 'Your store tagline will appear here';
+  const cat = v('primaryCategory');
+  document.getElementById('lsCategory').textContent = cat || 'Category';
+  const rp = document.querySelector('input[name="returnPolicy"]:checked');
+  document.getElementById('lsReturn').textContent = (rp ? rp.value.replace('days',' day') : '15-day') + ' returns';
+  // Also update step 7 summary
+  document.getElementById('ss7Logo').textContent = selectedLogoEmoji;
+  document.getElementById('ss7Name').textContent = v('storeDisplayName') || onboardingData.storeName || 'Your Store';
+  document.getElementById('ss7Category').textContent = cat || '';
+  document.getElementById('ss7Tagline').textContent = tagline || '';
+}
+
+function selectShipping(type) {
+  selectedShipping = type;
+  document.getElementById('sc-self').classList.toggle('selected', type === 'self');
+  document.getElementById('sc-fbv').classList.toggle('selected', type === 'fbv');
+}
+
+// ===================================================
+// STEP 6 — UTILS
+// ===================================================
+function calcSavings() {
+  const mrp = parseFloat(v('mrpPrice')) || 0;
+  const sp = parseFloat(v('sellingPrice')) || 0;
+  const badge = document.getElementById('savingsBadge');
+  if (mrp > 0 && sp > 0 && sp < mrp) {
+    const pct = Math.round(((mrp - sp) / mrp) * 100);
+    badge.textContent = 'You save: ' + pct + '%';
+    badge.style.display = 'inline-block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function ariaWriteDescription() {
+  const name = v('productName') || 'this product';
+  const cat = v('productCategory') || 'various categories';
+  const desc = `Discover the excellence of ${name} — a top-rated product in ${cat}. Engineered for superior performance and designed with user needs in mind, this product delivers outstanding quality at a competitive price. Whether you're buying for personal use or as a thoughtful gift, it promises lasting satisfaction. Backed by VibeStore's buyer protection and our flexible return policy.`;
+  document.getElementById('productDesc').value = desc;
+}
+
+// ===================================================
+// STEP 7 — POPULATE & CHECKLIST
+// ===================================================
+function populateStep7() {
+  document.getElementById('ss7Logo').textContent = selectedLogoEmoji;
+  document.getElementById('ss7Name').textContent = onboardingData.storeDisplayName || onboardingData.storeName || 'Your Store';
+  document.getElementById('ss7Category').textContent = onboardingData.primaryCategory || '';
+  document.getElementById('ss7Tagline').textContent = onboardingData.storeTagline || '';
+}
+
+function startChecklist() {
+  const items = document.querySelectorAll('#launchChecklist li');
+  items.forEach((li, i) => {
+    li.classList.remove('visible');
+    setTimeout(() => li.classList.add('visible'), (i + 1) * 400);
+  });
+}
+
+function goToDashboard() {
+  const name = onboardingData.legalName || onboardingData.storeName || 'Seller';
+  const email = onboardingData.email || 'seller@vibestore.in';
+  const storeName = onboardingData.storeDisplayName || onboardingData.storeName || 'My Store';
+  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  localStorage.setItem('vs_auth', JSON.stringify({
+    email: email,
+    name: name,
+    role: 'seller',
+    avatar: initials,
+    storeName: storeName,
+    loginTime: Date.now()
+  }));
+  localStorage.removeItem('vs_onboarding');
+  window.location.href = 'seller-dashboard.html';
+}
+
+// ===================================================
+// SHARE
+// ===================================================
+function shareWhatsApp() {
+  const store = onboardingData.storeDisplayName || onboardingData.storeName || 'my store';
+  window.open('https://wa.me/?text=' + encodeURIComponent('🎉 I just launched my store "' + store + '" on VibeStore! Check it out at https://vibestore.in/store/' + store.toLowerCase().replace(/\s+/g, '-')), '_blank');
+}
+function shareTwitter() {
+  const store = onboardingData.storeDisplayName || onboardingData.storeName || 'my store';
+  window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent('🚀 Just launched "' + store + '" on @VibeStore! Excited to start selling! #VibeStore #NewSeller'), '_blank');
+}
+function copyLink() {
+  const store = onboardingData.storeDisplayName || onboardingData.storeName || 'my-store';
+  const url = 'https://vibestore.in/store/' + store.toLowerCase().replace(/\s+/g, '-');
+  navigator.clipboard.writeText(url).then(() => alert('Store link copied: ' + url)).catch(() => alert('Link: ' + url));
+}
+
+// ===================================================
+// RADIO PILLS
+// ===================================================
+function selectPill(groupId, clickedLabel) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('active'));
+  clickedLabel.classList.add('active');
+}
+
+// ===================================================
+// CHAR COUNTER
+// ===================================================
+function countChars(el, max, counterId) {
+  const counter = document.getElementById(counterId);
+  if (counter) counter.textContent = el.value.length;
+}
+
+// ===================================================
+// INIT
+// ===================================================
+(function init() {
+  // Restore saved selections
+  if (onboardingData.accountType) {
+    selectType(onboardingData.accountType);
+    document.getElementById('step1NextBtn').disabled = false;
+  }
+
+  // Prefill step 2 from auth if available
+  try {
+    const auth = JSON.parse(localStorage.getItem('vs_auth') || '{}');
+    if (auth.email) {
+      const emailEl = document.getElementById('bizEmail');
+      if (emailEl) emailEl.value = auth.email;
+      onboardingData.email = auth.email;
+    }
+  } catch(e) {}
+
+  updateProgress(1);
+})();
+</script>
+</body>
+</html>
