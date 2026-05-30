@@ -215,8 +215,8 @@
 
   /* SALES CHART */
   .chart-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; }
-  .chart-body { padding: 0 20px 20px; }
-  canvas { max-height: 220px; }
+  .chart-body { padding: 0 20px 20px; position: relative; height: 260px; }
+  .chart-body canvas { position: absolute; inset: 16px 20px 20px 20px; width: calc(100% - 40px) !important; height: calc(100% - 36px) !important; }
 
   /* ORDERS TABLE */
   .table-wrap { overflow-x: auto; }
@@ -488,7 +488,7 @@
         <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#2196F3;display:inline-block;border-radius:2px;"></span> AI forecast</span>
       </div>
     </div>
-    <div class="chart-body" style="padding-top:16px;">
+    <div class="chart-body">
       <canvas id="salesChart"></canvas>
     </div>
   </div>
@@ -670,7 +670,7 @@ new Chart(document.getElementById('salesChart'), {
     ]
   },
   options: {
-    responsive: true, maintainAspectRatio: true,
+    responsive: true, maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales: {
       x: { grid: { display: false }, ticks: { font: { size: 11 } } },

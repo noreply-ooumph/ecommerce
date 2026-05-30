@@ -53,7 +53,7 @@ button{font-family:'Inter',sans-serif;cursor:pointer}
 .charts-grid{display:grid;grid-template-columns:1fr 1fr 2fr;gap:16px;margin-bottom:20px}
 .card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);padding:20px}
 .card-title{font-size:0.92rem;font-weight:700;color:#131921;margin-bottom:14px}
-canvas{max-height:220px}
+.chart-body{position:relative;height:260px;padding:0}.chart-body canvas{position:absolute;inset:0;width:100%!important;height:100%!important}
 .report-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
 .report-card{background:#fff;border-radius:10px;padding:16px 18px;box-shadow:0 1px 3px rgba(0,0,0,0.06);display:flex;align-items:center;gap:14px;cursor:pointer;transition:all 0.15s;border:2px solid transparent}
 .report-card:hover{border-color:#FF9900;background:#fffbf0}
@@ -135,15 +135,15 @@ td{padding:10px 12px;vertical-align:middle}
     <div class="charts-grid">
       <div class="card">
         <div class="card-title">GMV by Seller Type</div>
-        <canvas id="sellerTypeChart"></canvas>
+        <div class="chart-body"><canvas id="sellerTypeChart"></canvas></div>
       </div>
       <div class="card">
         <div class="card-title">Top Categories</div>
-        <canvas id="categoryChart"></canvas>
+        <div class="chart-body"><canvas id="categoryChart"></canvas></div>
       </div>
       <div class="card">
         <div class="card-title">Daily Orders — This Month <span style="font-size:0.72rem;font-weight:400;color:#999;margin-left:8px">with AI Forecast</span></div>
-        <canvas id="dailyOrdersChart"></canvas>
+        <div class="chart-body"><canvas id="dailyOrdersChart"></canvas></div>
       </div>
     </div>
 
@@ -224,18 +224,18 @@ function toggleSidebar(){
 }
 // Seller Type Doughnut
 const ctx1=document.getElementById('sellerTypeChart').getContext('2d');
-new Chart(ctx1,{type:'doughnut',data:{labels:['Pro Sellers','Individual','Enterprise'],datasets:[{data:[58,34,8],backgroundColor:['#FF9900','#007185','#8b5cf6'],borderWidth:0}]},options:{responsive:true,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:8}}},cutout:'65%'}});
+new Chart(ctx1,{type:'doughnut',data:{labels:['Pro Sellers','Individual','Enterprise'],datasets:[{data:[58,34,8],backgroundColor:['#FF9900','#007185','#8b5cf6'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:10,padding:8}}},cutout:'65%'}});
 
 // Category Bar
 const ctx2=document.getElementById('categoryChart').getContext('2d');
-new Chart(ctx2,{type:'bar',data:{labels:['Electronics','Fashion','Home','Books','Sports','Others'],datasets:[{label:'GMV (₹L)',data:[182,94,68,47,38,71],backgroundColor:'#FF9900',borderRadius:5}]},options:{responsive:true,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
+new Chart(ctx2,{type:'bar',data:{labels:['Electronics','Fashion','Home','Books','Sports','Others'],datasets:[{label:'GMV (₹L)',data:[182,94,68,47,38,71],backgroundColor:'#FF9900',borderRadius:5}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:10}}},y:{grid:{display:false},ticks:{font:{size:10}}}}}});
 
 // Daily Orders Line
 const days=Array.from({length:22},(_,i)=>i+1);
 const actual=[284,312,298,341,367,329,389,412,398,421,408,445,467,489,434,512,498,534,521,548,589,null];
 const forecast=[null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,548,600,620,640];
 const ctx3=document.getElementById('dailyOrdersChart').getContext('2d');
-new Chart(ctx3,{type:'line',data:{labels:[...days,'23','24','25'],datasets:[{label:'Orders',data:actual,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,0.07)',borderWidth:2.5,pointRadius:0,tension:0.4,fill:true},{label:'Forecast',data:forecast,borderColor:'#007185',borderDash:[5,3],borderWidth:2,pointRadius:0,tension:0.4,fill:false}]},options:{responsive:true,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10}}},scales:{y:{grid:{color:'#f0f2f5'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:8}}}}});
+new Chart(ctx3,{type:'line',data:{labels:[...days,'23','24','25'],datasets:[{label:'Orders',data:actual,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,0.07)',borderWidth:2.5,pointRadius:0,tension:0.4,fill:true},{label:'Forecast',data:forecast,borderColor:'#007185',borderDash:[5,3],borderWidth:2,pointRadius:0,tension:0.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10},boxWidth:10}}},scales:{y:{grid:{color:'#f0f2f5'},ticks:{font:{size:10}}},x:{grid:{display:false},ticks:{font:{size:10},maxTicksLimit:8}}}}});
 </script>
 </body>
 </html>
