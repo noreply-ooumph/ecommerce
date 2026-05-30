@@ -278,24 +278,29 @@
     .topbar { left: 180px; }
   }
   @media (max-width: 768px) {
+    body { display:block !important; overflow-x:hidden !important; }
     .sidebar {
-      position: fixed;
-      left: -220px;
+      position: fixed !important;
+      left: -240px !important;
       top: 0; bottom: 0;
       z-index: 1000;
       transition: left 0.3s ease;
-      width: 220px;
+      width: 220px !important;
     }
-    .sidebar.open { left: 0; }
+    .sidebar.open { left: 0 !important; }
     .sidebar.open ~ .sidebar-overlay { display: block; }
-    .main { margin-left: 0; }
-    .topbar { left: 0; }
+    .main { margin-left: 0 !important; width:100% !important; padding:12px !important; overflow-x:hidden !important; }
+    .topbar { left: 0 !important; right:0 !important; overflow:hidden !important; padding:0 12px !important; }
     .topbar-hamburger { display: flex !important; }
-    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
-    .two-col { grid-template-columns: 1fr; }
-    .section-row { grid-template-columns: 1fr; }
-    .chart-card { width: 100%; }
-    .agents-bar { display: none; }
+    .agent-chips { display: none !important; }
+    .seller-info .store { display:none !important; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr) !important; gap:10px !important; }
+    .two-col { grid-template-columns: 1fr !important; }
+    .section-row { grid-template-columns: 1fr !important; }
+    .chart-card { width: 100% !important; }
+    .agents-bar { display: none !important; }
+    .table-wrap { overflow-x:auto !important; }
+    table { min-width:520px !important; font-size:12px !important; }
   }
 @media(max-width:1024px){
   .sidebar{width:180px!important;}
