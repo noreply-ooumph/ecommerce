@@ -493,9 +493,7 @@
   // ── Redirect if already logged in ──
   const existing = vsGetAuth();
   if (existing) {
-    if (existing.role === 'admin') location.href = 'app.html';
-    else if (existing.role === 'seller') location.href = 'seller-dashboard.html';
-    else location.href = 'index.html';
+    vsRedirectToPortal(existing.role);
     return;
   }
 
@@ -564,8 +562,18 @@
     detectedRole = vsDetectRole(val);
     const cfg = ROLE_CONFIG[detectedRole];
 
-    roleBadge.className = `role-badge show ${detectedRole}`;
-    roleBadge.innerHTML = `${cfg.icon} ${cfg.label}`;
+    // Check registry first — show "Welcome back" if email is remembered
+    const remembered = vsLookupRegistry(val);
+    if (remembered) {
+      const portalNames = { buyer: '🛍️ Buyer Portal', seller: '🏪 Seller Central', admin: '⚙️ Platform Admin' };
+      const rememberedCfg = ROLE_CONFIG[remembered];
+      detectedRole = remembered;
+      roleBadge.className = `role-badge show ${remembered}`;
+      roleBadge.innerHTML = `${rememberedCfg.icon} Welcome back! Signing you into ${portalNames[remembered]}`;
+    } else {
+      roleBadge.className = `role-badge show ${detectedRole}`;
+      roleBadge.innerHTML = `${cfg.icon} ${cfg.label}`;
+    }
 
     portalBar.className = `portal-bar show ${detectedRole}`;
     portalBar.innerHTML = cfg.portal;
@@ -602,9 +610,7 @@
     const auth = vsLogin(email, name || 'VibeStore User');
     showMsg(signinMsg, 'success', `Welcome, ${auth.name.split(' ')[0]}! Redirecting…`);
     setTimeout(() => {
-      if (auth.role === 'admin')  location.href = 'app.html';
-      else if (auth.role === 'seller') location.href = 'seller-dashboard.html';
-      else location.href = 'index.html';
+      vsRedirectToPortal(auth.role);
     }, 700);
   }
 
@@ -643,8 +649,7 @@
     const auth = vsLogin(e, n);
     showMsg(msg, 'success', `Account created! Redirecting…`);
     setTimeout(() => {
-      if (auth.role === 'seller') location.href = 'seller-dashboard.html';
-      else location.href = 'index.html';
+      vsRedirectToPortal(auth.role);
     }, 800);
   });
 

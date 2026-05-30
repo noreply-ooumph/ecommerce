@@ -1829,18 +1829,16 @@ function startChecklist() {
 }
 
 function goToDashboard() {
-  const name = onboardingData.legalName || onboardingData.storeName || 'Seller';
-  const email = onboardingData.email || 'seller@vibestore.in';
-  const storeName = onboardingData.storeDisplayName || onboardingData.storeName || 'My Store';
-  const initials = name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
-  localStorage.setItem('vs_auth', JSON.stringify({
-    email: email,
-    name: name,
-    role: 'seller',
-    avatar: initials,
-    storeName: storeName,
-    loginTime: Date.now()
-  }));
+  const sellerName = onboardingData.legalName || onboardingData.storeName || 'Seller';
+  const sellerEmail = (onboardingData.email || 'seller@vibestore.in').toLowerCase().trim();
+  const storeName = onboardingData.storeDisplayName || onboardingData.storeName || (sellerName.split(' ')[0] + ' Store');
+
+  // Permanently register this email as a seller in the registry
+  vsRegisterUser(sellerEmail, 'seller', sellerName, storeName);
+
+  // Log in with role override to set vs_auth properly
+  vsLogin(sellerEmail, sellerName, 'seller');
+
   localStorage.removeItem('vs_onboarding');
   window.location.href = 'seller-dashboard.html';
 }
