@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>VibeStore Marketplace — India's AI-Powered Shopping Destination</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="vs_store.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -598,7 +599,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
       <div style="font-size:0.7rem;color:var(--muted);margin-left:6px;">Ranked by demand score</div>
     </div>
     <div class="cat-pills" id="catPills"></div>
-    <div class="prod-grid" id="prodGrid"></div>
+    <div class="prod-grid" id="prodGrid">
+      <div id="marketplace-products-grid" style="display:contents;"></div>
+    </div>
   </div>
 </div>
 
@@ -1033,6 +1036,62 @@ function closeNavDrawer(){
   document.getElementById('navDrawerOverlay').classList.remove('open');
 }
 
+/* ════════ MARKETPLACE PRODUCTS FROM VS_STORE ════════ */
+function renderMarketplaceProducts() {
+  const container = document.getElementById('marketplace-products-grid');
+  if (!container) return;
+
+  const products = typeof vsGetProducts === 'function' ? vsGetProducts('active') : [];
+
+  if (products.length === 0) {
+    // Fall back to the static renderProducts() if no live products yet
+    return;
+  }
+
+  // Replace the prod-grid contents with live marketplace data
+  const grid = document.getElementById('prodGrid');
+  if (!grid) return;
+  grid.innerHTML = products.slice(0, 8).map(p => {
+    const savings = p.mrp > p.price ? Math.round((1-p.price/p.mrp)*100) : 0;
+    return `
+    <div class="pca" style="cursor:pointer;" onclick="window.location.href='product.html'">
+      ${p.status==='featured' ? '<div style="position:absolute;top:8px;left:8px;background:#CC0C39;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;">⚡ FEATURED</div>' : ''}
+      <div class="pca-img">
+        <span>${p.emoji}</span>
+      </div>
+      <div class="pca-info">
+        <div class="pca-brand">${p.sellerName}</div>
+        <div class="pca-name">${p.name}</div>
+        <div class="pca-price-row">
+          <span class="pca-price">₹${p.price.toLocaleString()}</span>
+          ${savings > 0 ? `<span class="pca-save">${savings}% off</span>` : ''}
+        </div>
+        ${p.mrp > p.price ? `<div style="font-size:11px;color:#999;text-decoration:line-through;margin-bottom:4px;">M.R.P. ₹${p.mrp.toLocaleString()}</div>` : ''}
+        <div class="pca-delivery">🚀 FREE Delivery · Sold by ${p.sellerName}</div>
+        <div class="pca-btns">
+          <button class="btn-cart" onclick="event.stopPropagation();addToCartVS('${p.id}','${p.name.replace(/'/g,"\\''")}',${p.price},'${p.emoji}')">Add to Cart</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function addToCartVS(id, name, price, emoji) {
+  const cartData = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+  const existing = cartData.findIndex(i => i.id === id);
+  if (existing > -1) cartData[existing].qty++;
+  else cartData.push({ id, name, price, emoji, qty: 1 });
+  localStorage.setItem('vs_cart', JSON.stringify(cartData));
+  cart = cartData;
+  updateCount(); renderCart();
+  // Show toast
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  t.textContent = '✅ Added to cart';
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2000);
+}
+
 /* ════════ INIT ════════ */
 buildCarouselDots();
 renderDeals();
@@ -1043,6 +1102,10 @@ renderTimer('dotdTimer', Date.now() + 8 * 3600000 + 14 * 60000 + 22000);
 renderFlashTimer('fbTimer');
 updateCount();
 renderCart();
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderMarketplaceProducts();
+});
 </script>
 
 <!-- MOBILE NAV DRAWER -->

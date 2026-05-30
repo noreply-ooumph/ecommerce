@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Products — VibeStore Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
+<script src="vs_store.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f0f2f5;display:flex;height:100vh;overflow:hidden}
@@ -129,20 +130,18 @@ td{padding:10px 12px;vertical-align:middle}
     </div>
 
     <div class="metrics-grid">
-      <div class="metric-card"><div class="metric-icon">🏷️</div><div><div class="metric-val">52,847</div><div class="metric-label">Total Listings</div></div></div>
-      <div class="metric-card orange"><div class="metric-icon">⏳</div><div><div class="metric-val">234</div><div class="metric-label">Pending Review</div></div></div>
-      <div class="metric-card red"><div class="metric-icon">🚩</div><div><div class="metric-val">12</div><div class="metric-label">Flagged</div></div></div>
-      <div class="metric-card green"><div class="metric-icon">✅</div><div><div class="metric-val">51,892</div><div class="metric-label">Active Listings</div></div></div>
+      <div class="metric-card"><div class="metric-icon">🏷️</div><div><div class="metric-val" id="total-listings">—</div><div class="metric-label">Total Listings</div></div></div>
+      <div class="metric-card orange"><div class="metric-icon">⏳</div><div><div class="metric-val" id="pending-count">—</div><div class="metric-label">Pending Review</div></div></div>
+      <div class="metric-card red"><div class="metric-icon">🚩</div><div><div class="metric-val" id="flagged-count">—</div><div class="metric-label">Flagged / Rejected</div></div></div>
+      <div class="metric-card green"><div class="metric-icon">✅</div><div><div class="metric-val" id="active-count">—</div><div class="metric-label">Active Listings</div></div></div>
     </div>
 
     <div class="tabs-bar" id="tabsBar">
-      <button class="tab active" onclick="switchTab(this,'all')">All <span class="tab-count">52,847</span></button>
-      <button class="tab" onclick="switchTab(this,'pending')">Pending Review <span class="tab-count">234</span></button>
-      <button class="tab" onclick="switchTab(this,'active')">Active <span class="tab-count">51,892</span></button>
-      <button class="tab" onclick="switchTab(this,'flagged')">Flagged <span class="tab-count">12</span></button>
-      <button class="tab" onclick="switchTab(this,'rejected')">Rejected <span class="tab-count">709</span></button>
+      <button class="tab active" onclick="switchTab(this,'all')">All</button>
+      <button class="tab" onclick="switchTab(this,'pending')">Pending Review <span class="tab-count" id="pending-tab-badge">0</span></button>
+      <button class="tab" onclick="switchTab(this,'active')">Active</button>
+      <button class="tab" onclick="switchTab(this,'rejected')">Flagged / Rejected</button>
       <div class="ms-auto" style="display:flex;gap:8px;padding:0 4px">
-        <button class="btn-teal" onclick="alert('Approving all 234 pending listings...')">✓ Approve All Pending</button>
         <button class="btn-outline">📤 Export</button>
       </div>
     </div>
@@ -187,96 +186,7 @@ td{padding:10px 12px;vertical-align:middle}
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">📱</div><div><div class="prod-name">iPhone 15 Pro Max 256GB</div><div class="prod-sku">SKU: APL-IP15PM-256</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">TechMart India</a></td>
-            <td>Electronics</td>
-            <td>₹1,34,999</td>
-            <td>48</td>
-            <td><span class="status-badge sb-green">Active</span></td>
-            <td>15 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-flag" title="Flag">⚑</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">👟</div><div><div class="prod-name">Nike Air Max 270</div><div class="prod-sku">SKU: NK-AM270-BLK</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">FashionKart</a></td>
-            <td>Fashion</td>
-            <td>₹10,995</td>
-            <td>124</td>
-            <td><span class="status-badge sb-yellow">Pending Review</span></td>
-            <td>22 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-approve" title="Approve">✓</button><button class="btn-xs btn-reject" title="Reject">✗</button><button class="btn-xs btn-flag" title="Flag">⚑</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">⌚</div><div><div class="prod-name">Rolex Submariner (Clone)</div><div class="prod-sku">SKU: WCH-ROL-SUB-FAKE</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">WatchWorld</a></td>
-            <td>Accessories</td>
-            <td>₹2,499</td>
-            <td>200</td>
-            <td><span class="status-badge sb-red">🚩 Flagged</span></td>
-            <td>22 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-approve" title="Approve">✓</button><button class="btn-xs btn-reject" title="Reject">✗</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">💻</div><div><div class="prod-name">Dell XPS 15 Laptop i7</div><div class="prod-sku">SKU: DELL-XPS15-I7</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">GadgetZone</a></td>
-            <td>Electronics</td>
-            <td>₹1,12,999</td>
-            <td>15</td>
-            <td><span class="status-badge sb-yellow">Pending Review</span></td>
-            <td>22 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-approve">✓</button><button class="btn-xs btn-reject">✗</button><button class="btn-xs btn-flag">⚑</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">🪑</div><div><div class="prod-name">Ergonomic Office Chair</div><div class="prod-sku">SKU: HM-CHAIR-ERG-01</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">HomeDecor Plus</a></td>
-            <td>Home & Garden</td>
-            <td>₹15,499</td>
-            <td>32</td>
-            <td><span class="status-badge sb-green">Active</span></td>
-            <td>18 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-flag">⚑</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">📚</div><div><div class="prod-name">Harry Potter Complete Series</div><div class="prod-sku">SKU: BK-HP-COMP-SET</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">BookHub</a></td>
-            <td>Books</td>
-            <td>₹2,499</td>
-            <td>88</td>
-            <td><span class="status-badge sb-green">Active</span></td>
-            <td>10 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-flag">⚑</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">👜</div><div><div class="prod-name">Louis Vuitton Bag (Replica)</div><div class="prod-sku">SKU: BAG-LV-REP-02</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">LuxuryFakes</a></td>
-            <td>Fashion</td>
-            <td>₹1,299</td>
-            <td>500</td>
-            <td><span class="status-badge sb-red">🚩 Flagged</span></td>
-            <td>22 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-approve">✓</button><button class="btn-xs btn-reject">✗</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" onchange="updateBulk()"/></td>
-            <td><div class="prod-cell"><div class="prod-img">🎮</div><div><div class="prod-name">PlayStation 5 Console</div><div class="prod-sku">SKU: SONY-PS5-DISC</div></div></div></td>
-            <td><a class="teal-link" href="seller-profile.html">GadgetZone</a></td>
-            <td>Electronics</td>
-            <td>₹49,990</td>
-            <td>7</td>
-            <td><span class="status-badge sb-gray">Rejected</span></td>
-            <td>20 May 2026</td>
-            <td class="action-btns"><button class="btn-xs btn-approve">✓</button><button class="btn-xs btn-view">View</button></td>
-          </tr>
-        </tbody>
+        <tbody id="products-tbody"></tbody>
       </table>
       <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f2f5;font-size:0.8rem;color:#666">
         <span>Showing 8 of 52,847 listings</span>
@@ -292,14 +202,107 @@ td{padding:10px 12px;vertical-align:middle}
 <script src="auth.js"></script>
 <script>
 const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
+
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('show');
 }
-function switchTab(el,tab){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
 }
+
+function updateMetric(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = value;
+}
+
+let currentFilter = 'all';
+
+function loadAdminProducts(filter) {
+  filter = filter || 'all';
+  const products = vsGetProducts(filter === 'all' ? 'all' : filter);
+  const tbody = document.getElementById('products-tbody') || document.querySelector('table tbody');
+  if (!tbody) return;
+
+  // Update metric cards
+  const allP = vsGetProducts('all');
+  updateMetric('total-listings', allP.length);
+  updateMetric('pending-count', vsGetProducts('pending').length);
+  updateMetric('active-count', vsGetProducts('active').length);
+  updateMetric('flagged-count', vsGetProducts('rejected').length);
+
+  // Update pending badge in tab
+  const pendingBadge = document.getElementById('pending-tab-badge');
+  if (pendingBadge) pendingBadge.textContent = vsGetProducts('pending').length;
+
+  if (products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">No products in this category.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = products.map(p => {
+    const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
+    const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
+    return `<tr>
+      <td><input type="checkbox" onchange="updateBulk()"></td>
+      <td style="font-size:22px;text-align:center;">${p.emoji}</td>
+      <td style="font-weight:600;max-width:160px;">${p.name}</td>
+      <td><a href="seller-profile.html" style="color:#007185;font-size:12px;">${p.sellerName}</a></td>
+      <td>${p.category}</td>
+      <td>₹${p.price.toLocaleString()}</td>
+      <td style="color:${p.stock<10?'#CC0C39':'#333'}">${p.stock}</td>
+      <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">${p.status}</span></td>
+      <td style="white-space:nowrap;">
+        ${p.status==='pending' ? `
+          <button onclick="approveProduct('${p.id}')" style="background:#e6f9f2;color:#067D62;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✓ Approve</button>
+          <button onclick="rejectProduct('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 8px;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer;margin-right:4px;">✗ Reject</button>
+        ` : ''}
+        ${p.status==='active' ? `<button onclick="featureProduct('${p.id}')" style="background:#e8f4ff;color:#1565C0;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px;">★ Feature</button>` : ''}
+        <button onclick="deleteAdminProduct('${p.id}')" style="background:#f5f5f5;color:#666;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function approveProduct(id) {
+  vsUpdateProductStatus(id, 'active', auth?.email);
+  showToast('Product approved — now visible in buyer marketplace');
+  loadAdminProducts(currentFilter);
+}
+
+function rejectProduct(id) {
+  const reason = prompt('Reason for rejection (optional):') || 'Does not meet marketplace standards';
+  vsUpdateProductStatus(id, 'rejected', auth?.email, reason);
+  showToast('Product rejected — seller has been notified');
+  loadAdminProducts(currentFilter);
+}
+
+function featureProduct(id) {
+  vsUpdateProductStatus(id, 'featured', auth?.email);
+  showToast('Product featured — shown prominently in buyer marketplace');
+  loadAdminProducts(currentFilter);
+}
+
+function deleteAdminProduct(id) {
+  if (confirm('Permanently delete this product?')) {
+    vsDeleteProduct(id);
+    loadAdminProducts(currentFilter);
+  }
+}
+
+function setFilter(f) { currentFilter = f; loadAdminProducts(f); }
+
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  setFilter(tab);
+}
+
 function toggleAll(cb){
   document.querySelectorAll('tbody input[type=checkbox]').forEach(c=>c.checked=cb.checked);
   updateBulk();
@@ -314,6 +317,10 @@ function clearSelection(){
   document.querySelectorAll('input[type=checkbox]').forEach(c=>c.checked=false);
   document.getElementById('bulkBar').classList.remove('show');
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadAdminProducts('all');
+});
 </script>
 </body>
 </html>

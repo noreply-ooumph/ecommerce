@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="auth.js"></script>
+<script src="vs_store.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
@@ -439,6 +440,11 @@
     <button class="btn-bulk" onclick="clearSelection()">✕ Clear</button>
   </div>
 
+  <!-- PENDING NOTICE BANNER -->
+  <div style="border:1.5px solid #1565C0;background:#e8f4ff;border-radius:8px;padding:10px 16px;margin-bottom:16px;font-size:13px;color:#1565C0;font-weight:500;">
+    🔍 Products you add go to Admin review before appearing in the buyer marketplace.
+  </div>
+
   <!-- LISTINGS TABLE -->
   <div class="card">
     <div class="table-wrap">
@@ -446,15 +452,13 @@
         <thead>
           <tr>
             <th class="cb-cell"><input type="checkbox" id="select-all" onchange="toggleAll(this)"></th>
-            <th style="min-width:240px;">Product</th>
-            <th>Category</th>
-            <th>Your Price</th>
-            <th>Fee %</th>
-            <th>Your Earnings</th>
+            <th>Emoji</th>
+            <th style="min-width:200px;">Product</th>
+            <th>Price / MRP</th>
             <th>Stock</th>
             <th>Status</th>
-            <th>Created By</th>
-            <th style="min-width:110px;">Actions</th>
+            <th>Performance</th>
+            <th style="min-width:80px;">Actions</th>
           </tr>
         </thead>
         <tbody id="listings-tbody"></tbody>
@@ -485,108 +489,72 @@
 // Auth guard
 const auth = vsRequireAuth(['seller']);
 if (!auth) throw new Error('Not authenticated');
+
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
   const storeNameEl = document.querySelector('.sidebar-store-name');
   if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+  loadSellerListings();
 });
+
 function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
 function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
 
-// ---- LISTINGS DATA ----
-const listings = [
-  { emoji: '🎧', name: 'Sony WH-1000XM5 Wireless Headphones', sub: 'Sony · 30hr battery · ANC', cat: 'Audio', price: 24999, fee: 8, stock: 23, status: 'active', creator: 'aria' },
-  { emoji: '⌨️', name: 'Redragon K552 Mechanical Gaming Keyboard', sub: 'RGB Backlit · Brown switches', cat: 'Gaming', price: 3499, fee: 10, stock: 7, status: 'active', creator: 'aria' },
-  { emoji: '🖱️', name: 'Logitech MX Master 3S Wireless Mouse', sub: '8000 DPI · Ergonomic', cat: 'Electronics', price: 7499, fee: 8, stock: 34, status: 'active', creator: 'manual' },
-  { emoji: '💡', name: 'Philips Hue White &amp; Color Ambiance Starter', sub: '4 bulbs + Bridge · Works with Alexa', cat: 'Smart Home', price: 8999, fee: 12, stock: 4, status: 'active', creator: 'aria' },
-  { emoji: '🔋', name: 'Anker 737 Power Bank 26800mAh', sub: 'USB-C · 140W output', cat: 'Electronics', price: 5999, fee: 8, stock: 15, status: 'active', creator: 'aria' },
-  { emoji: '📷', name: 'GoPro HERO12 Black Action Camera', sub: '5.3K60 · HyperSmooth 6.0', cat: 'Cameras', price: 34999, fee: 6, stock: 6, status: 'active', creator: 'manual' },
-  { emoji: '🎮', name: 'Xbox Wireless Controller — Robot White', sub: 'Bluetooth · Windows compatible', cat: 'Gaming', price: 5799, fee: 10, stock: 0, status: 'oos', creator: 'aria' },
-  { emoji: '🔊', name: 'JBL Charge 5 Portable Bluetooth Speaker', sub: 'IP67 · Powerbank feature · 20hr', cat: 'Audio', price: 12999, fee: 9, stock: 19, status: 'active', creator: 'aria' },
-  { emoji: '📱', name: 'Anker 622 Magnetic Battery MagSafe', sub: '5000mAh · Slim folding stand', cat: 'Electronics', price: 3799, fee: 8, stock: 2, status: 'active', creator: 'manual' },
-  { emoji: '🖥️', name: 'LG UltraGear 27" QHD Gaming Monitor', sub: '165Hz · 1ms · HDR10', cat: 'Displays', price: 29999, fee: 6, stock: 11, status: 'draft', creator: 'aria' },
-  { emoji: '🎙️', name: 'HyperX QuadCast USB Condenser Microphone', sub: 'LED indicator · Anti-vibration', cat: 'Audio', price: 11499, fee: 9, stock: 8, status: 'active', creator: 'aria' },
-  { emoji: '🧲', name: 'Elago Magnetic Phone Wallet (MagSafe)', sub: 'Holds 3 cards · Vegan leather', cat: 'Accessories', price: 1299, fee: 15, stock: 0, status: 'rejected', creator: 'manual' },
-];
+// ---- VS_STORE DYNAMIC LISTINGS ----
+function loadSellerListings() {
+  const sellerId = auth ? auth.email : '';
+  const products = vsGetProducts(sellerId); // gets only this seller's products
+  const tbody = document.getElementById('listings-tbody') || document.querySelector('.listings-table tbody') || document.querySelector('table tbody');
+  if (!tbody) return;
+  if (products.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;">No listings yet. Add your first product above.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = products.map(p => {
+    const savings = p.mrp > p.price ? Math.round((1 - p.price/p.mrp)*100) : 0;
+    const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
+    const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
+    return `<tr>
+      <td><input type="checkbox" class="row-check" value="${p.id}"></td>
+      <td style="font-size:24px;text-align:center;">${p.emoji}</td>
+      <td style="font-weight:600;max-width:180px;">${p.name}<br><small style="color:#999;font-weight:400;">${p.category}</small></td>
+      <td>₹${p.price.toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${p.mrp.toLocaleString()}</small></td>
+      <td style="color:${p.stock<10?'#CC0C39':p.stock<20?'#e65c00':'#067D62'};font-weight:600;">${p.stock} units</td>
+      <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;">${p.status}</span></td>
+      <td style="color:#888;font-size:12px;">${p.orders} sold · ${p.views} views</td>
+      <td>
+        <button onclick="deleteProduct('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
 
-function getStockColor(s) { return s <= 0 ? '#CC0C39' : s < 5 ? '#CC0C39' : s < 20 ? '#FF9900' : '#067D62'; }
-function getStatusBadge(s) {
-  const map = { active: ['s-active','Active'], pending: ['s-pending','Pending Review'], draft: ['s-draft','Draft'], rejected: ['s-rejected','Rejected'], oos: ['s-oos','Out of Stock'] };
-  const [cls, label] = map[s] || ['s-draft','Unknown'];
-  return `<span class="status-badge ${cls}">${label}</span>`;
+function deleteProduct(id) {
+  if (confirm('Delete this listing?')) { vsDeleteProduct(id); loadSellerListings(); }
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
 }
 
 let selectedCount = 0;
-const tbody = document.getElementById('listings-tbody');
-listings.forEach((l, idx) => {
-  const earnings = (l.price * (1 - l.fee/100)).toFixed(0);
-  const stockPct = Math.min(100, (l.stock / 40) * 100);
-  const stockColor = getStockColor(l.stock);
-  tbody.innerHTML += `<tr id="row-${idx}">
-    <td class="cb-cell"><input type="checkbox" class="row-cb" data-idx="${idx}" onchange="updateSelection()"></td>
-    <td>
-      <div class="product-cell">
-        <div class="prod-img">${l.emoji}</div>
-        <div class="prod-name">
-          <a href="product.html">${l.name}</a>
-          <small>${l.sub}</small>
-        </div>
-      </div>
-    </td>
-    <td><span class="cat-pill">${l.cat}</span></td>
-    <td><input type="text" class="price-editable" value="₹${l.price.toLocaleString('en-IN')}" title="Click to edit price"></td>
-    <td class="fee-cell">${l.fee}%</td>
-    <td class="earnings-cell">₹${parseInt(earnings).toLocaleString('en-IN')}</td>
-    <td>
-      <div class="stock-wrap">
-        <span class="stock-num" style="color:${stockColor}">${l.stock > 0 ? l.stock : 'OOS'}</span>
-        <div class="stock-bar"><div class="stock-fill" style="width:${stockPct}%;background:${stockColor};"></div></div>
-      </div>
-    </td>
-    <td>${getStatusBadge(l.status)}</td>
-    <td>
-      <span class="creator-pill ${l.creator === 'aria' ? 'creator-aria' : 'creator-manual'}">
-        ${l.creator === 'aria' ? '🤖 Aria' : '👤 Manual'}
-      </span>
-    </td>
-    <td>
-      <div class="actions-cell">
-        <button class="icon-btn" title="Edit">✏️</button>
-        <button class="icon-btn" title="View on store">👁️</button>
-        <button class="icon-btn" title="Duplicate">⧉</button>
-        <div class="more-btn" style="position:relative;">
-          <button class="icon-btn" title="More" onclick="toggleDropdown(${idx})">⋮</button>
-          <div class="dropdown" id="dd-${idx}">
-            <a href="#">📋 Duplicate</a>
-            <a href="#">📦 Update Stock</a>
-            <a href="#">🔇 Deactivate</a>
-            <a href="#" class="danger">🗑 Delete</a>
-          </div>
-        </div>
-      </div>
-    </td>
-  </tr>`;
-});
-
-function toggleDropdown(idx) {
-  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== `dd-${idx}`) d.classList.remove('open'); });
-  document.getElementById(`dd-${idx}`).classList.toggle('open');
-}
-document.addEventListener('click', e => { if (!e.target.closest('.more-btn')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); });
-
 function toggleAll(cb) {
-  document.querySelectorAll('.row-cb').forEach(c => c.checked = cb.checked);
+  document.querySelectorAll('.row-check').forEach(c => c.checked = cb.checked);
   updateSelection();
 }
 function updateSelection() {
-  const checked = document.querySelectorAll('.row-cb:checked');
+  const checked = document.querySelectorAll('.row-check:checked');
   selectedCount = checked.length;
   const bar = document.getElementById('bulk-bar');
   bar.classList.toggle('visible', selectedCount > 0);
   document.getElementById('bulk-count').textContent = `${selectedCount} item${selectedCount !== 1 ? 's' : ''} selected`;
 }
 function clearSelection() {
-  document.querySelectorAll('.row-cb, #select-all').forEach(c => c.checked = false);
+  document.querySelectorAll('.row-check, #select-all').forEach(c => c.checked = false);
   updateSelection();
 }
 
@@ -599,7 +567,6 @@ function approveListing(btn) {
   const card = btn.closest('.pending-card');
   card.style.opacity = '0.5';
   card.style.pointerEvents = 'none';
-  const name = card.querySelector('h4').textContent;
   btn.textContent = '✓ Approved!';
   btn.style.background = '#067D62';
   setTimeout(() => {
@@ -611,16 +578,26 @@ function approveListing(btn) {
   }, 800);
 }
 
-// Inline price edit
-document.querySelectorAll('.price-editable').forEach(inp => {
-  inp.addEventListener('focus', () => { inp.style.borderColor = '#FF9900'; });
-  inp.addEventListener('blur', () => {
-    let v = inp.value.replace(/[₹,\s]/g, '');
-    if (!isNaN(v) && v > 0) inp.value = '₹' + parseInt(v).toLocaleString('en-IN');
-    inp.style.borderColor = 'transparent';
+// ---- ADD PRODUCT HANDLER ----
+// Wire to your Add Product form submit button. Call this after validation:
+function handleAddProduct() {
+  const newProduct = vsAddProduct({
+    sellerId:    auth.email,
+    sellerName:  auth.storeName || auth.name,
+    sellerEmail: auth.email,
+    name:        document.getElementById('prod-name')?.value || document.querySelector('[name="prod-name"]')?.value || '',
+    category:    document.getElementById('prod-category')?.value || '',
+    price:       document.getElementById('prod-price')?.value || 0,
+    mrp:         document.getElementById('prod-mrp')?.value || 0,
+    stock:       document.getElementById('prod-stock')?.value || 0,
+    description: document.getElementById('prod-desc')?.value || '',
+    emoji:       document.getElementById('selected-emoji')?.textContent || document.querySelector('.selected-emoji')?.textContent || '📦',
+    sku:         document.getElementById('prod-sku')?.value || '',
+    weight:      document.getElementById('prod-weight')?.value || ''
   });
-  inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
-});
+  showToast('Product submitted for review — Admin will approve within 24h');
+  loadSellerListings();
+}
 </script>
 </body>
 </html>
