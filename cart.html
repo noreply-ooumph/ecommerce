@@ -500,8 +500,17 @@
 
 </div><!-- /page-wrap -->
 
+<script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script>
+(function(){
+  if(typeof vsGetAuth==='function'){
+    const a=vsGetAuth();
+    if(!a){ window.location.href='buyer-login.html'; return; }
+    if(a.role==='seller') window.location.href='seller-dashboard.html';
+    if(a.role==='admin') window.location.href='app.html';
+  }
+})();
 (function() {
   // ── Auth nav update ──
   const auth = vsGetAuth();

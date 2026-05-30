@@ -550,6 +550,14 @@ a{text-decoration:none;color:inherit}
 </footer>
 
 <script>
+(function(){
+  if(typeof vsGetAuth==='function'){
+    const a=vsGetAuth();
+    if(!a){ window.location.href='buyer-login.html'; return; }
+    if(a.role==='seller') window.location.href='seller-dashboard.html';
+    if(a.role==='admin') window.location.href='app.html';
+  }
+})();
 // ===== CART DATA =====
 let cart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
 if (!cart.length) {
@@ -790,6 +798,25 @@ function showSuccess() {
     </div>`;
   }).join('');
 
+  // Record order in vs_store
+  if(typeof vsPlaceOrder==='function' && typeof vsGetAuth==='function') {
+    const auth = vsGetAuth();
+    const cartItems = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    cartItems.forEach(item => {
+      vsPlaceOrder({
+        buyerEmail:   auth?.email || 'guest',
+        buyerName:    auth?.name  || 'Guest',
+        sellerId:     item.sellerId || 'unknown',
+        sellerName:   item.sellerName || 'VibeStore Seller',
+        productId:    item.id,
+        productName:  item.name,
+        productEmoji: item.emoji || '📦',
+        qty:          item.qty || 1,
+        amount:       item.price * (item.qty||1)
+      });
+    });
+    localStorage.removeItem('vs_cart'); // clear cart after order
+  }
   document.getElementById('success-screen').style.display = 'block';
   document.body.style.overflow = 'hidden';
   setTimeout(() => document.body.style.overflow = '', 100);
@@ -816,6 +843,7 @@ function toast(msg) {
 
 window.addEventListener('load', init);
 </script>
+<script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script src="rex-chat.js"></script>
 </body>

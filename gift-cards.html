@@ -489,8 +489,25 @@ footer{background:#131921;color:rgba(255,255,255,.6);font-size:.78rem;margin-top
   <div class="footer-bottom">© 2026 VibeStore Marketplace · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
 </footer>
 
+<script src="auth.js"></script>
 <script src="rex-chat.js"></script>
 <script>
+// Soft auth check — redirect to buyer-login.html if not logged in
+(function(){
+  if(typeof vsGetAuth==='function'){
+    const a=vsGetAuth();
+    if(!a){ window.location.href='buyer-login.html'; return; }
+    if(a.role==='seller'){ window.location.href='seller-dashboard.html'; return; }
+    if(a.role==='admin'){ window.location.href='app.html'; return; }
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof vsUpdateNav==='function' && typeof vsGetAuth==='function'){
+    vsUpdateNav(vsGetAuth());
+  }
+});
+
 // Cart count
 function updateCartQty(){
   try{

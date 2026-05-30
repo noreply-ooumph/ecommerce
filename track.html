@@ -566,8 +566,25 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<script src="auth.js"></script>
 <script src="rex-chat.js"></script>
 <script>
+// Soft auth check — redirect to buyer-login.html if not logged in
+(function(){
+  if(typeof vsGetAuth==='function'){
+    const a=vsGetAuth();
+    if(!a){ window.location.href='buyer-login.html'; return; }
+    if(a.role==='seller'){ window.location.href='seller-dashboard.html'; return; }
+    if(a.role==='admin'){ window.location.href='app.html'; return; }
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(typeof vsUpdateNav==='function' && typeof vsGetAuth==='function'){
+    vsUpdateNav(vsGetAuth());
+  }
+});
+
 // ===== TOAST =====
 function toast(msg){
   const el=document.getElementById('toast');

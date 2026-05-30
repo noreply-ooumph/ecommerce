@@ -727,6 +727,7 @@ footer a{color:#ccc}
 </footer>
 
 <script>
+if(typeof vsSeedDemoData==='function') vsSeedDemoData();
 // ─── CART ───
 function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch{return[]}}
 function saveCart(c){localStorage.setItem('vs_cart',JSON.stringify(c))}
@@ -879,6 +880,7 @@ function showToast(msg){
   t._timer=setTimeout(function(){t.classList.remove('show')},2800);
 }
 </script>
+<script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){

@@ -6,6 +6,7 @@
 <title>VibeStore — India's Online Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="vs_store.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -1050,6 +1051,30 @@ document.getElementById('searchInput').addEventListener('keydown', e => {
 updateCartBadge();
 renderRecentlyViewed();
 startCountdowns();
+
+// Show real marketplace products in the deals/featured section
+if(typeof vsGetProducts==='function'){
+  vsSeedDemoData && vsSeedDemoData();
+  const live = vsGetProducts('featured');
+  if(live.length > 0){
+    const dealStrip = document.querySelector('.deals-strip, .deal-cards, #deal-strip, .products-row, #featured-products');
+    if(dealStrip){
+      const liveHTML = live.slice(0,4).map(p=>`
+        <div style="background:#fff;border-radius:8px;padding:14px;min-width:180px;max-width:200px;box-shadow:0 1px 4px rgba(0,0,0,0.08);flex-shrink:0;">
+          <span style="background:#CC0C39;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;">⚡ FEATURED</span>
+          <div style="font-size:48px;text-align:center;padding:10px 0;">${p.emoji}</div>
+          <div style="font-size:12px;font-weight:600;margin-bottom:4px;line-height:1.3;">${p.name}</div>
+          <div style="font-size:16px;font-weight:700;color:#0f1111;">₹${p.price.toLocaleString()}</div>
+          <div style="font-size:10px;color:#007185;margin-bottom:8px;">by ${p.sellerName}</div>
+          <button onclick="(function(){var c=JSON.parse(localStorage.getItem('vs_cart')||'[]');var i=c.findIndex(function(x){return x.id==='${p.id}'});if(i>-1)c[i].qty++;else c.push({id:'${p.id}',name:'${p.name.replace(/'/g,"\\'")}',price:${p.price},emoji:'${p.emoji}',qty:1});localStorage.setItem('vs_cart',JSON.stringify(c));var t=document.createElement('div');t.style='position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;';t.textContent='✅ Added to cart';document.body.appendChild(t);setTimeout(function(){t.remove()},2000)})()"
+            style="width:100%;background:#FF9900;color:#0f1111;border:none;padding:7px;border-radius:6px;font-weight:700;font-size:11px;cursor:pointer;">
+            Add to Cart
+          </button>
+        </div>`).join('');
+      dealStrip.insertAdjacentHTML('afterbegin', liveHTML);
+    }
+  }
+}
 
 // ===== DRAWER =====
 function openDrawer(){
