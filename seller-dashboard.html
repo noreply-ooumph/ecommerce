@@ -402,9 +402,16 @@
     ⚠️ &nbsp;<strong>2 listings need your approval</strong> before going live — Aria has everything ready.
     <button class="close-btn" onclick="this.parentElement.style.display='none'">✕</button>
   </div>
+  <div id="sector-insights"></div>
   <div class="alert-banner alert-blue" id="alert2" style="margin-bottom:16px;">
     💡 &nbsp;<strong>Atlas detected a pricing opportunity</strong> — potential <strong>+₹12,400</strong> extra revenue this week if you reprice 34 products.
     <button class="close-btn" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+
+  <!-- SELLER GREETING -->
+  <div style="margin-bottom:14px;display:flex;align-items:center;gap:0;">
+    <span class="seller-greeting" style="font-size:15px;font-weight:600;color:#0f1111;">Good morning 👋</span>
+    <span id="seller-cat-pill" style="display:none;background:#FF9900;color:#0f1111;font-size:10px;font-weight:700;padding:2px 10px;border-radius:20px;margin-left:8px;vertical-align:middle;"></span>
   </div>
 
   <!-- METRIC CARDS ROW 1 -->
@@ -571,13 +578,99 @@
 // Auth guard
 const auth = vsRequireAuth(['seller']);
 if (!auth) throw new Error('Not authenticated');
+
+function renderSectorInsights(auth) {
+  const registry = typeof vsLookupRegistry === 'function' ? vsLookupRegistry(auth.email) : null;
+  const category = registry?.category || 'Electronics';
+
+  const insights = {
+    Electronics: {
+      emoji:'💻', color:'#1565C0', bg:'#e3f2fd',
+      tips: ['Peak sales: Tuesday-Thursday 2-6 PM', 'Warranty details boost conversion by 34%', 'Video demos increase Add-to-Cart by 28%'],
+      metric: 'Avg return rate: 4.2% (Electronics benchmark)'
+    },
+    Fashion: {
+      emoji:'👗', color:'#7B1FA2', bg:'#f3e5f5',
+      tips: ['Size charts reduce returns by 45%', 'Weekend sales are 2.3x weekday', 'Customer photos boost trust by 60%'],
+      metric: 'Avg return rate: 18% (Fashion benchmark)'
+    },
+    Home: {
+      emoji:'🏠', color:'#E65100', bg:'#fbe9e7',
+      tips: ['Dimension details are #1 search filter', 'Room photos increase sales by 52%', 'Assembly guides reduce negative reviews'],
+      metric: 'Avg order value: ₹3,400 (Home benchmark)'
+    },
+    Grocery: {
+      emoji:'🛒', color:'#2E7D32', bg:'#e8f5e9',
+      tips: ['Expiry dates must be visible — FSSAI mandate', 'Organic certified products sell 3x faster', 'Bundle deals (buy 2 get 1) work best'],
+      metric: 'Repeat purchase rate: 67% (Grocery benchmark)'
+    },
+    Books: {
+      emoji:'📚', color:'#6D4C41', bg:'#efebe9',
+      tips: ['ISBN helps buyers find exact editions', 'Author bio increases trust significantly', 'Sample pages feature coming soon'],
+      metric: 'Avg order value: ₹350 (Books benchmark)'
+    },
+    Sports: {
+      emoji:'⚽', color:'#00838F', bg:'#e0f7fa',
+      tips: ['Size guides are critical for sports gear', 'Sports season peaks (cricket: Oct-Mar)', 'Video demos of equipment sell 40% better'],
+      metric: 'Avg return rate: 8% (Sports benchmark)'
+    },
+    Beauty: {
+      emoji:'💄', color:'#C2185B', bg:'#fce4ec',
+      tips: ['Ingredient lists build buyer confidence', 'Before/after results shown as emoji work', 'Skin type tags improve search ranking'],
+      metric: 'Repeat purchase rate: 72% (Beauty benchmark)'
+    },
+    Handmade: {
+      emoji:'🎨', color:'#F57F17', bg:'#fff8e1',
+      tips: ['Artisan story increases willingness to pay', 'Show making process in description', 'Customization option adds 25% premium'],
+      metric: 'Avg selling price premium: +40% vs mass-produced'
+    },
+    Other: {
+      emoji:'📦', color:'#546E7A', bg:'#eceff1',
+      tips: ['Detailed photos from multiple angles help', 'Clear return policy increases conversion', 'Competitive pricing tracked by Atlas AI'],
+      metric: 'Atlas AI monitors your category trends daily'
+    }
+  };
+
+  const data = insights[category] || insights['Other'];
+  const container = document.getElementById('sector-insights');
+  if (!container) return;
+
+  container.innerHTML = `
+    <div style="background:${data.bg};border:1px solid ${data.color}30;border-radius:10px;padding:16px 20px;margin-bottom:16px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+        <span style="font-size:1.8rem;">${data.emoji}</span>
+        <div>
+          <div style="font-weight:700;font-size:14px;color:${data.color};">${category} Seller Insights</div>
+          <div style="font-size:11px;color:#666;">${data.metric}</div>
+        </div>
+        <span style="margin-left:auto;background:${data.color};color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;">ATLAS AI</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        ${data.tips.map(t => `
+          <div style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:#333;">
+            <span style="color:${data.color};font-weight:700;flex-shrink:0;">→</span>
+            <span>${t}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
 // Update UI with seller info
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  renderSectorInsights(auth);
   const storeNameEl = document.querySelector('.sidebar-store-name');
   if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
   const greetingEl = document.querySelector('.seller-greeting');
   if (greetingEl) greetingEl.textContent = 'Good morning, ' + auth.name.split(' ')[0] + ' 👋';
+  const registry = typeof vsLookupRegistry === 'function' ? vsLookupRegistry(auth.email) : null;
+  const sellerCat = registry?.category || '';
+  if (sellerCat) {
+    const catPill = document.getElementById('seller-cat-pill');
+    if (catPill) { catPill.textContent = sellerCat; catPill.style.display = 'inline-block'; }
+  }
 });
 
 // Sidebar toggle

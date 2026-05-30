@@ -252,6 +252,18 @@ td{padding:10px 12px;vertical-align:middle}
       </div>
     </div>
 
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;margin-bottom:16px;" id="cat-filter-tabs">
+      <button onclick="setCatFilter('all')" class="cat-tab active" data-cat="all" style="background:#FF9900;color:#0f1111;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;">All Categories</button>
+      <button onclick="setCatFilter('Electronics')" class="cat-tab" data-cat="Electronics" style="background:#e3f2fd;color:#1565C0;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">💻 Electronics</button>
+      <button onclick="setCatFilter('Fashion')" class="cat-tab" data-cat="Fashion" style="background:#f3e5f5;color:#7B1FA2;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">👗 Fashion</button>
+      <button onclick="setCatFilter('Home')" class="cat-tab" data-cat="Home" style="background:#fbe9e7;color:#E65100;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">🏠 Home</button>
+      <button onclick="setCatFilter('Grocery')" class="cat-tab" data-cat="Grocery" style="background:#e8f5e9;color:#2E7D32;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">🛒 Grocery</button>
+      <button onclick="setCatFilter('Books')" class="cat-tab" data-cat="Books" style="background:#efebe9;color:#6D4C41;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">📚 Books</button>
+      <button onclick="setCatFilter('Sports')" class="cat-tab" data-cat="Sports" style="background:#e0f7fa;color:#00838F;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">⚽ Sports</button>
+      <button onclick="setCatFilter('Beauty')" class="cat-tab" data-cat="Beauty" style="background:#fce4ec;color:#C2185B;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">💄 Beauty</button>
+      <button onclick="setCatFilter('Handmade')" class="cat-tab" data-cat="Handmade" style="background:#fff8e1;color:#F57F17;border:none;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;">🎨 Handmade</button>
+    </div>
+
     <div class="filter-bar">
       <input class="filter-input" type="text" placeholder="🔍 Search product name, SKU, seller..."/>
       <select class="filter-select">
@@ -285,6 +297,7 @@ td{padding:10px 12px;vertical-align:middle}
             <th>Product</th>
             <th>Seller</th>
             <th>Category</th>
+            <th>Attributes</th>
             <th>Price</th>
             <th>Stock</th>
             <th>Status</th>
@@ -335,7 +348,7 @@ function loadAdminProducts(filter) {
   const tbody = document.getElementById('products-tbody') || document.querySelector('table tbody');
   if (!tbody) return;
 
-  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#999;">⏳ Loading listings...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:30px;color:#999;">⏳ Loading listings...</td></tr>';
 
   if (_unsubAdmin) _unsubAdmin();
 
@@ -352,19 +365,26 @@ function loadAdminProducts(filter) {
       if(badge) badge.textContent = all.filter(p=>p.status==='pending').length;
     });
 
-    if (products.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">No products in this category.</td></tr>';
+    // Apply category filter
+    const filtered = currentCatFilter === 'all' ? products : products.filter(p => p.category === currentCatFilter);
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="10" style="text-align:center;padding:40px;color:#999;">No products in this category.</td></tr>';
       return;
     }
     const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
     const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
     const auth = vsGetAuth ? vsGetAuth() : null;
-    tbody.innerHTML = products.map(p => `<tr>
+    tbody.innerHTML = filtered.map(p => {
+      const attrKeys = Object.keys(p.attributes || {}).slice(0,2);
+      const attrText = attrKeys.map(k => `${k}: ${(p.attributes||{})[k]}`).join(' · ') || '—';
+      return `<tr>
       <td><input type="checkbox"></td>
       <td style="font-size:22px;text-align:center;">${p.emoji}</td>
       <td style="font-weight:600;max-width:160px;">${p.name}</td>
       <td><a href="seller-profile.html" style="color:#007185;font-size:12px;">${p.sellerName}</a></td>
       <td>${p.category}</td>
+      <td style="font-size:11px;color:#666;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${attrText}">${attrText}</td>
       <td>₹${Number(p.price).toLocaleString()}</td>
       <td style="color:${p.stock<10?'#CC0C39':'#333'}">${p.stock}</td>
       <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;">${p.status}</span></td>
@@ -375,7 +395,8 @@ function loadAdminProducts(filter) {
         ${p.status==='active'?`<button onclick="featureProductDB('${p.id}')" style="background:#e8f4ff;color:#1565C0;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;margin-right:4px;">★ Feature</button>`:''}
         <button onclick="deleteAdminProductDB('${p.id}')" style="background:#f5f5f5;color:#666;border:none;padding:4px 8px;border-radius:5px;font-size:11px;cursor:pointer;">Delete</button>
       </td>
-    </tr>`).join('');
+    </tr>`;
+    }).join('');
   });
 }
 
@@ -397,6 +418,23 @@ async function featureProductDB(id) {
 }
 async function deleteAdminProductDB(id) {
   if (confirm('Permanently delete?')) await dbDeleteProduct(id);
+}
+let currentCatFilter = 'all';
+function setCatFilter(cat) {
+  currentCatFilter = cat;
+  document.querySelectorAll('.cat-tab').forEach(btn => {
+    const isActive = btn.dataset.cat === cat;
+    if (isActive) {
+      btn.classList.add('cat-tab-active');
+      btn.style.outline = '2px solid #FF9900';
+      btn.style.fontWeight = '700';
+    } else {
+      btn.classList.remove('cat-tab-active');
+      btn.style.outline = 'none';
+      btn.style.fontWeight = '600';
+    }
+  });
+  loadAdminProducts(currentFilter);
 }
 function setFilter(f) { currentFilter=f; loadAdminProducts(f); }
 

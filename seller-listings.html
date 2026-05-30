@@ -244,6 +244,72 @@
   .aria-note { margin-top: 12px; font-size: 12.5px; color: #067D62; display: flex; align-items: center; gap: 6px; }
   .aria-note::before { content: '🤖'; }
 
+  /* SLIDE PANEL */
+  .slide-panel-overlay {
+    display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200;
+  }
+  .slide-panel-overlay.open { display: block; }
+  .slide-panel {
+    position: fixed; top: 0; right: -520px; width: 500px; max-width: 100vw;
+    height: 100vh; background: #fff; box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    z-index: 201; display: flex; flex-direction: column;
+    transition: right 0.32s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+  }
+  .slide-panel.open { right: 0; }
+  .slide-panel-header {
+    padding: 20px 22px 16px; border-bottom: 1px solid #eee;
+    display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  }
+  .slide-panel-header h3 { font-size: 16px; font-weight: 700; color: #0f1111; flex: 1; }
+  .slide-panel-close {
+    background: #f5f5f5; border: none; border-radius: 6px; width: 32px; height: 32px;
+    font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: #555; transition: background 0.15s;
+  }
+  .slide-panel-close:hover { background: #eee; }
+  .slide-panel-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+  .slide-panel-footer {
+    padding: 14px 22px; border-top: 1px solid #eee; display: flex; gap: 10px;
+    flex-shrink: 0; background: #fafbfc;
+  }
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #333; margin-bottom: 5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 10px; border: 1px solid #ddd; border-radius: 6px;
+    font-size: 13px; font-family: 'Inter', sans-serif; background: #fff; color: #333;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.1);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-section-title {
+    font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase;
+    letter-spacing: 0.6px; margin: 20px 0 12px; padding-bottom: 6px;
+    border-bottom: 1px solid #eee;
+  }
+  .emoji-picker-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .emoji-opt {
+    font-size: 22px; cursor: pointer; padding: 6px; border-radius: 8px;
+    border: 2px solid transparent; transition: all 0.15s; line-height: 1;
+  }
+  .emoji-opt:hover { background: #fff8ee; border-color: #FF9900; }
+  .emoji-opt.selected { background: #fff3cc; border-color: #FF9900; }
+  .btn-primary {
+    flex: 1; background: #FF9900; color: #0f1111; border: none; border-radius: 8px;
+    padding: 12px 20px; font-size: 14px; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background 0.2s;
+  }
+  .btn-primary:hover { background: #e68a00; }
+  .btn-secondary {
+    background: #f5f5f5; color: #333; border: 1.5px solid #ddd; border-radius: 8px;
+    padding: 12px 18px; font-size: 14px; font-weight: 600; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: all 0.2s;
+  }
+  .btn-secondary:hover { background: #eee; }
+
   @media (max-width: 900px) {
     .pending-grid { grid-template-columns: 1fr; }
     .aria-panel { flex-direction: column; }
@@ -265,6 +331,8 @@
     .pending-grid { grid-template-columns: 1fr; }
     .filter-bar { flex-direction: column; align-items: stretch; }
     .filter-bar .search-input { max-width: 100%; }
+    #category-specific-fields .form-group { margin-bottom: 10px; }
+    .form-row-2 { grid-template-columns: 1fr !important; }
   }
 @media(max-width:1024px){
   .sidebar{width:180px!important;}
@@ -337,6 +405,99 @@
   </div>
 </header>
 <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- ADD PRODUCT SLIDE PANEL -->
+<div class="slide-panel-overlay" id="add-panel-overlay" onclick="closeAddPanel()"></div>
+<div class="slide-panel" id="add-panel">
+  <div class="slide-panel-header">
+    <h3>➕ Add New Product</h3>
+    <button class="slide-panel-close" onclick="closeAddPanel()">✕</button>
+  </div>
+  <div class="slide-panel-body">
+
+    <!-- EMOJI PICKER -->
+    <div class="form-section-title">Choose an Emoji</div>
+    <div class="emoji-picker-row" id="emoji-picker-row">
+      <span class="emoji-opt selected" onclick="selectEmoji(this)">📦</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">💻</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">📱</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🎮</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🎧</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">👗</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">👟</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🏠</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🛋️</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🛒</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">📚</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">⚽</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">💄</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🎨</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🖨️</span>
+      <span class="emoji-opt" onclick="selectEmoji(this)">🔌</span>
+    </div>
+    <span id="selected-emoji" style="display:none;">📦</span>
+
+    <!-- BASIC FIELDS -->
+    <div class="form-section-title">Basic Information</div>
+
+    <!-- CATEGORY (first field — drives dynamic fields below) -->
+    <div class="form-group">
+      <label for="prod-category">Category <span style="color:#CC0C39">*</span></label>
+      <select id="prod-category" name="prod-category" onchange="onCategoryChange(this.value)">
+        <option value="Electronics">Electronics</option>
+        <option value="Fashion">Fashion</option>
+        <option value="Home">Home &amp; Furniture</option>
+        <option value="Grocery">Grocery &amp; Food</option>
+        <option value="Books">Books</option>
+        <option value="Sports">Sports &amp; Outdoors</option>
+        <option value="Beauty">Beauty &amp; Personal Care</option>
+        <option value="Handmade">Handmade &amp; Artisan</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="prod-name">Product Name <span style="color:#CC0C39">*</span></label>
+      <input type="text" id="prod-name" placeholder="e.g. Sony WH-1000XM5 Wireless Headphones" required>
+    </div>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label for="prod-price">Selling Price (₹) <span style="color:#CC0C39">*</span></label>
+        <input type="number" id="prod-price" placeholder="e.g. 24999" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="prod-mrp">MRP (₹)</label>
+        <input type="number" id="prod-mrp" placeholder="e.g. 29999" min="0">
+      </div>
+    </div>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label for="prod-stock">Stock Quantity <span style="color:#CC0C39">*</span></label>
+        <input type="number" id="prod-stock" placeholder="e.g. 50" min="0" required>
+      </div>
+      <div class="form-group">
+        <label for="prod-sku">SKU / Item Code</label>
+        <input type="text" id="prod-sku" placeholder="e.g. SNY-WH1000XM5-BLK">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="prod-desc">Description</label>
+      <textarea id="prod-desc" placeholder="Describe your product — Aria AI will optimize this for search visibility..."></textarea>
+    </div>
+
+    <!-- CATEGORY-SPECIFIC DYNAMIC FIELDS -->
+    <div class="form-section-title">Category Details</div>
+    <div id="category-specific-fields"></div>
+
+  </div>
+  <div class="slide-panel-footer">
+    <button class="btn-secondary" onclick="closeAddPanel()">Cancel</button>
+    <button class="btn-primary" onclick="handleAddProduct()">Submit for Review</button>
+  </div>
+</div>
 
 <!-- MAIN -->
 <main class="main">
@@ -447,10 +608,14 @@
     <select>
       <option>All Categories</option>
       <option>Electronics</option>
-      <option>Gaming</option>
-      <option>Office Supplies</option>
-      <option>Smart Home</option>
-      <option>Audio</option>
+      <option>Fashion</option>
+      <option>Home</option>
+      <option>Grocery</option>
+      <option>Books</option>
+      <option>Sports</option>
+      <option>Beauty</option>
+      <option>Handmade</option>
+      <option>Other</option>
     </select>
     <select>
       <option>Sort: Newest First</option>
@@ -460,7 +625,7 @@
       <option>Stock: Low First</option>
     </select>
     <div class="filter-bar-spacer"></div>
-    <button class="btn-orange" onclick="alert('Add product form coming soon!')">+ Add Single Product</button>
+    <button class="btn-orange" onclick="openAddPanel()">+ Add Single Product</button>
   </div>
 
   <!-- BULK ACTIONS BAR -->
@@ -480,6 +645,15 @@
     🔍 Products you add go to Admin review before appearing in the buyer marketplace.
   </div>
 
+  <!-- SELLER CATEGORY BANNER -->
+  <div id="seller-cat-banner" style="background:linear-gradient(135deg,#1565C020,#1565C010);border:1px solid #1565C040;border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+    <span style="font-size:1.5rem" id="cat-emoji">💻</span>
+    <div>
+      <div style="font-weight:700;font-size:14px;" id="cat-title">Electronics Seller</div>
+      <div style="font-size:12px;color:#666;">Your listings are optimized for the Electronics category. Aria AI applies Electronics-specific SEO.</div>
+    </div>
+  </div>
+
   <!-- LISTINGS TABLE -->
   <div class="card">
     <div class="table-wrap">
@@ -489,6 +663,7 @@
             <th class="cb-cell"><input type="checkbox" id="select-all" onchange="toggleAll(this)"></th>
             <th>Emoji</th>
             <th style="min-width:200px;">Product</th>
+            <th>Category</th>
             <th>Price / MRP</th>
             <th>Stock</th>
             <th>Status</th>
@@ -521,7 +696,177 @@
 </main>
 
 <script>
-// Auth guard
+// ---- CATEGORY FIELDS DATA ----
+const CATEGORY_FIELDS = {
+  Electronics: [
+    {id:'brand', label:'Brand', type:'text', required:true, placeholder:'e.g. Sony, Samsung, Apple'},
+    {id:'model', label:'Model Number', type:'text', required:true, placeholder:'e.g. WH-1000XM5'},
+    {id:'warranty', label:'Warranty (months)', type:'number', placeholder:'e.g. 12'},
+    {id:'battery', label:'Battery Life', type:'text', placeholder:'e.g. 30 hours, 5000mAh'},
+    {id:'connectivity', label:'Connectivity', type:'text', placeholder:'e.g. Bluetooth 5.0, WiFi 6'},
+    {id:'colors', label:'Available Colors', type:'text', placeholder:'e.g. Black, White, Silver'},
+    {id:'in_box', label:'In The Box', type:'text', placeholder:'e.g. Device, USB-C Cable, Manual'},
+    {id:'compatible', label:'Compatible With', type:'text', placeholder:'e.g. iOS 14+, Android 10+'},
+    {id:'weight_g', label:'Weight (grams)', type:'number', placeholder:'e.g. 250'},
+  ],
+  Fashion: [
+    {id:'brand', label:'Brand / Label', type:'text', required:true, placeholder:'e.g. Zara, H&M, Unbranded'},
+    {id:'fabric', label:'Fabric / Material', type:'text', required:true, placeholder:'e.g. 100% Cotton, Polyester Blend'},
+    {id:'sizes', label:'Available Sizes', type:'text', required:true, placeholder:'e.g. S, M, L, XL, XXL'},
+    {id:'colors', label:'Available Colors', type:'text', placeholder:'e.g. Red, Navy Blue, Black'},
+    {id:'gender', label:'Gender', type:'select', options:['Men','Women','Unisex','Boys','Girls','Baby']},
+    {id:'fit', label:'Fit Type', type:'select', options:['Regular Fit','Slim Fit','Loose Fit','Oversized','Relaxed']},
+    {id:'occasion', label:'Occasion', type:'text', placeholder:'e.g. Casual, Formal, Party, Ethnic'},
+    {id:'care', label:'Care Instructions', type:'text', placeholder:'e.g. Machine wash cold, dry flat'},
+    {id:'country_origin', label:'Country of Origin', type:'text', placeholder:'e.g. India'},
+  ],
+  Home: [
+    {id:'brand', label:'Brand', type:'text', placeholder:'e.g. IKEA, Nilkamal'},
+    {id:'material', label:'Material', type:'text', required:true, placeholder:'e.g. Solid Wood, Stainless Steel'},
+    {id:'dimensions', label:'Dimensions (L×W×H)', type:'text', placeholder:'e.g. 120×60×75 cm'},
+    {id:'color', label:'Color / Finish', type:'text', placeholder:'e.g. Walnut Brown, Matte White'},
+    {id:'room_type', label:'Room Type', type:'select', options:['Living Room','Bedroom','Kitchen','Bathroom','Office','Outdoor']},
+    {id:'assembly', label:'Assembly Required', type:'select', options:['No Assembly','Easy Assembly','Professional Required']},
+    {id:'weight_kg', label:'Weight (kg)', type:'number', placeholder:'e.g. 5.5'},
+    {id:'in_box', label:"What's Included", type:'text', placeholder:'e.g. Table, 4 chairs, hardware kit'},
+  ],
+  Grocery: [
+    {id:'brand', label:'Brand', type:'text', required:true, placeholder:'e.g. Amul, Organic India'},
+    {id:'weight_volume', label:'Weight / Volume', type:'text', required:true, placeholder:'e.g. 500g, 1L, 250ml'},
+    {id:'ingredients', label:'Key Ingredients', type:'text', placeholder:'e.g. Whole wheat, Salt, Water'},
+    {id:'organic', label:'Organic Certified', type:'select', options:['Yes - FSSAI Certified','Yes - Other Cert','No']},
+    {id:'shelf_life', label:'Shelf Life', type:'text', required:true, placeholder:'e.g. 6 months, 1 year'},
+    {id:'storage', label:'Storage Instructions', type:'text', placeholder:'e.g. Store in cool dry place'},
+    {id:'allergens', label:'Allergens', type:'text', placeholder:'e.g. Contains gluten, nuts'},
+    {id:'country_origin', label:'Country of Origin', type:'text', placeholder:'e.g. India'},
+    {id:'fssai', label:'FSSAI License No.', type:'text', placeholder:'e.g. 12345678901234'},
+  ],
+  Books: [
+    {id:'author', label:'Author', type:'text', required:true, placeholder:'e.g. Chetan Bhagat'},
+    {id:'publisher', label:'Publisher', type:'text', required:true, placeholder:'e.g. Rupa Publications'},
+    {id:'isbn', label:'ISBN', type:'text', placeholder:'e.g. 978-81-291-1234-5'},
+    {id:'edition', label:'Edition / Year', type:'text', placeholder:'e.g. 3rd Edition, 2023'},
+    {id:'pages', label:'Number of Pages', type:'number', placeholder:'e.g. 320'},
+    {id:'language', label:'Language', type:'select', options:['English','Hindi','Tamil','Telugu','Bengali','Marathi','Other']},
+    {id:'binding', label:'Binding', type:'select', options:['Paperback','Hardcover','E-book','Spiral Bound']},
+    {id:'genre', label:'Genre', type:'text', placeholder:'e.g. Fiction, Self-Help, Technology'},
+  ],
+  Sports: [
+    {id:'brand', label:'Brand', type:'text', required:true, placeholder:'e.g. Nike, Adidas, Cosco'},
+    {id:'sport_type', label:'Sport / Activity', type:'text', required:true, placeholder:'e.g. Cricket, Football, Yoga'},
+    {id:'material', label:'Material', type:'text', placeholder:'e.g. High-grade PU Leather, Nylon'},
+    {id:'sizes', label:'Available Sizes', type:'text', placeholder:'e.g. S, M, L or 7, 8, 9, 10'},
+    {id:'colors', label:'Colors', type:'text', placeholder:'e.g. Red/Black, Blue/White'},
+    {id:'age_group', label:'Age Group', type:'select', options:['Kids (5-12)','Teens (13-17)','Adults (18+)','All Ages']},
+    {id:'indoor_outdoor', label:'Indoor / Outdoor', type:'select', options:['Indoor','Outdoor','Both']},
+    {id:'weight_g', label:'Weight (grams)', type:'number', placeholder:'e.g. 420'},
+  ],
+  Beauty: [
+    {id:'brand', label:'Brand', type:'text', required:true, placeholder:'e.g. Lakme, Mamaearth'},
+    {id:'volume_weight', label:'Volume / Weight', type:'text', required:true, placeholder:'e.g. 50ml, 100g'},
+    {id:'skin_type', label:'Skin Type', type:'select', options:['All Skin Types','Oily','Dry','Combination','Sensitive','Normal']},
+    {id:'key_ingredients', label:'Key Ingredients', type:'text', placeholder:'e.g. Vitamin C, Hyaluronic Acid'},
+    {id:'cruelty_free', label:'Cruelty Free', type:'select', options:['Yes','No','Not Specified']},
+    {id:'shelf_life', label:'Shelf Life', type:'text', placeholder:'e.g. 24 months'},
+    {id:'how_to_use', label:'How to Use', type:'text', placeholder:'e.g. Apply on cleansed face, massage gently'},
+    {id:'country_origin', label:'Country of Origin', type:'text', placeholder:'e.g. India'},
+  ],
+  Handmade: [
+    {id:'artisan', label:'Artisan / Maker Name', type:'text', required:true, placeholder:'e.g. Priya Sharma'},
+    {id:'material', label:'Material Used', type:'text', required:true, placeholder:'e.g. Terracotta, Jute, Hand-spun cotton'},
+    {id:'dimensions', label:'Dimensions', type:'text', placeholder:'e.g. 20×15×10 cm'},
+    {id:'colors', label:'Colors / Finish', type:'text', placeholder:'e.g. Earthy tones, Natural dyes'},
+    {id:'customizable', label:'Customizable', type:'select', options:['Yes - Name/Text','Yes - Color','Yes - Size','No']},
+    {id:'made_to_order', label:'Made to Order', type:'select', options:['Yes (7-10 days)','Yes (15+ days)','No - Ready to Ship']},
+    {id:'craft_type', label:'Craft Type', type:'text', placeholder:'e.g. Pottery, Weaving, Block Print, Embroidery'},
+    {id:'origin_state', label:'State of Origin', type:'text', placeholder:'e.g. Rajasthan, Gujarat, West Bengal'},
+  ],
+  Other: [
+    {id:'brand', label:'Brand (if any)', type:'text', placeholder:'e.g. Brand name or leave blank'},
+    {id:'material', label:'Material / Composition', type:'text', placeholder:'e.g. Plastic, Metal, Mixed'},
+    {id:'dimensions', label:'Dimensions / Size', type:'text', placeholder:'e.g. 30×20×10 cm'},
+    {id:'color', label:'Color', type:'text', placeholder:'e.g. Red, Blue, Multicolor'},
+    {id:'warranty', label:'Warranty', type:'text', placeholder:'e.g. 6 months, No warranty'},
+    {id:'country_origin', label:'Country of Origin', type:'text', placeholder:'e.g. India'},
+  ]
+};
+
+const CAT_EMOJI = {
+  Electronics:'💻', Fashion:'👗', Home:'🏠', Grocery:'🛒',
+  Books:'📚', Sports:'⚽', Beauty:'💄', Handmade:'🎨', Other:'📦'
+};
+
+const catColors = {
+  Electronics:'#1565C0', Fashion:'#7B1FA2', Home:'#E65100',
+  Grocery:'#2E7D32', Books:'#6D4C41', Sports:'#00838F',
+  Beauty:'#C2185B', Handmade:'#F57F17', Other:'#546E7A'
+};
+
+// Track current selected category
+let selectedCategory = 'Electronics';
+
+function renderCategoryFields(category) {
+  const fields = CATEGORY_FIELDS[category] || CATEGORY_FIELDS['Other'];
+  const container = document.getElementById('category-specific-fields');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="background:#fff8ee;border:1px solid #ffe0a0;border-radius:8px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:#7a4f00;">
+      <strong>📋 ${category} Listing</strong> — Fill in the details below. Aria AI will optimize your listing for search visibility.
+    </div>
+    ${fields.map(f => `
+      <div class="form-group" style="margin-bottom:14px;">
+        <label style="display:block;font-size:12px;font-weight:600;color:#333;margin-bottom:5px;">
+          ${f.label}${f.required ? ' <span style="color:#CC0C39">*</span>' : ''}
+        </label>
+        ${f.type === 'select'
+          ? `<select id="attr_${f.id}" name="attr_${f.id}" style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;background:#fff;">
+              ${(f.options||[]).map(o => `<option value="${o}">${o}</option>`).join('')}
+             </select>`
+          : `<input type="${f.type||'text'}" id="attr_${f.id}" name="attr_${f.id}"
+              placeholder="${f.placeholder||''}"
+              style="width:100%;padding:8px 10px;border:1px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;"
+              ${f.required ? 'required' : ''}>`
+        }
+      </div>
+    `).join('')}
+  `;
+}
+
+function collectCategoryAttributes(category) {
+  const fields = CATEGORY_FIELDS[category] || CATEGORY_FIELDS['Other'];
+  const attrs = {};
+  fields.forEach(f => {
+    const el = document.getElementById('attr_' + f.id);
+    if (el) attrs[f.id] = el.value;
+  });
+  return attrs;
+}
+
+function onCategoryChange(category) {
+  selectedCategory = category;
+  renderCategoryFields(category);
+}
+
+// ---- SLIDE PANEL ----
+function openAddPanel() {
+  document.getElementById('add-panel').classList.add('open');
+  document.getElementById('add-panel-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeAddPanel() {
+  document.getElementById('add-panel').classList.remove('open');
+  document.getElementById('add-panel-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ---- EMOJI PICKER ----
+function selectEmoji(el) {
+  document.querySelectorAll('.emoji-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selected-emoji').textContent = el.textContent;
+}
+
+// ---- AUTH GUARD ----
 const auth = vsRequireAuth(['seller']);
 if (!auth) throw new Error('Not authenticated');
 
@@ -529,6 +874,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
   const storeNameEl = document.querySelector('.sidebar-store-name');
   if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+
+  // Determine seller category
+  const sellerCategory = (auth.storeName && typeof vsLookupRegistry === 'function')
+    ? (vsLookupRegistry(auth.email)?.category || 'Electronics')
+    : 'Electronics';
+  selectedCategory = sellerCategory;
+
+  // Set category dropdown to seller's category
+  const catDrop = document.getElementById('prod-category');
+  if (catDrop) catDrop.value = sellerCategory;
+
+  // Render category-specific fields
+  renderCategoryFields(sellerCategory);
+
+  // Update seller category banner
+  const emoji = CAT_EMOJI[sellerCategory] || '📦';
+  const catEmojEl = document.getElementById('cat-emoji');
+  const catTitleEl = document.getElementById('cat-title');
+  const bannerEl = document.getElementById('seller-cat-banner');
+  if (catEmojEl) catEmojEl.textContent = emoji;
+  if (catTitleEl) catTitleEl.textContent = sellerCategory + ' Seller';
+  if (bannerEl) {
+    const color = catColors[sellerCategory] || '#546E7A';
+    bannerEl.style.background = `linear-gradient(135deg,${color}20,${color}10)`;
+    bannerEl.style.borderColor = color + '40';
+    const desc = bannerEl.querySelector('div > div:last-child');
+    if (desc) desc.textContent = `Your listings are optimized for the ${sellerCategory} category. Aria AI applies ${sellerCategory}-specific SEO.`;
+  }
+
   dbSeedDemo().then(() => loadSellerListings());
 });
 
@@ -544,39 +918,46 @@ function loadSellerListings() {
   const tbody = document.getElementById('listings-tbody') || document.querySelector('table tbody');
   if (!tbody) return;
 
-  // Show loading state
-  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:30px;color:#999;">⏳ Loading your listings...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:30px;color:#999;">⏳ Loading your listings...</td></tr>';
 
-  // Unsubscribe previous listener
   if (_unsubListings) _unsubListings();
 
-  // Use realtime listener — updates automatically when admin approves/rejects
   _unsubListings = dbListenProducts(sellerId, function(products) {
     if (products.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:#999;">No listings yet. Add your first product above.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:40px;color:#999;">No listings yet. Add your first product above.</td></tr>';
       return;
     }
     const statusColors = { pending:'#e65c00', active:'#067D62', rejected:'#CC0C39', featured:'#1565C0' };
     const statusBg = { pending:'#fff3e0', active:'#e6f9f2', rejected:'#fce8ec', featured:'#e8f4ff' };
-    tbody.innerHTML = products.map(p => `<tr>
-      <td><input type="checkbox" class="row-check" value="${p.id}"></td>
-      <td style="font-size:24px;text-align:center;">${p.emoji}</td>
-      <td style="font-weight:600;max-width:180px;">${p.name}<br><small style="color:#999;font-weight:400;">${p.category}</small></td>
-      <td>₹${Number(p.price).toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${Number(p.mrp).toLocaleString()}</small></td>
-      <td style="color:${p.stock<10?'#CC0C39':p.stock<20?'#e65c00':'#067D62'};font-weight:600;">${p.stock} units</td>
-      <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;">${p.status}</span>
-        ${p.status==='rejected'&&p.rejectedReason?`<br><small style="color:#CC0C39;font-size:10px;">${p.rejectedReason}</small>`:''}
-      </td>
-      <td style="color:#888;font-size:12px;">${p.orders||0} sold · ${p.views||0} views</td>
-      <td><button onclick="deleteProductDB('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Delete</button></td>
-    </tr>`).join('');
+    tbody.innerHTML = products.map(p => {
+      const pCat = p.category || 'Other';
+      const pColor = catColors[pCat] || '#546E7A';
+      const catBadge = `<span style="background:${pColor}20;color:${pColor};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;">${pCat}</span>`;
+      return `<tr>
+        <td><input type="checkbox" class="row-check" value="${p.id}"></td>
+        <td style="font-size:24px;text-align:center;">${p.emoji || '📦'}</td>
+        <td style="font-weight:600;max-width:180px;">${p.name}<br><small style="color:#999;font-weight:400;">${p.sku || ''}</small></td>
+        <td>${catBadge}</td>
+        <td>₹${Number(p.price).toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${Number(p.mrp||0).toLocaleString()}</small></td>
+        <td style="color:${p.stock<10?'#CC0C39':p.stock<20?'#e65c00':'#067D62'};font-weight:600;">${p.stock} units</td>
+        <td><span style="background:${statusBg[p.status]||'#f5f5f5'};color:${statusColors[p.status]||'#666'};padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;">${p.status}</span>
+          ${p.status==='rejected'&&p.rejectedReason?`<br><small style="color:#CC0C39;font-size:10px;">${p.rejectedReason}</small>`:''}
+        </td>
+        <td style="color:#888;font-size:12px;">${p.orders||0} sold · ${p.views||0} views</td>
+        <td><button onclick="deleteProductDB('${p.id}')" style="background:#fce8ec;color:#CC0C39;border:none;padding:4px 10px;border-radius:6px;font-size:11px;cursor:pointer;">Delete</button></td>
+      </tr>`;
+    }).join('');
+
+    // Re-wire checkboxes
+    document.querySelectorAll('.row-check').forEach(cb => {
+      cb.addEventListener('change', updateSelection);
+    });
   });
 }
 
 async function deleteProductDB(id) {
   if (confirm('Delete this listing?')) {
     await dbDeleteProduct(id);
-    // listener auto-updates the table
   }
 }
 
@@ -626,26 +1007,44 @@ function approveListing(btn) {
 }
 
 // ---- ADD PRODUCT HANDLER ----
-// Wire to your Add Product form submit button. Call this after validation:
 async function handleAddProduct() {
   const auth = vsGetAuth ? vsGetAuth() : null;
-  // ... existing validation code stays ...
-  const newProduct = await dbAddProduct({
+  if (!auth) return;
+
+  const name = document.getElementById('prod-name')?.value?.trim();
+  const price = document.getElementById('prod-price')?.value;
+  const stock = document.getElementById('prod-stock')?.value;
+
+  if (!name) { showToast('❌ Please enter a product name'); return; }
+  if (!price || Number(price) <= 0) { showToast('❌ Please enter a valid selling price'); return; }
+  if (!stock || Number(stock) < 0) { showToast('❌ Please enter stock quantity'); return; }
+
+  const attributes = collectCategoryAttributes(selectedCategory);
+
+  await dbAddProduct({
     sellerId:    auth.email,
     sellerName:  auth.storeName || auth.name,
     sellerEmail: auth.email,
-    name:        document.getElementById('prod-name')?.value || '',
-    category:    document.getElementById('prod-category')?.value || '',
-    price:       document.getElementById('prod-price')?.value || 0,
-    mrp:         document.getElementById('prod-mrp')?.value || 0,
-    stock:       document.getElementById('prod-stock')?.value || 0,
+    name:        name,
+    category:    selectedCategory,
+    attributes:  attributes,
+    price:       Number(price),
+    mrp:         Number(document.getElementById('prod-mrp')?.value || price),
+    stock:       Number(stock),
     description: document.getElementById('prod-desc')?.value || '',
     emoji:       document.getElementById('selected-emoji')?.textContent || '📦',
     sku:         document.getElementById('prod-sku')?.value || '',
-    weight:      document.getElementById('prod-weight')?.value || ''
   });
+
   showToast('✅ Product submitted — Admin will review within 24h');
-  // listener auto-refreshes the table
+  closeAddPanel();
+
+  // Reset form
+  ['prod-name','prod-price','prod-mrp','prod-stock','prod-sku','prod-desc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
+  renderCategoryFields(selectedCategory);
 }
 </script>
 </body>

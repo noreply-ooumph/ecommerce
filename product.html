@@ -363,6 +363,7 @@ footer a{color:#ccc}
     <!-- ═══ CENTER: INFO ═══ -->
     <div class="info-wrap card">
       <a class="brand-link" href="collections.html">Sony</a>
+      <span id="product-cat-badge" style="display:none;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:8px;"></span>
       <h1 class="prod-title">Sony WH-1000XM5 Industry Leading Wireless Noise Cancelling Headphones</h1>
 
       <div class="ratings-row">
@@ -770,6 +771,31 @@ async function loadProductFromDB() {
     if(sellerEl) sellerEl.textContent = p.sellerName;
     const descEl = document.querySelector('.product-description-text, .product-desc-content');
     if(descEl) descEl.textContent = p.description;
+    // Render category-specific attributes in specs table
+    if (p.attributes && Object.keys(p.attributes).length > 0) {
+      const specsTable = document.querySelector('.spec-table tbody, .specs-table tbody, .tech-specs tbody, table.specs tbody');
+      if (specsTable) {
+        const attrRows = Object.entries(p.attributes)
+          .filter(([k,v]) => v && v.toString().trim())
+          .map(([k,v], i) => `
+            <tr style="background:${i%2===0?'#f9f9f9':'#fff'}">
+              <td style="padding:10px 14px;font-weight:600;color:#333;font-size:13px;width:35%;border-bottom:1px solid #eee;text-transform:capitalize;">${k.replace(/_/g,' ')}</td>
+              <td style="padding:10px 14px;color:#555;font-size:13px;border-bottom:1px solid #eee;">${v}</td>
+            </tr>
+          `).join('');
+        if (attrRows) specsTable.innerHTML = attrRows;
+      }
+
+      // Show category badge near product title
+      const catBadge = document.getElementById('product-cat-badge');
+      if (catBadge) {
+        const catColors = {Electronics:'#1565C0',Fashion:'#7B1FA2',Home:'#E65100',Grocery:'#2E7D32',Books:'#6D4C41',Sports:'#00838F',Beauty:'#C2185B',Handmade:'#F57F17',Other:'#546E7A'};
+        catBadge.textContent = p.category || '';
+        catBadge.style.background = ((catColors[p.category]||'#546E7A') + '20');
+        catBadge.style.color = catColors[p.category] || '#546E7A';
+        catBadge.style.display = 'inline-block';
+      }
+    }
     // Increment view count
     dbGetProductById && vsIncrementProductView && vsIncrementProductView(productId);
     document.title = p.name + ' — VibeStore';
