@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  .sidebar { width: 220px; background: #232f3e; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto; }
+  .sidebar-logo { padding: 20px 18px 16px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #FF9900; border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: -0.3px; }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #c8cdd4; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: background 0.15s, color 0.15s; border-left: 3px solid transparent; cursor: pointer; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  .topbar { position: fixed; top: 0; left: 220px; right: 0; height: 60px; background: #0f1111; box-shadow: 0 1px 4px rgba(0,0,0,0.3); display: flex; align-items: center; padding: 0 24px; z-index: 99; gap: 16px; }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #FF9900; }
+  .breadcrumb { font-size: 13px; color: #8d96a0; flex: 1; margin-left: 12px; }
+  .breadcrumb strong { color: #fff; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #CC0C39; color: #fff; font-size: 9px; font-weight: 700; min-width: 15px; height: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF9900, #e68a00); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #fff; font-size: 13px; }
+  .seller-info .store { color: #8d96a0; }
+
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* 3-COLUMN SETTINGS LAYOUT */
+  .settings-layout { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: start; }
+
+  /* SETTINGS NAV */
+  .settings-nav { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; position: sticky; top: 80px; }
+  .settings-nav-item { display: flex; align-items: center; gap: 8px; padding: 11px 14px; font-size: 13px; font-weight: 500; color: #444; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; border-bottom: 1px solid #f5f6f8; }
+  .settings-nav-item:last-child { border-bottom: none; }
+  .settings-nav-item:hover { background: #fafbfc; color: #0f1111; }
+  .settings-nav-item.active { border-left-color: #FF9900; background: #fff8ee; color: #FF9900; font-weight: 600; }
+  .settings-nav-icon { font-size: 14px; width: 18px; text-align: center; }
+  .settings-nav-item.danger { color: #CC0C39; }
+  .settings-nav-item.danger:hover { background: #fff5f5; }
+
+  /* SETTINGS PANEL */
+  .settings-panel { display: none; }
+  .settings-panel.active { display: block; }
+  .panel-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
+  .panel-card-header { padding: 16px 20px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 10px; }
+  .panel-card-header h2 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #0f1111; flex: 1; }
+  .panel-card-body { padding: 20px; }
+
+  /* FORM STYLES */
+  .form-group { margin-bottom: 18px; }
+  .form-label { font-size: 13px; font-weight: 600; color: #444; margin-bottom: 6px; display: block; }
+  .form-label span { font-size: 12px; color: #888; font-weight: 400; }
+  .form-control { width: 100%; border: 1px solid #d0d5dd; border-radius: 6px; padding: 9px 12px; font-size: 13.5px; font-family: 'Inter', sans-serif; outline: none; transition: border 0.15s; color: #0f1111; }
+  .form-control:focus { border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.1); }
+  textarea.form-control { resize: vertical; min-height: 80px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  /* LOGO PICKER */
+  .logo-picker { display: flex; align-items: center; gap: 16px; }
+  .logo-box { width: 72px; height: 72px; border-radius: 12px; background: linear-gradient(135deg, #FF9900, #e68a00); display: flex; align-items: center; justify-content: center; font-size: 32px; cursor: pointer; border: 2px solid transparent; transition: all 0.15s; }
+  .logo-box:hover { border-color: #FF9900; transform: scale(1.05); }
+
+  /* CHIPS */
+  .chips-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 500; cursor: pointer; border: 1.5px solid #d0d5dd; color: #555; background: #fff; transition: all 0.15s; }
+  .chip.selected { background: #FF9900; color: #fff; border-color: #FF9900; font-weight: 600; }
+  .chip:hover:not(.selected) { border-color: #FF9900; color: #FF9900; }
+
+  /* BANNER UPLOAD */
+  .banner-upload { border: 2px dashed #d0d5dd; border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.15s; }
+  .banner-upload:hover { border-color: #FF9900; background: #fff8ee; }
+  .banner-upload p { font-size: 13px; color: #888; margin-top: 8px; }
+
+  /* BUTTONS */
+  .btn { padding: 9px 18px; border-radius: 6px; font-size: 13.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; font-family: 'Inter', sans-serif; }
+  .btn-orange { background: #FF9900; color: #fff; border-color: #FF9900; }
+  .btn-orange:hover { background: #e68a00; }
+  .btn-outline { background: #fff; border-color: #d0d5dd; color: #555; }
+  .btn-outline:hover { border-color: #888; }
+  .btn-red { background: #fff; border-color: #CC0C39; color: #CC0C39; }
+  .btn-red:hover { background: #CC0C39; color: #fff; }
+  .btn-gray { background: #f0f2f5; color: #555; border-color: #e5e7eb; }
+
+  /* AI AGENTS GRID */
+  .agents-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .agent-card { border: 1.5px solid #e5e7eb; border-radius: 10px; padding: 14px 16px; display: flex; align-items: center; gap: 12px; transition: all 0.15s; }
+  .agent-card:hover { border-color: #FF9900; background: #fffcf5; }
+  .agent-emoji { font-size: 24px; flex-shrink: 0; }
+  .agent-info { flex: 1; }
+  .agent-name { font-size: 14px; font-weight: 700; color: #0f1111; }
+  .agent-role { font-size: 12px; color: #888; margin-top: 2px; }
+  .agent-config { font-size: 12px; color: #007185; font-weight: 600; cursor: pointer; text-decoration: none; }
+  .agent-config:hover { text-decoration: underline; }
+  .toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 22px; transition: .3s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+  input:checked + .toggle-slider { background: #067D62; }
+  input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+  /* AUTONOMY SLIDER */
+  .autonomy-wrap { margin-bottom: 20px; }
+  .autonomy-labels { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px; color: #888; }
+  .autonomy-labels span { font-weight: 600; }
+  input[type=range] { width: 100%; accent-color: #FF9900; height: 4px; cursor: pointer; }
+  .autonomy-current { text-align: center; margin-top: 10px; font-size: 13.5px; font-weight: 600; color: #0f1111; }
+  .autonomy-desc { text-align: center; font-size: 12px; color: #888; margin-top: 4px; }
+
+  /* PLAN CARD */
+  .plan-badge { display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(90deg, #FF9900, #ffb732); color: #fff; font-size: 14px; font-weight: 700; padding: 6px 14px; border-radius: 20px; margin-bottom: 14px; }
+  .feature-list { list-style: none; }
+  .feature-list li { display: flex; align-items: center; gap: 8px; padding: 6px 0; font-size: 13.5px; color: #333; border-bottom: 1px solid #f5f6f8; }
+  .feature-list li:last-child { border-bottom: none; }
+  .feature-list li::before { content: "✓"; color: #067D62; font-weight: 700; }
+  .usage-meter { margin-bottom: 12px; }
+  .usage-label { display: flex; justify-content: space-between; font-size: 12.5px; color: #555; margin-bottom: 5px; }
+  .usage-track { height: 8px; background: #f0f2f5; border-radius: 4px; overflow: hidden; }
+  .usage-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #FF9900, #ffb732); }
+
+  /* SECURITY */
+  .sessions-list { margin-bottom: 16px; }
+  .session-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f5f6f8; }
+  .session-row:last-child { border-bottom: none; }
+  .session-icon { font-size: 22px; }
+  .session-info { flex: 1; }
+  .session-device { font-size: 13.5px; font-weight: 600; color: #0f1111; }
+  .session-meta { font-size: 12px; color: #888; margin-top: 2px; }
+  .session-current { font-size: 11px; font-weight: 700; color: #067D62; background: #d1fae5; padding: 2px 8px; border-radius: 10px; }
+
+  /* NOTIFICATIONS TOGGLES */
+  .notif-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f5f6f8; }
+  .notif-row:last-of-type { border-bottom: none; }
+  .notif-label { flex: 1; font-size: 13.5px; font-weight: 500; color: #0f1111; }
+  .notif-label span { font-size: 12px; color: #888; display: block; margin-top: 2px; font-weight: 400; }
+
+  /* QR PLACEHOLDER */
+  .qr-box { width: 100px; height: 100px; background: #f0f2f5; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 36px; border: 1px solid #e5e7eb; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #0f1111; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 500; z-index: 999; display: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); align-items: center; gap: 8px; }
+  .toast.show { display: flex; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .settings-layout { grid-template-columns: 1fr; }
+    .settings-nav { position: static; display: flex; overflow-x: auto; flex-direction: row; white-space: nowrap; border-radius: 8px; padding: 4px; gap: 4px; }
+    .settings-nav-item { border-left: none !important; border-bottom: none !important; border-radius: 6px; flex-shrink: 0; }
+    .settings-nav-item.active { background: #FF9900; color: #fff !important; }
+    .agents-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 480px) {
+    .agents-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a href="seller-dashboard.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item"><span class="nav-icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item"><span class="nav-icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="nav-icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item"><span class="nav-icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item"><span class="nav-icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item active"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="topbar-logo">⚡ Seller Central</div>
+  <div class="breadcrumb">Settings &rsaquo; <strong id="topbarSection">Store Profile</strong></div>
+  <div class="topbar-bell">🔔<span class="bell-badge">3</span></div>
+  <div class="seller-info"><div class="sname">Vikram S.</div><div class="store">MyStore Electronics</div></div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;cursor:pointer;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#aaa">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="settings-layout">
+
+    <!-- SETTINGS NAV -->
+    <nav class="settings-nav">
+      <div class="settings-nav-item active" onclick="showPanel('store-profile',this,'Store Profile')">
+        <span class="settings-nav-icon">🏪</span> Store Profile
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('bank-payouts',this,'Bank & Payouts')">
+        <span class="settings-nav-icon">💰</span> Bank & Payouts
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('shipping',this,'Shipping')">
+        <span class="settings-nav-icon">📦</span> Shipping
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('ai-config',this,'AI Agent Config')">
+        <span class="settings-nav-icon">🤖</span> AI Agent Config
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('notifications',this,'Notifications')">
+        <span class="settings-nav-icon">🔔</span> Notifications
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('security',this,'Security')">
+        <span class="settings-nav-icon">🔐</span> Security
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('documents',this,'Documents & GST')">
+        <span class="settings-nav-icon">📄</span> Documents & GST
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('policies',this,'Policies')">
+        <span class="settings-nav-icon">📋</span> Policies
+      </div>
+      <div class="settings-nav-item" onclick="showPanel('subscription',this,'Subscription Plan')">
+        <span class="settings-nav-icon">💳</span> Subscription Plan
+      </div>
+      <div class="settings-nav-item danger" onclick="showPanel('close-account',this,'Close Account')">
+        <span class="settings-nav-icon">🚪</span> Close Account
+      </div>
+    </nav>
+
+    <!-- PANELS CONTAINER -->
+    <div>
+
+      <!-- STORE PROFILE -->
+      <div id="panel-store-profile" class="settings-panel active">
+        <div class="panel-card">
+          <div class="panel-card-header">
+            <span style="font-size:22px;">🏪</span>
+            <h2>Store Profile</h2>
+          </div>
+          <div class="panel-card-body">
+            <div class="form-group">
+              <label class="form-label">Store Logo <span>Click to change</span></label>
+              <div class="logo-picker">
+                <div class="logo-box" onclick="toast('Opening emoji picker...')">🛍️</div>
+                <div style="flex:1;">
+                  <button class="btn btn-outline" onclick="toast('Upload dialog opening...')">Upload Image</button>
+                  <p style="font-size:12px;color:#888;margin-top:6px;">PNG, JPG up to 2MB. Recommended 200×200px</p>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Name</label>
+              <input type="text" class="form-control" value="MyStore Electronics">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Description</label>
+              <textarea class="form-control">Your one-stop shop for premium electronics, accessories, and gadgets. Trusted by 10,000+ customers. Fast shipping, easy returns, and top-quality products guaranteed.</textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category Specialization</label>
+              <div class="chips-wrap">
+                <div class="chip selected" onclick="this.classList.toggle('selected')">🎧 Audio</div>
+                <div class="chip selected" onclick="this.classList.toggle('selected')">📱 Accessories</div>
+                <div class="chip selected" onclick="this.classList.toggle('selected')">⌚ Wearables</div>
+                <div class="chip" onclick="this.classList.toggle('selected')">💻 Laptops</div>
+                <div class="chip" onclick="this.classList.toggle('selected')">📷 Cameras</div>
+                <div class="chip selected" onclick="this.classList.toggle('selected')">🔌 Charging</div>
+                <div class="chip" onclick="this.classList.toggle('selected')">🖥️ Monitors</div>
+                <div class="chip" onclick="this.classList.toggle('selected')">🎮 Gaming</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Return Policy</label>
+              <select class="form-control">
+                <option>7-day return policy</option>
+                <option selected>15-day return policy</option>
+                <option>30-day return policy</option>
+                <option>No returns (final sale)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Banner Image</label>
+              <div class="banner-upload" onclick="toast('Opening file upload...')">
+                <div style="font-size:32px;">🖼️</div>
+                <p>Click to upload store banner<br>Recommended size: 1200×300px</p>
+              </div>
+            </div>
+            <button class="btn btn-orange" onclick="toast('✅ Settings saved')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANK & PAYOUTS -->
+      <div id="panel-bank-payouts" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">💰</span><h2>Bank & Payouts</h2></div>
+          <div class="panel-card-body">
+            <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+              <span>✅</span><span style="font-size:13px;color:#2e7d32;font-weight:500;">Bank account verified — HDFC Bank ending in 4821</span>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Account Holder Name</label><input type="text" class="form-control" value="Vikram Sharma"></div>
+              <div class="form-group"><label class="form-label">Bank Name</label><input type="text" class="form-control" value="HDFC Bank"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Account Number</label><input type="text" class="form-control" value="••••••••4821"></div>
+              <div class="form-group"><label class="form-label">IFSC Code</label><input type="text" class="form-control" value="HDFC0001234"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Payout Schedule</label>
+              <select class="form-control"><option>Daily (next business day)</option><option selected>Weekly (every Monday)</option><option>Monthly</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Minimum Payout Threshold</label><input type="text" class="form-control" value="₹500"></div>
+            <button class="btn btn-orange" onclick="toast('✅ Settings saved')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SHIPPING -->
+      <div id="panel-shipping" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">📦</span><h2>Shipping Settings</h2></div>
+          <div class="panel-card-body">
+            <div class="form-group"><label class="form-label">Default Shipping Partner</label>
+              <select class="form-control"><option selected>VibeShip Express (Recommended)</option><option>Delhivery</option><option>Bluedart</option><option>DTDC</option><option>India Post</option></select>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">Processing Time</label>
+                <select class="form-control"><option>Same day</option><option selected>1 business day</option><option>2 business days</option><option>3 business days</option></select>
+              </div>
+              <div class="form-group"><label class="form-label">Warehouse Location</label><input type="text" class="form-control" value="Lucknow, UP"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Free Shipping Threshold</label><input type="text" class="form-control" value="₹499"></div>
+            <div class="form-group"><label class="form-label">Standard Shipping Rate (below threshold)</label><input type="text" class="form-control" value="₹49"></div>
+            <button class="btn btn-orange" onclick="toast('✅ Settings saved')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI AGENT CONFIG -->
+      <div id="panel-ai-config" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">🤖</span><h2>Configure Your AI Team</h2></div>
+          <div class="panel-card-body">
+            <div class="agents-grid">
+              <div class="agent-card">
+                <div class="agent-emoji">🔴</div>
+                <div class="agent-info">
+                  <div class="agent-name">Aria</div>
+                  <div class="agent-role">Product listing & optimization</div>
+                  <a class="agent-config" onclick="toast('Opening Aria config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Aria AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">🟢</div>
+                <div class="agent-info">
+                  <div class="agent-name">Nova</div>
+                  <div class="agent-role">Order fulfillment & shipping</div>
+                  <a class="agent-config" onclick="toast('Opening Nova config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Nova AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">💬</div>
+                <div class="agent-info">
+                  <div class="agent-name">Rex</div>
+                  <div class="agent-role">Buyer communication & support</div>
+                  <a class="agent-config" onclick="toast('Opening Rex config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Rex AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">🌙</div>
+                <div class="agent-info">
+                  <div class="agent-name">Luna</div>
+                  <div class="agent-role">Promotions & deals</div>
+                  <a class="agent-config" onclick="toast('Opening Luna config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Luna AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">📊</div>
+                <div class="agent-info">
+                  <div class="agent-name">Atlas</div>
+                  <div class="agent-role">Pricing & analytics</div>
+                  <a class="agent-config" onclick="toast('Opening Atlas config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Atlas AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">🔵</div>
+                <div class="agent-info">
+                  <div class="agent-name">Sage</div>
+                  <div class="agent-role">Finance & tax filing</div>
+                  <a class="agent-config" onclick="toast('Opening Sage config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Sage AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">📢</div>
+                <div class="agent-info">
+                  <div class="agent-name">Echo</div>
+                  <div class="agent-role">Marketing & SEO</div>
+                  <a class="agent-config" onclick="toast('Opening Echo config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" onchange="toast('Echo AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+              <div class="agent-card">
+                <div class="agent-emoji">🧘</div>
+                <div class="agent-info">
+                  <div class="agent-name">Zen</div>
+                  <div class="agent-role">Returns & dispute resolution</div>
+                  <a class="agent-config" onclick="toast('Opening Zen config...')">Configure →</a>
+                </div>
+                <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Zen AI updated')"><span class="toggle-slider"></span></label>
+              </div>
+            </div>
+            <div style="background:#fafbfc;border-radius:8px;padding:16px;border:1px solid #e5e7eb;">
+              <div style="font-size:14px;font-weight:700;color:#0f1111;margin-bottom:14px;">AI Autonomy Level</div>
+              <div class="autonomy-wrap">
+                <div class="autonomy-labels">
+                  <span>Conservative</span>
+                  <span>Balanced</span>
+                  <span>Autonomous</span>
+                </div>
+                <input type="range" min="0" max="2" value="1" id="autonomySlider" oninput="updateAutonomy(this.value)">
+                <div class="autonomy-current" id="autonomyLabel">Balanced</div>
+                <div class="autonomy-desc" id="autonomyDesc">AI suggests, you approve major actions — exceptions notify you</div>
+              </div>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn btn-orange" onclick="toast('✅ AI configuration saved')">Save AI Settings</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTIFICATIONS -->
+      <div id="panel-notifications" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">🔔</span><h2>Notification Preferences</h2></div>
+          <div class="panel-card-body">
+            <div class="notif-row">
+              <div class="notif-label">New Orders <span>Get notified when a buyer places an order</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">Low Stock Alerts <span>Alert when product inventory drops below threshold</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">Payout Processed <span>Confirm when VibeStore transfers funds to your bank</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">Return Requests <span>When a buyer requests to return an order</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">Messages <span>New buyer messages and inquiries</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">AI Reports <span>Weekly performance summaries from Atlas, Luna, and team</span></div>
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div class="notif-row">
+              <div class="notif-label">Platform Updates <span>New features, policy changes, and VibeStore announcements</span></div>
+              <label class="toggle-switch"><input type="checkbox" onchange="toast('Notification setting updated')"><span class="toggle-slider"></span></label>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn btn-orange" onclick="toast('✅ Settings saved')">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECURITY -->
+      <div id="panel-security" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">🔐</span><h2>Security</h2></div>
+          <div class="panel-card-body">
+            <div style="font-size:14px;font-weight:700;color:#0f1111;margin-bottom:12px;">Change Password</div>
+            <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-control" placeholder="Enter current password"></div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-control" placeholder="Min 8 characters"></div>
+              <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-control" placeholder="Repeat new password"></div>
+            </div>
+            <button class="btn btn-orange" onclick="toast('✅ Password changed successfully')" style="margin-bottom:24px;">Update Password</button>
+            <div style="height:1px;background:#f0f2f5;margin-bottom:20px;"></div>
+            <div style="font-size:14px;font-weight:700;color:#0f1111;margin-bottom:12px;">Two-Factor Authentication (2FA)</div>
+            <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+              <label class="toggle-switch"><input type="checkbox" checked id="twoFaToggle" onchange="toggle2FA(this)"><span class="toggle-slider"></span></label>
+              <span style="font-size:13.5px;color:#0f1111;font-weight:500;">2FA is <strong id="twoFaStatus" style="color:#067D62;">Enabled</strong></span>
+            </div>
+            <div id="qrSection" style="display:flex;align-items:center;gap:16px;background:#fafbfc;border-radius:8px;padding:14px;border:1px solid #e5e7eb;margin-bottom:20px;">
+              <div class="qr-box">📱</div>
+              <div>
+                <div style="font-size:13.5px;font-weight:600;color:#0f1111;margin-bottom:4px;">Scan with Google Authenticator</div>
+                <div style="font-size:12.5px;color:#888;margin-bottom:8px;">Or enter code manually: <strong style="font-family:monospace;color:#007185;">JBSWY3DPEHPK3PXP</strong></div>
+                <button class="btn btn-outline" style="font-size:12px;padding:5px 12px;" onclick="toast('Backup codes sent to your email')">Download Backup Codes</button>
+              </div>
+            </div>
+            <div style="height:1px;background:#f0f2f5;margin-bottom:20px;"></div>
+            <div style="font-size:14px;font-weight:700;color:#0f1111;margin-bottom:12px;">Active Sessions</div>
+            <div class="sessions-list">
+              <div class="session-row">
+                <div class="session-icon">💻</div>
+                <div class="session-info">
+                  <div class="session-device">Windows PC — Chrome 124</div>
+                  <div class="session-meta">Lucknow, India &mdash; Active now</div>
+                </div>
+                <span class="session-current">Current</span>
+              </div>
+              <div class="session-row">
+                <div class="session-icon">📱</div>
+                <div class="session-info">
+                  <div class="session-device">iPhone 14 — Safari</div>
+                  <div class="session-meta">Lucknow, India &mdash; 2 hours ago</div>
+                </div>
+                <button class="btn btn-outline" style="font-size:11.5px;padding:4px 10px;" onclick="toast('Session revoked')">Revoke</button>
+              </div>
+              <div class="session-row">
+                <div class="session-icon">💻</div>
+                <div class="session-info">
+                  <div class="session-device">MacBook Pro — Chrome 123</div>
+                  <div class="session-meta">Mumbai, India &mdash; 3 days ago</div>
+                </div>
+                <button class="btn btn-outline" style="font-size:11.5px;padding:4px 10px;" onclick="toast('Session revoked')">Revoke</button>
+              </div>
+            </div>
+            <button class="btn btn-red" onclick="toast('All other sessions logged out')" style="margin-top:8px;">Log Out All Other Devices</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS & GST -->
+      <div id="panel-documents" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">📄</span><h2>Documents & GST</h2></div>
+          <div class="panel-card-body">
+            <div style="background:#e8f5e9;border:1px solid #a5d6a7;border-radius:8px;padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;gap:8px;">
+              <span>✅</span><span style="font-size:13px;color:#2e7d32;font-weight:500;">All documents verified — KYC complete</span>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label class="form-label">GST Number</label><input type="text" class="form-control" value="09ABCDE1234F1Z5"></div>
+              <div class="form-group"><label class="form-label">PAN Number</label><input type="text" class="form-control" value="ABCDE1234F"></div>
+            </div>
+            <div class="form-group"><label class="form-label">Business Type</label>
+              <select class="form-control"><option selected>Individual / Proprietorship</option><option>Partnership</option><option>Private Limited Company</option><option>LLP</option></select>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;">
+              <div style="border:1px solid #e5e7eb;border-radius:8px;padding:14px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:6px;">📋</div>
+                <div style="font-size:13px;font-weight:600;color:#0f1111;">GST Certificate</div>
+                <div style="font-size:11px;color:#067D62;margin:4px 0;font-weight:600;">✓ Verified</div>
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="toast('Opening document...')">View</button>
+              </div>
+              <div style="border:1px solid #e5e7eb;border-radius:8px;padding:14px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:6px;">🪪</div>
+                <div style="font-size:13px;font-weight:600;color:#0f1111;">Aadhaar / PAN</div>
+                <div style="font-size:11px;color:#067D62;margin:4px 0;font-weight:600;">✓ Verified</div>
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="toast('Opening document...')">View</button>
+              </div>
+              <div style="border:1px solid #e5e7eb;border-radius:8px;padding:14px;text-align:center;">
+                <div style="font-size:24px;margin-bottom:6px;">🏦</div>
+                <div style="font-size:13px;font-weight:600;color:#0f1111;">Bank Statement</div>
+                <div style="font-size:11px;color:#067D62;margin:4px 0;font-weight:600;">✓ Verified</div>
+                <button class="btn btn-outline" style="font-size:11px;padding:4px 10px;" onclick="toast('Opening document...')">View</button>
+              </div>
+            </div>
+            <div style="margin-top:16px;">
+              <button class="btn btn-orange" onclick="toast('✅ Settings saved')">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- POLICIES -->
+      <div id="panel-policies" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">📋</span><h2>Store Policies</h2></div>
+          <div class="panel-card-body">
+            <div class="form-group"><label class="form-label">Return & Refund Policy</label><textarea class="form-control" style="min-height:100px;">We accept returns within 15 days of delivery. Items must be unused and in original packaging. Damaged or defective items are eligible for immediate replacement or full refund.</textarea></div>
+            <div class="form-group"><label class="form-label">Shipping Policy</label><textarea class="form-control">Orders are dispatched within 1 business day. Standard delivery takes 3-5 business days. Express delivery available at checkout for 1-2 days.</textarea></div>
+            <div class="form-group"><label class="form-label">Privacy Policy</label><textarea class="form-control">Your personal data is kept secure and never shared with third parties without consent. We comply with applicable data protection regulations.</textarea></div>
+            <button class="btn btn-orange" onclick="toast('✅ Policies saved')">Save Policies</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUBSCRIPTION -->
+      <div id="panel-subscription" class="settings-panel">
+        <div class="panel-card">
+          <div class="panel-card-header"><span style="font-size:22px;">💳</span><h2>Subscription Plan</h2></div>
+          <div class="panel-card-body">
+            <div class="plan-badge">⭐ Pro Plan &mdash; ₹999/month</div>
+            <ul class="feature-list" style="margin-bottom:18px;">
+              <li>Unlimited product listings</li>
+              <li>All 8 AI agents included (Aria, Nova, Rex, Luna, Atlas, Sage, Echo, Zen)</li>
+              <li>Priority customer support 24/7</li>
+              <li>Advanced analytics and reporting</li>
+              <li>Lightning deals and promotions</li>
+              <li>GST filing assistance via Sage</li>
+              <li>Dedicated account manager</li>
+              <li>0% extra commission (standard commission only)</li>
+            </ul>
+            <div style="font-size:13px;font-weight:700;color:#0f1111;margin-bottom:10px;">Usage This Month</div>
+            <div class="usage-meter">
+              <div class="usage-label"><span>Listings Used</span><span>124 / Unlimited</span></div>
+              <div class="usage-track"><div class="usage-fill" style="width:20%;"></div></div>
+            </div>
+            <div class="usage-meter">
+              <div class="usage-label"><span>Orders Processed</span><span>847 / 2,000</span></div>
+              <div class="usage-track"><div class="usage-fill" style="width:42%;"></div></div>
+            </div>
+            <div class="usage-meter">
+              <div class="usage-label"><span>AI Actions</span><span>3,240 / 5,000</span></div>
+              <div class="usage-track"><div class="usage-fill" style="width:65%;"></div></div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:16px;align-items:center;">
+              <button class="btn btn-orange" onclick="toast('Opening Enterprise plan details...')">Upgrade to Enterprise</button>
+              <button class="btn btn-outline" onclick="toast('Opening billing history...')">Billing History</button>
+              <button style="background:none;border:none;color:#CC0C39;font-size:13px;font-weight:600;cursor:pointer;padding:8px 4px;" onclick="if(confirm('Are you sure you want to cancel your Pro plan?'))toast('Cancellation initiated — plan ends at billing period')">Cancel Plan</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CLOSE ACCOUNT -->
+      <div id="panel-close-account" class="settings-panel">
+        <div class="panel-card" style="border:2px solid #CC0C39;">
+          <div class="panel-card-header"><span style="font-size:22px;">🚪</span><h2 style="color:#CC0C39;">Close Account</h2></div>
+          <div class="panel-card-body">
+            <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:14px 16px;margin-bottom:18px;">
+              <div style="font-size:14px;font-weight:700;color:#CC0C39;margin-bottom:6px;">⚠️ Warning: This action is irreversible</div>
+              <div style="font-size:13px;color:#7f1d1d;line-height:1.6;">Closing your account will permanently delete all your listings, order history, analytics data, and AI agent configurations. Pending payouts will be processed to your bank account within 7 business days.</div>
+            </div>
+            <div class="form-group"><label class="form-label">Reason for closing (optional)</label>
+              <select class="form-control"><option>Select a reason...</option><option>Switching to another platform</option><option>Business closed</option><option>Not enough sales</option><option>Too expensive</option><option>Other</option></select>
+            </div>
+            <div class="form-group"><label class="form-label">Type "DELETE MY ACCOUNT" to confirm</label><input type="text" class="form-control" placeholder="DELETE MY ACCOUNT" id="deleteConfirm"></div>
+            <button class="btn btn-red" onclick="if(document.getElementById('deleteConfirm').value==='DELETE MY ACCOUNT'){toast('Account closure requested — our team will process within 48 hours')}else{toast('Please type the confirmation phrase exactly')}" style="padding:10px 20px;">Permanently Close Account</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+function showPanel(id, el, name) {
+  document.querySelectorAll('.settings-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.settings-nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  el.classList.add('active');
+  document.getElementById('topbarSection').textContent = name;
+}
+
+function updateAutonomy(val) {
+  const labels = ['Conservative', 'Balanced', 'Autonomous'];
+  const descs = [
+    'AI suggests only — you approve every action before it executes',
+    'AI handles routine tasks — you approve major actions, exceptions notify you',
+    'AI handles everything automatically — only escalates critical exceptions'
+  ];
+  document.getElementById('autonomyLabel').textContent = labels[val];
+  document.getElementById('autonomyDesc').textContent = descs[val];
+}
+
+function toggle2FA(el) {
+  const status = document.getElementById('twoFaStatus');
+  const qr = document.getElementById('qrSection');
+  if(el.checked) {
+    status.textContent = 'Enabled'; status.style.color = '#067D62';
+    qr.style.display = 'flex';
+    toast('2FA enabled — your account is now more secure');
+  } else {
+    status.textContent = 'Disabled'; status.style.color = '#CC0C39';
+    qr.style.display = 'none';
+    toast('2FA disabled — we recommend keeping this on');
+  }
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Ctrl+S to save
+document.addEventListener('keydown', function(e) {
+  if((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    toast('✅ Settings saved');
+  }
+});
+</script>
+</body>
+</html>

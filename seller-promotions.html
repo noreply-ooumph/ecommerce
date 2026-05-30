@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promotions — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  .sidebar { width: 220px; background: #232f3e; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto; }
+  .sidebar-logo { padding: 20px 18px 16px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #FF9900; border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: -0.3px; }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #c8cdd4; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: background 0.15s, color 0.15s; border-left: 3px solid transparent; cursor: pointer; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  .topbar { position: fixed; top: 0; left: 220px; right: 0; height: 60px; background: #0f1111; box-shadow: 0 1px 4px rgba(0,0,0,0.3); display: flex; align-items: center; padding: 0 24px; z-index: 99; gap: 16px; }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #FF9900; }
+  .breadcrumb { font-size: 13px; color: #8d96a0; flex: 1; margin-left: 12px; }
+  .breadcrumb strong { color: #fff; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #CC0C39; color: #fff; font-size: 9px; font-weight: 700; min-width: 15px; height: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF9900, #e68a00); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #fff; font-size: 13px; }
+  .seller-info .store { color: #8d96a0; }
+
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* LUNA BANNER */
+  .luna-banner {
+    background: linear-gradient(135deg, #4a0080 0%, #7c3aed 40%, #a855f7 70%, #ec4899 100%);
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .luna-icon { font-size: 36px; flex-shrink: 0; }
+  .luna-text { flex: 1; }
+  .luna-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .luna-subtitle { font-size: 12.5px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  .luna-stats { display: flex; gap: 20px; flex-wrap: wrap; }
+  .luna-stat { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 16px; text-align: center; min-width: 100px; }
+  .luna-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; }
+  .luna-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 2px; font-weight: 500; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; margin-bottom: 20px; background: #fff; border-radius: 8px; padding: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); width: fit-content; }
+  .tab { padding: 8px 20px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; color: #555; transition: all 0.15s; border: none; background: none; }
+  .tab.active { background: #FF9900; color: #fff; font-weight: 600; }
+  .tab:hover:not(.active) { background: #f5f7fa; color: #0f1111; }
+
+  /* PROMO CARDS GRID */
+  .promo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .promo-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; }
+  .promo-card-header { padding: 14px 16px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #f0f2f5; }
+  .promo-type-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .badge-lightning { background: #fff3cd; color: #d97706; }
+  .badge-coupon { background: #d1fae5; color: #065f46; }
+  .badge-bundle { background: #dbeafe; color: #1e40af; }
+  .badge-sponsored { background: #ede9fe; color: #5b21b6; }
+  .promo-name { font-size: 14px; font-weight: 700; color: #0f1111; flex: 1; }
+  .promo-discount { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 800; color: #CC0C39; }
+  .promo-body { padding: 14px 16px; }
+  .promo-products { font-size: 12.5px; color: #555; margin-bottom: 10px; }
+  .promo-label { font-size: 10.5px; text-transform: uppercase; color: #aaa; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .promo-progress-track { height: 6px; background: #f0f2f5; border-radius: 3px; overflow: hidden; margin-bottom: 4px; }
+  .promo-progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #FF9900, #ffb732); }
+  .promo-progress-label { font-size: 11px; color: #888; }
+  .promo-meta { display: flex; gap: 12px; margin: 10px 0; }
+  .promo-meta-item { flex: 1; background: #fafbfc; border-radius: 6px; padding: 8px 10px; text-align: center; }
+  .promo-meta-val { font-size: 14px; font-weight: 700; color: #0f1111; font-family: 'Space Grotesk', sans-serif; }
+  .promo-meta-lbl { font-size: 10px; color: #888; }
+  .promo-footer { display: flex; align-items: center; gap: 8px; padding: 12px 16px; border-top: 1px solid #f0f2f5; flex-wrap: wrap; }
+  .creator-tag { font-size: 11.5px; color: #888; flex: 1; }
+  .creator-tag strong { color: #7c3aed; }
+  .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 20px; transition: .3s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+  input:checked + .toggle-slider { background: #067D62; }
+  input:checked + .toggle-slider:before { transform: translateX(16px); }
+  .btn { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+  .btn-outline { background: #fff; border-color: #d0d5dd; color: #555; }
+  .btn-outline:hover { border-color: #888; color: #333; }
+  .btn-orange { background: #FF9900; color: #fff; border-color: #FF9900; }
+  .btn-orange:hover { background: #e68a00; }
+  .btn-red { background: #fff; border-color: #CC0C39; color: #CC0C39; }
+  .countdown { background: #fff3cd; color: #d97706; font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+
+  /* LUNA SUGGESTIONS */
+  .suggestions-grid { display: flex; flex-direction: column; gap: 14px; margin-bottom: 24px; }
+  .suggestion-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 2px solid #a855f7; overflow: hidden; }
+  .suggestion-header { background: linear-gradient(90deg, rgba(168,85,247,0.08), rgba(236,72,153,0.04)); padding: 14px 18px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(168,85,247,0.1); }
+  .suggestion-body { padding: 14px 18px; }
+  .suggestion-reasoning { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 12px; }
+  .suggestion-impact { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .suggestion-footer { display: flex; gap: 10px; align-items: center; }
+
+  /* CREATE PANEL */
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #0f1111; }
+
+  /* SLIDE PANEL */
+  .panel-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 200; }
+  .panel-overlay.open { display: block; }
+  .slide-panel { position: fixed; right: 0; top: 0; bottom: 0; width: 420px; background: #fff; z-index: 201; box-shadow: -4px 0 20px rgba(0,0,0,0.15); transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; }
+  .slide-panel.open { transform: translateX(0); }
+  .panel-header { padding: 20px 24px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 12px; }
+  .panel-header h2 { font-size: 18px; font-weight: 700; color: #0f1111; flex: 1; }
+  .panel-close { background: none; border: none; font-size: 22px; cursor: pointer; color: #888; padding: 0; }
+  .panel-body { padding: 20px 24px; }
+  .form-group { margin-bottom: 16px; }
+  .form-label { font-size: 12.5px; font-weight: 600; color: #444; margin-bottom: 6px; display: block; }
+  .form-control { width: 100%; border: 1px solid #d0d5dd; border-radius: 6px; padding: 9px 12px; font-size: 13.5px; font-family: 'Inter', sans-serif; outline: none; transition: border 0.15s; }
+  .form-control:focus { border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.1); }
+  .type-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .type-option { border: 2px solid #e5e7eb; border-radius: 8px; padding: 10px 12px; cursor: pointer; text-align: center; font-size: 12.5px; font-weight: 600; color: #555; transition: all 0.15s; }
+  .type-option.selected { border-color: #FF9900; background: #fff8ee; color: #FF9900; }
+  .luna-toggle-row { display: flex; align-items: center; gap: 12px; background: linear-gradient(90deg, rgba(124,58,237,0.06), rgba(236,72,153,0.04)); border: 1px solid rgba(124,58,237,0.2); border-radius: 8px; padding: 12px 14px; margin-bottom: 16px; }
+  .luna-toggle-label { flex: 1; font-size: 13px; font-weight: 600; color: #4a0080; }
+  .luna-toggle-sub { font-size: 11.5px; color: #888; font-weight: 400; }
+
+  /* PERFORMANCE CHART */
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 10px; }
+  .card-header h3 { font-size: 15px; font-weight: 700; color: #0f1111; flex: 1; }
+  .card-body { padding: 16px 18px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #0f1111; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 500; z-index: 999; display: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  .toast.show { display: flex; align-items: center; gap: 8px; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .promo-grid { grid-template-columns: 1fr !important; }
+    .slide-panel { width: 100%; right: -100%; }
+    .slide-panel.open { right: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a href="seller-dashboard.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item"><span class="nav-icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item"><span class="nav-icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="nav-icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item"><span class="nav-icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item active"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item"><span class="nav-icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="topbar-logo">⚡ Seller Central</div>
+  <div class="breadcrumb">Promotions &rsaquo; <strong>AI-Powered Deals</strong></div>
+  <div class="topbar-bell">🔔<span class="bell-badge">3</span></div>
+  <div class="seller-info"><div class="sname">Vikram S.</div><div class="store">MyStore Electronics</div></div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;cursor:pointer;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#aaa">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- LUNA BANNER -->
+  <div class="luna-banner">
+    <div class="luna-icon">🌙</div>
+    <div class="luna-text">
+      <div class="luna-title">Luna is running your promotions</div>
+      <div class="luna-subtitle">Luna created 3 deals for this week — projected +₹28,000 extra revenue<br>Luna manages: lightning deals, coupons, bundle offers, seasonal campaigns, sponsored listings</div>
+    </div>
+    <div class="luna-stats">
+      <div class="luna-stat">
+        <div class="luna-stat-val">8</div>
+        <div class="luna-stat-label">Active Promos</div>
+      </div>
+      <div class="luna-stat">
+        <div class="luna-stat-val">₹12,400</div>
+        <div class="luna-stat-label">Savings Given</div>
+      </div>
+      <div class="luna-stat">
+        <div class="luna-stat-val">234</div>
+        <div class="luna-stat-label">Extra Orders</div>
+      </div>
+      <div class="luna-stat">
+        <div class="luna-stat-val" style="color:#fde68a;">340%</div>
+        <div class="luna-stat-label">Promo ROI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION HEADER + BUTTON -->
+  <div class="section-header">
+    <div>
+      <div class="section-title">Promotions Manager</div>
+    </div>
+    <button class="btn btn-orange" onclick="openPanel()" style="padding:10px 18px;font-size:13.5px;">+ Create Promotion</button>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs" id="mainTabs">
+    <button class="tab active" onclick="switchTab(this,'active')">Active (4)</button>
+    <button class="tab" onclick="switchTab(this,'scheduled')">Scheduled (2)</button>
+    <button class="tab" onclick="switchTab(this,'expired')">Expired (12)</button>
+    <button class="tab" onclick="switchTab(this,'suggestions')">Luna Suggestions ✨ (3)</button>
+  </div>
+
+  <!-- ACTIVE PROMOS -->
+  <div id="tab-active">
+    <div class="promo-grid">
+      <!-- Card 1 -->
+      <div class="promo-card">
+        <div class="promo-card-header">
+          <span class="promo-type-badge badge-lightning">⚡ Lightning Deal</span>
+          <span class="promo-discount">20% off</span>
+          <span class="countdown">⏱ 4h 32m left</span>
+        </div>
+        <div class="promo-body">
+          <div class="promo-name">Earbuds Flash Sale</div>
+          <div class="promo-products" style="margin-top:6px;">🎧 Wireless Earbuds Pro X &nbsp;|&nbsp; 🎧 Sports Earbuds V1</div>
+          <div style="margin-top:10px;">
+            <div class="promo-label">Usage</div>
+            <div class="promo-progress-track"><div class="promo-progress-fill" style="width:68%;"></div></div>
+            <div class="promo-progress-label">136 of 200 used &mdash; 68%</div>
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-item"><div class="promo-meta-val">₹14,280</div><div class="promo-meta-lbl">Revenue</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val">68</div><div class="promo-meta-lbl">Orders</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val" style="color:#067D62;">340%</div><div class="promo-meta-lbl">ROI</div></div>
+          </div>
+        </div>
+        <div class="promo-footer">
+          <span class="creator-tag">Created by <strong>🌙 Luna</strong></span>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Promotion status updated')"><span class="toggle-slider"></span></label>
+          <button class="btn btn-outline" onclick="toast('Opening editor...')">Edit</button>
+          <button class="btn btn-outline" onclick="toast('Extending deal...')">Extend</button>
+          <button class="btn btn-red" onclick="toast('Deal ended')">End</button>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="promo-card">
+        <div class="promo-card-header">
+          <span class="promo-type-badge badge-coupon">🎫 Coupon Code</span>
+          <span class="promo-discount">₹200 off</span>
+          <span class="countdown">📅 3 days left</span>
+        </div>
+        <div class="promo-body">
+          <div class="promo-name">VIBE200 — Weekend Deal</div>
+          <div class="promo-products" style="margin-top:6px;">📱 USB-C Hub &nbsp;|&nbsp; 🖱️ Ergonomic Mouse &nbsp;|&nbsp; ⌚ Smart Band</div>
+          <div style="margin-top:10px;">
+            <div class="promo-label">Usage</div>
+            <div class="promo-progress-track"><div class="promo-progress-fill" style="width:44%;background:linear-gradient(90deg,#007185,#00b3c9);"></div></div>
+            <div class="promo-progress-label">88 of 200 used &mdash; 44%</div>
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-item"><div class="promo-meta-val">₹8,800</div><div class="promo-meta-lbl">Revenue</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val">44</div><div class="promo-meta-lbl">Orders</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val" style="color:#067D62;">280%</div><div class="promo-meta-lbl">ROI</div></div>
+          </div>
+        </div>
+        <div class="promo-footer">
+          <span class="creator-tag">Created by <strong style="color:#888;">👤 Manual</strong></span>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Promotion status updated')"><span class="toggle-slider"></span></label>
+          <button class="btn btn-outline" onclick="toast('Opening editor...')">Edit</button>
+          <button class="btn btn-outline" onclick="toast('Extending deal...')">Extend</button>
+          <button class="btn btn-red" onclick="toast('Deal ended')">End</button>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="promo-card">
+        <div class="promo-card-header">
+          <span class="promo-type-badge badge-bundle">📦 Bundle Offer</span>
+          <span class="promo-discount">15% off</span>
+          <span class="countdown">📅 7 days left</span>
+        </div>
+        <div class="promo-body">
+          <div class="promo-name">Workspace Starter Bundle</div>
+          <div class="promo-products" style="margin-top:6px;">🖱️ Mouse + 📱 USB Hub + 🔌 GaN Charger</div>
+          <div style="margin-top:10px;">
+            <div class="promo-label">Usage</div>
+            <div class="promo-progress-track"><div class="promo-progress-fill" style="width:22%;background:linear-gradient(90deg,#7c3aed,#a855f7);"></div></div>
+            <div class="promo-progress-label">22 of 100 used &mdash; 22%</div>
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-item"><div class="promo-meta-val">₹3,300</div><div class="promo-meta-lbl">Revenue</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val">22</div><div class="promo-meta-lbl">Orders</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val" style="color:#888;">190%</div><div class="promo-meta-lbl">ROI</div></div>
+          </div>
+        </div>
+        <div class="promo-footer">
+          <span class="creator-tag">Created by <strong>🌙 Luna</strong></span>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Promotion status updated')"><span class="toggle-slider"></span></label>
+          <button class="btn btn-outline" onclick="toast('Opening editor...')">Edit</button>
+          <button class="btn btn-outline" onclick="toast('Extending deal...')">Extend</button>
+          <button class="btn btn-red" onclick="toast('Deal ended')">End</button>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="promo-card">
+        <div class="promo-card-header">
+          <span class="promo-type-badge badge-sponsored">📢 Sponsored Listing</span>
+          <span class="promo-discount" style="font-size:14px;color:#5b21b6;">₹500/day budget</span>
+          <span class="countdown" style="background:#ede9fe;color:#5b21b6;">📅 Ongoing</span>
+        </div>
+        <div class="promo-body">
+          <div class="promo-name">Top of Search — Earbuds</div>
+          <div class="promo-products" style="margin-top:6px;">🎧 Wireless Earbuds Pro X — keyword: "wireless earbuds"</div>
+          <div style="margin-top:10px;">
+            <div class="promo-label">Budget Spent Today</div>
+            <div class="promo-progress-track"><div class="promo-progress-fill" style="width:74%;background:linear-gradient(90deg,#5b21b6,#a855f7);"></div></div>
+            <div class="promo-progress-label">₹370 of ₹500 spent — 74%</div>
+          </div>
+          <div class="promo-meta">
+            <div class="promo-meta-item"><div class="promo-meta-val">₹6,840</div><div class="promo-meta-lbl">Revenue Today</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val">1,240</div><div class="promo-meta-lbl">Impressions</div></div>
+            <div class="promo-meta-item"><div class="promo-meta-val" style="color:#067D62;">18.5x</div><div class="promo-meta-lbl">ROAS</div></div>
+          </div>
+        </div>
+        <div class="promo-footer">
+          <span class="creator-tag">Created by <strong>🌙 Luna</strong></span>
+          <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Promotion status updated')"><span class="toggle-slider"></span></label>
+          <button class="btn btn-outline" onclick="toast('Opening editor...')">Edit</button>
+          <button class="btn btn-outline" onclick="toast('Budget updated...')">Extend</button>
+          <button class="btn btn-red" onclick="toast('Campaign paused')">End</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LUNA SUGGESTIONS (hidden by default) -->
+  <div id="tab-suggestions" style="display:none;">
+    <div style="background:linear-gradient(90deg,rgba(124,58,237,0.08),rgba(236,72,153,0.04));border:1px solid rgba(124,58,237,0.15);border-radius:10px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-size:20px;">🌙</span>
+      <div>
+        <div style="font-size:14px;font-weight:700;color:#4a0080;">Luna AI Recommendations</div>
+        <div style="font-size:12.5px;color:#888;">Based on market analysis, buyer behavior, and your performance data</div>
+      </div>
+    </div>
+    <div class="suggestions-grid">
+      <div class="suggestion-card">
+        <div class="suggestion-header">
+          <span style="font-size:24px;">🌙</span>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:#4a0080;">Lightning Deal — Electronics</div>
+            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:#ede9fe;color:#5b21b6;">Suggested Discount: 25% off</span>
+          </div>
+          <span style="font-size:11px;color:#888;">Suggested now</span>
+        </div>
+        <div class="suggestion-body">
+          <div class="suggestion-reasoning">Electronics demand is <strong>3x normal</strong> this week due to upcoming festive season. Luna detected similar seller promotions performing 4x better during this window. Timing this deal now will maximize visibility and conversion.</div>
+          <div class="suggestion-impact">
+            <span style="font-size:20px;">📈</span>
+            <div><div style="font-size:13px;font-weight:700;color:#067D62;">Projected Impact: +₹15,000 estimated revenue</div><div style="font-size:11.5px;color:#555;">Expected 60 additional orders over 6 hours</div></div>
+          </div>
+          <div class="suggestion-footer">
+            <button class="btn btn-orange" style="flex:1;" onclick="toast('✨ Creating deal — Luna is optimizing it now!')">Create This Deal</button>
+            <button style="background:none;border:none;font-size:13px;color:#888;cursor:pointer;padding:6px 10px;" onclick="this.closest('.suggestion-card').remove();toast('Suggestion dismissed')">Dismiss</button>
+          </div>
+        </div>
+      </div>
+      <div class="suggestion-card">
+        <div class="suggestion-header">
+          <span style="font-size:24px;">🌙</span>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:#4a0080;">Bundle Offer — Workspace Kit</div>
+            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:#ede9fe;color:#5b21b6;">Suggested Discount: 18% off bundle</span>
+          </div>
+          <span style="font-size:11px;color:#888;">Suggested 2h ago</span>
+        </div>
+        <div class="suggestion-body">
+          <div class="suggestion-reasoning">Luna noticed buyers who purchase your mouse frequently also add a USB hub in the same session. Bundling Mouse + Hub + Charger at 18% off could <strong>increase average order value by ₹450</strong> and reduce cart abandonment.</div>
+          <div class="suggestion-impact">
+            <span style="font-size:20px;">📦</span>
+            <div><div style="font-size:13px;font-weight:700;color:#067D62;">Projected Impact: +₹9,000 estimated revenue</div><div style="font-size:11.5px;color:#555;">+35% AOV increase predicted</div></div>
+          </div>
+          <div class="suggestion-footer">
+            <button class="btn btn-orange" style="flex:1;" onclick="toast('✨ Bundle deal created by Luna!')">Create This Deal</button>
+            <button style="background:none;border:none;font-size:13px;color:#888;cursor:pointer;padding:6px 10px;" onclick="this.closest('.suggestion-card').remove();toast('Suggestion dismissed')">Dismiss</button>
+          </div>
+        </div>
+      </div>
+      <div class="suggestion-card">
+        <div class="suggestion-header">
+          <span style="font-size:24px;">🌙</span>
+          <div style="flex:1;">
+            <div style="font-size:14px;font-weight:700;color:#4a0080;">Coupon Code — Re-engagement</div>
+            <span style="font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;background:#ede9fe;color:#5b21b6;">Suggested Discount: ₹150 off ₹999+</span>
+          </div>
+          <span style="font-size:11px;color:#888;">Suggested 5h ago</span>
+        </div>
+        <div class="suggestion-body">
+          <div class="suggestion-reasoning">You have <strong>284 buyers who haven't returned in 45+ days</strong>. Luna recommends a targeted coupon to re-engage them. Past re-engagement campaigns show 22% redemption rate and high LTV buyers.</div>
+          <div class="suggestion-impact">
+            <span style="font-size:20px;">💌</span>
+            <div><div style="font-size:13px;font-weight:700;color:#067D62;">Projected Impact: +₹6,200 estimated revenue</div><div style="font-size:11.5px;color:#555;">~62 re-activated buyers at 22% redemption</div></div>
+          </div>
+          <div class="suggestion-footer">
+            <button class="btn btn-orange" style="flex:1;" onclick="toast('✨ Coupon campaign launched by Luna!')">Create This Deal</button>
+            <button style="background:none;border:none;font-size:13px;color:#888;cursor:pointer;padding:6px 10px;" onclick="this.closest('.suggestion-card').remove();toast('Suggestion dismissed')">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLACEHOLDER TABS -->
+  <div id="tab-scheduled" style="display:none;padding:40px;text-align:center;background:#fff;border-radius:10px;">
+    <div style="font-size:40px;margin-bottom:12px;">📅</div>
+    <div style="font-size:16px;font-weight:700;color:#0f1111;margin-bottom:8px;">2 Scheduled Promotions</div>
+    <div style="font-size:13.5px;color:#888;">Luna has scheduled these to launch automatically at the optimal time</div>
+  </div>
+  <div id="tab-expired" style="display:none;padding:40px;text-align:center;background:#fff;border-radius:10px;">
+    <div style="font-size:40px;margin-bottom:12px;">📜</div>
+    <div style="font-size:16px;font-weight:700;color:#0f1111;margin-bottom:8px;">12 Expired Promotions</div>
+    <div style="font-size:13.5px;color:#888;">View historical performance and duplicate any past promotion</div>
+  </div>
+
+  <!-- PERFORMANCE CHART -->
+  <div class="card" style="margin-top:24px;margin-bottom:30px;">
+    <div class="card-header">
+      <h3>📊 Revenue: Promotions vs Organic (Last 14 Days)</h3>
+      <div style="display:flex;gap:12px;font-size:12px;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#FF9900;display:inline-block;"></span>Promo Revenue</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:12px;height:12px;border-radius:2px;background:#007185;display:inline-block;"></span>Organic</span>
+      </div>
+    </div>
+    <div class="card-body"><canvas id="perfChart" height="80"></canvas></div>
+  </div>
+
+</main>
+
+<!-- CREATE PANEL OVERLAY -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="slide-panel" id="slidePanel">
+  <div class="panel-header">
+    <h2>🎟️ Create Promotion</h2>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-body">
+    <div class="form-group">
+      <label class="form-label">Promotion Type</label>
+      <div class="type-selector">
+        <div class="type-option selected" onclick="selectType(this)">⚡ Lightning Deal</div>
+        <div class="type-option" onclick="selectType(this)">🎫 Coupon Code</div>
+        <div class="type-option" onclick="selectType(this)">📦 Bundle Offer</div>
+        <div class="type-option" onclick="selectType(this)">🔁 BOGO</div>
+        <div class="type-option" onclick="selectType(this)" style="grid-column:1/-1;">📢 Sponsored Listing</div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Products</label>
+      <input type="text" class="form-control" placeholder="Search and select products..." value="🎧 Wireless Earbuds Pro X">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Promotion Name</label>
+      <input type="text" class="form-control" placeholder="e.g. Weekend Flash Sale" value="Summer Flash Deal">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group">
+        <label class="form-label">Discount Type</label>
+        <select class="form-control">
+          <option>Percentage (%)</option>
+          <option>Fixed Amount (₹)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Discount Value</label>
+        <input type="text" class="form-control" placeholder="e.g. 20" value="20">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group">
+        <label class="form-label">Start Date & Time</label>
+        <input type="datetime-local" class="form-control">
+      </div>
+      <div class="form-group">
+        <label class="form-label">End Date & Time</label>
+        <input type="datetime-local" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Usage Limit</label>
+      <input type="number" class="form-control" placeholder="e.g. 200" value="200">
+    </div>
+    <div class="luna-toggle-row">
+      <div>
+        <div class="luna-toggle-label">🌙 Let Luna optimize this promotion</div>
+        <div class="luna-toggle-sub">Luna will auto-adjust timing, budget, and targeting for best results</div>
+      </div>
+      <label class="toggle-switch"><input type="checkbox" checked><span class="toggle-slider"></span></label>
+    </div>
+    <button class="btn btn-orange" style="width:100%;padding:12px;font-size:14px;" onclick="closePanel();toast('🎟️ Promotion launched! Luna is optimizing it.')">🚀 Launch Promotion</button>
+    <button style="width:100%;padding:8px;margin-top:8px;background:none;border:none;font-size:13px;color:#888;cursor:pointer;" onclick="closePanel()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+function openPanel() {
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('slidePanel').classList.add('open');
+}
+function closePanel() {
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.getElementById('slidePanel').classList.remove('open');
+}
+function selectType(el) {
+  document.querySelectorAll('.type-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function switchTab(el, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  ['active','scheduled','expired','suggestions'].forEach(t => {
+    const el2 = document.getElementById('tab-'+t);
+    if(el2) el2.style.display = (t===tab)?'block':'none';
+  });
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// Performance Chart
+const ctx = document.getElementById('perfChart').getContext('2d');
+const labels = Array.from({length:14},(_,i)=>{const d=new Date();d.setDate(d.getDate()-13+i);return d.toLocaleDateString('en',{month:'short',day:'numeric'});});
+new Chart(ctx, {
+  type:'bar',
+  data:{
+    labels,
+    datasets:[
+      {label:'Promo Revenue',data:[3200,4100,2800,5200,4800,6100,5600,4200,7100,6400,5800,8200,7600,9100],backgroundColor:'rgba(255,153,0,0.8)',borderRadius:3,stack:'s'},
+      {label:'Organic',data:[5100,4800,6200,5400,6800,5900,7200,6100,5800,7400,6700,6200,7800,8400],backgroundColor:'rgba(0,113,133,0.6)',borderRadius:3,stack:'s'}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{font:{size:11},boxWidth:14}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9},callback:v=>'₹'+v.toLocaleString()},stacked:true}}}
+});
+</script>
+</body>
+</html>

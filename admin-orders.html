@@ -7,797 +7,359 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#06060f;--bg2:#0d0d1f;--bg3:#13132a;
-  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
-  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
-  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;
-  --blue:#60a5fa;
-  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
-  --sidebar-w:240px;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;display:flex;height:100vh;overflow:hidden}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
-input,select{font-family:'Inter',sans-serif}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-@keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes fadeUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
-@keyframes toastIn{from{transform:translateX(120%);opacity:0}to{transform:translateX(0);opacity:1}}
-@keyframes toastOut{from{transform:translateX(0);opacity:1}to{transform:translateX(120%);opacity:0}}
+#sidebar{width:240px;flex-shrink:0;background:#131921;display:flex;flex-direction:column;height:100vh;overflow-y:auto;position:fixed;left:0;top:0;z-index:100}
+.topbar-hamburger{display:none;background:none;border:none;color:#333;font-size:1.3rem;cursor:pointer;padding:4px 8px;margin-right:4px;align-items:center;justify-content:center}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99}
+.sidebar-overlay.show{display:block}
+@media(max-width:768px){
+  #sidebar{left:-240px;transition:left 0.3s ease;z-index:1000}
+  #sidebar.open{left:0}
+  #main{margin-left:0}
+  .topbar-hamburger{display:flex!important}
+  .metrics-grid{grid-template-columns:1fr 1fr!important}
+  .card{overflow-x:auto}
+  table{white-space:nowrap}
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-input,.filter-select{width:100%!important}
+}
+.sb-logo{padding:20px 20px 18px;font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:#FF9900;border-bottom:1px solid #232f3e}
+.sb-section{padding:16px 16px 6px;font-size:0.62rem;font-weight:700;color:#8a9bb0;letter-spacing:0.1em;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:0.84rem;color:#d5dbdb;cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;text-decoration:none}
+.sb-item:hover{background:#232f3e;color:#fff}
+.sb-item.active{background:#232f3e;color:#FF9900;border-left-color:#FF9900}
+.sb-divider{border:none;border-top:1px solid #232f3e;margin:8px 0}
+.live-badge{margin-left:auto;background:#1a7a3a;color:#4ade80;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:10px}
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{background:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.1);flex-shrink:0}
+.topbar-left{font-size:0.82rem;color:#666}.topbar-left span{color:#131921;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.bell-btn{position:relative;background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px}
+.bell-badge{position:absolute;top:0;right:0;background:#e53e3e;color:#fff;font-size:0.55rem;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.agent-chip{background:#f0f2f5;border:1px solid #ddd;border-radius:20px;padding:4px 10px;font-size:0.72rem;color:#333;display:flex;align-items:center;gap:5px}
+.agent-chip .dot{width:6px;height:6px;border-radius:50%;background:#22c55e}
+.admin-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF9900,#e07b00);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page-title{font-size:1.3rem;font-weight:700;color:#131921;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.ai-banner{background:linear-gradient(135deg,#232f3e,#131921);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;color:#fff}
+.ai-banner .ai-icon{font-size:1.4rem}
+.ai-banner .ai-text{font-size:0.88rem;line-height:1.5}
+.ai-banner .ai-text strong{color:#FF9900}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.metric-card{background:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:4px solid #3b82f6}
+.metric-card.green{border-left-color:#22c55e}.metric-card.orange{border-left-color:#FF9900}.metric-card.red{border-left-color:#ef4444}.metric-card.teal{border-left-color:#007185}
+.metric-icon{font-size:1.5rem}.metric-val{font-size:1.3rem;font-weight:700;color:#131921;line-height:1}.metric-label{font-size:0.72rem;color:#666;margin-top:2px}
+.filter-bar{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.filter-input{border:1px solid #ddd;border-radius:7px;padding:8px 12px;font-size:0.83rem;font-family:'Inter',sans-serif;outline:none;width:200px}
+.filter-input:focus{border-color:#FF9900}
+.filter-select{border:1px solid #ddd;border-radius:7px;padding:8px 12px;font-size:0.83rem;font-family:'Inter',sans-serif;outline:none;background:#fff}
+.btn-orange{background:#FF9900;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:0.83rem;font-weight:600;cursor:pointer}
+.btn-outline{background:#fff;color:#333;border:1px solid #ddd;border-radius:8px;padding:9px 14px;font-size:0.83rem;font-weight:600;cursor:pointer}
+.ms-auto{margin-left:auto}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:0.82rem}
+thead th{background:#f8f9fa;color:#555;font-weight:600;padding:10px 12px;text-align:left;font-size:0.78rem}
+tbody tr{border-bottom:1px solid #f0f2f5;transition:background 0.15s;cursor:pointer}
+tbody tr:hover{background:#fffbf0}
+td{padding:10px 12px;vertical-align:middle}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:0.7rem;font-weight:600}
+.sb-green{background:#dcfce7;color:#166534}
+.sb-yellow{background:#fef9c3;color:#854d0e}
+.sb-red{background:#fee2e2;color:#991b1b}
+.sb-blue{background:#dbeafe;color:#1e40af}
+.sb-gray{background:#f3f4f6;color:#374151}
+.sb-orange{background:#fff7ed;color:#c2410c}
+.dispute-badge{background:#fef9c3;color:#854d0e;font-size:0.65rem;padding:2px 7px;border-radius:8px;font-weight:700;margin-left:4px}
+.teal-link{color:#007185;font-weight:600}
+.teal-link:hover{text-decoration:underline}
+.action-btns{display:flex;gap:5px}
+.btn-xs{padding:4px 8px;border-radius:5px;font-size:0.7rem;font-weight:600;border:none;cursor:pointer;white-space:nowrap}
+.btn-view{background:#f0f2f5;color:#333}.btn-view:hover{background:#e5e7eb}
+.btn-resolve{background:#dbeafe;color:#1e40af}.btn-resolve:hover{background:#3b82f6;color:#fff}
 
-/* ─── SIDEBAR ─── */
-#sidebar{
-  width:var(--sidebar-w);flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
-  transition:width 0.3s;z-index:100;
-}
-.sb-logo{
-  padding:20px 20px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;
-  background:linear-gradient(135deg,var(--purple2),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  flex-shrink:0;
-}
-.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
-.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.sb-store-name{font-size:0.83rem;font-weight:600}
-.sb-store-url{font-size:0.68rem;color:var(--gray)}
-.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 16px;margin:2px 8px;border-radius:8px;
-  font-size:0.84rem;color:var(--gray);cursor:pointer;
-  transition:all 0.2s;border:1px solid transparent;
-}
-.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
-.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
-.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
-.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
-.sb-badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
-.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
-.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--card);cursor:pointer}
-.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
-.sb-user-name{font-size:0.82rem;font-weight:600}
-.sb-user-plan{font-size:0.68rem;color:var(--cyan)}
-
-/* ─── MAIN ─── */
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-/* ─── TOP BAR ─── */
-#topbar{
-  height:60px;flex-shrink:0;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 24px;gap:16px;
-}
-.tb-title{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;flex:1}
-.btn{
-  display:inline-flex;align-items:center;gap:7px;
-  padding:8px 16px;border-radius:8px;font-size:0.83rem;font-weight:600;
-  border:none;transition:all 0.2s;
-}
-.btn-primary{background:var(--purple);color:#fff}
-.btn-primary:hover{background:var(--purple2);transform:translateY(-1px);box-shadow:0 4px 16px rgba(124,58,237,0.4)}
-.btn-ghost{background:var(--card);color:var(--white);border:1px solid var(--border)}
-.btn-ghost:hover{background:rgba(255,255,255,0.07);border-color:rgba(255,255,255,0.15)}
-.btn-sm{padding:6px 12px;font-size:0.76rem}
-.btn-danger{background:rgba(248,113,113,0.15);color:var(--red);border:1px solid rgba(248,113,113,0.25)}
-.btn-danger:hover{background:rgba(248,113,113,0.25)}
-
-/* ─── CONTENT ─── */
-#content{flex:1;overflow-y:auto;padding:24px}
-
-/* ─── ZEN AI BANNER ─── */
-.zen-banner{
-  background:linear-gradient(135deg,rgba(6,182,212,0.08),rgba(124,58,237,0.08));
-  border:1px solid rgba(6,182,212,0.25);border-radius:12px;
-  padding:14px 20px;display:flex;align-items:center;gap:14px;
-  margin-bottom:24px;animation:fadeUp 0.5s ease;
-}
-.zen-banner-icon{font-size:1.4rem;flex-shrink:0}
-.zen-banner-text{font-size:0.85rem;color:var(--cyan2);flex:1}
-.zen-banner-text strong{color:#fff}
-.zen-banner-actions{display:flex;gap:8px}
-
-/* ─── METRIC CARDS ─── */
-.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.metric-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:18px 20px;transition:all 0.25s;animation:fadeUp 0.5s ease;
-}
-.metric-card:hover{border-color:rgba(124,58,237,0.3);transform:translateY(-2px)}
-.mc-label{font-size:0.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;font-weight:600;margin-bottom:10px}
-.mc-value{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;line-height:1}
-.mc-sub{font-size:0.72rem;color:var(--gray);margin-top:6px}
-.mc-delta{display:inline-flex;align-items:center;gap:3px;font-size:0.72rem;font-weight:600;padding:2px 6px;border-radius:4px;margin-top:6px}
-.delta-up{background:rgba(74,222,128,0.12);color:var(--green)}
-.delta-down{background:rgba(248,113,113,0.12);color:var(--red)}
-
-/* ─── FILTER TABS ─── */
-.filter-tabs{display:flex;gap:2px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:16px;overflow-x:auto}
-.tab{
-  padding:7px 14px;border-radius:7px;font-size:0.82rem;font-weight:500;
-  color:var(--gray);cursor:pointer;border:none;background:none;white-space:nowrap;
-  transition:all 0.2s;display:flex;align-items:center;gap:6px;
-}
-.tab:hover{color:var(--white)}
-.tab.active{background:rgba(124,58,237,0.2);color:var(--white)}
-.tab-count{background:rgba(255,255,255,0.08);color:var(--gray);font-size:0.67rem;padding:1px 6px;border-radius:4px;font-weight:700}
-.tab.active .tab-count{background:rgba(124,58,237,0.3);color:var(--lav)}
-
-/* ─── SEARCH/FILTER BAR ─── */
-.search-bar{
-  display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;
-}
-.search-input{
-  flex:1;min-width:200px;
-  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-  padding:9px 14px;font-size:0.84rem;color:var(--white);outline:none;
-  transition:border-color 0.2s;
-}
-.search-input:focus{border-color:var(--purple)}
-.search-input::placeholder{color:var(--gray)}
-.filter-select{
-  background:var(--bg2);border:1px solid var(--border);border-radius:8px;
-  padding:8px 12px;font-size:0.82rem;color:var(--white);outline:none;
-  cursor:pointer;transition:border-color 0.2s;
-}
-.filter-select:focus{border-color:var(--purple)}
-.filter-select option{background:#1a1a2e}
-
-/* ─── BULK ACTIONS ─── */
-.bulk-bar{
-  display:flex;align-items:center;gap:10px;padding:10px 14px;
-  background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);
-  border-radius:8px;margin-bottom:12px;
-  transition:all 0.3s;
-}
-.bulk-bar.hidden{display:none}
-.bulk-count{font-size:0.83rem;font-weight:600;color:var(--lav);margin-right:4px}
-.bulk-actions{display:flex;gap:8px;margin-left:auto}
-
-/* ─── TABLE ─── */
-.table-wrap{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;
-}
-table{width:100%;border-collapse:collapse}
-thead th{
-  padding:12px 16px;font-size:0.72rem;color:var(--gray);
-  text-transform:uppercase;letter-spacing:0.06em;font-weight:700;
-  background:rgba(255,255,255,0.02);border-bottom:1px solid var(--border);
-  text-align:left;white-space:nowrap;
-}
-thead th:first-child{width:44px}
-tbody tr{border-bottom:1px solid rgba(255,255,255,0.05);transition:background 0.15s;cursor:pointer}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(255,255,255,0.03)}
-tbody tr.selected{background:rgba(124,58,237,0.07)}
-td{padding:13px 16px;font-size:0.84rem;vertical-align:middle}
-.td-order{font-weight:700;color:var(--cyan);font-size:0.84rem}
-.td-order:hover{text-decoration:underline}
-.td-date{color:var(--gray);font-size:0.78rem}
-.td-customer{font-weight:500}
-.td-items{color:var(--gray);font-size:0.78rem}
-.td-total{font-weight:700}
-.td-actions{display:flex;gap:6px;align-items:center}
-
-/* ─── STATUS BADGES ─── */
-.badge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:3px 10px;border-radius:100px;font-size:0.71rem;font-weight:700;
-  white-space:nowrap;
-}
-.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
-.badge-green{background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
-.badge-green::before{background:var(--green)}
-.badge-blue{background:rgba(96,165,250,0.12);color:var(--blue);border:1px solid rgba(96,165,250,0.2)}
-.badge-blue::before{background:var(--blue)}
-.badge-yellow{background:rgba(251,191,36,0.12);color:var(--yellow);border:1px solid rgba(251,191,36,0.2)}
-.badge-yellow::before{background:var(--yellow)}
-.badge-red{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.badge-red::before{background:var(--red)}
-.badge-purple{background:rgba(124,58,237,0.15);color:var(--lav);border:1px solid rgba(124,58,237,0.3)}
-.badge-purple::before{background:var(--lav)}
-.badge-gray{background:rgba(136,146,164,0.12);color:var(--gray);border:1px solid rgba(136,146,164,0.2)}
-.badge-gray::before{background:var(--gray)}
-
-/* ─── CHECKBOX ─── */
-input[type=checkbox]{
-  width:15px;height:15px;accent-color:var(--purple);cursor:pointer;border-radius:4px;
-}
-
-/* ─── PAGINATION ─── */
-.pagination{
-  display:flex;align-items:center;justify-content:between;
-  padding:16px 20px;border-top:1px solid var(--border);
-  gap:8px;
-}
-.page-info{font-size:0.8rem;color:var(--gray);flex:1}
-.page-btns{display:flex;gap:4px;margin-left:auto}
-.page-btn{
-  width:32px;height:32px;display:flex;align-items:center;justify-content:center;
-  border-radius:6px;font-size:0.82rem;border:1px solid var(--border);
-  background:none;color:var(--gray);cursor:pointer;transition:all 0.2s;
-}
-.page-btn:hover{background:rgba(124,58,237,0.1);color:var(--white);border-color:rgba(124,58,237,0.3)}
-.page-btn.active{background:var(--purple);color:#fff;border-color:var(--purple)}
-.page-btn:disabled{opacity:0.3;cursor:not-allowed}
-
-/* ─── SLIDE PANEL ─── */
-#overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;
-  opacity:0;pointer-events:none;transition:opacity 0.3s;
-}
-#overlay.open{opacity:1;pointer-events:all}
-#slide-panel{
-  position:fixed;top:0;right:0;bottom:0;width:480px;
-  background:var(--bg2);border-left:1px solid var(--border);
-  z-index:201;transform:translateX(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  display:flex;flex-direction:column;overflow:hidden;
-}
-#slide-panel.open{transform:translateX(0)}
-.panel-header{
-  padding:20px 24px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:16px;flex-shrink:0;
-}
-.panel-close{
-  width:32px;height:32px;border-radius:8px;background:var(--card);
-  border:1px solid var(--border);display:flex;align-items:center;justify-content:center;
-  cursor:pointer;font-size:1rem;color:var(--gray);transition:all 0.2s;
-}
-.panel-close:hover{color:var(--white);background:rgba(255,255,255,0.08)}
-.panel-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;flex:1}
-.panel-body{flex:1;overflow-y:auto;padding:24px}
-.panel-section{margin-bottom:24px}
-.panel-section-title{font-size:0.72rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--gray);font-weight:700;margin-bottom:12px}
-.panel-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
-.panel-row:last-child{border-bottom:none}
-.panel-row-label{font-size:0.82rem;color:var(--gray)}
-.panel-row-value{font-size:0.82rem;font-weight:600}
-.panel-customer{display:flex;align-items:center;gap:12px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:16px}
-.panel-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.9rem;flex-shrink:0}
-.panel-customer-name{font-weight:600;font-size:0.88rem}
-.panel-customer-email{font-size:0.75rem;color:var(--gray)}
-.panel-item{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px}
-.panel-item-img{width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(6,182,212,0.3));display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.panel-item-name{font-size:0.84rem;font-weight:500;flex:1}
-.panel-item-price{font-size:0.84rem;font-weight:700;color:var(--cyan)}
-.panel-footer{padding:20px 24px;border-top:1px solid var(--border);display:flex;gap:10px;flex-shrink:0}
-
-/* ─── TOAST ─── */
-#toast{
-  position:fixed;bottom:24px;right:24px;z-index:300;
-  background:linear-gradient(135deg,rgba(74,222,128,0.12),rgba(6,182,212,0.12));
-  border:1px solid rgba(74,222,128,0.3);border-radius:12px;
-  padding:14px 18px;display:flex;align-items:center;gap:12px;
-  max-width:360px;box-shadow:0 8px 32px rgba(0,0,0,0.4);
-  animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1);
-}
-#toast.hide{animation:toastOut 0.3s ease forwards}
-.toast-icon{font-size:1.3rem;flex-shrink:0}
-.toast-text{font-size:0.84rem;color:var(--white)}
-.toast-text strong{color:var(--green)}
-.toast-close{margin-left:auto;background:none;border:none;color:var(--gray);font-size:1rem;cursor:pointer;padding:2px;flex-shrink:0}
-
-/* ─── RESPONSIVE ─── */
-@media(max-width:1100px){
-  .metrics-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:900px){
-  #sidebar{display:none}
-  .td-date,.td-items{display:none}
-  #slide-panel{width:100%}
-}
-@media(max-width:640px){
-  .metrics-grid{grid-template-columns:1fr 1fr}
-  #content{padding:16px}
-  .search-bar{flex-direction:column;align-items:stretch}
-  .search-input{min-width:unset}
-}
+/* SLIDE PANEL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:200}
+.overlay.show{display:block}
+.slide-panel{position:fixed;right:-480px;top:0;width:480px;height:100vh;background:#fff;z-index:201;overflow-y:auto;transition:right 0.3s ease;box-shadow:-4px 0 20px rgba(0,0,0,0.15)}
+.slide-panel.open{right:0}
+.panel-header{background:#131921;color:#fff;padding:18px 20px;display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:1rem;font-weight:700;font-family:'Space Grotesk',sans-serif}
+.panel-close{background:none;border:none;color:#fff;font-size:1.3rem;cursor:pointer}
+.panel-body{padding:20px}
+.panel-section{margin-bottom:18px}
+.panel-section-title{font-size:0.75rem;font-weight:700;color:#8a9bb0;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:8px}
+.info-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0f2f5;font-size:0.83rem}
+.info-row .label{color:#666}.info-row .value{font-weight:600;color:#131921}
+.dispute-actions{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.dispute-btn{padding:11px 16px;border-radius:8px;font-size:0.85rem;font-weight:600;border:none;cursor:pointer;text-align:left}
+.btn-refund{background:#dcfce7;color:#166534}.btn-refund:hover{background:#16a34a;color:#fff}
+.btn-seller-side{background:#dbeafe;color:#1e40af}.btn-seller-side:hover{background:#3b82f6;color:#fff}
+.btn-escalate{background:#fee2e2;color:#991b1b}.btn-escalate:hover{background:#dc2626;color:#fff}
 </style>
 </head>
 <body>
 
-<!-- ─── SIDEBAR ─── -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <nav id="sidebar">
-  <div class="sb-logo">
-    <div class="sb-dot"></div>
-    VibeStore
-  </div>
-
-  <div class="sb-store">
-    <div class="sb-store-icon">🛍️</div>
-    <div>
-      <div class="sb-store-name">My VibeStore</div>
-      <div class="sb-store-url">vibestore.myshopify.com</div>
-    </div>
-  </div>
-
-  <div class="sb-section">Main Menu</div>
-  <a href="app.html" class="sb-item"><span class="icon">🏠</span> Dashboard</a>
-  <a href="admin-orders.html" class="sb-item active"><span class="icon">📦</span> Orders <span class="sb-badge">47</span></a>
-  <a href="admin-products.html" class="sb-item"><span class="icon">🏷️</span> Products</a>
-  <a href="admin-customers.html" class="sb-item"><span class="icon">👥</span> Customers</a>
-  <a href="admin-discounts.html" class="sb-item"><span class="icon">🎟️</span> Discounts</a>
-  <a href="admin-reports.html" class="sb-item"><span class="icon">📊</span> Reports</a>
-
-  <div class="sb-section">Store</div>
-  <a href="admin-settings.html" class="sb-item"><span class="icon">⚙️</span> Settings</a>
-  <a href="mystore.html" class="sb-item"><span class="icon">🔗</span> View Store <span class="sb-badge sb-badge-green">Live</span></a>
-  <a href="index.html" class="sb-item"><span class="icon">🏠</span> Back to Site</a>
-
-  <div class="sb-bottom">
-    <div class="sb-user">
-      <div class="sb-avatar">S</div>
-      <div>
-        <div class="sb-user-name">Sarth</div>
-        <div class="sb-user-plan">Pro Plan · Zen AI On</div>
-      </div>
-    </div>
-  </div>
+  <div class="sb-logo">⚡VibeStore Admin</div>
+  <div class="sb-section">Main</div>
+  <a class="sb-item" href="app.html">🏠 Dashboard</a>
+  <a class="sb-item active" href="admin-orders.html">📦 Orders</a>
+  <a class="sb-item" href="admin-products.html">🏷️ Products</a>
+  <a class="sb-item" href="admin-customers.html">👥 Sellers</a>
+  <a class="sb-item" href="admin-discounts.html">🎟️ Promotions</a>
+  <a class="sb-item" href="admin-reports.html">📊 Reports</a>
+  <a class="sb-item" href="admin-settings.html">⚙️ Settings</a>
+  <hr class="sb-divider"/>
+  <a class="sb-item" href="index.html">🛍️ View Marketplace <span class="live-badge">Live</span></a>
+  <a class="sb-item" href="seller-central.html">👨‍💼 Seller Central</a>
 </nav>
 
-<!-- ─── MAIN ─── -->
 <div id="main">
-
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <div class="tb-title">📦 Orders</div>
-    <button class="btn btn-ghost" onclick="alert('Export CSV generated!')">⬇ Export</button>
-    <button class="btn btn-primary" onclick="openCreateOrder()">+ Create Order</button>
+  <div class="topbar">
+    <button class="topbar-hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-left">Admin Panel &rsaquo; <span>All Marketplace Orders</span></div>
+    <div class="topbar-right">
+      <button class="bell-btn">🔔<span class="bell-badge">12</span></button>
+      <div class="agent-chip"><span class="dot"></span> Zen Active</div>
+      <div class="admin-avatar" onclick="vsLogout()" title="Sign out">A</div>
+    </div>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
-
-    <!-- ZEN AI BANNER -->
-    <div class="zen-banner">
-      <div class="zen-banner-icon">🤖</div>
-      <div class="zen-banner-text">
-        <strong>Zen AI</strong> processed <strong>47 orders</strong> today —
-        <strong style="color:var(--yellow)">3 flagged for review</strong>,
-        <strong style="color:var(--red)">2 require manual action</strong>.
-        Auto-fulfillment active on eligible digital orders.
-      </div>
-      <div class="zen-banner-actions">
-        <button class="btn btn-ghost btn-sm" onclick="alert('Viewing flagged orders…')">View Flagged</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--gray)" onclick="this.closest('.zen-banner').remove()">✕</button>
-      </div>
+  <div class="content">
+    <div class="page-title">All Marketplace Orders</div>
+    <div class="ai-banner">
+      <div class="ai-icon">🤖</div>
+      <div class="ai-text"><strong>Zen AI:</strong> Zen processed <strong>847 orders</strong> today across 1,284 active sellers — <strong>12 disputes need resolution</strong>, 8 refund requests pending. Average dispute resolution time: 4.2 hrs.</div>
     </div>
 
-    <!-- METRIC CARDS -->
     <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="mc-label">Today's Orders</div>
-        <div class="mc-value" style="color:var(--cyan)">47</div>
-        <div><span class="mc-delta delta-up">↑ 12%</span></div>
-        <div class="mc-sub">vs 42 yesterday</div>
-      </div>
-      <div class="metric-card">
-        <div class="mc-label">Pending Fulfilment</div>
-        <div class="mc-value" style="color:var(--yellow)">12</div>
-        <div><span class="mc-delta delta-down">↑ 3</span></div>
-        <div class="mc-sub">Needs attention</div>
-      </div>
-      <div class="metric-card">
-        <div class="mc-label">Shipped</div>
-        <div class="mc-value" style="color:var(--blue)">28</div>
-        <div><span class="mc-delta delta-up">↑ 8%</span></div>
-        <div class="mc-sub">In transit today</div>
-      </div>
-      <div class="metric-card">
-        <div class="mc-label">Delivered Today</div>
-        <div class="mc-value" style="color:var(--green)">31</div>
-        <div><span class="mc-delta delta-up">↑ 19%</span></div>
-        <div class="mc-sub">Customer satisfied</div>
-      </div>
+      <div class="metric-card"><div class="metric-icon">📦</div><div><div class="metric-val">847</div><div class="metric-label">Total Orders Today</div></div></div>
+      <div class="metric-card orange"><div class="metric-icon">⏳</div><div><div class="metric-val">47</div><div class="metric-label">Pending Processing</div></div></div>
+      <div class="metric-card red"><div class="metric-icon">⚖️</div><div><div class="metric-val">12</div><div class="metric-label">Open Disputes</div></div></div>
+      <div class="metric-card teal"><div class="metric-icon">↩️</div><div><div class="metric-val">8</div><div class="metric-label">Refunds Requested</div></div></div>
     </div>
 
-    <!-- FILTER TABS -->
-    <div class="filter-tabs" id="filterTabs">
-      <button class="tab active" data-filter="all" onclick="setFilter(this,'all')">All <span class="tab-count">347</span></button>
-      <button class="tab" data-filter="unfulfilled" onclick="setFilter(this,'unfulfilled')">Unfulfilled <span class="tab-count">12</span></button>
-      <button class="tab" data-filter="partial" onclick="setFilter(this,'partial')">Partially Fulfilled <span class="tab-count">3</span></button>
-      <button class="tab" data-filter="fulfilled" onclick="setFilter(this,'fulfilled')">Fulfilled <span class="tab-count">298</span></button>
-      <button class="tab" data-filter="cancelled" onclick="setFilter(this,'cancelled')">Cancelled <span class="tab-count">34</span></button>
-    </div>
-
-    <!-- SEARCH + FILTER BAR -->
-    <div class="search-bar">
-      <input type="search" class="search-input" placeholder="🔍  Search orders by #, customer, email…" id="searchInput" oninput="filterTable()"/>
-      <input type="date" class="filter-select" id="dateFrom" style="color:var(--gray)" onchange="filterTable()"/>
-      <input type="date" class="filter-select" id="dateTo" style="color:var(--gray)" onchange="filterTable()"/>
-      <select class="filter-select" id="payFilter" onchange="filterTable()">
-        <option value="">Payment Status</option>
-        <option>Paid</option>
-        <option>Pending</option>
-        <option>Authorized</option>
-        <option>Refunded</option>
+    <div class="filter-bar">
+      <input class="filter-input" type="text" placeholder="🔍 Search order #, buyer, product..."/>
+      <select class="filter-select">
+        <option>All Sellers</option>
+        <option>TechMart India</option>
+        <option>GadgetZone</option>
+        <option>FashionKart</option>
+        <option>HomeDecor Plus</option>
       </select>
-      <select class="filter-select" id="fulfillFilter" onchange="filterTable()">
-        <option value="">Fulfilment Status</option>
-        <option>Fulfilled</option>
-        <option>Unfulfilled</option>
-        <option>Shipped</option>
+      <select class="filter-select">
+        <option>All Statuses</option>
         <option>Delivered</option>
+        <option>Shipped</option>
+        <option>Processing</option>
         <option>Cancelled</option>
-        <option>Partially Fulfilled</option>
+        <option>Dispute</option>
       </select>
-      <select class="filter-select" id="sortFilter" onchange="filterTable()">
-        <option value="newest">Sort: Newest</option>
-        <option value="oldest">Sort: Oldest</option>
-        <option value="highest">Sort: Highest Total</option>
-        <option value="lowest">Sort: Lowest Total</option>
+      <select class="filter-select">
+        <option>All Payments</option>
+        <option>UPI</option>
+        <option>Card</option>
+        <option>COD</option>
+        <option>Wallet</option>
       </select>
+      <input class="filter-input" type="date" style="width:150px"/>
+      <button class="btn-outline ms-auto" onclick="alert('Exporting orders...')">📤 Export CSV</button>
     </div>
 
-    <!-- BULK ACTIONS BAR -->
-    <div class="bulk-bar hidden" id="bulkBar">
-      <span class="bulk-count" id="bulkCount">0 selected</span>
-      <span style="font-size:0.82rem;color:var(--gray)">— bulk actions:</span>
-      <div class="bulk-actions">
-        <button class="btn btn-ghost btn-sm" onclick="bulkAction('fulfill')">✅ Mark Fulfilled</button>
-        <button class="btn btn-ghost btn-sm" onclick="bulkAction('print')">🖨️ Print Packing Slips</button>
-        <button class="btn btn-danger btn-sm" onclick="bulkAction('cancel')">✕ Cancel Orders</button>
-        <button class="btn btn-ghost btn-sm" onclick="bulkAction('export')">⬇ Export Selected</button>
-      </div>
-    </div>
-
-    <!-- ORDERS TABLE -->
-    <div class="table-wrap">
-      <table id="ordersTable">
+    <div class="card">
+      <table>
         <thead>
           <tr>
-            <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"/></th>
+            <th><input type="checkbox"/></th>
             <th>Order #</th>
+            <th>Buyer</th>
+            <th>Seller</th>
+            <th>Product</th>
             <th>Date</th>
-            <th>Customer</th>
-            <th>Items</th>
+            <th>Amount</th>
+            <th>Status</th>
             <th>Payment</th>
-            <th>Fulfilment</th>
-            <th>Total</th>
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="ordersBody">
-          <!-- Rows injected by JS -->
+        <tbody id="ordersTable">
+          <tr onclick="openPanel('VS-10847','Priya Mehta','TechMart India','Sony WH-1000XM5','22 May 2026','₹24,999','Delivered','UPI',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10847</strong></td>
+            <td>Priya Mehta</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">TechMart India</a></td>
+            <td>Sony WH-1000XM5</td>
+            <td>22 May 2026</td>
+            <td>₹24,999</td>
+            <td><span class="status-badge sb-green">Delivered</span></td>
+            <td>UPI</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation();openPanel('VS-10847','Priya Mehta','TechMart India','Sony WH-1000XM5','22 May 2026','₹24,999','Delivered','UPI',false)">View</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10846','Rahul Sharma','FashionKart','Nike Air Force 1','22 May 2026','₹8,499','Shipped','Card',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10846</strong></td>
+            <td>Rahul Sharma</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">FashionKart</a></td>
+            <td>Nike Air Force 1</td>
+            <td>22 May 2026</td>
+            <td>₹8,499</td>
+            <td><span class="status-badge sb-blue">Shipped</span></td>
+            <td>Card</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation();openPanel('VS-10846','Rahul Sharma','FashionKart','Nike Air Force 1','22 May 2026','₹8,499','Shipped','Card',false)">View</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10845','Aisha Khan','GadgetZone','iPhone 15 Pro','21 May 2026','₹1,34,999','Dispute','UPI',true)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10845</strong></td>
+            <td>Aisha Khan</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">GadgetZone</a></td>
+            <td>iPhone 15 Pro</td>
+            <td>21 May 2026</td>
+            <td>₹1,34,999</td>
+            <td><span class="status-badge sb-red">Dispute ⚖️</span></td>
+            <td>UPI</td>
+            <td class="action-btns">
+              <button class="btn-xs btn-resolve" onclick="event.stopPropagation();openPanel('VS-10845','Aisha Khan','GadgetZone','iPhone 15 Pro','21 May 2026','₹1,34,999','Dispute','UPI',true)">Resolve</button>
+            </td>
+          </tr>
+          <tr onclick="openPanel('VS-10844','Vikram Patel','HomeDecor Plus','Ceramic Vase Set','21 May 2026','₹2,299','Processing','COD',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10844</strong></td>
+            <td>Vikram Patel</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">HomeDecor Plus</a></td>
+            <td>Ceramic Vase Set</td>
+            <td>21 May 2026</td>
+            <td>₹2,299</td>
+            <td><span class="status-badge sb-yellow">Processing</span></td>
+            <td>COD</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation();openPanel('VS-10844','Vikram Patel','HomeDecor Plus','Ceramic Vase Set','21 May 2026','₹2,299','Processing','COD',false)">View</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10843','Neha Reddy','BookHub','Harry Potter Box Set','21 May 2026','₹2,499','Delivered','UPI',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10843</strong></td>
+            <td>Neha Reddy</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">BookHub</a></td>
+            <td>Harry Potter Box Set</td>
+            <td>21 May 2026</td>
+            <td>₹2,499</td>
+            <td><span class="status-badge sb-green">Delivered</span></td>
+            <td>UPI</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation();openPanel('VS-10843','Neha Reddy','BookHub','Harry Potter Box Set','21 May 2026','₹2,499','Delivered','UPI',false)">View</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10842','Arjun Singh','TechMart India','Samsung Galaxy S24','20 May 2026','₹79,999','Dispute','EMI',true)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10842</strong></td>
+            <td>Arjun Singh</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">TechMart India</a></td>
+            <td>Samsung Galaxy S24</td>
+            <td>20 May 2026</td>
+            <td>₹79,999</td>
+            <td><span class="status-badge sb-red">Dispute ⚖️</span></td>
+            <td>EMI</td>
+            <td class="action-btns"><button class="btn-xs btn-resolve" onclick="event.stopPropagation();openPanel('VS-10842','Arjun Singh','TechMart India','Samsung Galaxy S24','20 May 2026','₹79,999','Dispute','EMI',true)">Resolve</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10841','Meera Iyer','FashionKart','Zara Winter Jacket','20 May 2026','₹5,999','Delivered','Wallet',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10841</strong></td>
+            <td>Meera Iyer</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">FashionKart</a></td>
+            <td>Zara Winter Jacket</td>
+            <td>20 May 2026</td>
+            <td>₹5,999</td>
+            <td><span class="status-badge sb-green">Delivered</span></td>
+            <td>Wallet</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation();openPanel('VS-10841','Meera Iyer','FashionKart','Zara Winter Jacket','20 May 2026','₹5,999','Delivered','Wallet',false)">View</button></td>
+          </tr>
+          <tr onclick="openPanel('VS-10840','Suresh Kumar','GadgetZone','Noise ColorFit Pro','20 May 2026','₹3,499','Cancelled','UPI',false)">
+            <td><input type="checkbox" onclick="event.stopPropagation()"/></td>
+            <td><strong>#VS-10840</strong></td>
+            <td>Suresh Kumar</td>
+            <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">GadgetZone</a></td>
+            <td>Noise ColorFit Pro</td>
+            <td>20 May 2026</td>
+            <td>₹3,499</td>
+            <td><span class="status-badge sb-gray">Cancelled</span></td>
+            <td>UPI</td>
+            <td class="action-btns"><button class="btn-xs btn-view" onclick="event.stopPropagation()">View</button></td>
+          </tr>
         </tbody>
       </table>
-      <div class="pagination">
-        <div class="page-info" id="pageInfo">Showing 1–20 of 347 orders</div>
-        <div class="page-btns">
-          <button class="page-btn" disabled>‹</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn" onclick="alert('Page 2')">2</button>
-          <button class="page-btn" onclick="alert('Page 3')">3</button>
-          <span style="color:var(--gray);font-size:0.82rem;padding:0 6px">…</span>
-          <button class="page-btn" onclick="alert('Page 18')">18</button>
-          <button class="page-btn" onclick="alert('Next page')">›</button>
+      <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f2f5;font-size:0.8rem;color:#666">
+        <span>Showing 8 of 847 orders</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn-outline" style="padding:5px 12px;font-size:0.78rem">← Prev</button>
+          <button class="btn-orange" style="padding:5px 12px;font-size:0.78rem">Next →</button>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-  </div><!-- /content -->
-</div><!-- /main -->
-
-<!-- ─── OVERLAY ─── -->
-<div id="overlay" onclick="closePanel()"></div>
-
-<!-- ─── SLIDE PANEL ─── -->
-<div id="slide-panel">
+<!-- SLIDE PANEL -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+<div class="slide-panel" id="slidePanel">
   <div class="panel-header">
+    <div class="panel-title" id="panelTitle">Order Details</div>
     <button class="panel-close" onclick="closePanel()">✕</button>
-    <div class="panel-title" id="panelTitle">Order #5001</div>
-    <div id="panelBadge"></div>
   </div>
-  <div class="panel-body" id="panelBody">
-    <!-- injected by JS -->
-  </div>
-  <div class="panel-footer" id="panelFooter">
-    <button class="btn btn-primary" onclick="alert('Order fulfilled!')">✅ Fulfill Order</button>
-    <button class="btn btn-ghost" onclick="alert('Printing…')">🖨️ Print</button>
-    <a href="track.html" class="btn btn-ghost">📍 Track</a>
-    <button class="btn btn-ghost" style="margin-left:auto" onclick="closePanel()">Close</button>
-  </div>
+  <div class="panel-body" id="panelBody"></div>
 </div>
 
-<!-- ─── TOAST ─── -->
-<div id="toast">
-  <div class="toast-icon">✅</div>
-  <div class="toast-text"><strong>Zen AI auto-fulfilled 3 orders</strong> — #5001, #5005, #5007 processed successfully.</div>
-  <button class="toast-close" onclick="dismissToast()">✕</button>
-</div>
-
+<script src="auth.js"></script>
 <script>
-// ─── ORDER DATA ───
-const orders = [
-  {id:'#5001',date:'2026-05-20',customer:'Rahul S.',email:'rahul.sharma@gmail.com',items:2,itemList:['Neon Vibes Tee (M)','Glow Cap'],payment:'Paid',fulfilment:'Fulfilled',total:3499,city:'Mumbai'},
-  {id:'#5002',date:'2026-05-20',customer:'Priya K.',email:'priya.k@outlook.com',items:1,itemList:['Abstract Print Hoodie (S)'],payment:'Paid',fulfilment:'Shipped',total:899,city:'Delhi'},
-  {id:'#5003',date:'2026-05-20',customer:'Mike R.',email:'mike.r@gmail.com',items:3,itemList:['Retro Jacket (L)','Cargo Shorts','Mesh Sneakers'],payment:'Paid',fulfilment:'Unfulfilled',total:12450,city:'Bangalore'},
-  {id:'#5004',date:'2026-05-19',customer:'Sarah L.',email:'sarah.l@yahoo.com',items:1,itemList:['Mini Crossbag'],payment:'Pending',fulfilment:'Unfulfilled',total:299,city:'London'},
-  {id:'#5005',date:'2026-05-19',customer:'Ananya M.',email:'ananya.m@gmail.com',items:2,itemList:['Summer Dress (M)','Straw Hat'],payment:'Paid',fulfilment:'Delivered',total:5999,city:'Hyderabad'},
-  {id:'#5006',date:'2026-05-19',customer:'James P.',email:'james.p@gmail.com',items:1,itemList:['Vintage Denim Jacket (XL)'],payment:'Refunded',fulfilment:'Cancelled',total:1299,city:'New York'},
-  {id:'#5007',date:'2026-05-19',customer:'Neha V.',email:'neha.v@hotmail.com',items:4,itemList:['Boho Skirt','Crop Top (S)','Anklet Set','Tote Bag'],payment:'Paid',fulfilment:'Fulfilled',total:8240,city:'Pune'},
-  {id:'#5008',date:'2026-05-18',customer:'Tom W.',email:'tom.w@icloud.com',items:1,itemList:['Premium Leather Jacket (M)'],payment:'Paid',fulfilment:'Shipped',total:29990,city:'Sydney'},
-  {id:'#5009',date:'2026-05-18',customer:'Kavita R.',email:'kavita.r@gmail.com',items:2,itemList:['Floral Kurti (L)','Dupatta'],payment:'Paid',fulfilment:'Unfulfilled',total:2198,city:'Jaipur'},
-  {id:'#5010',date:'2026-05-18',customer:'Alex D.',email:'alex.d@gmail.com',items:1,itemList:['Enamel Pin Set'],payment:'Authorized',fulfilment:'Unfulfilled',total:449,city:'Toronto'},
-  {id:'#5011',date:'2026-05-17',customer:'Meera J.',email:'meera.j@gmail.com',items:2,itemList:['Silk Blouse (M)','Wide Leg Pants'],payment:'Paid',fulfilment:'Fulfilled',total:4750,city:'Chennai'},
-  {id:'#5012',date:'2026-05-17',customer:'David L.',email:'david.l@outlook.com',items:1,itemList:['Graphic Oversized Tee'],payment:'Paid',fulfilment:'Shipped',total:699,city:'Singapore'},
-  {id:'#5013',date:'2026-05-17',customer:'Isha T.',email:'isha.t@gmail.com',items:3,itemList:['Neon Biker Shorts','Sports Bra','Water Bottle'],payment:'Paid',fulfilment:'Partially Fulfilled',total:3120,city:'Kolkata'},
-  {id:'#5014',date:'2026-05-16',customer:'Chris M.',email:'chris.m@gmail.com',items:1,itemList:['Canvas Backpack'],payment:'Paid',fulfilment:'Delivered',total:1850,city:'Chicago'},
-  {id:'#5015',date:'2026-05-16',customer:'Pooja S.',email:'pooja.s@gmail.com',items:2,itemList:['Ethnic Maxi Dress (S)','Bangles Set'],payment:'Pending',fulfilment:'Unfulfilled',total:3299,city:'Lucknow'},
-  {id:'#5016',date:'2026-05-15',customer:'Ryan K.',email:'ryan.k@gmail.com',items:1,itemList:['Denim Joggers (L)'],payment:'Paid',fulfilment:'Fulfilled',total:1199,city:'Austin'},
-  {id:'#5017',date:'2026-05-15',customer:'Divya N.',email:'divya.n@yahoo.com',items:4,itemList:['Palazzo Pants','Printed Tee','Earring Set','Scrunchies x5'],payment:'Refunded',fulfilment:'Cancelled',total:2890,city:'Ahmedabad'},
-  {id:'#5018',date:'2026-05-14',customer:'Liam O.',email:'liam.o@gmail.com',items:2,itemList:['Slim Chinos (32)','Oxford Shoes'],payment:'Paid',fulfilment:'Fulfilled',total:6480,city:'Dublin'},
-  {id:'#5019',date:'2026-05-14',customer:'Sneha B.',email:'sneha.b@gmail.com',items:1,itemList:['Handloom Saree'],payment:'Authorized',fulfilment:'Unfulfilled',total:7500,city:'Varanasi'},
-  {id:'#5020',date:'2026-05-13',customer:'Omar F.',email:'omar.f@gmail.com',items:3,itemList:['Track Jacket (M)','Joggers','Cap'],payment:'Paid',fulfilment:'Shipped',total:4350,city:'Dubai'},
-];
-
-// ─── PAYMENT BADGE ───
-function payBadge(s){
-  const map={
-    'Paid':'badge-green','Pending':'badge-yellow',
-    'Authorized':'badge-blue','Refunded':'badge-red'
-  };
-  return `<span class="badge ${map[s]||'badge-gray'}">${s}</span>`;
+const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
 }
-
-// ─── FULFILMENT BADGE ───
-function fulfillBadge(s){
-  const map={
-    'Fulfilled':'badge-green','Shipped':'badge-blue',
-    'Unfulfilled':'badge-yellow','Delivered':'badge-green',
-    'Cancelled':'badge-red','Partially Fulfilled':'badge-purple'
-  };
-  return `<span class="badge ${map[s]||'badge-gray'}">${s}</span>`;
-}
-
-// ─── RENDER TABLE ───
-let currentFilter='all';
-
-function renderTable(data){
-  const tbody=document.getElementById('ordersBody');
-  tbody.innerHTML=data.map((o,i)=>`
-    <tr id="row-${i}" onclick="openPanel(${i})" class="${selectedRows.has(i)?'selected':''}">
-      <td onclick="event.stopPropagation()">
-        <input type="checkbox" data-idx="${i}" ${selectedRows.has(i)?'checked':''} onchange="toggleRow(this,${i})"/>
-      </td>
-      <td><span class="td-order">${o.id}</span></td>
-      <td class="td-date">${formatDate(o.date)}</td>
-      <td class="td-customer">${o.customer}<br/><span style="font-size:0.72rem;color:var(--gray)">${o.city}</span></td>
-      <td class="td-items">${o.items} item${o.items>1?'s':''}</td>
-      <td>${payBadge(o.payment)}</td>
-      <td>${fulfillBadge(o.fulfilment)}</td>
-      <td class="td-total">₹${o.total.toLocaleString('en-IN')}</td>
-      <td class="td-actions" onclick="event.stopPropagation()">
-        <button class="btn btn-ghost btn-sm" onclick="fulfillOrder('${o.id}')">✅ Fulfill</button>
-        <button class="btn btn-ghost btn-sm" onclick="alert('Printing ${o.id}…')">🖨️</button>
-        <button class="btn btn-ghost btn-sm" onclick="showMore(event,'${o.id}')">⋯</button>
-      </td>
-    </tr>
-  `).join('');
-  document.getElementById('pageInfo').textContent=`Showing 1–${data.length} of 347 orders`;
-}
-
-function formatDate(d){
-  const dt=new Date(d);
-  return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-}
-
-// ─── FILTER + SEARCH ───
-function filterTable(){
-  let data=[...orders];
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const pay=document.getElementById('payFilter').value;
-  const fill=document.getElementById('fulfillFilter').value;
-  const sort=document.getElementById('sortFilter').value;
-
-  if(q) data=data.filter(o=>o.id.toLowerCase().includes(q)||o.customer.toLowerCase().includes(q)||o.email.toLowerCase().includes(q));
-  if(pay) data=data.filter(o=>o.payment===pay);
-  if(fill) data=data.filter(o=>o.fulfilment===fill);
-  if(currentFilter!=='all'){
-    const map={unfulfilled:'Unfulfilled',partial:'Partially Fulfilled',fulfilled:'Fulfilled',cancelled:'Cancelled'};
-    if(map[currentFilter]) data=data.filter(o=>o.fulfilment===map[currentFilter]);
-  }
-  if(sort==='oldest') data.sort((a,b)=>a.date.localeCompare(b.date));
-  else if(sort==='highest') data.sort((a,b)=>b.total-a.total);
-  else if(sort==='lowest') data.sort((a,b)=>a.total-b.total);
-  else data.sort((a,b)=>b.date.localeCompare(a.date));
-  renderTable(data);
-}
-
-function setFilter(btn,filter){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  btn.classList.add('active');
-  currentFilter=filter;
-  filterTable();
-}
-
-// ─── SELECTION ───
-const selectedRows=new Set();
-
-function toggleSelectAll(cb){
-  const checks=document.querySelectorAll('#ordersBody input[type=checkbox]');
-  checks.forEach(c=>{
-    const idx=parseInt(c.dataset.idx);
-    c.checked=cb.checked;
-    cb.checked?selectedRows.add(idx):selectedRows.delete(idx);
-    document.getElementById('row-'+idx)?.classList.toggle('selected',cb.checked);
-  });
-  updateBulkBar();
-}
-
-function toggleRow(cb,idx){
-  cb.checked?selectedRows.add(idx):selectedRows.delete(idx);
-  document.getElementById('row-'+idx)?.classList.toggle('selected',cb.checked);
-  updateBulkBar();
-}
-
-function updateBulkBar(){
-  const bar=document.getElementById('bulkBar');
-  const count=document.getElementById('bulkCount');
-  if(selectedRows.size>0){
-    bar.classList.remove('hidden');
-    count.textContent=`${selectedRows.size} selected`;
-  } else {
-    bar.classList.add('hidden');
-  }
-}
-
-function bulkAction(type){
-  const msgs={
-    fulfill:`✅ ${selectedRows.size} orders marked as fulfilled!`,
-    print:`🖨️ Printing packing slips for ${selectedRows.size} orders…`,
-    cancel:`Orders cancelled. ${selectedRows.size} orders updated.`,
-    export:`⬇ Exporting ${selectedRows.size} orders to CSV…`
-  };
-  alert(msgs[type]);
-  selectedRows.clear();
-  document.getElementById('selectAll').checked=false;
-  filterTable();
-  updateBulkBar();
-}
-
-// ─── SLIDE PANEL ───
-let currentOrderIdx=null;
-function openPanel(idx){
-  currentOrderIdx=idx;
-  const o=orders[idx];
-  document.getElementById('panelTitle').textContent=`Order ${o.id}`;
-  document.getElementById('panelBadge').innerHTML=fulfillBadge(o.fulfilment);
-  const initials=o.customer.split(' ').map(w=>w[0]).join('');
+function openPanel(id,buyer,seller,product,date,amount,status,payment,hasDispute){
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('slidePanel').classList.add('open');
+  document.getElementById('panelTitle').textContent='Order #'+id;
+  const disputeHtml=hasDispute?`
+    <div class="panel-section">
+      <div class="panel-section-title">⚖️ Dispute Resolution</div>
+      <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:12px;font-size:0.83rem;color:#92400e;margin-bottom:12px">
+        <strong>Buyer claim:</strong> Product not as described. Requesting full refund of ${amount}.
+      </div>
+      <div class="dispute-actions">
+        <button class="dispute-btn btn-refund" onclick="alert('Refund initiated for buyer')">✅ Refund Buyer — Issue full refund of ${amount}</button>
+        <button class="dispute-btn btn-seller-side" onclick="alert('Ruling in favor of seller')">🏪 Side with Seller — Close dispute, no refund</button>
+        <button class="dispute-btn btn-escalate" onclick="alert('Escalated to senior team')">🔺 Escalate — Send to senior resolution team</button>
+      </div>
+    </div>`:'';
   document.getElementById('panelBody').innerHTML=`
-    <div class="panel-customer">
-      <div class="panel-avatar">${initials}</div>
-      <div>
-        <div class="panel-customer-name">${o.customer}</div>
-        <div class="panel-customer-email">${o.email} · ${o.city}</div>
-      </div>
+    <div class="panel-section">
+      <div class="panel-section-title">Order Info</div>
+      <div class="info-row"><span class="label">Order ID</span><span class="value">#${id}</span></div>
+      <div class="info-row"><span class="label">Product</span><span class="value">${product}</span></div>
+      <div class="info-row"><span class="label">Date</span><span class="value">${date}</span></div>
+      <div class="info-row"><span class="label">Amount</span><span class="value">${amount}</span></div>
+      <div class="info-row"><span class="label">Payment</span><span class="value">${payment}</span></div>
+      <div class="info-row"><span class="label">Status</span><span class="value">${status}</span></div>
     </div>
     <div class="panel-section">
-      <div class="panel-section-title">Order Details</div>
-      <div class="panel-row"><span class="panel-row-label">Order #</span><span class="panel-row-value">${o.id}</span></div>
-      <div class="panel-row"><span class="panel-row-label">Date</span><span class="panel-row-value">${formatDate(o.date)}</span></div>
-      <div class="panel-row"><span class="panel-row-label">Payment</span><span class="panel-row-value">${payBadge(o.payment)}</span></div>
-      <div class="panel-row"><span class="panel-row-label">Fulfilment</span><span class="panel-row-value">${fulfillBadge(o.fulfilment)}</span></div>
-      <div class="panel-row"><span class="panel-row-label">Total</span><span class="panel-row-value" style="color:var(--cyan);font-size:1rem">₹${o.total.toLocaleString('en-IN')}</span></div>
+      <div class="panel-section-title">Buyer Details</div>
+      <div class="info-row"><span class="label">Name</span><span class="value">${buyer}</span></div>
+      <div class="info-row"><span class="label">Email</span><span class="value">buyer@example.com</span></div>
+      <div class="info-row"><span class="label">Phone</span><span class="value">+91 98765 43210</span></div>
+      <div class="info-row"><span class="label">Address</span><span class="value">Mumbai, Maharashtra</span></div>
     </div>
     <div class="panel-section">
-      <div class="panel-section-title">Items (${o.items})</div>
-      ${o.itemList.map(item=>`
-        <div class="panel-item">
-          <div class="panel-item-img">${getItemEmoji(item)}</div>
-          <div class="panel-item-name">${item}</div>
-          <div class="panel-item-price">₹${Math.round(o.total/o.items).toLocaleString('en-IN')}</div>
-        </div>
-      `).join('')}
+      <div class="panel-section-title">Seller Details</div>
+      <div class="info-row"><span class="label">Seller</span><span class="value"><a class="teal-link" href="seller-profile.html">${seller}</a></span></div>
+      <div class="info-row"><span class="label">Seller Rating</span><span class="value">⭐ 4.8 / 5.0</span></div>
+      <div class="info-row"><span class="label">Plan</span><span class="value">Pro Seller</span></div>
     </div>
-    <div class="panel-section">
-      <div class="panel-section-title">Shipping Address</div>
-      <div style="font-size:0.83rem;color:var(--gray);line-height:1.7">
-        ${o.customer}<br/>
-        ${getAddress(o.city)}<br/>
-        <span style="color:var(--cyan)">📍 ${o.city}</span>
-      </div>
-    </div>
-    <div class="panel-section">
-      <div class="panel-section-title">Zen AI Insights</div>
-      <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.15);border-radius:8px;padding:12px;font-size:0.8rem;color:var(--cyan2);line-height:1.6">
-        🤖 <strong>Zen AI:</strong> ${getAIInsight(o)}
-      </div>
-    </div>
-  `;
-  document.getElementById('overlay').classList.add('open');
-  document.getElementById('slide-panel').classList.add('open');
+    ${disputeHtml}`;
 }
-
-function getItemEmoji(name){
-  if(/jacket|coat/i.test(name)) return '🧥';
-  if(/tee|shirt|top|blouse/i.test(name)) return '👕';
-  if(/dress|skirt|kurti|saree/i.test(name)) return '👗';
-  if(/shoe|sneaker/i.test(name)) return '👟';
-  if(/bag|backpack|tote/i.test(name)) return '👜';
-  if(/cap|hat/i.test(name)) return '🧢';
-  if(/pants|shorts|jogger|chinos/i.test(name)) return '👖';
-  if(/earring|anklet|bangle|bangles|jewel/i.test(name)) return '💍';
-  return '🛍️';
-}
-
-function getAddress(city){
-  const map={
-    'Mumbai':'Andheri West, Maharashtra 400058',
-    'Delhi':'Connaught Place, New Delhi 110001',
-    'Bangalore':'Koramangala, Karnataka 560034',
-    'London':'Shoreditch, London E1 6RF, UK',
-    'Hyderabad':'Banjara Hills, Telangana 500034',
-    'New York':'Brooklyn, NY 11201, USA',
-    'Pune':'Koregaon Park, Maharashtra 411001',
-    'Sydney':'Surry Hills, NSW 2010, Australia',
-    'Jaipur':'C-Scheme, Rajasthan 302001',
-    'Toronto':'Downtown, Ontario M5V 2T6',
-    'Chennai':'T. Nagar, Tamil Nadu 600017',
-    'Singapore':'Orchard Road, Singapore 238858',
-    'Kolkata':'Park Street, West Bengal 700016',
-    'Chicago':'Lincoln Park, IL 60614, USA',
-    'Lucknow':'Hazratganj, UP 226001',
-    'Austin':'South Congress, TX 78704, USA',
-    'Ahmedabad':'CG Road, Gujarat 380006',
-    'Dublin':'Temple Bar, Dublin 2, Ireland',
-    'Varanasi':'Godowlia, UP 221001',
-    'Dubai':'Downtown, Dubai UAE',
-  };
-  return map[city]||city;
-}
-
-function getAIInsight(o){
-  if(o.fulfilment==='Unfulfilled') return `This order has been pending for ${daysDiff(o.date)} day(s). Recommend immediate action to maintain SLA.`;
-  if(o.fulfilment==='Cancelled'||o.payment==='Refunded') return `Refund processed. Consider sending a re-engagement coupon to win back ${o.customer.split(' ')[0]}.`;
-  if(o.payment==='Pending') return `Payment is still pending. Send a payment reminder to ${o.customer.split(' ')[0]} to close this order.`;
-  if(o.total>10000) return `High-value order (₹${o.total.toLocaleString('en-IN')}). Priority fulfillment recommended. Customer is likely a VIP.`;
-  return `Order is on track. Estimated delivery within 3–5 business days. Customer satisfaction score: predicted 4.7/5.`;
-}
-
-function daysDiff(date){
-  return Math.max(0,Math.round((new Date()-new Date(date))/(1000*60*60*24)));
-}
-
 function closePanel(){
-  document.getElementById('overlay').classList.remove('open');
-  document.getElementById('slide-panel').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('slidePanel').classList.remove('open');
 }
-
-// ─── MISC ───
-function fulfillOrder(id){
-  alert(`✅ Order ${id} has been marked as fulfilled and customer notified!`);
-}
-
-function showMore(e,id){
-  e.stopPropagation();
-  const options=['Edit Order','Send Tracking Email','Print Invoice','Archive Order','Cancel Order'];
-  alert(`More options for ${id}:\n\n${options.map((o,i)=>`${i+1}. ${o}`).join('\n')}`);
-}
-
-function openCreateOrder(){
-  alert('Create Order panel coming soon!\n\nThis will let you create a manual order for a customer — select products, apply discounts, and choose shipping.');
-}
-
-// ─── TOAST ───
-function dismissToast(){
-  const t=document.getElementById('toast');
-  t.classList.add('hide');
-  setTimeout(()=>t.remove(),400);
-}
-setTimeout(()=>{
-  const t=document.getElementById('toast');
-  if(t){t.classList.add('hide');setTimeout(()=>t&&t.remove(),400);}
-},6000);
-
-// ─── INIT ───
-renderTable(orders);
 </script>
 </body>
 </html>

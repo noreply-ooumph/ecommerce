@@ -3,798 +3,986 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Flash Sale — Aria AI curated deals</title>
+<title>Today's Deals — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f8f8f5;--card:#ffffff;--accent:#6d28d9;--text:#111111;--muted:#6b7280;--border:#e5e5e0;
-  --bg2:#f3f3ef;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;
-  --gray:#6b7280;--gray2:#9ca3af;--green:#16a34a;--red:#dc2626;--yellow:#d97706;--orange:#ea580c;
+  --nav:#131921;--orange:#FF9900;--orange2:#FF6600;--teal:#007185;--bg:#f0f2f5;
+  --white:#fff;--border:#d5d9d9;--gray:#565959;--gray2:#888c8c;--dark:#0f1111;
+  --red:#cc0c39;--green:#067D62;--yellow:#c45500;
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
 
-/* TOP BANNER */
-.top-banner{background:var(--red);color:white;text-align:center;padding:10px;font-size:0.82rem;font-weight:600;letter-spacing:0.02em;animation:shimmer 2s infinite}
-@keyframes shimmer{0%,100%{background:var(--red)}50%{background:#b91c1c}}
+/* ===== NAV ===== */
+nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:10px;padding:8px 16px;height:60px}
+.nav-logo{color:white;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;white-space:nowrap;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color 0.15s;flex-shrink:0}
+.nav-logo:hover{border-color:white}
+.nav-logo span{color:var(--orange)}
+.nav-deliver{color:rgba(255,255,255,0.85);font-size:0.72rem;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color 0.15s;white-space:nowrap;flex-shrink:0;line-height:1.4}
+.nav-deliver:hover{border-color:white;cursor:pointer}
+.nav-deliver strong{color:white;font-size:0.82rem;display:block}
+.nav-search{flex:1;display:flex;border-radius:4px;overflow:hidden;max-width:900px}
+.nav-search-cat{background:#f3f3f3;border:none;padding:0 10px;font-size:0.78rem;color:var(--dark);cursor:pointer;border-right:1px solid #ccc;min-width:60px}
+.nav-search input{flex:1;padding:0 12px;border:none;font-size:0.92rem;outline:none;height:40px}
+.nav-search-btn{background:var(--orange);border:none;width:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer;transition:background 0.15s}
+.nav-search-btn:hover{background:#e68900}
+.nav-btn{color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;font-size:0.82rem;cursor:pointer;white-space:nowrap;line-height:1.4;transition:border-color 0.15s;background:none}
+.nav-btn:hover{border-color:white}
+.nav-btn span{color:rgba(255,255,255,0.8);font-size:0.7rem;display:block}
+.nav-btn strong{font-size:0.88rem}
+.nav-cart{display:flex;align-items:flex-end;gap:4px;color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;transition:border-color 0.15s;cursor:pointer;background:none}
+.nav-cart:hover{border-color:white}
+.nav-cart-count{color:var(--orange);font-size:1.1rem;font-weight:800;line-height:1}
+.nav-cart-text{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+.nav-bottom{background:#232f3e;padding:4px 16px;display:flex;gap:4px;align-items:center;overflow-x:auto}
+.nav-bottom::-webkit-scrollbar{display:none}
+.nav-bot-btn{color:white;font-size:0.82rem;padding:6px 10px;border:1px solid transparent;border-radius:3px;white-space:nowrap;transition:border-color 0.15s;cursor:pointer;background:none}
+.nav-bot-btn:hover{border-color:white}
+.nav-bot-btn.active{border-color:var(--orange);color:var(--orange)}
 
-/* NAV */
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1300px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:var(--dark);display:flex;align-items:center;gap:8px;cursor:pointer}
-.nav-logo .ai-tag{font-size:0.55rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:0.04em}
-.nav-links{display:flex;gap:4px;flex:1;justify-content:center}
-.nav-lnk{padding:6px 13px;border-radius:6px;font-size:0.83rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all 0.2s;border:1px solid transparent;white-space:nowrap}
-.nav-lnk:hover{background:var(--bg2);color:var(--dark);border-color:var(--border)}
-.nav-lnk.active{background:#fef2f2;color:var(--red);border-color:#fecaca;font-weight:700}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-search{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.83rem;color:var(--gray);width:190px;transition:all 0.2s}
-.nav-search:focus-within{border-color:var(--purple);background:white}
-.nav-search input{background:none;border:none;outline:none;color:var(--text);width:100%;font-size:0.83rem}
-.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;position:relative;text-decoration:none}
-.nav-icon:hover{border-color:var(--purple);background:var(--bg2)}
-.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+/* ===== PAGE HEADER ===== */
+.page-header{background:white;border-bottom:1px solid var(--border);padding:14px 20px}
+.page-header-inner{max-width:1500px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.page-title{font-size:1.5rem;font-weight:800;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;gap:10px}
+.deals-meta{display:flex;align-items:center;gap:14px;font-size:0.82rem;color:var(--gray)}
+.deals-meta .updated{color:var(--teal);font-weight:600}
+.deals-counter{background:#cc0c39;color:white;font-size:0.78rem;font-weight:800;padding:4px 12px;border-radius:20px}
+.sort-row{display:flex;align-items:center;gap:8px}
+.sort-label{font-size:0.82rem;color:var(--gray)}
+.sort-select{border:1px solid var(--border);border-radius:4px;padding:6px 28px 6px 10px;font-size:0.82rem;outline:none;cursor:pointer;background:white;appearance:none}
 
-/* SALE HERO */
-.sale-hero{background:linear-gradient(135deg,#0a0010 0%,#1a0505 40%,#0a1a0a 100%);color:white;padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden;min-height:400px;display:flex;align-items:center}
-.sale-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(220,38,38,0.3),transparent 50%),radial-gradient(ellipse at 80% 50%,rgba(234,88,12,0.2),transparent 50%)}
-.sale-hero::after{content:'⚡ FLASH SALE ⚡ FLASH SALE ⚡ FLASH SALE ⚡ FLASH SALE ⚡ FLASH SALE ⚡ FLASH SALE ⚡';position:absolute;bottom:0;left:0;right:0;background:rgba(220,38,38,0.15);padding:8px 0;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;color:rgba(255,100,100,0.5);overflow:hidden;white-space:nowrap}
-.hero-inner{max-width:800px;margin:0 auto;position:relative;z-index:1;width:100%}
-.aria-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(220,38,38,0.2);border:1px solid rgba(220,38,38,0.4);border-radius:100px;padding:5px 16px;font-size:0.75rem;color:#fca5a5;margin-bottom:16px;font-weight:600}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
-.aria-dot{width:7px;height:7px;border-radius:50%;background:#f87171;animation:pulse 1.2s infinite}
-.sale-hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:800;line-height:1;margin-bottom:8px;letter-spacing:-0.03em}
-.sale-hero h1 em{font-style:normal;background:linear-gradient(135deg,#fca5a5,#fde68a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.sale-sub{color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:28px}
-.sale-sub strong{color:#fca5a5}
+/* ===== FILTER TABS ===== */
+.filter-strip{background:white;border-bottom:1px solid var(--border)}
+.filter-strip-inner{max-width:1500px;margin:0 auto;padding:0 20px;display:flex;gap:0;overflow-x:auto}
+.filter-strip-inner::-webkit-scrollbar{display:none}
+.filter-tab{padding:14px 18px;font-size:0.85rem;font-weight:600;color:var(--gray);border-bottom:3px solid transparent;white-space:nowrap;cursor:pointer;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none}
+.filter-tab:hover{color:var(--dark);border-bottom-color:#aaa}
+.filter-tab.active{color:var(--orange);border-bottom-color:var(--orange)}
+.filter-tab .new-tag{background:var(--red);color:white;font-size:0.6rem;font-weight:800;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
 
-/* COUNTDOWN */
-.countdown-wrap{display:flex;gap:16px;justify-content:center;margin-bottom:28px;flex-wrap:wrap}
-.countdown-unit{text-align:center}
-.countdown-num{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3rem);font-weight:800;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:10px 18px;min-width:80px;display:block;line-height:1;backdrop-filter:blur(10px)}
-.countdown-lbl{font-size:0.68rem;color:rgba(255,255,255,0.5);margin-top:6px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase}
-.colon{font-family:'Space Grotesk',sans-serif;font-size:2.5rem;font-weight:800;color:rgba(255,255,255,0.4);align-self:flex-start;margin-top:14px}
+/* ===== CATEGORY CHIPS ===== */
+.cat-strip{background:white;border-bottom:1px solid var(--border);padding:10px 20px}
+.cat-strip-inner{max-width:1500px;margin:0 auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.cat-label{font-size:0.78rem;color:var(--gray);font-weight:600;white-space:nowrap;margin-right:4px}
+.cat-chip{padding:6px 14px;border:1px solid var(--border);border-radius:20px;font-size:0.8rem;font-weight:500;cursor:pointer;transition:all 0.2s;background:white;white-space:nowrap}
+.cat-chip:hover{border-color:var(--teal);color:var(--teal)}
+.cat-chip.active{background:#e8f4f5;border-color:var(--teal);color:var(--teal);font-weight:600}
 
-/* PROGRESS BAR */
-.progress-bar-wrap{max-width:600px;margin:0 auto 8px}
-.pb-label{display:flex;justify-content:space-between;font-size:0.78rem;color:rgba(255,255,255,0.5);margin-bottom:8px}
-.pb-label span:last-child{color:#fca5a5;font-weight:600}
-.pb-track{background:rgba(255,255,255,0.1);border-radius:100px;height:8px;overflow:hidden}
-.pb-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#ef4444,#f97316);width:72%;animation:growBar 1.5s ease forwards}
-@keyframes growBar{from{width:0}to{width:72%}}
+/* ===== MAIN ===== */
+.deals-page{max-width:1500px;margin:0 auto;padding:20px 16px}
 
-/* FILTER PILLS */
-.filters-section{max-width:1300px;margin:0 auto;padding:32px 24px 0}
-.filter-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.filter-pill{padding:8px 18px;border-radius:100px;font-size:0.83rem;font-weight:600;border:1px solid var(--border);background:white;color:var(--gray);cursor:pointer;transition:all 0.2s;white-space:nowrap}
-.filter-pill:hover{border-color:var(--red);color:var(--red)}
-.filter-pill.active{background:var(--red);color:white;border-color:var(--red)}
+/* ===== DEAL OF THE DAY BANNER ===== */
+.dotd-banner{background:white;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px;display:grid;grid-template-columns:340px 1fr;min-height:290px;box-shadow:0 2px 8px rgba(0,0,0,0.07)}
+.dotd-left{background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);display:flex;align-items:center;justify-content:center;padding:32px;position:relative}
+.dotd-emoji{font-size:8rem;filter:drop-shadow(0 8px 24px rgba(0,0,0,0.4))}
+.dotd-badge{position:absolute;top:16px;left:16px;background:#cc0c39;color:white;font-size:0.72rem;font-weight:800;padding:5px 12px;border-radius:3px;letter-spacing:0.03em}
+.dotd-seller-tag{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:4px 14px;font-size:0.7rem;color:rgba(255,255,255,0.8);white-space:nowrap;backdrop-filter:blur(4px)}
+.dotd-seller-tag a{color:var(--orange);font-weight:700}
+.dotd-right{padding:28px 32px;display:flex;flex-direction:column;justify-content:center}
+.dotd-tag{font-size:0.72rem;color:var(--gray2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:6px}
+.dotd-name{font-size:1.4rem;font-weight:700;margin-bottom:8px;line-height:1.3}
+.dotd-stars{color:var(--orange);font-size:0.9rem;margin-bottom:12px}
+.dotd-stars span{color:var(--gray2);font-size:0.78rem;margin-left:4px}
+.dotd-price-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.dotd-sale{font-size:1.8rem;font-weight:800;color:#cc0c39}
+.dotd-orig{font-size:1rem;color:var(--gray2);text-decoration:line-through}
+.dotd-save{background:#cc0c39;color:white;font-size:0.75rem;font-weight:800;padding:3px 10px;border-radius:3px}
+.dotd-countdown{display:flex;align-items:center;gap:8px;margin:14px 0 18px;background:#f0f2f5;padding:10px 14px;border-radius:4px;width:fit-content}
+.dotd-cd-label{font-size:0.75rem;color:var(--gray);font-weight:600}
+.dotd-cd-time{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;color:#cc0c39}
+.dotd-progress{margin-bottom:16px;max-width:400px}
+.lbar-top{display:flex;justify-content:space-between;font-size:0.72rem;margin-bottom:4px}
+.lbar-claimed{color:#cc0c39;font-weight:700}
+.lbar-time{color:var(--gray2)}
+.lbar-track{background:#f0f0f0;border-radius:2px;height:6px;overflow:hidden}
+.lbar-fill{height:100%;background:linear-gradient(90deg,#cc0c39,var(--orange));border-radius:2px}
+.dotd-btns{display:flex;gap:10px;flex-wrap:wrap}
+.btn-dotd-cart{background:var(--orange);color:white;border:none;border-radius:20px;padding:10px 24px;font-size:0.92rem;font-weight:700;transition:background 0.15s}
+.btn-dotd-cart:hover{background:#e68900}
+.btn-dotd-buy{background:#ffd814;color:var(--dark);border:none;border-radius:20px;padding:10px 24px;font-size:0.92rem;font-weight:700;transition:background 0.15s}
+.btn-dotd-buy:hover{background:#f7ca00}
 
-/* DEAL GRID */
-.deals-section{max-width:1300px;margin:0 auto;padding:28px 24px}
-.deals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.deal-card{background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all 0.25s;cursor:pointer;position:relative}
-.deal-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.12);border-color:rgba(220,38,38,0.3)}
-.deal-img{background:var(--bg2);aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative;overflow:hidden}
-.deal-img::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(0,0,0,0.03))}
-.discount-badge{position:absolute;top:10px;left:10px;padding:4px 10px;border-radius:8px;font-size:0.72rem;font-weight:800;background:var(--red);color:white;letter-spacing:0.02em}
-.deal-type-badge{position:absolute;top:10px;right:10px;padding:3px 9px;border-radius:100px;font-size:0.63rem;font-weight:700}
-.badge-ai-drop{background:rgba(109,40,217,0.1);color:var(--purple)}
-.badge-flash{background:#fef3c7;color:var(--yellow)}
-.badge-clearance{background:#fee2e2;color:var(--red)}
-.stock-badge{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,0.7);color:white;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;backdrop-filter:blur(4px)}
-.wish-btn{position:absolute;bottom:10px;right:10px;width:32px;height:32px;background:white;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all 0.2s}
-.wish-btn:hover{border-color:var(--red);background:#fee2e2}
-.deal-info{padding:14px}
-.deal-cat{font-size:0.67rem;color:var(--gray2);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
-.deal-name{font-weight:600;font-size:0.85rem;margin-bottom:8px;line-height:1.3}
-.price-row{display:flex;align-items:baseline;gap:7px;margin-bottom:4px}
-.sale-price{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;color:var(--red)}
-.orig-price{font-size:0.8rem;color:var(--gray2);text-decoration:line-through}
-.savings{font-size:0.72rem;color:var(--green);font-weight:700}
-.deal-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.btn-cart-deal{border:1px solid var(--border);background:white;color:var(--text);border-radius:7px;padding:8px 6px;font-size:0.77rem;font-weight:600;transition:all 0.2s}
-.btn-cart-deal:hover{border-color:var(--purple);color:var(--purple)}
-.btn-buy-now{background:var(--red);color:white;border:none;border-radius:7px;padding:8px 6px;font-size:0.77rem;font-weight:700;transition:all 0.2s}
-.btn-buy-now:hover{background:#b91c1c}
+/* ===== SECTION TITLE ROW ===== */
+.section-title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-h{font-size:1.2rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.see-all{color:var(--teal);font-size:0.85rem;font-weight:600;cursor:pointer}
+.see-all:hover{text-decoration:underline;color:var(--orange)}
 
-/* ADDED TO CART FEEDBACK */
-.btn-cart-deal.added{background:#f0fdf4;border-color:#86efac;color:var(--green)}
+/* ===== LIGHTNING DEALS GRID (4 cols) ===== */
+.deals-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:8px;overflow:hidden}
 
-/* TOP PICKS */
-.picks-section{max-width:1300px;margin:0 auto;padding:0 24px 32px}
-.section-hdr{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:22px;flex-wrap:wrap;gap:10px}
-.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700}
-.section-sub{font-size:0.82rem;color:var(--gray);margin-top:3px}
-.luna-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(109,40,217,0.07);border:1px solid rgba(109,40,217,0.15);border-radius:100px;padding:4px 12px;font-size:0.72rem;color:var(--purple);font-weight:600}
-.picks-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.pick-card{background:white;border:2px solid rgba(109,40,217,0.15);border-radius:16px;overflow:hidden;transition:all 0.25s;cursor:pointer;position:relative}
-.pick-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(109,40,217,0.12);border-color:rgba(109,40,217,0.3)}
-.pick-img{background:linear-gradient(135deg,#f3e8ff,#e0f2fe);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
-.pick-crown{position:absolute;top:10px;left:10px;font-size:1.2rem}
-.pick-info{padding:14px}
-.pick-name{font-weight:700;font-size:0.88rem;margin-bottom:6px}
-.pick-why{font-size:0.72rem;color:var(--purple);background:rgba(109,40,217,0.06);border-radius:6px;padding:4px 8px;margin-bottom:10px;line-height:1.4}
-.pick-price-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
-.pick-sale{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:800;color:var(--red)}
-.pick-orig{font-size:0.78rem;color:var(--gray2);text-decoration:line-through}
-.pick-save{font-size:0.72rem;color:var(--green);font-weight:700}
-.btn-pick{width:100%;background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:8px;padding:9px;font-size:0.82rem;font-weight:700;transition:all 0.2s}
-.btn-pick:hover{opacity:0.9}
+/* ===== DEAL CARD ===== */
+.deal-card{background:white;padding:16px;position:relative;transition:box-shadow 0.2s;cursor:pointer;display:flex;flex-direction:column}
+.deal-card:hover{box-shadow:inset 0 0 0 2px var(--orange);z-index:2}
+.deal-img-wrap{position:relative;margin-bottom:12px;display:flex;align-items:center;justify-content:center}
+.deal-emoji-bg{width:100%;aspect-ratio:1;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:4.5rem;background:linear-gradient(135deg,#f8f8f8,#eee)}
+.deal-badge-tl{position:absolute;top:8px;left:8px;font-size:0.68rem;font-weight:800;padding:4px 8px;border-radius:3px;white-space:nowrap}
+.badge-lightning{background:#cc0c39;color:white}
+.badge-clearance{background:#007600;color:white}
+.badge-coupon{background:#00a650;color:white}
+.deal-pct-badge{position:absolute;top:8px;right:8px;background:#cc0c39;color:white;font-size:0.72rem;font-weight:800;padding:4px 8px;border-radius:3px}
+.deal-wish{position:absolute;bottom:8px;right:8px;width:28px;height:28px;background:rgba(255,255,255,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;border:1px solid var(--border);cursor:pointer;transition:all 0.2s}
+.deal-wish:hover{background:#fef0f0;border-color:#f7a5a5}
+/* Lightning progress bar */
+.lightning-bar{margin-bottom:10px}
+/* Deal meta */
+.deal-cat{font-size:0.68rem;color:var(--teal);text-transform:uppercase;font-weight:600;letter-spacing:0.04em;margin-bottom:3px}
+.deal-name{font-size:0.85rem;font-weight:500;margin-bottom:6px;line-height:1.35;color:var(--dark)}
+.deal-stars{color:var(--orange);font-size:0.82rem;margin-bottom:6px}
+.deal-stars span{color:var(--teal);font-size:0.75rem;margin-left:3px}
+.deal-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:4px}
+.deal-sale{font-size:1.1rem;font-weight:700;color:#cc0c39}
+.deal-orig{font-size:0.78rem;color:var(--gray2);text-decoration:line-through}
+.deal-savings{font-size:0.75rem;color:var(--green);font-weight:600;margin-bottom:6px}
+.deal-seller-tag{font-size:0.71rem;color:var(--gray2);margin-bottom:10px}
+.deal-seller-tag a{color:var(--teal);font-weight:600}
+.deal-seller-tag a:hover{text-decoration:underline}
+.deal-actions{display:flex;gap:6px;margin-top:auto}
+.btn-deal-cart{flex:1;background:var(--orange);color:white;border:none;border-radius:20px;padding:8px 10px;font-size:0.8rem;font-weight:700;transition:background 0.15s}
+.btn-deal-cart:hover{background:#e68900}
+.btn-deal-buy{flex:1;background:#ffd814;color:var(--dark);border:1px solid #fcd200;border-radius:20px;padding:8px 10px;font-size:0.8rem;font-weight:700;transition:background 0.15s}
+.btn-deal-buy:hover{background:#f7ca00}
+.btn-deal-cart.added{background:#d4edda;border:1px solid #c3e6cb;color:#155724;border-radius:20px}
 
-/* TRUST BADGES */
-.trust-section{background:white;border-top:1px solid var(--border);padding:24px}
-.trust-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap}
-.trust-item{display:flex;align-items:center;gap:10px;font-size:0.8rem;color:var(--gray);font-weight:500}
-.trust-item span{font-size:1.2rem}
+/* ===== SELLER DEALS TAB ===== */
+.seller-deals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.seller-deal-card{background:white;border:1px solid var(--border);border-radius:8px;padding:20px;transition:all 0.2s;cursor:pointer;position:relative;overflow:hidden}
+.seller-deal-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1);border-color:#bbb;transform:translateY(-2px)}
+.seller-deal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange2))}
+.sd-top{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.sd-logo{font-size:2.4rem;width:56px;height:56px;background:#f5f5f5;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--border)}
+.sd-info{}
+.sd-name{font-size:1rem;font-weight:700;margin-bottom:3px}
+.sd-rating{font-size:0.78rem;color:var(--orange)}
+.sd-rating span{color:var(--gray2)}
+.sd-deal-headline{font-size:0.95rem;font-weight:700;color:#cc0c39;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.sd-deal-count{font-size:0.78rem;color:var(--gray);margin-bottom:14px}
+.sd-preview{display:flex;gap:8px;margin-bottom:14px;overflow:hidden}
+.sd-preview-item{font-size:1.4rem;width:36px;height:36px;background:#f5f5f5;border-radius:4px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+.btn-shop-seller{width:100%;background:var(--orange);color:white;border:none;border-radius:4px;padding:10px;font-size:0.85rem;font-weight:700;transition:background 0.15s}
+.btn-shop-seller:hover{background:#e68900}
 
-footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem}
-footer a{color:#a78bfa;margin:0 8px}
+/* ===== COUPON SECTION ===== */
+.coupon-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.coupon-card{background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden;position:relative;cursor:pointer;transition:box-shadow 0.2s}
+.coupon-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+.coupon-img{background:linear-gradient(135deg,#f5f5f5,#e8e8e8);height:110px;display:flex;align-items:center;justify-content:center;font-size:3.2rem;position:relative}
+.coupon-badge{position:absolute;top:8px;left:8px;background:#00a650;color:white;font-size:0.65rem;font-weight:800;padding:3px 8px;border-radius:3px}
+.coupon-info{padding:12px}
+.coupon-name{font-size:0.82rem;font-weight:600;margin-bottom:3px;line-height:1.3}
+.coupon-seller{font-size:0.7rem;color:var(--teal);margin-bottom:3px;font-weight:600}
+.coupon-save{font-size:0.78rem;color:var(--green);font-weight:700;margin-bottom:8px}
+.btn-clip{width:100%;background:transparent;border:1px solid var(--orange);border-radius:3px;padding:7px;font-size:0.78rem;font-weight:700;color:var(--orange);transition:all 0.2s}
+.btn-clip:hover{background:var(--orange);color:white}
+.btn-clip.clipped{background:#e8f5e9;border-color:#4caf50;color:#1b5e20;cursor:default}
+/* Coupon tear */
+.coupon-card::before,.coupon-card::after{content:'';position:absolute;top:50%;width:14px;height:14px;background:var(--bg);border-radius:50%;transform:translateY(-50%);z-index:1}
+.coupon-card::before{left:-7px}
+.coupon-card::after{right:-7px}
 
-/* CART TOAST */
-.cart-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:#111;color:white;border-radius:100px;padding:12px 24px;font-size:0.85rem;font-weight:600;z-index:9999;transition:transform 0.3s ease;box-shadow:0 8px 24px rgba(0,0,0,0.3);white-space:nowrap}
+/* ===== TRUST BAR ===== */
+.trust-bar{background:white;border:1px solid var(--border);border-radius:8px;margin-top:24px}
+.trust-bar-inner{max-width:1500px;margin:0 auto;padding:14px 20px;display:flex;gap:28px;flex-wrap:wrap;justify-content:center}
+.trust-item{display:flex;align-items:center;gap:8px;font-size:0.8rem;color:var(--gray);font-weight:500}
+.trust-item span{font-size:1.1rem}
+
+/* ===== TAB CONTENT SECTIONS ===== */
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* ===== FOOTER ===== */
+footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;margin-top:32px}
+.foot-inner{max-width:1500px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:20px}
+.foot-col h4{color:white;font-size:0.85rem;margin-bottom:10px}
+.foot-col a{display:block;font-size:0.78rem;color:rgba(255,255,255,0.7);margin-bottom:6px;transition:color 0.2s}
+.foot-col a:hover{color:white}
+.foot-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.45)}
+
+/* ===== TOAST ===== */
+.cart-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;border-radius:100px;padding:10px 22px;font-size:0.84rem;font-weight:600;z-index:9999;transition:transform 0.3s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3);white-space:nowrap;display:flex;align-items:center;gap:8px}
 .cart-toast.show{transform:translateX(-50%) translateY(0)}
 
-@media(max-width:1024px){.deals-grid{grid-template-columns:repeat(3,1fr)}.picks-grid{grid-template-columns:repeat(2,1fr)}}
+/* ===== RESPONSIVE ===== */
+@media(max-width:1200px){.deals-grid{grid-template-columns:repeat(3,1fr)}.coupon-grid{grid-template-columns:repeat(3,1fr)}.seller-deals-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.dotd-banner{grid-template-columns:1fr}.dotd-left{min-height:200px}.deals-grid{grid-template-columns:repeat(2,1fr)}.coupon-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.nav-deliver{display:none}.nav-search-cat{display:none}.deals-grid{grid-template-columns:repeat(2,1fr)}.foot-grid{grid-template-columns:repeat(2,1fr)}.seller-deals-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.deals-grid{grid-template-columns:1fr}.coupon-grid{grid-template-columns:1fr}}
+
 @media(max-width:768px){
   .deals-grid{grid-template-columns:repeat(2,1fr)}
-  .picks-grid{grid-template-columns:repeat(2,1fr)}
-  .countdown-num{font-size:1.8rem;min-width:60px;padding:8px 12px}
-  .nav-links{display:none}
-  .nav-search{display:none}
+  .dotd-banner{flex-direction:column}
+  .coupon-grid{grid-template-columns:1fr}
+  .seller-deals-grid{grid-template-columns:1fr 1fr}
 }
-@media(max-width:480px){.deals-grid{grid-template-columns:1fr}.picks-grid{grid-template-columns:1fr}}
+@media(max-width:480px){
+  .deals-grid{grid-template-columns:repeat(2,1fr)}
+}
 </style>
 </head>
 <body>
 
-<div class="top-banner">🔥 FLASH SALE IS LIVE — UP TO 60% OFF · Ends at Midnight Tonight · Limited Stock!</div>
-
+<!-- ===== NAV ===== -->
 <nav>
-  <div class="nav-inner">
-    <div class="nav-logo" onclick="window.location.href='mystore.html'">
-      VibeStore <div class="ai-tag">AI</div>
+  <div class="nav-top">
+    <a class="nav-logo" href="index.html">Vibe<span>Store</span></a>
+    <div class="nav-deliver">
+      <span>Deliver to</span>
+      <strong>📍 Lucknow 226001</strong>
     </div>
-    <div class="nav-links">
-      <a href="collections.html" class="nav-lnk">Shop</a>
-      <a href="sale.html" class="nav-lnk active">Sale 🔥</a>
-      <a href="blog.html" class="nav-lnk">Blog</a>
-      <a href="faq.html" class="nav-lnk">Help</a>
-      <a href="contact.html" class="nav-lnk">Contact</a>
+    <div class="nav-search">
+      <select class="nav-search-cat"><option>All</option><option>Electronics</option><option>Fashion</option><option>Beauty</option><option>Sports</option><option>Home</option></select>
+      <input placeholder="Search deals, products, sellers..."/>
+      <button class="nav-search-btn">🔍</button>
     </div>
-    <div class="nav-right">
-      <div class="nav-search"><span>🔍</span><input placeholder="Search deals..."/></div>
-      <a href="account.html" class="nav-icon" title="Account">👤</a>
-      <a href="track.html" class="nav-icon" title="Orders">📦</a>
-      <a href="wishlist.html" class="nav-icon" title="Wishlist">♡</a>
-      <a href="cart.html" class="nav-icon" title="Cart" style="position:relative">
-        🛒<div class="cart-count" id="cartCount">0</div>
-      </a>
-    </div>
+    <a href="account.html" class="nav-btn"><span class="vs-nav-greeting">Hello, Sign in</span><strong>Account &amp; Lists</strong></a>
+    <a href="returns.html" class="nav-btn"><span>Returns</span><strong>&amp; Orders</strong></a>
+    <a href="checkout.html" class="nav-cart">
+      <div>
+        <div class="nav-cart-count" id="cartCount">0</div>
+        <div class="nav-cart-text">Cart 🛒</div>
+      </div>
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-bot-btn">☰ All</button>
+    <a href="sale.html" class="nav-bot-btn active">Today's Deals</a>
+    <a href="collections.html" class="nav-bot-btn">New Arrivals</a>
+    <a href="account.html" class="nav-bot-btn">Your Account</a>
+    <a href="gift-cards.html" class="nav-bot-btn">Gift Cards</a>
+    <a href="become-seller.html" class="nav-bot-btn">Sell on VibeStore</a>
+    <a href="blog.html" class="nav-bot-btn">Blog</a>
   </div>
 </nav>
 
-<!-- SALE HERO -->
-<div class="sale-hero">
-  <div class="hero-inner">
-    <div class="aria-badge"><div class="aria-dot"></div> Aria AI · 847 price-drop opportunities found today</div>
-    <h1><em>UP TO 60%</em><br/>OFF</h1>
-    <p class="sale-sub">Flash Sale ends at midnight · <strong>Aria AI</strong> identified the best deals just for you</p>
-
-    <!-- COUNTDOWN -->
-    <div class="countdown-wrap">
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cdHours">00</span>
-        <div class="countdown-lbl">Hours</div>
-      </div>
-      <div class="colon">:</div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cdMins">00</span>
-        <div class="countdown-lbl">Minutes</div>
-      </div>
-      <div class="colon">:</div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cdSecs">00</span>
-        <div class="countdown-lbl">Seconds</div>
+<!-- ===== PAGE HEADER ===== -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div class="page-title">⚡ Today's Deals</div>
+      <div class="deals-meta">
+        <span class="updated">🔄 Updated hourly</span>
+        <span class="deals-counter" id="dealsCounter">47 deals remaining today</span>
       </div>
     </div>
-
-    <!-- STOCK PROGRESS -->
-    <div class="progress-bar-wrap">
-      <div class="pb-label">
-        <span>Sale ends when stock runs out</span>
-        <span id="stockCount">234 items remaining</span>
-      </div>
-      <div class="pb-track"><div class="pb-fill"></div></div>
+    <div class="sort-row">
+      <span class="sort-label">Sort by:</span>
+      <select class="sort-select" onchange="sortDeals(this.value)">
+        <option value="featured">Featured</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="discount">Biggest Discount</option>
+        <option value="ending">Ending Soonest</option>
+      </select>
     </div>
   </div>
 </div>
 
-<!-- FILTER PILLS -->
-<div class="filters-section">
-  <div class="filter-row">
-    <button class="filter-pill active" onclick="filterDeals('all',this)">🔥 All Deals</button>
-    <button class="filter-pill" onclick="filterDeals('electronics',this)">💻 Electronics</button>
-    <button class="filter-pill" onclick="filterDeals('fashion',this)">👗 Fashion</button>
-    <button class="filter-pill" onclick="filterDeals('beauty',this)">💄 Beauty</button>
-    <button class="filter-pill" onclick="filterDeals('sports',this)">⚽ Sports</button>
-    <button class="filter-pill" onclick="filterDeals('home',this)">🏠 Home</button>
+<!-- ===== FILTER TABS ===== -->
+<div class="filter-strip">
+  <div class="filter-strip-inner">
+    <button class="filter-tab active" onclick="switchTab('all',this)">All Deals</button>
+    <button class="filter-tab" onclick="switchTab('lightning',this)">⚡ Lightning Deals</button>
+    <button class="filter-tab" onclick="switchTab('dotd',this)">🔥 Deal of the Day</button>
+    <button class="filter-tab" onclick="switchTab('clearance',this)">🏷️ Clearance</button>
+    <button class="filter-tab" onclick="switchTab('coupon',this)">✂️ Coupons</button>
+    <button class="filter-tab" onclick="switchTab('seller',this)">🏪 Seller Deals <span class="new-tag">NEW</span></button>
   </div>
 </div>
 
-<!-- DEALS GRID -->
-<div class="deals-section">
-  <div class="deals-grid" id="dealsGrid">
+<!-- ===== CATEGORY CHIPS ===== -->
+<div class="cat-strip">
+  <div class="cat-strip-inner">
+    <span class="cat-label">Category:</span>
+    <button class="cat-chip active" onclick="filterCat('all',this)">🛍️ All</button>
+    <button class="cat-chip" onclick="filterCat('electronics',this)">📱 Electronics</button>
+    <button class="cat-chip" onclick="filterCat('fashion',this)">👗 Fashion</button>
+    <button class="cat-chip" onclick="filterCat('home',this)">🏠 Home</button>
+    <button class="cat-chip" onclick="filterCat('beauty',this)">💄 Beauty</button>
+    <button class="cat-chip" onclick="filterCat('sports',this)">⚽ Sports</button>
+    <button class="cat-chip" onclick="filterCat('books',this)">📚 Books</button>
+  </div>
+</div>
 
-    <!-- Deal 1 -->
-    <div class="deal-card" data-cat="electronics">
-      <div class="deal-img">
-        🎧
-        <div class="discount-badge">60% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="stock-badge">Only 3 left!</div>
-        <div class="wish-btn">♡</div>
+<!-- ===== DEALS PAGE ===== -->
+<div class="deals-page">
+
+  <!-- ===== TAB: ALL / DOTD ===== -->
+  <div class="tab-content active" id="tab-all">
+
+    <!-- DEAL OF THE DAY FULL-WIDTH BANNER -->
+    <div class="dotd-banner" data-dealtype="dotd" data-cat="electronics">
+      <div class="dotd-left">
+        <div class="dotd-badge">🔥 Deal of the Day</div>
+        <div class="dotd-emoji">📸</div>
+        <div class="dotd-seller-tag">Sold by <a href="seller-profile.html">TechHub Electronics</a></div>
       </div>
-      <div class="deal-info">
-        <div class="deal-cat">Electronics</div>
-        <div class="deal-name">Sony WH-1000XM5 Noise-Cancelling Headphones</div>
-        <div class="price-row">
-          <span class="sale-price">₹9,999</span>
-          <span class="orig-price">₹24,999</span>
+      <div class="dotd-right">
+        <div class="dotd-tag">Electronics · Cameras · VibeStore Fulfilled</div>
+        <div class="dotd-name">Canon EOS R50 Mirrorless Camera with 18-45mm Kit Lens — Perfect for Creators</div>
+        <div class="dotd-stars">★★★★★ <span>4,218 ratings · 1,203 answered questions</span></div>
+        <div class="dotd-price-row">
+          <span class="dotd-sale">₹48,990</span>
+          <span class="dotd-orig">₹72,995</span>
+          <span class="dotd-save">33% OFF</span>
         </div>
-        <div class="savings">You save ₹15,000!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Sony WH-1000XM5',9999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Sony WH-1000XM5',9999)">Buy Now</button>
+        <div style="font-size:0.82rem;color:var(--green);font-weight:600;margin-bottom:8px">You save ₹24,005!</div>
+        <div class="dotd-countdown">
+          <span class="dotd-cd-label">⏰ Deal ends in:</span>
+          <span class="dotd-cd-time" id="dotdTimer">—</span>
+        </div>
+        <div class="dotd-progress">
+          <div class="lbar-top"><span class="lbar-claimed">🔥 87% claimed — hurry!</span><span class="lbar-time">Limited stock</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:87%"></div></div>
+        </div>
+        <div class="dotd-btns">
+          <button class="btn-dotd-cart" onclick="addToCart(this,'Canon EOS R50 Camera',48990,'📸','TechHub Electronics')">Add to Cart</button>
+          <button class="btn-dotd-buy" onclick="buyNow('Canon EOS R50 Camera',48990,'📸','TechHub Electronics')">Buy Now</button>
         </div>
       </div>
     </div>
 
-    <!-- Deal 2 -->
-    <div class="deal-card" data-cat="electronics">
-      <div class="deal-img">
-        ⌚
-        <div class="discount-badge">45% OFF</div>
-        <div class="deal-type-badge badge-flash">Flash Deal</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Electronics</div>
-        <div class="deal-name">Apple Watch Series 9 (45mm, GPS)</div>
-        <div class="price-row">
-          <span class="sale-price">₹22,000</span>
-          <span class="orig-price">₹39,900</span>
-        </div>
-        <div class="savings">You save ₹17,900!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Apple Watch Series 9',22000)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Apple Watch Series 9',22000)">Buy Now</button>
-        </div>
-      </div>
+    <!-- LIGHTNING DEALS -->
+    <div class="section-title-row" id="lightningHeader">
+      <div class="section-h">⚡ Lightning Deals</div>
+      <span class="see-all" onclick="switchTab('lightning', document.querySelector('[onclick*=lightning]'))">See all Lightning Deals →</span>
     </div>
+    <div class="deals-grid" id="dealsGrid">
 
-    <!-- Deal 3 -->
-    <div class="deal-card" data-cat="fashion">
-      <div class="deal-img">
-        👟
-        <div class="discount-badge">55% OFF</div>
-        <div class="deal-type-badge badge-clearance">Clearance</div>
-        <div class="stock-badge">Only 7 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Fashion</div>
-        <div class="deal-name">Nike Air Max 270 Running Shoes</div>
-        <div class="price-row">
-          <span class="sale-price">₹3,599</span>
-          <span class="orig-price">₹7,995</span>
+      <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="9999" data-discount="60">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🎧</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">60% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
         </div>
-        <div class="savings">You save ₹4,396!</div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">73% claimed</span><span class="lbar-time" data-ends="02:34:18">Ends 02:34:18</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:73%"></div></div>
+        </div>
+        <div class="deal-cat">Electronics · Audio</div>
+        <div class="deal-name">Sony WH-1000XM5 Wireless Noise-Cancelling Headphones</div>
+        <div class="deal-stars">★★★★★ <span>12,841</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹9,999</span><span class="deal-orig">₹24,999</span></div>
+        <div class="deal-savings">You save ₹15,000 (60%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">TechHub Electronics</a></div>
         <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Nike Air Max 270',3599)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Nike Air Max 270',3599)">Buy Now</button>
+          <button class="btn-deal-cart" onclick="addToCart(this,'Sony WH-1000XM5',9999,'🎧','TechHub Electronics')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Sony WH-1000XM5',9999,'🎧','TechHub Electronics')">Buy Now</button>
         </div>
       </div>
-    </div>
 
-    <!-- Deal 4 -->
-    <div class="deal-card" data-cat="beauty">
-      <div class="deal-img">
-        💄
-        <div class="discount-badge">40% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="wish-btn">♡</div>
+      <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="22000" data-discount="45">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">⌚</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">45% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">91% claimed — almost gone!</span><span class="lbar-time" data-ends="00:18:05">Ends 00:18:05</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:91%"></div></div>
+        </div>
+        <div class="deal-cat">Electronics · Wearables</div>
+        <div class="deal-name">Apple Watch Series 9 (45mm GPS) — Midnight Aluminium</div>
+        <div class="deal-stars">★★★★★ <span>8,342</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹22,000</span><span class="deal-orig">₹39,900</span></div>
+        <div class="deal-savings">You save ₹17,900 (45%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">AppleZone Official</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Apple Watch Series 9',22000,'⌚','AppleZone Official')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Apple Watch Series 9',22000,'⌚','AppleZone Official')">Buy Now</button>
+        </div>
       </div>
-      <div class="deal-info">
+
+      <div class="deal-card" data-dealtype="clearance" data-cat="fashion" data-price="3599" data-discount="55">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">👟</div>
+          <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
+          <div class="deal-pct-badge">55% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="deal-cat">Fashion · Footwear</div>
+        <div class="deal-name">Nike Air Max 270 Running Shoes — Men's Size 8–12</div>
+        <div class="deal-stars">★★★★☆ <span>3,127</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹3,599</span><span class="deal-orig">₹7,995</span></div>
+        <div class="deal-savings">You save ₹4,396 (55%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">FashionFirst India</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Nike Air Max 270',3599,'👟','FashionFirst India')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Nike Air Max 270',3599,'👟','FashionFirst India')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="beauty" data-price="2999" data-discount="40">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">💄</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">40% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">58% claimed</span><span class="lbar-time" data-ends="04:12:00">Ends 04:12:00</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:58%"></div></div>
+        </div>
         <div class="deal-cat">Beauty</div>
-        <div class="deal-name">Charlotte Tilbury Flawless Foundation Set</div>
-        <div class="price-row">
-          <span class="sale-price">₹2,999</span>
-          <span class="orig-price">₹4,999</span>
-        </div>
-        <div class="savings">You save ₹2,000!</div>
+        <div class="deal-name">Charlotte Tilbury Flawless Foundation Set (8-piece)</div>
+        <div class="deal-stars">★★★★★ <span>5,490</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹2,999</span><span class="deal-orig">₹4,999</span></div>
+        <div class="deal-savings">You save ₹2,000 (40%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">GlowUp Beauty Store</a></div>
         <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'CT Foundation Set',2999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('CT Foundation Set',2999)">Buy Now</button>
+          <button class="btn-deal-cart" onclick="addToCart(this,'CT Foundation Set',2999,'💄','GlowUp Beauty Store')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('CT Foundation Set',2999,'💄','GlowUp Beauty Store')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="74990" data-discount="35">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">💻</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">35% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">96% claimed — hurry!</span><span class="lbar-time" data-ends="00:04:32">Ends 00:04:32</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:96%"></div></div>
+        </div>
+        <div class="deal-cat">Electronics · Laptops</div>
+        <div class="deal-name">MacBook Air M2 13-inch 8GB 256GB — Starlight</div>
+        <div class="deal-stars">★★★★★ <span>21,033</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹74,990</span><span class="deal-orig">₹1,14,900</span></div>
+        <div class="deal-savings">You save ₹39,910 (35%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">AppleZone Official</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'MacBook Air M2',74990,'💻','AppleZone Official')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('MacBook Air M2',74990,'💻','AppleZone Official')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="clearance" data-cat="sports" data-price="6499" data-discount="50">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🏋️</div>
+          <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
+          <div class="deal-pct-badge">50% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="deal-cat">Sports &amp; Fitness</div>
+        <div class="deal-name">Bowflex SelectTech Adjustable Dumbbells — Pair (5–52.5 lbs)</div>
+        <div class="deal-stars">★★★★☆ <span>7,218</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹6,499</span><span class="deal-orig">₹12,999</span></div>
+        <div class="deal-savings">You save ₹6,500 (50%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">FitGear India</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Bowflex Dumbbells',6499,'🏋️','FitGear India')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Bowflex Dumbbells',6499,'🏋️','FitGear India')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="home" data-price="4699" data-discount="42">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🍳</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">42% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">44% claimed</span><span class="lbar-time" data-ends="05:55:00">Ends 05:55:00</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:44%"></div></div>
+        </div>
+        <div class="deal-cat">Home &amp; Kitchen</div>
+        <div class="deal-name">Instant Pot Duo 7-in-1 Electric Pressure Cooker 6 Quart</div>
+        <div class="deal-stars">★★★★★ <span>84,200</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹4,699</span><span class="deal-orig">₹8,099</span></div>
+        <div class="deal-savings">You save ₹3,400 (42%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">HomeEssentials Co.</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Instant Pot Duo',4699,'🍳','HomeEssentials Co.')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Instant Pot Duo',4699,'🍳','HomeEssentials Co.')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="fashion" data-price="5999" data-discount="60">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🕶️</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">60% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">81% claimed</span><span class="lbar-time" data-ends="01:22:45">Ends 01:22:45</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:81%"></div></div>
+        </div>
+        <div class="deal-cat">Fashion · Accessories</div>
+        <div class="deal-name">Ray-Ban Aviator Classic Sunglasses RB3025 — Gold Frame</div>
+        <div class="deal-stars">★★★★★ <span>16,820</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹5,999</span><span class="deal-orig">₹14,990</span></div>
+        <div class="deal-savings">You save ₹8,991 (60%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">FashionFirst India</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Ray-Ban Aviator',5999,'🕶️','FashionFirst India')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Ray-Ban Aviator',5999,'🕶️','FashionFirst India')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="87999" data-discount="30">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">📱</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">30% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">62% claimed</span><span class="lbar-time" data-ends="03:48:10">Ends 03:48:10</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:62%"></div></div>
+        </div>
+        <div class="deal-cat">Electronics · Smartphones</div>
+        <div class="deal-name">Samsung Galaxy S24 Ultra 256GB — Titanium Black</div>
+        <div class="deal-stars">★★★★★ <span>9,501</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹87,999</span><span class="deal-orig">₹1,24,999</span></div>
+        <div class="deal-savings">You save ₹37,000 (30%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">TechHub Electronics</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Samsung S24 Ultra',87999,'📱','TechHub Electronics')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Samsung S24 Ultra',87999,'📱','TechHub Electronics')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="clearance" data-cat="beauty" data-price="24900" data-discount="38">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">💇</div>
+          <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
+          <div class="deal-pct-badge">38% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="deal-cat">Beauty · Hair Care</div>
+        <div class="deal-name">Dyson Airwrap Complete Multi-Styler &amp; Dryer</div>
+        <div class="deal-stars">★★★★★ <span>6,724</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹24,900</span><span class="deal-orig">₹40,000</span></div>
+        <div class="deal-savings">You save ₹15,100 (38%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">GlowUp Beauty Store</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Dyson Airwrap',24900,'💇','GlowUp Beauty Store')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Dyson Airwrap',24900,'💇','GlowUp Beauty Store')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="34999" data-discount="36">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🎮</div>
+          <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
+          <div class="deal-pct-badge">36% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="lightning-bar">
+          <div class="lbar-top"><span class="lbar-claimed">79% claimed</span><span class="lbar-time" data-ends="02:10:00">Ends 02:10:00</span></div>
+          <div class="lbar-track"><div class="lbar-fill" style="width:79%"></div></div>
+        </div>
+        <div class="deal-cat">Electronics · Gaming</div>
+        <div class="deal-name">PlayStation 5 Slim + Extra DualSense Controller Bundle</div>
+        <div class="deal-stars">★★★★★ <span>32,001</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹34,999</span><span class="deal-orig">₹54,999</span></div>
+        <div class="deal-savings">You save ₹20,000 (36%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">TechHub Electronics</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'PS5 Slim Bundle',34999,'🎮','TechHub Electronics')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('PS5 Slim Bundle',34999,'🎮','TechHub Electronics')">Buy Now</button>
+        </div>
+      </div>
+
+      <div class="deal-card" data-dealtype="clearance" data-cat="home" data-price="19900" data-discount="58">
+        <div class="deal-img-wrap">
+          <div class="deal-emoji-bg">🌀</div>
+          <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
+          <div class="deal-pct-badge">58% OFF</div>
+          <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
+        </div>
+        <div class="deal-cat">Home · Appliances</div>
+        <div class="deal-name">Dyson V15 Detect Absolute Cordless Vacuum Cleaner</div>
+        <div class="deal-stars">★★★★★ <span>4,882</span></div>
+        <div class="deal-price-row"><span class="deal-sale">₹19,900</span><span class="deal-orig">₹47,400</span></div>
+        <div class="deal-savings">You save ₹27,500 (58%)</div>
+        <div class="deal-seller-tag">Sold by <a href="seller-profile.html">HomeEssentials Co.</a></div>
+        <div class="deal-actions">
+          <button class="btn-deal-cart" onclick="addToCart(this,'Dyson V15 Vacuum',19900,'🌀','HomeEssentials Co.')">Add to Cart</button>
+          <button class="btn-deal-buy" onclick="buyNow('Dyson V15 Vacuum',19900,'🌀','HomeEssentials Co.')">Buy Now</button>
+        </div>
+      </div>
+
+    </div><!-- /deals-grid -->
+
+    <!-- COUPON SECTION -->
+    <div style="margin-top:28px" id="couponSection">
+      <div class="section-title-row">
+        <div class="section-h">✂️ Clip &amp; Save — Coupons from Top Sellers</div>
+        <span class="see-all">See all coupons →</span>
+      </div>
+      <div class="coupon-grid">
+        <div class="coupon-card" data-cat="beauty">
+          <div class="coupon-img">🧴<div class="coupon-badge">✂️ Coupon</div></div>
+          <div class="coupon-info">
+            <div class="coupon-name">The Ordinary Skincare Starter Set (8 products)</div>
+            <div class="coupon-seller">OrganicNest India</div>
+            <div class="coupon-save">Extra ₹400 off with coupon · Total: ₹1,399</div>
+            <button class="btn-clip" onclick="clipCoupon(this)">✂️ Clip Coupon</button>
+          </div>
+        </div>
+        <div class="coupon-card" data-cat="home">
+          <div class="coupon-img">💡<div class="coupon-badge">✂️ Coupon</div></div>
+          <div class="coupon-info">
+            <div class="coupon-name">Philips Hue Smart Bulb Starter Kit (4 bulbs + Bridge)</div>
+            <div class="coupon-seller">HomeEssentials Co.</div>
+            <div class="coupon-save">Extra ₹600 off with coupon · Total: ₹2,399</div>
+            <button class="btn-clip" onclick="clipCoupon(this)">✂️ Clip Coupon</button>
+          </div>
+        </div>
+        <div class="coupon-card" data-cat="sports">
+          <div class="coupon-img">🚴<div class="coupon-badge">✂️ Coupon</div></div>
+          <div class="coupon-info">
+            <div class="coupon-name">Peloton Cycling Seat Pad + Shoes Bundle</div>
+            <div class="coupon-seller">FitGear India</div>
+            <div class="coupon-save">Extra ₹500 off with coupon · Total: ₹2,799</div>
+            <button class="btn-clip" onclick="clipCoupon(this)">✂️ Clip Coupon</button>
+          </div>
+        </div>
+        <div class="coupon-card" data-cat="electronics">
+          <div class="coupon-img">🖥️<div class="coupon-badge">✂️ Coupon</div></div>
+          <div class="coupon-info">
+            <div class="coupon-name">LG 27" 4K UHD IPS Monitor with USB-C (HDR10)</div>
+            <div class="coupon-seller">TechHub Electronics</div>
+            <div class="coupon-save">Extra ₹2,000 off with coupon · Total: ₹24,999</div>
+            <button class="btn-clip" onclick="clipCoupon(this)">✂️ Clip Coupon</button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Deal 5 -->
-    <div class="deal-card" data-cat="electronics">
-      <div class="deal-img">
-        💻
-        <div class="discount-badge">35% OFF</div>
-        <div class="deal-type-badge badge-flash">Flash Deal</div>
-        <div class="stock-badge">Only 2 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Electronics</div>
-        <div class="deal-name">MacBook Air M2 13-inch 8GB 256GB</div>
-        <div class="price-row">
-          <span class="sale-price">₹74,990</span>
-          <span class="orig-price">₹1,14,900</span>
-        </div>
-        <div class="savings">You save ₹39,910!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'MacBook Air M2',74990)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('MacBook Air M2',74990)">Buy Now</button>
-        </div>
-      </div>
-    </div>
+  </div><!-- /tab-all -->
 
-    <!-- Deal 6 -->
-    <div class="deal-card" data-cat="sports">
-      <div class="deal-img">
-        🏋️
-        <div class="discount-badge">50% OFF</div>
-        <div class="deal-type-badge badge-clearance">Clearance</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Sports</div>
-        <div class="deal-name">Bowflex SelectTech Adjustable Dumbbells (Pair)</div>
-        <div class="price-row">
-          <span class="sale-price">₹6,499</span>
-          <span class="orig-price">₹12,999</span>
-        </div>
-        <div class="savings">You save ₹6,500!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Bowflex Dumbbells',6499)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Bowflex Dumbbells',6499)">Buy Now</button>
-        </div>
-      </div>
+  <!-- ===== TAB: SELLER DEALS (NEW) ===== -->
+  <div class="tab-content" id="tab-seller">
+    <div class="section-title-row" style="margin-bottom:20px">
+      <div class="section-h">🏪 Seller Flash Sales — Limited Time Offers</div>
+      <span class="see-all" onclick="location.href='seller-profile.html'">Browse all sellers →</span>
     </div>
+    <div class="seller-deals-grid">
 
-    <!-- Deal 7 -->
-    <div class="deal-card" data-cat="home">
-      <div class="deal-img">
-        🍳
-        <div class="discount-badge">42% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="stock-badge">Only 12 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Home</div>
-        <div class="deal-name">Instant Pot Duo 7-in-1 Electric Pressure Cooker</div>
-        <div class="price-row">
-          <span class="sale-price">₹4,699</span>
-          <span class="orig-price">₹8,099</span>
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">🖥️</div>
+          <div class="sd-info">
+            <div class="sd-name">TechHub Electronics</div>
+            <div class="sd-rating">★★★★★ <span>(2,341 reviews)</span></div>
+          </div>
         </div>
-        <div class="savings">You save ₹3,400!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Instant Pot Duo',4699)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Instant Pot Duo',4699)">Buy Now</button>
+        <div class="sd-deal-headline">⚡ TechHub Flash Sale — Up to 60% off</div>
+        <div class="sd-deal-count">14 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="03:20:00">03:20:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">🎧</div>
+          <div class="sd-preview-item">📱</div>
+          <div class="sd-preview-item">💻</div>
+          <div class="sd-preview-item">🎮</div>
+          <div class="sd-preview-item">⌚</div>
         </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop TechHub Deals →</button>
       </div>
+
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">👗</div>
+          <div class="sd-info">
+            <div class="sd-name">FashionFirst India</div>
+            <div class="sd-rating">★★★★½ <span>(1,102 reviews)</span></div>
+          </div>
+        </div>
+        <div class="sd-deal-headline">👗 End of Season Sale — Flat 40-70% off</div>
+        <div class="sd-deal-count">22 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="11:45:00">11:45:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">👔</div>
+          <div class="sd-preview-item">👟</div>
+          <div class="sd-preview-item">🕶️</div>
+          <div class="sd-preview-item">👜</div>
+          <div class="sd-preview-item">🧣</div>
+        </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop FashionFirst Deals →</button>
+      </div>
+
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">🌿</div>
+          <div class="sd-info">
+            <div class="sd-name">OrganicNest India</div>
+            <div class="sd-rating">★★★★½ <span>(430 reviews)</span></div>
+          </div>
+        </div>
+        <div class="sd-deal-headline">🌿 Beauty Bonanza — Buy 2 Get 1 Free</div>
+        <div class="sd-deal-count">8 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="06:00:00">06:00:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">🧴</div>
+          <div class="sd-preview-item">💆</div>
+          <div class="sd-preview-item">🌱</div>
+          <div class="sd-preview-item">✨</div>
+          <div class="sd-preview-item">🫧</div>
+        </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop OrganicNest Deals →</button>
+      </div>
+
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">🏋️</div>
+          <div class="sd-info">
+            <div class="sd-name">FitGear India</div>
+            <div class="sd-rating">★★★★ <span>(288 reviews)</span></div>
+          </div>
+        </div>
+        <div class="sd-deal-headline">🏋️ Fitness Festival — Up to 50% off</div>
+        <div class="sd-deal-count">11 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="08:30:00">08:30:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">🏋️</div>
+          <div class="sd-preview-item">🚴</div>
+          <div class="sd-preview-item">🎽</div>
+          <div class="sd-preview-item">⚡</div>
+          <div class="sd-preview-item">💪</div>
+        </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop FitGear Deals →</button>
+      </div>
+
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">🍎</div>
+          <div class="sd-info">
+            <div class="sd-name">AppleZone Official</div>
+            <div class="sd-rating">★★★★★ <span>(8,770 reviews)</span></div>
+          </div>
+        </div>
+        <div class="sd-deal-headline">🍎 Apple Summer Deals — No-cost EMI available</div>
+        <div class="sd-deal-count">5 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="18:00:00">18:00:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">💻</div>
+          <div class="sd-preview-item">⌚</div>
+          <div class="sd-preview-item">📱</div>
+          <div class="sd-preview-item">🎧</div>
+          <div class="sd-preview-item">🖥️</div>
+        </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop AppleZone Deals →</button>
+      </div>
+
+      <div class="seller-deal-card" onclick="location.href='seller-profile.html'">
+        <div class="sd-top">
+          <div class="sd-logo">🏠</div>
+          <div class="sd-info">
+            <div class="sd-name">HomeEssentials Co.</div>
+            <div class="sd-rating">★★★★ <span>(615 reviews)</span></div>
+          </div>
+        </div>
+        <div class="sd-deal-headline">🏠 Home Refresh Sale — Up to 55% off appliances</div>
+        <div class="sd-deal-count">17 deals active · Ends in <span style="color:#cc0c39;font-weight:700" data-ends="14:15:00">14:15:00</span></div>
+        <div class="sd-preview">
+          <div class="sd-preview-item">🍳</div>
+          <div class="sd-preview-item">🌀</div>
+          <div class="sd-preview-item">💡</div>
+          <div class="sd-preview-item">🪴</div>
+          <div class="sd-preview-item">🧹</div>
+        </div>
+        <button class="btn-shop-seller" onclick="event.stopPropagation();location.href='seller-profile.html'">Shop HomeEssentials Deals →</button>
+      </div>
+
     </div>
+  </div><!-- /tab-seller -->
 
-    <!-- Deal 8 -->
-    <div class="deal-card" data-cat="fashion">
-      <div class="deal-img">
-        🕶️
-        <div class="discount-badge">60% OFF</div>
-        <div class="deal-type-badge badge-flash">Flash Deal</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Fashion</div>
-        <div class="deal-name">Ray-Ban Aviator Classic Sunglasses</div>
-        <div class="price-row">
-          <span class="sale-price">₹5,999</span>
-          <span class="orig-price">₹14,990</span>
-        </div>
-        <div class="savings">You save ₹8,991!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Ray-Ban Aviator',5999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Ray-Ban Aviator',5999)">Buy Now</button>
-        </div>
-      </div>
+  <!-- ===== TRUST BAR ===== -->
+  <div class="trust-bar">
+    <div class="trust-bar-inner">
+      <div class="trust-item"><span>✅</span> Verified Deals — All prices checked</div>
+      <div class="trust-item"><span>🛡️</span> Buyer Protection on all sellers</div>
+      <div class="trust-item"><span>↩️</span> Easy Returns — up to 30 days</div>
+      <div class="trust-item"><span>🤖</span> AI Curated — Best deals surfaced for you</div>
     </div>
-
-    <!-- Deal 9 -->
-    <div class="deal-card" data-cat="electronics">
-      <div class="deal-img">
-        📱
-        <div class="discount-badge">30% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="stock-badge">Only 5 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Electronics</div>
-        <div class="deal-name">Samsung Galaxy S24 Ultra 256GB Titanium</div>
-        <div class="price-row">
-          <span class="sale-price">₹87,999</span>
-          <span class="orig-price">₹1,24,999</span>
-        </div>
-        <div class="savings">You save ₹37,000!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Samsung S24 Ultra',87999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Samsung S24 Ultra',87999)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 10 -->
-    <div class="deal-card" data-cat="beauty">
-      <div class="deal-img">
-        🧴
-        <div class="discount-badge">38% OFF</div>
-        <div class="deal-type-badge badge-clearance">Clearance</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Beauty</div>
-        <div class="deal-name">Dyson Airwrap Complete Multi-Styler</div>
-        <div class="price-row">
-          <span class="sale-price">₹24,900</span>
-          <span class="orig-price">₹40,000</span>
-        </div>
-        <div class="savings">You save ₹15,100!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Dyson Airwrap',24900)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Dyson Airwrap',24900)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 11 -->
-    <div class="deal-card" data-cat="sports">
-      <div class="deal-img">
-        🚴
-        <div class="discount-badge">47% OFF</div>
-        <div class="deal-type-badge badge-flash">Flash Deal</div>
-        <div class="stock-badge">Only 4 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Sports</div>
-        <div class="deal-name">Peloton Bike Seat Pad + Cycling Shoes Bundle</div>
-        <div class="price-row">
-          <span class="sale-price">₹3,299</span>
-          <span class="orig-price">₹6,199</span>
-        </div>
-        <div class="savings">You save ₹2,900!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Cycling Bundle',3299)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Cycling Bundle',3299)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 12 -->
-    <div class="deal-card" data-cat="home">
-      <div class="deal-img">
-        💡
-        <div class="discount-badge">55% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Home</div>
-        <div class="deal-name">Philips Hue Smart Bulb Starter Kit (4 bulbs)</div>
-        <div class="price-row">
-          <span class="sale-price">₹2,999</span>
-          <span class="orig-price">₹6,649</span>
-        </div>
-        <div class="savings">You save ₹3,650!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Philips Hue Kit',2999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Philips Hue Kit',2999)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 13 -->
-    <div class="deal-card" data-cat="fashion">
-      <div class="deal-img">
-        👜
-        <div class="discount-badge">52% OFF</div>
-        <div class="deal-type-badge badge-clearance">Clearance</div>
-        <div class="stock-badge">Only 6 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Fashion</div>
-        <div class="deal-name">Michael Kors Jet Set Travel Tote Bag</div>
-        <div class="price-row">
-          <span class="sale-price">₹8,499</span>
-          <span class="orig-price">₹17,700</span>
-        </div>
-        <div class="savings">You save ₹9,201!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'MK Tote Bag',8499)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('MK Tote Bag',8499)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 14 -->
-    <div class="deal-card" data-cat="electronics">
-      <div class="deal-img">
-        🖥️
-        <div class="discount-badge">33% OFF</div>
-        <div class="deal-type-badge badge-flash">Flash Deal</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Electronics</div>
-        <div class="deal-name">LG 27" 4K UHD IPS Monitor with USB-C</div>
-        <div class="price-row">
-          <span class="sale-price">₹26,999</span>
-          <span class="orig-price">₹39,990</span>
-        </div>
-        <div class="savings">You save ₹12,991!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'LG 27 4K Monitor',26999)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('LG 27 4K Monitor',26999)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 15 -->
-    <div class="deal-card" data-cat="beauty">
-      <div class="deal-img">
-        🌿
-        <div class="discount-badge">44% OFF</div>
-        <div class="deal-type-badge badge-ai-drop">AI Price Drop</div>
-        <div class="stock-badge">Only 9 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Beauty</div>
-        <div class="deal-name">The Ordinary Skincare Starter Set (8 products)</div>
-        <div class="price-row">
-          <span class="sale-price">₹1,799</span>
-          <span class="orig-price">₹3,199</span>
-        </div>
-        <div class="savings">You save ₹1,400!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'The Ordinary Set',1799)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('The Ordinary Set',1799)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Deal 16 -->
-    <div class="deal-card" data-cat="home">
-      <div class="deal-img">
-        🌀
-        <div class="discount-badge">58% OFF</div>
-        <div class="deal-type-badge badge-clearance">Clearance</div>
-        <div class="stock-badge">Only 1 left!</div>
-        <div class="wish-btn">♡</div>
-      </div>
-      <div class="deal-info">
-        <div class="deal-cat">Home</div>
-        <div class="deal-name">Dyson V15 Detect Absolute Cordless Vacuum</div>
-        <div class="price-row">
-          <span class="sale-price">₹19,900</span>
-          <span class="orig-price">₹47,400</span>
-        </div>
-        <div class="savings">You save ₹27,500!</div>
-        <div class="deal-actions">
-          <button class="btn-cart-deal" onclick="addToCart(this,'Dyson V15 Vacuum',19900)">Add to Cart</button>
-          <button class="btn-buy-now" onclick="buyNow('Dyson V15 Vacuum',19900)">Buy Now</button>
-        </div>
-      </div>
-    </div>
-
   </div>
-</div>
 
-<!-- TOP PICKS BY LUNA AI -->
-<div class="picks-section">
-  <div class="section-hdr">
-    <div>
-      <div class="section-title">🌙 Today's Top Picks</div>
-      <div class="section-sub">Handpicked by Luna AI — the highest value deals of the day</div>
-    </div>
-    <div class="luna-badge">🌙 Luna AI Picks</div>
-  </div>
-  <div class="picks-grid">
-    <div class="pick-card">
-      <div class="pick-img">🎮<div class="pick-crown">👑</div></div>
-      <div class="pick-info">
-        <div class="pick-name">PlayStation 5 Slim + Extra Controller Bundle</div>
-        <div class="pick-why">Luna AI: "Best gaming deal of 2024 — won't last long at this price"</div>
-        <div class="pick-price-row">
-          <span class="pick-sale">₹34,999</span>
-          <span class="pick-orig">₹54,999</span>
-          <span class="pick-save">Save ₹20,000</span>
-        </div>
-        <button class="btn-pick" onclick="addToCart(this,'PS5 Slim Bundle',34999);this.textContent='Added ✓'">Add to Cart — 36% OFF</button>
-      </div>
-    </div>
-    <div class="pick-card">
-      <div class="pick-img">📸<div class="pick-crown">⭐</div></div>
-      <div class="pick-info">
-        <div class="pick-name">Canon EOS R50 Mirrorless Camera with Kit Lens</div>
-        <div class="pick-why">Luna AI: "Perfect starter mirrorless — prices rarely drop this low"</div>
-        <div class="pick-price-row">
-          <span class="pick-sale">₹48,990</span>
-          <span class="pick-orig">₹72,995</span>
-          <span class="pick-save">Save ₹24,005</span>
-        </div>
-        <button class="btn-pick" onclick="addToCart(this,'Canon EOS R50',48990);this.textContent='Added ✓'">Add to Cart — 33% OFF</button>
-      </div>
-    </div>
-    <div class="pick-card">
-      <div class="pick-img">🎵<div class="pick-crown">💎</div></div>
-      <div class="pick-info">
-        <div class="pick-name">Bose QuietComfort 45 Wireless Headphones</div>
-        <div class="pick-why">Luna AI: "Top-rated ANC headphones — 5-star reviews and all-time low price"</div>
-        <div class="pick-price-row">
-          <span class="pick-sale">₹14,999</span>
-          <span class="pick-orig">₹29,900</span>
-          <span class="pick-save">Save ₹14,901</span>
-        </div>
-        <button class="btn-pick" onclick="addToCart(this,'Bose QC45',14999);this.textContent='Added ✓'">Add to Cart — 50% OFF</button>
-      </div>
-    </div>
-    <div class="pick-card">
-      <div class="pick-img">⚡<div class="pick-crown">🔥</div></div>
-      <div class="pick-info">
-        <div class="pick-name">iPad Air 5th Gen 256GB WiFi + Apple Pencil</div>
-        <div class="pick-why">Luna AI: "Rare bundle deal — iPad + Pencil together under ₹60K is exceptional value"</div>
-        <div class="pick-price-row">
-          <span class="pick-sale">₹57,999</span>
-          <span class="pick-orig">₹84,800</span>
-          <span class="pick-save">Save ₹26,801</span>
-        </div>
-        <button class="btn-pick" onclick="addToCart(this,'iPad Air + Pencil',57999);this.textContent='Added ✓'">Add to Cart — 32% OFF</button>
-      </div>
-    </div>
-  </div>
-</div>
+</div><!-- /deals-page -->
 
-<!-- TRUST BADGES -->
-<div class="trust-section">
-  <div class="trust-inner">
-    <div class="trust-item"><span>✅</span> 100% Authentic Products</div>
-    <div class="trust-item"><span>🚚</span> Free Delivery over ₹999</div>
-    <div class="trust-item"><span>↩️</span> 30-Day Easy Returns</div>
-    <div class="trust-item"><span>🔒</span> Secure Payments</div>
-    <div class="trust-item"><span>🤖</span> AI-Powered Deals</div>
-    <div class="trust-item"><span>💬</span> 24/7 Support</div>
-  </div>
-</div>
-
+<!-- FOOTER -->
 <footer>
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html">Collections</a><a href="sale.html">Sale</a><a href="compare.html">Compare</a><a href="gift-cards.html">Gift Cards</a><a href="blog.html">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track.html">Track Order</a><a href="notifications.html">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html">My Account</a><a href="loyalty.html">Loyalty</a><a href="wishlist.html">Wishlist</a><a href="referral.html">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html">Home</a><a href="referral.html">Referrals</a><a href="contact.html">Contact</a>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="collections.html">Collections</a>
+        <a href="sale.html">Today's Deals</a>
+        <a href="compare.html">Compare</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Customer Service</h4>
+        <a href="returns.html">Returns &amp; Refunds</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+      <div class="foot-col">
+        <h4>Your Account</h4>
+        <a href="account.html">My Account</a>
+        <a href="vibepass.html">VibePass</a>
+        <a href="wishlist.html">Wish List</a>
+        <a href="referral.html">Referral Program</a>
+      </div>
+      <div class="foot-col">
+        <h4>Sell on VibeStore</h4>
+        <a href="become-seller.html">Become a Seller</a>
+        <a href="seller-central.html">Seller Central</a>
+        <a href="seller-profile.html">Seller Directory</a>
+        <a href="index.html">About Us</a>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
+  </div>
 </footer>
 
-<!-- CART TOAST -->
 <div class="cart-toast" id="cartToast">✅ Added to cart!</div>
 
-<script src="rex-chat.js"></script>
 <script>
-// ---- CART ----
-function getCart(){
-  try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch(e){return[]}
-}
-function saveCart(cart){
-  localStorage.setItem('vs_cart',JSON.stringify(cart));
-  const count=cart.reduce((s,i)=>s+(i.qty||1),0);
-  const el=document.getElementById('cartCount');
-  if(el) el.textContent=count;
-}
+// ===== CART =====
+function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch(e){return[]}}
+function saveCart(c){localStorage.setItem('vs_cart',JSON.stringify(c));updateCartCount()}
 function updateCartCount(){
-  const cart=getCart();
-  const count=cart.reduce((s,i)=>s+(i.qty||1),0);
-  const el=document.getElementById('cartCount');
-  if(el) el.textContent=count;
+  const c=getCart();const n=c.reduce((s,i)=>s+(i.qty||1),0);
+  const el=document.getElementById('cartCount');if(el)el.textContent=n;
 }
 updateCartCount();
 
-function addToCart(btn, name, price){
-  const cart=getCart();
-  const existing=cart.find(i=>i.name===name);
-  if(existing) existing.qty=(existing.qty||1)+1;
-  else cart.push({name,price,qty:1,addedAt:Date.now()});
-  saveCart(cart);
-
-  // Button feedback
-  const origText=btn.textContent;
-  btn.classList.add('added');
-  btn.textContent='Added ✓';
-  setTimeout(()=>{btn.classList.remove('added');btn.textContent=origText;},1500);
-
-  // Stock countdown
-  const sc=document.getElementById('stockCount');
-  if(sc){
-    let n=parseInt(sc.textContent)||234;
-    n=Math.max(1,n-1);
-    sc.textContent=n+' items remaining';
-  }
-
+function addToCart(btn,name,price,emoji,seller){
+  const c=getCart();
+  const ex=c.find(i=>i.name===name);
+  if(ex)ex.qty=(ex.qty||1)+1;
+  else c.push({name,price,qty:1,emoji:emoji||'🛍️',seller:seller||'VibeStore',fulfilled:'seller',addedAt:Date.now()});
+  saveCart(c);
+  const orig=btn.textContent;
+  btn.classList.add('added');btn.textContent='Added ✓';
+  setTimeout(()=>{btn.classList.remove('added');btn.textContent=orig},1500);
   showToast('✅ '+name+' added to cart!');
 }
-
-function buyNow(name, price){
-  addToCart({textContent:'',classList:{add:()=>{},remove:()=>{}}},name,price);
+function buyNow(name,price,emoji,seller){
+  const fakeBtn={textContent:'',classList:{add:()=>{},remove:()=>{}}};
+  addToCart(fakeBtn,name,price,emoji,seller);
   window.location.href='checkout.html';
 }
-
 function showToast(msg){
   const t=document.getElementById('cartToast');
-  t.textContent=msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// ---- FILTER ----
-function filterDeals(cat, btn){
-  document.querySelectorAll('.filter-pill').forEach(p=>p.classList.remove('active'));
+// ===== TAB SWITCH =====
+function switchTab(type, btn) {
+  document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+
+  // Show/hide tab content sections
+  document.getElementById('tab-all').classList.remove('active');
+  document.getElementById('tab-seller').classList.remove('active');
+
+  if(type==='seller'){
+    document.getElementById('tab-seller').classList.add('active');
+  } else {
+    document.getElementById('tab-all').classList.add('active');
+    // Filter within all-tab
+    document.querySelectorAll('.deal-card').forEach(c=>{
+      c.style.display=(type==='all'||c.dataset.dealtype===type)?'flex':'none';
+    });
+    document.querySelector('.dotd-banner').style.display=(type==='all'||type==='dotd')?'':'none';
+    document.getElementById('lightningHeader').style.display=(type==='all'||type==='lightning')?'':'none';
+    document.getElementById('couponSection').style.display=(type==='all'||type==='coupon')?'':'none';
+  }
+}
+
+// ===== CATEGORY FILTER =====
+function filterCat(cat, btn){
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
   btn.classList.add('active');
-  document.querySelectorAll('.deal-card').forEach(card=>{
-    if(cat==='all'||card.dataset.cat===cat) card.style.display='';
-    else card.style.display='none';
+  document.querySelectorAll('.deal-card').forEach(c=>{
+    c.style.display=(cat==='all'||c.dataset.cat===cat)?'flex':'none';
   });
 }
 
-// ---- COUNTDOWN TO MIDNIGHT ----
-function updateCountdown(){
-  const now=new Date();
-  const midnight=new Date();
-  midnight.setHours(24,0,0,0);
-  const diff=midnight-now;
-  const h=Math.floor(diff/3600000);
-  const m=Math.floor((diff%3600000)/60000);
-  const s=Math.floor((diff%60000)/1000);
-  document.getElementById('cdHours').textContent=String(h).padStart(2,'0');
-  document.getElementById('cdMins').textContent=String(m).padStart(2,'0');
-  document.getElementById('cdSecs').textContent=String(s).padStart(2,'0');
+// ===== SORT =====
+function sortDeals(val){
+  const grid=document.getElementById('dealsGrid');
+  const cards=[...grid.querySelectorAll('.deal-card')];
+  cards.sort((a,b)=>{
+    if(val==='price-asc') return +a.dataset.price - +b.dataset.price;
+    if(val==='price-desc') return +b.dataset.price - +a.dataset.price;
+    if(val==='discount') return +b.dataset.discount - +a.dataset.discount;
+    return 0;
+  });
+  cards.forEach(c=>grid.appendChild(c));
+  showToast('🔃 Deals sorted!');
 }
-updateCountdown();
-setInterval(updateCountdown,1000);
 
-// ---- STOCK TRICKLE ----
+// ===== COUPON CLIP =====
+function clipCoupon(btn){
+  if(btn.classList.contains('clipped')) return;
+  btn.classList.add('clipped');
+  btn.textContent='✅ Clipped!';
+  showToast('✂️ Coupon clipped — applied automatically at checkout!');
+}
+
+// ===== WISHLIST =====
+function wishItem(btn){
+  btn.textContent='❤️';
+  btn.style.background='#fef0f0';
+  showToast('❤️ Saved to your Wish List!');
+}
+
+// ===== DOTD COUNTDOWN (end of day) =====
+function updateDotd(){
+  const now=new Date();
+  const end=new Date();end.setHours(23,59,59,999);
+  const diff=end-now;
+  const h=Math.floor(diff/3600000),m=Math.floor((diff%3600000)/60000),s=Math.floor((diff%60000)/1000);
+  const el=document.getElementById('dotdTimer');
+  if(el)el.textContent=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+updateDotd();setInterval(updateDotd,1000);
+
+// ===== LIGHTNING TIMERS =====
+(function tickLightning(){
+  document.querySelectorAll('[data-ends]').forEach(el=>{
+    const parts=el.dataset.ends.split(':').map(Number);
+    if(parts.length<3) return;
+    let total=parts[0]*3600+parts[1]*60+parts[2];
+    if(total>0){
+      total--;
+      const h=Math.floor(total/3600),m=Math.floor((total%3600)/60),s=total%60;
+      const ts=`${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+      el.dataset.ends=ts;
+      if(el.textContent.startsWith('Ends ')) el.textContent='Ends '+ts;
+      else el.textContent=ts;
+    }
+  });
+  setTimeout(tickLightning,1000);
+})();
+
+// ===== DEALS COUNTER countdown =====
+let dealsLeft=47;
 setInterval(()=>{
-  const sc=document.getElementById('stockCount');
-  if(sc&&Math.random()<0.3){
-    let n=parseInt(sc.textContent)||234;
-    n=Math.max(1,n-1);
-    sc.textContent=n+' items remaining';
+  if(dealsLeft>12){
+    dealsLeft--;
+    const el=document.getElementById('dealsCounter');
+    if(el) el.textContent=dealsLeft+' deals remaining today';
   }
-},8000);
+}, 18000);
 </script>
+<script src="auth.js"></script>
+<script>
+(function(){ const a = vsGetAuth ? vsGetAuth() : null; if(a) vsUpdateNav(a); })();
+</script>
+<script src="rex-chat.js"></script>
 </body>
 </html>

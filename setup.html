@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Create Your Store — VibeStore</title>
+<title>Become a Seller — Quick Setup — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -172,8 +172,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="topbar">
   <a href="index.html" class="logo">Vibe<span>Store</span></a>
   <div class="topbar-right">
-    <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">Setting up your store</span>
-    <a href="instant-launch.html" style="background:linear-gradient(135deg,#059669,#0d9488);color:white;padding:7px 14px;border-radius:7px;font-size:0.78rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">⚡ Skip — Let AI Decide</a>
+    <span style="color:rgba(255,255,255,0.4);font-size:0.8rem;">Setting up your seller account</span>
+    <a href="instant-launch.html" style="background:linear-gradient(135deg,#059669,#0d9488);color:white;padding:7px 14px;border-radius:7px;font-size:0.78rem;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:6px;">⚡ Quick Register</a>
     <a href="index.html">Exit</a>
   </div>
 </div>
@@ -183,17 +183,17 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <div class="progress-inner" id="progressBar">
     <div class="prog-step">
       <div class="prog-dot active" id="dot1">1</div>
-      <div class="prog-label active" id="lbl1">Your Business</div>
+      <div class="prog-label active" id="lbl1">Business Details</div>
     </div>
     <div class="prog-line" id="line1"></div>
     <div class="prog-step">
       <div class="prog-dot" id="dot2">2</div>
-      <div class="prog-label" id="lbl2">Store Details</div>
+      <div class="prog-label" id="lbl2">Bank Account</div>
     </div>
     <div class="prog-line" id="line2"></div>
     <div class="prog-step">
       <div class="prog-dot" id="dot3">3</div>
-      <div class="prog-label" id="lbl3">Choose Theme</div>
+      <div class="prog-label" id="lbl3">First Product</div>
     </div>
     <div class="prog-line" id="line3"></div>
     <div class="prog-step">
@@ -203,22 +203,22 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     <div class="prog-line" id="line4"></div>
     <div class="prog-step">
       <div class="prog-dot" id="dot5">5</div>
-      <div class="prog-label" id="lbl5">Review & Launch</div>
+      <div class="prog-label" id="lbl5">Go Live</div>
     </div>
   </div>
 </div>
 
 <div class="setup-wrap">
 
-  <!-- ===== STEP 1: BUSINESS TYPE ===== -->
+  <!-- ===== STEP 1: BUSINESS DETAILS ===== -->
   <div class="step active" id="step1">
     <div class="step-hdr">
-      <div class="step-tag">Step 1 of 5</div>
-      <h1>What kind of store<br/>do you want to build?</h1>
-      <p>Pick your industry. VibeStore's AI agents will pre-configure your store, products, and marketing based on your selection.</p>
+      <div class="step-tag">Step 1 of 5 — Become a Seller</div>
+      <h1>Business details &amp;<br/>seller information</h1>
+      <p>Tell us about your business. This information is used to verify your seller account, generate GST invoices, and display your seller profile on VibeStore marketplace.</p>
     </div>
 
-    <div class="section-label">Select your category</div>
+    <div class="section-label">What will you sell?</div>
     <div class="cat-grid" id="catGrid">
       <div class="cat-card" onclick="selectCat(this,'Fashion & Apparel')">
         <span class="cat-icon">👗</span>
@@ -282,19 +282,76 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       </div>
     </div>
 
-    <div class="section-label">How will you sell?</div>
+    <div class="section-label">Business type</div>
     <div class="type-row">
-      <div class="type-card selected" onclick="selectType(this,'Online only')" id="typeOnline">
-        <div class="type-icon">🌐</div>
-        <div class="type-info"><h4>Online Only</h4><p>Sell entirely through your VibeStore website — global reach from day one.</p></div>
+      <div class="type-card selected" onclick="selectType(this,'Individual / Sole Proprietor')" id="typeOnline">
+        <div class="type-icon">🧑‍💼</div>
+        <div class="type-info"><h4>Individual / Proprietor</h4><p>Sell as an individual or sole proprietor. GST optional for turnover under ₹40L.</p></div>
       </div>
-      <div class="type-card" onclick="selectType(this,'Online + Physical')" id="typeHybrid">
-        <div class="type-icon">🏪</div>
-        <div class="type-info"><h4>Online + Physical</h4><p>Run a storefront and sync inventory with your physical location.</p></div>
+      <div class="type-card" onclick="selectType(this,'Registered Business (Pvt Ltd / LLP)')" id="typeHybrid">
+        <div class="type-icon">🏢</div>
+        <div class="type-info"><h4>Registered Business</h4><p>Private Limited, LLP, OPC. GST registration mandatory.</p></div>
       </div>
-      <div class="type-card" onclick="selectType(this,'Wholesale / B2B')" id="typeWholesale">
-        <div class="type-icon">📦</div>
-        <div class="type-info"><h4>Wholesale / B2B</h4><p>Sell in bulk to businesses. AI agents handle bulk pricing and invoicing.</p></div>
+      <div class="type-card" onclick="selectType(this,'Brand / Manufacturer')" id="typeWholesale">
+        <div class="type-icon">🏭</div>
+        <div class="type-info"><h4>Brand / Manufacturer</h4><p>Sell your own brand. Access brand protection and exclusive listings.</p></div>
+      </div>
+    </div>
+
+    <div class="section-label">GST &amp; legal details</div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Business / Brand Name <span style="color:#ef4444">*</span></label>
+        <input type="text" id="storeName" placeholder="e.g. TechHub Electronics, Luna Threads" oninput="updateSlug()"/>
+        <span class="hint">This is your seller display name on VibeStore marketplace.</span>
+      </div>
+      <div class="field">
+        <label>GST Number <span class="optional-badge">Optional under ₹40L</span></label>
+        <input type="text" id="storeSlug" placeholder="22AAAAA0000A1Z5"/>
+        <span class="hint">Required if your annual turnover exceeds ₹40 lakhs.</span>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Your Email Address <span style="color:#ef4444">*</span></label>
+        <input type="email" id="storeEmail" placeholder="you@yourbusiness.com"/>
+      </div>
+      <div class="field">
+        <label>Mobile Number <span style="color:#ef4444">*</span></label>
+        <div class="prefix">
+          <span>+91</span>
+          <input type="tel" id="storePhone" placeholder="98765 43210"/>
+        </div>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>State / Region</label>
+        <select id="storeCountry">
+          <option>Uttar Pradesh</option>
+          <option>Maharashtra</option>
+          <option>Delhi</option>
+          <option>Karnataka</option>
+          <option>Tamil Nadu</option>
+          <option>Gujarat</option>
+          <option>Rajasthan</option>
+          <option>West Bengal</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Currency</label>
+        <select id="storeCurrency">
+          <option value="INR (₹)">INR — Indian Rupee (₹)</option>
+          <option value="USD ($)">USD — US Dollar ($)</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid full">
+      <div class="field">
+        <label>Brief Seller Description <span class="optional-badge">Optional</span></label>
+        <textarea id="storeDesc" placeholder="Tell buyers about your business — what you sell, your story, what makes you unique on the VibeStore marketplace."></textarea>
+        <span class="hint">This appears on your seller profile page visible to all customers.</span>
       </div>
     </div>
 
@@ -307,86 +364,74 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
   </div>
 
-  <!-- ===== STEP 2: STORE DETAILS ===== -->
+  <!-- ===== STEP 2: BANK ACCOUNT ===== -->
   <div class="step" id="step2">
     <div class="step-hdr">
-      <div class="step-tag">Step 2 of 5</div>
-      <h1>Tell us about<br/>your store</h1>
-      <p>This information powers your storefront, AI-generated descriptions, and your custom domain. You can change everything later.</p>
+      <div class="step-tag">Step 2 of 5 — Payouts</div>
+      <h1>Bank account<br/>for payouts</h1>
+      <p>Add your bank account to receive payouts. VibeStore pays sellers every 7 days directly to your account. Your banking details are encrypted and never shared.</p>
+    </div>
+
+    <div style="background:rgba(6,182,212,0.06);border:1px solid rgba(6,182,212,0.25);border-radius:10px;padding:14px 18px;margin-bottom:24px;font-size:0.83rem;color:#0e7490;display:flex;align-items:flex-start;gap:10px">
+      <span style="font-size:1.1rem;flex-shrink:0">🔒</span>
+      <div>Your banking information is secured with 256-bit encryption. VibeStore is RBI-compliant and certified PCI-DSS Level 1. We never store your full account number on our servers.</div>
     </div>
 
     <div class="form-grid">
       <div class="field">
-        <label>Store Name <span style="color:#ef4444">*</span></label>
-        <input type="text" id="storeName" placeholder="e.g. Luna Threads, TechNest, GreenLeaf" oninput="updateSlug()"/>
-        <span class="hint">This becomes your brand name across the entire store.</span>
+        <label>Account Holder Name <span style="color:#ef4444">*</span></label>
+        <input type="text" placeholder="As it appears on your bank account"/>
       </div>
       <div class="field">
-        <label>Store URL</label>
-        <div class="prefix">
-          <span>vibestore.in/</span>
-          <input type="text" id="storeSlug" placeholder="luna-threads"/>
-        </div>
-        <span class="hint">Auto-generated from your store name.</span>
-      </div>
-    </div>
-
-    <div class="form-grid full">
-      <div class="field">
-        <label>Store Tagline <span class="optional-badge">Optional</span></label>
-        <input type="text" id="storeTagline" placeholder="e.g. Sustainable fashion for the modern wardrobe"/>
-        <span class="hint">Appears in your hero banner and browser tab.</span>
-      </div>
-    </div>
-
-    <div class="form-grid">
-      <div class="field">
-        <label>Your Country / Region</label>
-        <select id="storeCountry">
-          <option value="India">India</option>
-          <option value="United States">United States</option>
-          <option value="United Kingdom">United Kingdom</option>
-          <option value="UAE">United Arab Emirates</option>
-          <option value="Singapore">Singapore</option>
-          <option value="Australia">Australia</option>
-          <option value="Canada">Canada</option>
-          <option value="Other">Other</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Store Currency</label>
-        <select id="storeCurrency">
-          <option value="INR (₹)">INR — Indian Rupee (₹)</option>
-          <option value="USD ($)">USD — US Dollar ($)</option>
-          <option value="GBP (£)">GBP — British Pound (£)</option>
-          <option value="AED (د.إ)">AED — UAE Dirham</option>
-          <option value="SGD ($)">SGD — Singapore Dollar</option>
-          <option value="AUD ($)">AUD — Australian Dollar</option>
-          <option value="CAD ($)">CAD — Canadian Dollar</option>
+        <label>Bank Name <span style="color:#ef4444">*</span></label>
+        <select>
+          <option>State Bank of India</option>
+          <option>HDFC Bank</option>
+          <option>ICICI Bank</option>
+          <option>Axis Bank</option>
+          <option>Kotak Mahindra Bank</option>
+          <option>Punjab National Bank</option>
+          <option>Bank of Baroda</option>
+          <option>Yes Bank</option>
+          <option>Other</option>
         </select>
       </div>
     </div>
-
     <div class="form-grid">
       <div class="field">
-        <label>Your Email Address <span style="color:#ef4444">*</span></label>
-        <input type="email" id="storeEmail" placeholder="you@yourcompany.com"/>
+        <label>Account Number <span style="color:#ef4444">*</span></label>
+        <input type="text" placeholder="Enter your account number"/>
       </div>
       <div class="field">
-        <label>Phone Number <span class="optional-badge">Optional</span></label>
-        <div class="prefix">
-          <span>+91</span>
-          <input type="tel" id="storePhone" placeholder="98765 43210"/>
-        </div>
+        <label>Confirm Account Number <span style="color:#ef4444">*</span></label>
+        <input type="text" placeholder="Re-enter to confirm"/>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>IFSC Code <span style="color:#ef4444">*</span></label>
+        <input type="text" placeholder="e.g. SBIN0001234" style="text-transform:uppercase"/>
+        <span class="hint">11-character IFSC code on your cheque book or bank statement.</span>
+      </div>
+      <div class="field">
+        <label>Account Type</label>
+        <select>
+          <option>Current Account (Recommended for businesses)</option>
+          <option>Savings Account</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid full">
+      <div class="field">
+        <label>UPI ID <span class="optional-badge">Optional — for instant payouts</span></label>
+        <input type="text" placeholder="yourname@upi"/>
+        <span class="hint">Link your UPI ID for same-day instant payouts (available for accounts in good standing).</span>
       </div>
     </div>
 
-    <div class="form-grid full">
-      <div class="field">
-        <label>Brief Store Description <span class="optional-badge">Optional</span></label>
-        <textarea id="storeDesc" placeholder="Tell Sage AI what your store is about. It will use this to write your homepage copy, product descriptions, and blog articles."></textarea>
-        <span class="hint">The more you write here, the better Sage AI can represent your brand voice.</span>
-      </div>
+    <div style="background:#f9fafb;border:1px solid var(--border);border-radius:10px;padding:14px 18px;margin-top:8px;font-size:0.82rem;color:var(--muted)">
+      <strong style="display:block;color:var(--text);margin-bottom:6px">📅 Payout Schedule</strong>
+      VibeStore pays out every Monday for the previous week's sales (T+7 days). Instant payouts via UPI are available after your first 10 successful orders.
     </div>
 
     <div class="nav-row">
@@ -401,103 +446,85 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
   </div>
 
-  <!-- ===== STEP 3: THEME ===== -->
+  <!-- ===== STEP 3: FIRST PRODUCT ===== -->
   <div class="step" id="step3">
     <div class="step-hdr">
-      <div class="step-tag">Step 3 of 5</div>
-      <h1>Choose your store's<br/>look and feel</h1>
-      <p>Nova AI will apply your chosen theme across every page. You can customise colours, fonts, and layout after launch.</p>
+      <div class="step-tag">Step 3 of 5 — List Your First Product</div>
+      <h1>Add your first<br/>product listing</h1>
+      <p>List your first product on the VibeStore marketplace. This helps us verify your seller account faster. You can add, edit, and manage all products from Seller Central after going live.</p>
     </div>
 
-    <div class="theme-grid" id="themeGrid">
-      <div class="theme-card selected" onclick="selectTheme(this,'Vibe Dark','Dark, modern, premium')">
-        <div class="theme-preview" style="background:linear-gradient(135deg,#0f0f1a,#1a0533);">
-          <div class="mini-nav" style="background:rgba(255,255,255,0.05);">
-            <div class="mini-dot" style="background:#7c3aed;"></div>
-            <div class="mini-bar" style="background:rgba(255,255,255,0.1);"></div>
-          </div>
-          <div class="mini-product" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.3);">🎧</div>
-        </div>
-        <div class="theme-info">
-          <div class="theme-name">Vibe Dark</div>
-          <div class="theme-desc">Dark, minimal, premium feel</div>
-          <div class="theme-tags"><span class="theme-tag">Popular</span><span class="theme-tag">Electronics</span><span class="theme-tag">Luxury</span></div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Product Name <span style="color:#ef4444">*</span></label>
+        <input type="text" id="storeName" placeholder="e.g. Sony WH-1000XM5 Wireless Headphones" oninput="updateSlug()"/>
+      </div>
+      <div class="field">
+        <label>Product Category <span style="color:#ef4444">*</span></label>
+        <select>
+          <option>Electronics</option>
+          <option>Fashion &amp; Apparel</option>
+          <option>Beauty &amp; Wellness</option>
+          <option>Home &amp; Living</option>
+          <option>Sports &amp; Fitness</option>
+          <option>Books &amp; Education</option>
+          <option>Jewellery</option>
+          <option>Toys &amp; Kids</option>
+          <option>Art &amp; Handmade</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Selling Price (₹) <span style="color:#ef4444">*</span></label>
+        <div class="prefix">
+          <span>₹</span>
+          <input type="number" placeholder="999" min="1"/>
         </div>
       </div>
-
-      <div class="theme-card" onclick="selectTheme(this,'Clean Light','Bright, airy, minimal')">
-        <div class="theme-preview" style="background:#f8f8f5;">
-          <div class="mini-nav" style="background:#fff;border-bottom:1px solid #e5e7eb;">
-            <div class="mini-dot" style="background:#0f0f1a;"></div>
-            <div class="mini-bar" style="background:#e5e7eb;"></div>
-          </div>
-          <div class="mini-product" style="background:#fff;border:1px solid #e5e7eb;">👗</div>
+      <div class="field">
+        <label>MRP / Original Price (₹)</label>
+        <div class="prefix">
+          <span>₹</span>
+          <input type="number" placeholder="1299" min="1"/>
         </div>
-        <div class="theme-info">
-          <div class="theme-name">Clean Light</div>
-          <div class="theme-desc">Bright, airy, editorial</div>
-          <div class="theme-tags"><span class="theme-tag">Fashion</span><span class="theme-tag">Beauty</span><span class="theme-tag">Minimal</span></div>
-        </div>
+        <span class="hint">Shows a strikethrough on the listing. Leave blank if no discount.</span>
       </div>
-
-      <div class="theme-card" onclick="selectTheme(this,'Bold Gradient','Vibrant, energetic, Gen-Z')">
-        <div class="theme-preview" style="background:linear-gradient(135deg,#4f1b8c,#0e7490);">
-          <div class="mini-nav" style="background:rgba(255,255,255,0.1);">
-            <div class="mini-dot" style="background:#a78bfa;"></div>
-            <div class="mini-bar" style="background:rgba(255,255,255,0.15);"></div>
-          </div>
-          <div class="mini-product" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);">👟</div>
-        </div>
-        <div class="theme-info">
-          <div class="theme-name">Bold Gradient</div>
-          <div class="theme-desc">Vibrant, energetic, Gen-Z</div>
-          <div class="theme-tags"><span class="theme-tag">Streetwear</span><span class="theme-tag">Sports</span><span class="theme-tag">Youth</span></div>
-        </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Stock Quantity <span style="color:#ef4444">*</span></label>
+        <input type="number" placeholder="100" min="1"/>
       </div>
-
-      <div class="theme-card" onclick="selectTheme(this,'Natural Earth','Warm, organic, artisan')">
-        <div class="theme-preview" style="background:#fdf6ec;">
-          <div class="mini-nav" style="background:#fff7ed;border-bottom:1px solid #fed7aa;">
-            <div class="mini-dot" style="background:#92400e;"></div>
-            <div class="mini-bar" style="background:#fed7aa;"></div>
-          </div>
-          <div class="mini-product" style="background:#fff7ed;border:1px solid #fed7aa;">🌿</div>
-        </div>
-        <div class="theme-info">
-          <div class="theme-name">Natural Earth</div>
-          <div class="theme-desc">Warm, organic, sustainable</div>
-          <div class="theme-tags"><span class="theme-tag">Organic</span><span class="theme-tag">Handmade</span><span class="theme-tag">Food</span></div>
-        </div>
+      <div class="field">
+        <label>SKU / Product Code <span class="optional-badge">Optional</span></label>
+        <input type="text" id="storeSlug" placeholder="e.g. SKU-001, SONY-XM5-BLK"/>
+        <span class="hint">Your internal product code for inventory tracking.</span>
       </div>
-
-      <div class="theme-card" onclick="selectTheme(this,'Luxury Black','Ultra-premium, high-fashion')">
-        <div class="theme-preview" style="background:#000;">
-          <div class="mini-nav" style="background:#111;">
-            <div class="mini-dot" style="background:#d4af37;"></div>
-            <div class="mini-bar" style="background:#222;"></div>
-          </div>
-          <div class="mini-product" style="background:#111;border:1px solid #d4af37;">💍</div>
-        </div>
-        <div class="theme-info">
-          <div class="theme-name">Luxury Black</div>
-          <div class="theme-desc">Ultra-premium, high-fashion</div>
-          <div class="theme-tags"><span class="theme-tag">Jewellery</span><span class="theme-tag">Luxury</span><span class="theme-tag">Premium</span></div>
-        </div>
+    </div>
+    <div class="form-grid full">
+      <div class="field">
+        <label>Product Description <span style="color:#ef4444">*</span></label>
+        <textarea placeholder="Describe your product — key features, specifications, what's in the box, why customers should buy it. Sage AI will optimise this for VibeStore search."></textarea>
+        <span class="hint">Minimum 80 characters. Sage AI will enhance and SEO-optimise your description automatically.</span>
       </div>
-
-      <div class="theme-card" onclick="selectTheme(this,'Playful Pastel','Fun, colourful, family-friendly')">
-        <div class="theme-preview" style="background:linear-gradient(135deg,#fce7f3,#e0f2fe);">
-          <div class="mini-nav" style="background:rgba(255,255,255,0.6);">
-            <div class="mini-dot" style="background:#ec4899;"></div>
-            <div class="mini-bar" style="background:rgba(236,72,153,0.2);"></div>
-          </div>
-          <div class="mini-product" style="background:rgba(255,255,255,0.7);border:1px solid rgba(236,72,153,0.2);">🧸</div>
-        </div>
-        <div class="theme-info">
-          <div class="theme-name">Playful Pastel</div>
-          <div class="theme-desc">Fun, colourful, family-friendly</div>
-          <div class="theme-tags"><span class="theme-tag">Kids</span><span class="theme-tag">Toys</span><span class="theme-tag">Art</span></div>
-        </div>
+    </div>
+    <div class="form-grid">
+      <div class="field">
+        <label>Shipping Weight (kg)</label>
+        <input type="number" placeholder="0.5" step="0.1" min="0.01"/>
+        <span class="hint">Used to calculate shipping costs automatically.</span>
+      </div>
+      <div class="field">
+        <label>Dispatch Time</label>
+        <select>
+          <option>Same day (order before 12 PM)</option>
+          <option>1 business day</option>
+          <option>2–3 business days</option>
+          <option>3–5 business days</option>
+          <option>5–7 business days</option>
+        </select>
       </div>
     </div>
 
@@ -516,9 +543,9 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <!-- ===== STEP 4: AI AGENTS ===== -->
   <div class="step" id="step4">
     <div class="step-hdr">
-      <div class="step-tag">Step 4 of 5</div>
+      <div class="step-tag">Step 4 of 5 — AI Agents for Your Seller Account</div>
       <h1>Configure your<br/>AI agent team</h1>
-      <p>All 8 agents are active by default. Toggle off any you don't need. You can reconfigure them from the admin dashboard at any time.</p>
+      <p>These AI agents work for you as a seller on the VibeStore marketplace. All 8 are active by default. Toggle off any you don't need — you can reconfigure from Seller Central at any time.</p>
     </div>
 
     <div class="agent-grid">
@@ -603,34 +630,34 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
   <!-- ===== STEP 5: REVIEW & LAUNCH ===== -->
   <div class="step" id="step5">
     <div class="step-hdr">
-      <div class="step-tag">Step 5 of 5</div>
-      <h1>Your store is ready<br/>to launch</h1>
-      <p>Review your configuration below. Click "Launch Store" and your 8 AI agents will go live instantly.</p>
+      <div class="step-tag">Step 5 of 5 — Go Live on VibeStore Marketplace</div>
+      <h1>Your seller account<br/>is ready to go live</h1>
+      <p>Review your seller account details below. Click "Go Live on VibeStore" and your seller account and AI agents will be activated instantly on the marketplace.</p>
     </div>
 
     <div class="review-card">
       <div class="review-hdr">
-        <h3>Business & Store Details</h3>
+        <h3>Business &amp; Seller Account Details</h3>
         <span class="review-edit" onclick="goStep(1)">Edit</span>
       </div>
       <div class="review-body">
         <div class="rv-item"><div class="rv-label">Category</div><div class="rv-val" id="rv-cat">—</div></div>
-        <div class="rv-item"><div class="rv-label">Selling Model</div><div class="rv-val" id="rv-type">Online only</div></div>
-        <div class="rv-item"><div class="rv-label">Store Name</div><div class="rv-val" id="rv-name">—</div></div>
-        <div class="rv-item"><div class="rv-label">Store URL</div><div class="rv-val" id="rv-url">—</div></div>
-        <div class="rv-item"><div class="rv-label">Country</div><div class="rv-val" id="rv-country">India</div></div>
+        <div class="rv-item"><div class="rv-label">Business Type</div><div class="rv-val" id="rv-type">Individual / Sole Proprietor</div></div>
+        <div class="rv-item"><div class="rv-label">Business Name</div><div class="rv-val" id="rv-name">—</div></div>
+        <div class="rv-item"><div class="rv-label">Seller Profile URL</div><div class="rv-val" id="rv-url">—</div></div>
+        <div class="rv-item"><div class="rv-label">State</div><div class="rv-val" id="rv-country">Uttar Pradesh</div></div>
         <div class="rv-item"><div class="rv-label">Currency</div><div class="rv-val" id="rv-currency">INR (₹)</div></div>
       </div>
     </div>
 
     <div class="review-card">
       <div class="review-hdr">
-        <h3>Theme Selected</h3>
-        <span class="review-edit" onclick="goStep(3)">Change</span>
+        <h3>First Product &amp; Bank Account</h3>
+        <span class="review-edit" onclick="goStep(3)">Edit</span>
       </div>
       <div class="review-body" style="grid-template-columns:1fr;">
-        <div class="rv-item"><div class="rv-label">Theme</div><div class="rv-val" id="rv-theme">Vibe Dark</div></div>
-        <div class="rv-item"><div class="rv-label">Style</div><div class="rv-val" id="rv-theme-desc">Dark, modern, premium feel</div></div>
+        <div class="rv-item"><div class="rv-label">First Product</div><div class="rv-val" id="rv-theme">—</div></div>
+        <div class="rv-item"><div class="rv-label">Bank Account</div><div class="rv-val" id="rv-theme-desc">✓ Added &amp; verified</div></div>
       </div>
     </div>
 
@@ -643,8 +670,8 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
     </div>
 
     <div class="launch-box">
-      <h3>Everything is configured.</h3>
-      <p>Your AI agents are standing by. Launching will take approximately 8 seconds.</p>
+      <h3>Your seller account is ready.</h3>
+      <p>Your AI agents are standing by to manage your seller account on the marketplace. Going live takes approximately 8 seconds.</p>
       <div class="agents-live">
         <div class="alv"><div class="alv-dot"></div>Zen AI ready</div>
         <div class="alv"><div class="alv-dot"></div>Luna AI ready</div>
@@ -657,7 +684,7 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
       </div>
       <button class="btn-launch" onclick="launchStore()">
         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        Launch My VibeStore
+        Go Live on VibeStore Marketplace
       </button>
     </div>
 
@@ -675,12 +702,12 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-h
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-logo">Vibe<span>Store</span></div>
   <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-  <div class="loading-status" id="loadingStatus">Initialising your store...</div>
+  <div class="loading-status" id="loadingStatus">Activating your seller account...</div>
   <div class="loading-agents">
     <div class="la-item"><div class="la-dot"></div>Zen AI booting</div>
-    <div class="la-item"><div class="la-dot"></div>Luna AI booting</div>
-    <div class="la-item"><div class="la-dot"></div>Sage AI writing homepage</div>
-    <div class="la-item"><div class="la-dot"></div>Nova AI curating products</div>
+    <div class="la-item"><div class="la-dot"></div>Luna AI monitoring prices</div>
+    <div class="la-item"><div class="la-dot"></div>Sage AI optimising your listing</div>
+    <div class="la-item"><div class="la-dot"></div>Rex AI activating seller support</div>
   </div>
 </div>
 
@@ -753,8 +780,8 @@ function toggleAgent(el) {
 function buildReview() {
   document.getElementById('rv-cat').textContent = config.cat || 'Not selected';
   document.getElementById('rv-type').textContent = config.type;
-  document.getElementById('rv-name').textContent = document.getElementById('storeName').value || 'My VibeStore';
-  document.getElementById('rv-url').textContent = 'vibestore.in/' + (document.getElementById('storeSlug').value || 'my-store');
+  document.getElementById('rv-name').textContent = document.getElementById('storeName').value || 'My Business';
+  document.getElementById('rv-url').textContent = 'vibestore.in/seller/' + (document.getElementById('storeSlug').value || 'my-seller-account');
   document.getElementById('rv-country').textContent = document.getElementById('storeCountry').value;
   document.getElementById('rv-currency').textContent = document.getElementById('storeCurrency').value;
   document.getElementById('rv-theme').textContent = config.theme;
@@ -788,21 +815,21 @@ function launchStore() {
   overlay.classList.add('show');
 
   const steps = [
-    [10, 'Configuring store settings...'],
-    [25, 'Activating Zen AI — Operations...'],
-    [38, 'Activating Luna AI — Price tracking...'],
-    [50, 'Activating Aria AI — Marketing engine...'],
-    [62, 'Sage AI writing your homepage copy...'],
-    [74, 'Nova AI curating product catalogue...'],
-    [85, 'Atlas AI indexing search...'],
-    [94, 'Rex AI chat widget activating...'],
-    [100, 'Your store is live!'],
+    [10, 'Creating your seller account...'],
+    [25, 'Verifying business details...'],
+    [38, 'Activating Zen AI — Order management...'],
+    [50, 'Activating Luna AI — Price monitoring...'],
+    [62, 'Sage AI optimising your first listing...'],
+    [74, 'Setting up payout schedule...'],
+    [85, 'Atlas AI indexing your products...'],
+    [94, 'Rex AI seller support activating...'],
+    [100, 'Your seller account is live!'],
   ];
 
   let i = 0;
   function tick() {
     if (i >= steps.length) {
-      setTimeout(() => { window.location.href = 'mystore.html'; }, 600);
+      setTimeout(() => { window.location.href = 'seller-central.html'; }, 600);
       return;
     }
     const [pct, msg] = steps[i++];

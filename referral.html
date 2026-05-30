@@ -3,324 +3,483 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Referral Program — VibeStore</title>
+<title>Invite Friends, Earn Rewards — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--bg:#f8f8f5;--border:#e5e5e0;--text:#0f0f1a;--muted:#6b7280;}
+:root{--orange:#FF9900;--orange-dark:#e88a00;--teal:#007185;--red:#CC0C39;--navy:#131921;--nav2:#232f3e;--bg:#f0f2f5;--white:#fff;--border:#ddd;--text:#0F1111;--muted:#565959;--green:#007600;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
-.nav{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;}
-.nav-logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
-.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;}
-.nav-links a:hover{color:white;}
+
+/* NAV */
+.nav{background:var(--navy);padding:0 16px;display:flex;align-items:center;gap:8px;height:60px;position:sticky;top:0;z-index:600;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:white;text-decoration:none;white-space:nowrap;border:2px solid transparent;padding:4px 8px;border-radius:3px;}
+.nav-logo:hover{border-color:white;}
+.nav-logo span{color:var(--orange);}
+.nav-search{flex:1;display:flex;max-width:780px;height:40px;}
+.nav-search-cat{background:#f3f3f3;border:none;border-radius:4px 0 0 4px;padding:0 10px;font-size:0.75rem;color:#555;cursor:pointer;border-right:1px solid #cdba96;min-width:60px;}
+.nav-search-input{flex:1;border:none;outline:none;padding:0 12px;font-size:0.9rem;font-family:'Inter',sans-serif;}
+.nav-search-btn{background:var(--orange);border:none;border-radius:0 4px 4px 0;padding:0 16px;cursor:pointer;font-size:1rem;color:var(--navy);}
+.nav-search-btn:hover{background:var(--orange-dark);}
+.nav-right{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-link{color:white;text-decoration:none;font-size:0.78rem;padding:4px 8px;border:2px solid transparent;border-radius:3px;white-space:nowrap;line-height:1.3;}
+.nav-link:hover{border-color:white;}
+.nav-link small{display:block;font-size:0.68rem;color:rgba(255,255,255,0.7);}
+.nav-link strong{font-size:0.85rem;}
+.nav-cart-btn{color:white;text-decoration:none;font-size:0.78rem;padding:4px 8px;border:2px solid transparent;border-radius:3px;display:flex;align-items:center;gap:4px;}
+.nav-cart-btn:hover{border-color:white;}
+.cart-count{color:var(--orange);font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;}
+.nav2{background:var(--nav2);padding:0 16px;display:flex;align-items:center;gap:4px;height:38px;overflow-x:auto;}
+.nav2 a{color:white;text-decoration:none;font-size:0.82rem;padding:6px 10px;border-radius:3px;white-space:nowrap;border:2px solid transparent;}
+.nav2 a:hover{border-color:white;}
+.nav2-bold{font-weight:700;}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#1a0533,#0c1a3a);padding:60px 32px;text-align:center;position:relative;overflow:hidden;}
-.hero-particles{position:absolute;inset:0;pointer-events:none;}
-canvas{position:absolute;inset:0;width:100%;height:100%;}
+.hero{background:linear-gradient(135deg,#FF9900 0%,#e06a00 40%,#c45000 100%);padding:56px 24px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:rgba(255,255,255,0.07);border-radius:50%;}
+.hero::after{content:'';position:absolute;bottom:-80px;left:-40px;width:250px;height:250px;background:rgba(255,255,255,0.05);border-radius:50%;}
 .hero-content{position:relative;z-index:1;}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);border-radius:100px;padding:6px 16px;font-size:0.78rem;font-weight:600;color:#a78bfa;margin-bottom:20px;}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:2.8rem;font-weight:700;color:white;margin-bottom:14px;line-height:1.2;}
-.hero h1 span{background:linear-gradient(135deg,#a78bfa,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero p{color:rgba(255,255,255,0.65);font-size:1rem;max-width:520px;margin:0 auto 32px;}
-.ref-code-box{display:inline-flex;align-items:center;gap:0;background:rgba(255,255,255,0.06);border:2px solid rgba(124,58,237,0.5);border-radius:14px;overflow:hidden;margin-bottom:32px;}
-.ref-code{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:white;padding:14px 24px;letter-spacing:0.08em;}
-.ref-copy{background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;padding:14px 20px;color:white;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity 0.2s;}
-.ref-copy:hover{opacity:0.85;}
-.share-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
-.share-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 18px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:7px;transition:all 0.2s;}
-.share-btn:hover{background:rgba(255,255,255,0.14);}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:2.6rem;font-weight:700;color:white;margin-bottom:12px;line-height:1.2;}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,0.9);max-width:540px;margin:0 auto 32px;}
+.hero-pill{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:100px;padding:6px 18px;font-size:0.82rem;font-weight:600;color:white;margin-bottom:20px;}
 
-/* STATS ROW */
-.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;padding:24px;max-width:900px;margin:0 auto;}
-.stat-card{background:white;border-radius:14px;border:1px solid var(--border);padding:20px;text-align:center;}
-.stat-icon{font-size:1.8rem;margin-bottom:8px;}
-.stat-n{font-family:'Space Grotesk',sans-serif;font-size:1.6rem;font-weight:700;color:var(--navy);}
-.stat-l{font-size:0.75rem;color:var(--muted);margin-top:3px;}
+/* REFERRAL CARD */
+.ref-card-wrap{display:flex;justify-content:center;padding:32px 24px;}
+.ref-card{background:white;border-radius:10px;box-shadow:0 4px 24px rgba(0,0,0,0.12);padding:32px 36px;max-width:560px;width:100%;}
+.ref-card-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.ref-card-sub{font-size:0.84rem;color:var(--muted);margin-bottom:22px;}
+.ref-code-box{background:#f7f7f7;border:2px dashed var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:14px 18px;margin-bottom:20px;}
+.ref-code-label{font-size:0.72rem;color:var(--muted);margin-bottom:4px;}
+.ref-code-value{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text);letter-spacing:0.1em;}
+.btn-copy{background:var(--orange);color:var(--navy);border:none;border-radius:6px;padding:10px 18px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
+.btn-copy:hover{background:var(--orange-dark);}
+.share-via-label{font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:10px;}
+.share-btns{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;font-size:0.82rem;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:opacity 0.2s;}
+.share-btn:hover{opacity:0.87;}
+.sbtn-wa{background:#25D366;color:white;}
+.sbtn-tw{background:#1DA1F2;color:white;}
+.sbtn-em{background:#6b7280;color:white;}
+.sbtn-cp{background:#f0f2f5;color:var(--text);border:1px solid var(--border)!important;}
+.share-link-row{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.share-link-input{flex:1;border:none;outline:none;padding:9px 12px;font-size:0.8rem;color:var(--muted);font-family:'Inter',sans-serif;}
+.share-link-copy{background:var(--navy);color:white;border:none;padding:9px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.share-link-copy:hover{background:#2a3f54;}
 
-/* HOW IT WORKS */
+/* STEPS */
 .section{max-width:900px;margin:0 auto;padding:0 24px 40px;}
-.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy);margin-bottom:6px;}
-.section-sub{font-size:0.88rem;color:var(--muted);margin-bottom:24px;}
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.step-card{background:white;border-radius:14px;border:1px solid var(--border);padding:24px;text-align:center;position:relative;}
-.step-num{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;font-weight:700;font-size:0.9rem;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
-.step-icon{font-size:2rem;margin-bottom:10px;}
-.step-card h3{font-size:0.95rem;font-weight:700;color:var(--navy);margin-bottom:6px;}
-.step-card p{font-size:0.8rem;color:var(--muted);line-height:1.5;}
-.step-arrow{position:absolute;right:-24px;top:50%;transform:translateY(-50%);font-size:1.2rem;color:var(--muted);z-index:1;}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.section-sub{font-size:0.86rem;color:var(--muted);margin-bottom:22px;}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;position:relative;}
+.step-connector{position:absolute;top:40px;left:calc(33.33% - 12px);width:calc(33.33% + 24px);height:2px;background:linear-gradient(90deg,var(--orange),var(--orange-dark));display:none;}
+.step-card{background:white;border-radius:8px;border:1px solid var(--border);padding:28px 20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.step-num{width:44px;height:44px;border-radius:50%;background:var(--orange);color:var(--navy);font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+.step-emoji{font-size:2rem;margin-bottom:10px;}
+.step-card h3{font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.step-card p{font-size:0.8rem;color:var(--muted);line-height:1.6;}
 
-/* REWARDS TIERS */
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.tier-card{background:white;border-radius:14px;border:2px solid var(--border);padding:24px;text-align:center;transition:all 0.25s;cursor:default;}
-.tier-card.active{border-color:var(--purple);box-shadow:0 0 0 4px rgba(124,58,237,0.1);}
-.tier-card.premium{background:linear-gradient(135deg,#1a0533,#2d1b69);border-color:transparent;}
-.tier-badge{display:inline-block;font-size:0.68rem;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:12px;}
-.tier-badge.bronze{background:#fef3c7;color:#92400e;}
-.tier-badge.silver{background:#f1f5f9;color:#475569;}
-.tier-badge.gold{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;}
-.tier-emoji{font-size:2.4rem;margin-bottom:10px;}
-.tier-card h3{font-size:1.1rem;font-weight:700;color:var(--navy);margin-bottom:4px;}
-.tier-card.premium h3{color:white;}
-.tier-refs{font-size:0.78rem;color:var(--muted);margin-bottom:16px;}
-.tier-card.premium .tier-refs{color:rgba(255,255,255,0.5);}
-.tier-reward{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--purple);margin-bottom:4px;}
-.tier-card.premium .tier-reward{color:#a78bfa;}
-.tier-reward-l{font-size:0.75rem;color:var(--muted);}
-.tier-card.premium .tier-reward-l{color:rgba(255,255,255,0.5);}
-.tier-perks{margin-top:16px;display:flex;flex-direction:column;gap:6px;}
-.tier-perk{font-size:0.78rem;color:var(--muted);display:flex;align-items:center;gap:6px;}
-.tier-card.premium .tier-perk{color:rgba(255,255,255,0.7);}
-.tier-perk::before{content:'✓';color:#16a34a;font-weight:700;}
-.tier-card.premium .tier-perk::before{color:#4ade80;}
-.current-badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--purple);color:white;font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:100px;white-space:nowrap;}
-
-/* REFERRAL TABLE */
-.ref-table{width:100%;border-collapse:collapse;background:white;border-radius:14px;overflow:hidden;border:1px solid var(--border);}
-.ref-table th{background:var(--bg);padding:12px 16px;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);text-align:left;}
-.ref-table td{padding:14px 16px;border-top:1px solid var(--border);font-size:0.84rem;}
-.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:600;}
-.pill-green{background:#dcfce7;color:#16a34a;}
-.pill-yellow{background:#fef9c3;color:#92400e;}
-.pill-blue{background:#dbeafe;color:#1d4ed8;}
-.earnings{font-weight:700;color:#16a34a;}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:40px;}
+.stat-card{background:white;border-radius:8px;border:1px solid var(--border);padding:20px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,0.06);}
+.stat-icon{font-size:1.8rem;margin-bottom:8px;}
+.stat-n{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;color:var(--text);}
+.stat-l{font-size:0.75rem;color:var(--muted);margin-top:4px;}
+.stat-card.highlight{border-color:var(--orange);box-shadow:0 0 0 2px rgba(255,153,0,0.2);}
+.stat-card.highlight .stat-n{color:var(--orange-dark);}
 
 /* LEADERBOARD */
-.leaderboard{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;}
-.lb-hdr{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-.lb-hdr h3{font-size:0.95rem;font-weight:700;}
-.lb-badge{font-size:0.72rem;background:rgba(124,58,237,0.1);color:var(--purple);padding:3px 10px;border-radius:100px;font-weight:600;}
-.lb-row{display:flex;align-items:center;gap:14px;padding:12px 20px;border-top:1px solid var(--border);transition:background 0.2s;}
-.lb-row:hover{background:var(--bg);}
-.lb-row.you{background:rgba(124,58,237,0.05);}
-.lb-rank{width:28px;text-align:center;font-weight:700;font-size:0.9rem;}
-.lb-rank.top{font-size:1.1rem;}
-.lb-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:white;flex-shrink:0;}
-.lb-name{flex:1;font-size:0.85rem;font-weight:600;}
+.leaderboard-card{background:white;border-radius:8px;border:1px solid var(--border);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:40px;}
+.lb-header{background:var(--navy);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;}
+.lb-header h3{color:white;font-size:0.95rem;font-weight:700;}
+.lb-badge{background:var(--orange);color:var(--navy);font-size:0.72rem;font-weight:700;padding:3px 10px;border-radius:100px;}
+.lb-row{display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid var(--border);transition:background 0.15s;}
+.lb-row:last-child{border-bottom:none;}
+.lb-row:hover{background:#fafafa;}
+.lb-row.you{background:#fff8ec;}
+.lb-rank{width:32px;text-align:center;font-size:1.2rem;}
+.lb-rank-num{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:var(--muted);width:32px;text-align:center;}
+.lb-avatar{width:38px;height:38px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:0.9rem;font-weight:700;color:var(--navy);flex-shrink:0;font-family:'Space Grotesk',sans-serif;}
+.lb-name{flex:1;font-size:0.88rem;font-weight:600;}
 .lb-refs{font-size:0.8rem;color:var(--muted);}
-.lb-earn{font-size:0.88rem;font-weight:700;color:#16a34a;}
+.lb-earn{font-size:0.9rem;font-weight:700;color:var(--green);}
 
-@media(max-width:768px){.steps,.tiers{grid-template-columns:1fr;}.stats-row{grid-template-columns:repeat(2,1fr);}.hero h1{font-size:1.9rem;}.step-arrow{display:none;}}
-@media(max-width:480px){.stats-row{grid-template-columns:1fr;}.ref-code{font-size:1.1rem;padding:12px 16px;}}
+/* FRIENDS TABLE */
+.friends-table{width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;border:1px solid var(--border);box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:40px;}
+.friends-table th{background:#f7f7f7;padding:12px 16px;font-size:0.76rem;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);text-align:left;border-bottom:1px solid var(--border);}
+.friends-table td{padding:13px 16px;border-bottom:1px solid var(--border);font-size:0.84rem;color:var(--text);}
+.friends-table tr:last-child td{border-bottom:none;}
+.friends-table tr:hover td{background:#fafafa;}
+.status-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:100px;font-size:0.73rem;font-weight:600;}
+.pill-green{background:#e5f5e0;color:var(--green);}
+.pill-yellow{background:#fef9c3;color:#7a5c00;}
+.pill-blue{background:#e8f4fd;color:#0066c0;}
+.reward-earned{font-weight:700;color:var(--green);}
+.reward-pending{font-weight:600;color:var(--muted);}
+
+/* ECHO AI TIP */
+.echo-tip{background:linear-gradient(135deg,#e8f8f0,#d4f0e6);border:1px solid #b2dfc7;border-radius:8px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;margin-bottom:40px;}
+.echo-icon{width:40px;height:40px;background:#007600;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.echo-text h4{font-size:0.9rem;font-weight:700;color:#005500;margin-bottom:4px;}
+.echo-text p{font-size:0.82rem;color:#004400;line-height:1.6;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#333;color:white;padding:10px 22px;border-radius:8px;font-size:0.85rem;font-weight:600;z-index:999;transition:transform 0.3s;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* FOOTER */
+.footer{background:var(--navy);color:rgba(255,255,255,0.7);margin-top:0;}
+.footer-top{background:#232f3e;padding:14px 24px;text-align:center;font-size:0.8rem;color:rgba(255,255,255,0.7);cursor:pointer;}
+.footer-top:hover{color:white;}
+.footer-cols{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:32px;padding:32px 24px;}
+.footer-col h4{color:white;font-size:0.88rem;font-weight:700;margin-bottom:12px;}
+.footer-col a{display:block;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.8rem;margin-bottom:8px;}
+.footer-col a:hover{color:white;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding:16px 24px;text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);}
+
+@media(max-width:900px){.steps-grid,.stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.steps-grid,.stats-grid{grid-template-columns:1fr;}.hero h1{font-size:1.8rem;}.ref-card{padding:22px 18px;}.footer-cols{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
 
+<!-- AMAZON DARK NAV -->
 <nav class="nav">
-  <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
-  <div class="nav-links">
-    <a href="mystore.html">Store</a>
-    <a href="collections.html">Collections</a>
-    <a href="sale.html">Sale</a>
-    <a href="blog.html">Blog</a>
-    <a href="account.html">👤 Account</a>
-    <a href="track.html">📦 Orders</a>
-    <a href="wishlist.html">♡ Wishlist</a>
-    <a href="notifications.html">🔔 Alerts</a>
+  <a href="index.html" class="nav-logo">Vibe<span>Store</span></a>
+  <form class="nav-search" onsubmit="return false">
+    <select class="nav-search-cat">
+      <option>All</option>
+      <option>Electronics</option>
+      <option>Audio</option>
+      <option>Mobiles</option>
+      <option>Computers</option>
+      <option>Fashion</option>
+    </select>
+    <input class="nav-search-input" type="text" placeholder="Search VibeStore..."/>
+    <button class="nav-search-btn" onclick="window.location.href='search.html'">🔍</button>
+  </form>
+  <div class="nav-right">
+    <a href="account.html" class="nav-link"><small>Hello, Aryan</small><strong>Account &amp; Lists</strong></a>
+    <a href="track.html" class="nav-link"><small>Returns</small><strong>&amp; Orders</strong></a>
+    <a href="wishlist.html" class="nav-link"><small>Your</small><strong>❤️ Wishlist</strong></a>
+    <a href="checkout.html" class="nav-cart-btn">🛒 <span class="cart-count" id="cartCount">0</span> Cart</a>
   </div>
 </nav>
+<nav class="nav2">
+  <a href="store.html" class="nav2-bold">☰ All</a>
+  <a href="store.html">Today's Deals</a>
+  <a href="sale.html">Sale</a>
+  <a href="collections.html">Electronics</a>
+  <a href="collections.html">Audio</a>
+  <a href="collections.html">Mobiles</a>
+  <a href="gift-cards.html">Gift Cards</a>
+  <a href="loyalty.html">VibeCash</a>
+  <a href="blog.html">Blog</a>
+  <a href="become-seller.html">Become a Seller</a>
+  <a href="seller-central.html">Seller Central</a>
+</nav>
 
+<!-- HERO -->
 <div class="hero">
-  <canvas id="particles"></canvas>
   <div class="hero-content">
-    <div class="hero-badge">🎁 Aria AI — Referral Engine Active</div>
-    <h1>Refer Friends.<br/><span>Earn Real Money.</span></h1>
-    <p>Every friend you invite earns you ₹500 in VibeCredits. They get ₹300 off their first order. Aria AI tracks everything automatically — no forms, no delays.</p>
+    <div class="hero-pill">🎁 VibeStore Referral Program</div>
+    <h1>🎁 Invite Friends,<br/>Earn Rewards</h1>
+    <p>Give ₹200, Get ₹200 for every friend who shops on VibeStore Marketplace. No limits. No expiry.</p>
+  </div>
+</div>
+
+<!-- REFERRAL CARD -->
+<div class="ref-card-wrap">
+  <div class="ref-card">
+    <div class="ref-card-title">Your Personal Referral Code</div>
+    <div class="ref-card-sub">Share this code with friends. Both of you earn ₹200 when they place their first order.</div>
     <div class="ref-code-box">
-      <div class="ref-code">SARTH-VS42</div>
-      <button class="ref-copy" onclick="copyCode()">📋 Copy Code</button>
+      <div>
+        <div class="ref-code-label">YOUR CODE</div>
+        <div class="ref-code-value">ARYAN-VS2025</div>
+      </div>
+      <button class="btn-copy" onclick="copyCode()">📋 Copy Code</button>
     </div>
-    <div class="share-row">
-      <div class="share-btn">📱 WhatsApp</div>
-      <div class="share-btn">📘 Facebook</div>
-      <div class="share-btn">🐦 Twitter/X</div>
-      <div class="share-btn">📧 Email</div>
-      <div class="share-btn">🔗 Copy Link</div>
+    <div class="share-via-label">Share via:</div>
+    <div class="share-btns">
+      <button class="share-btn sbtn-wa" onclick="toast('Opening WhatsApp...')">📱 WhatsApp</button>
+      <button class="share-btn sbtn-tw" onclick="toast('Opening Twitter...')">🐦 Twitter</button>
+      <button class="share-btn sbtn-em" onclick="toast('Opening Email...')">📧 Email</button>
+      <button class="share-btn sbtn-cp" onclick="copyLink()">🔗 Copy Link</button>
+    </div>
+    <div style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;margin-top:16px;">OR share your referral link:</div>
+    <div class="share-link-row">
+      <input class="share-link-input" type="text" id="refLinkInput" value="https://vibestore.in/ref/ARYAN-VS2025" readonly/>
+      <button class="share-link-copy" onclick="copyLink()">Copy</button>
+    </div>
+  </div>
+</div>
+
+<!-- REFER A SELLER CARD -->
+<div class="ref-card-wrap" style="padding-top:0;padding-bottom:0;">
+  <div class="ref-card" style="border:2px solid var(--teal);background:linear-gradient(135deg,#f0f9fa,#e8f4ff);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span style="font-size:1.5rem;">🏪</span>
+      <div class="ref-card-title" style="margin-bottom:0;">Refer a Seller</div>
+    </div>
+    <div class="ref-card-sub" style="margin-bottom:16px;">Know someone who wants to sell online? Refer them to VibeStore Marketplace and earn <strong style="color:var(--green);">₹500</strong> when they make their first sale!</div>
+    <div style="background:white;border:1px dashed var(--teal);border-radius:8px;padding:12px 16px;margin-bottom:16px;">
+      <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px;">YOUR SELLER REFERRAL LINK</div>
+      <div style="font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:8px;">vibestore.in/seller-ref/ARYAN-VS2025</div>
+      <button class="btn-copy" onclick="toast('✅ Seller referral link copied!')">📋 Copy Link</button>
+    </div>
+    <div style="font-size:0.78rem;color:var(--muted);">Earn ₹500 VibeCash when your referred seller completes their first sale. No cap on earnings!</div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-title">How It Works</div>
+  <div class="section-sub">Three simple steps to start earning rewards with your referrals.</div>
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-num">1</div>
+      <div class="step-emoji">📤</div>
+      <h3>Share Your Code</h3>
+      <p>Send your unique referral code or link to friends via WhatsApp, Twitter, email, or any platform you use.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">2</div>
+      <div class="step-emoji">🛍️</div>
+      <h3>Friend Makes First Purchase</h3>
+      <p>Your friend signs up on VibeStore using your code and places their first order of ₹499 or more.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-num">3</div>
+      <div class="step-emoji">💰</div>
+      <h3>Both Get ₹200 Credit</h3>
+      <p>You both get ₹200 VibeCash automatically credited to your accounts. Use it on any future order.</p>
     </div>
   </div>
 </div>
 
 <!-- STATS -->
-<div class="stats-row">
-  <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-n">12</div><div class="stat-l">Friends Referred</div></div>
-  <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-n">9</div><div class="stat-l">Completed Orders</div></div>
-  <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-n">₹4,500</div><div class="stat-l">Total Earned</div></div>
-  <div class="stat-card"><div class="stat-icon">🎯</div><div class="stat-n">₹1,000</div><div class="stat-l">Pending Credits</div></div>
+<div class="section">
+  <div class="section-title">Your Referral Stats</div>
+  <div class="section-sub">Track your referral performance and earnings at a glance.</div>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-n">12</div>
+      <div class="stat-l">Friends Invited</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-n">8</div>
+      <div class="stat-l">Signed Up</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🛒</div>
+      <div class="stat-n">5</div>
+      <div class="stat-l">Made a Purchase</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-icon">💰</div>
+      <div class="stat-n">₹1,000</div>
+      <div class="stat-l">Total Earned</div>
+    </div>
+  </div>
 </div>
 
+<!-- LEADERBOARD -->
 <div class="section">
-  <!-- HOW IT WORKS -->
-  <div class="section-title">How It Works</div>
-  <div class="section-sub">Aria AI handles the entire referral lifecycle — tracking, verification, and payouts.</div>
-  <div class="steps" style="margin-bottom:40px;">
-    <div class="step-card">
-      <div class="step-num">1</div>
-      <div class="step-icon">🔗</div>
-      <h3>Share Your Code</h3>
-      <p>Send your unique code or link to friends via WhatsApp, social media, or email. Aria AI tracks every click.</p>
-      <div class="step-arrow">→</div>
+  <div class="section-title">Top Referrers This Month</div>
+  <div class="section-sub">The most active referrers win exclusive Champion rewards and bonus VibeCash.</div>
+  <div class="leaderboard-card">
+    <div class="lb-header">
+      <h3>🏆 May 2026 Leaderboard</h3>
+      <span class="lb-badge">Resets June 1</span>
     </div>
-    <div class="step-card">
-      <div class="step-num">2</div>
-      <div class="step-icon">🛍️</div>
-      <h3>Friend Makes a Purchase</h3>
-      <p>Your friend signs up and places their first order of ₹999+. They save ₹300 automatically — no coupon needed.</p>
-      <div class="step-arrow">→</div>
+    <div class="lb-row">
+      <div class="lb-rank">🥇</div>
+      <div class="lb-avatar" style="background:#FFA41C;">A</div>
+      <div class="lb-name">Aditya R.</div>
+      <div class="lb-refs">47 referrals</div>
+      <div class="lb-earn">₹9,400</div>
     </div>
-    <div class="step-card">
-      <div class="step-num">3</div>
-      <div class="step-icon">💸</div>
-      <h3>You Earn ₹500</h3>
-      <p>Aria AI verifies the order and instantly credits ₹500 to your VibeWallet. Withdraw or use on your next order.</p>
+    <div class="lb-row">
+      <div class="lb-rank">🥈</div>
+      <div class="lb-avatar" style="background:#b0b8c1;">S</div>
+      <div class="lb-name">Shruti V.</div>
+      <div class="lb-refs">38 referrals</div>
+      <div class="lb-earn">₹7,600</div>
     </div>
-  </div>
-
-  <!-- TIERS -->
-  <div class="section-title">Reward Tiers</div>
-  <div class="section-sub">The more you refer, the more you earn per referral. Aria AI upgrades you automatically.</div>
-  <div class="tiers" style="margin-bottom:40px;">
-    <div class="tier-card">
-      <div class="tier-badge bronze">Bronze</div>
-      <div class="tier-emoji">🥉</div>
-      <h3>Starter</h3>
-      <div class="tier-refs">0–4 referrals</div>
-      <div class="tier-reward">₹500</div>
-      <div class="tier-reward-l">per referral</div>
-      <div class="tier-perks">
-        <div class="tier-perk">₹300 friend discount</div>
-        <div class="tier-perk">Basic VibeWallet</div>
-        <div class="tier-perk">30-day tracking</div>
-      </div>
+    <div class="lb-row">
+      <div class="lb-rank">🥉</div>
+      <div class="lb-avatar" style="background:#cd7f32;color:white;">K</div>
+      <div class="lb-name">Karan B.</div>
+      <div class="lb-refs">29 referrals</div>
+      <div class="lb-earn">₹5,800</div>
     </div>
-    <div class="tier-card active" style="position:relative;">
-      <div class="current-badge">🎯 Your Current Tier</div>
-      <div class="tier-badge silver">Silver</div>
-      <div class="tier-emoji">🥈</div>
-      <h3>Advocate</h3>
-      <div class="tier-refs">5–19 referrals · You're here!</div>
-      <div class="tier-reward">₹750</div>
-      <div class="tier-reward-l">per referral</div>
-      <div class="tier-perks">
-        <div class="tier-perk">₹400 friend discount</div>
-        <div class="tier-perk">Priority withdrawals</div>
-        <div class="tier-perk">60-day tracking</div>
-        <div class="tier-perk">Bonus on 10th referral</div>
-      </div>
+    <div class="lb-row">
+      <div class="lb-rank-num">4</div>
+      <div class="lb-avatar" style="background:#e8f4fd;color:#0066c0;">N</div>
+      <div class="lb-name">Neha G.</div>
+      <div class="lb-refs">21 referrals</div>
+      <div class="lb-earn">₹4,200</div>
     </div>
-    <div class="tier-card premium" style="position:relative;">
-      <div class="tier-badge gold">Gold</div>
-      <div class="tier-emoji">🏆</div>
-      <h3>Champion</h3>
-      <div class="tier-refs" style="color:rgba(255,255,255,0.5);">20+ referrals</div>
-      <div class="tier-reward">₹1,000</div>
-      <div class="tier-reward-l">per referral</div>
-      <div class="tier-perks">
-        <div class="tier-perk">₹500 friend discount</div>
-        <div class="tier-perk">Instant bank transfer</div>
-        <div class="tier-perk">90-day tracking</div>
-        <div class="tier-perk">Exclusive Champion badge</div>
-        <div class="tier-perk">Monthly bonus rewards</div>
-      </div>
+    <div class="lb-row you">
+      <div class="lb-rank-num">7</div>
+      <div class="lb-avatar" style="background:var(--orange);color:var(--navy);">Y</div>
+      <div class="lb-name">You 🎯 <span style="font-size:0.72rem;color:var(--orange);font-weight:700;">— Keep going!</span></div>
+      <div class="lb-refs">12 referrals</div>
+      <div class="lb-earn">₹1,000</div>
     </div>
   </div>
+</div>
 
-  <!-- REFERRALS TABLE -->
-  <div class="section-title" style="margin-bottom:6px;">Your Referrals</div>
-  <div class="section-sub">Aria AI tracks every referral in real-time.</div>
-  <table class="ref-table" style="margin-bottom:32px;">
+<!-- REFERRED FRIENDS TABLE -->
+<div class="section">
+  <div class="section-title">Your Referred Friends</div>
+  <div class="section-sub">Track the status of each friend you've invited to VibeStore.</div>
+  <table class="friends-table">
     <thead>
-      <tr><th>Friend</th><th>Joined</th><th>Status</th><th>Your Earnings</th></tr>
+      <tr>
+        <th>Name</th>
+        <th>Date Joined</th>
+        <th>Status</th>
+        <th>Your Reward</th>
+      </tr>
     </thead>
     <tbody>
-      <tr><td>Priya S.</td><td>May 15, 2025</td><td><span class="status-pill pill-green">✓ Completed</span></td><td class="earnings">+₹750</td></tr>
-      <tr><td>Rahul M.</td><td>May 12, 2025</td><td><span class="status-pill pill-green">✓ Completed</span></td><td class="earnings">+₹750</td></tr>
-      <tr><td>Ananya K.</td><td>May 10, 2025</td><td><span class="status-pill pill-yellow">⏳ Pending</span></td><td class="earnings" style="color:var(--muted)">₹750 pending</td></tr>
-      <tr><td>Dev T.</td><td>May 8, 2025</td><td><span class="status-pill pill-blue">🛒 Ordered</span></td><td class="earnings">+₹750</td></tr>
-      <tr><td>Meera P.</td><td>May 5, 2025</td><td><span class="status-pill pill-green">✓ Completed</span></td><td class="earnings">+₹750</td></tr>
+      <tr>
+        <td><strong>Priya S.</strong></td>
+        <td>May 15, 2026</td>
+        <td><span class="status-pill pill-green">✓ Purchased</span></td>
+        <td class="reward-earned">+₹200</td>
+      </tr>
+      <tr>
+        <td><strong>Rahul M.</strong></td>
+        <td>May 12, 2026</td>
+        <td><span class="status-pill pill-green">✓ Purchased</span></td>
+        <td class="reward-earned">+₹200</td>
+      </tr>
+      <tr>
+        <td><strong>Ananya K.</strong></td>
+        <td>May 10, 2026</td>
+        <td><span class="status-pill pill-yellow">⏳ Signed Up</span></td>
+        <td class="reward-pending">Pending purchase</td>
+      </tr>
+      <tr>
+        <td><strong>Dev T.</strong></td>
+        <td>May 8, 2026</td>
+        <td><span class="status-pill pill-green">✓ Purchased</span></td>
+        <td class="reward-earned">+₹200</td>
+      </tr>
+      <tr>
+        <td><strong>Meera P.</strong></td>
+        <td>May 5, 2026</td>
+        <td><span class="status-pill pill-green">✓ Purchased</span></td>
+        <td class="reward-earned">+₹200</td>
+      </tr>
+      <tr>
+        <td><strong>Arjun S.</strong></td>
+        <td>May 3, 2026</td>
+        <td><span class="status-pill pill-blue">🔗 Signed Up</span></td>
+        <td class="reward-pending">Pending purchase</td>
+      </tr>
+      <tr>
+        <td><strong>Kavya R.</strong></td>
+        <td>Apr 28, 2026</td>
+        <td><span class="status-pill pill-green">✓ Purchased</span></td>
+        <td class="reward-earned">+₹200</td>
+      </tr>
     </tbody>
   </table>
+</div>
 
-  <!-- LEADERBOARD -->
-  <div class="section-title" style="margin-bottom:6px;">This Month's Leaderboard</div>
-  <div class="section-sub">Top referrers win bonus VibeCredits and exclusive Champion rewards.</div>
-  <div class="leaderboard">
-    <div class="lb-hdr"><h3>🏆 May 2025 Champions</h3><div class="lb-badge">Resets June 1</div></div>
-    <div class="lb-row"><div class="lb-rank top">🥇</div><div class="lb-avatar">A</div><div class="lb-name">Aditya R.</div><div class="lb-refs">47 referrals</div><div class="lb-earn">₹47,000</div></div>
-    <div class="lb-row"><div class="lb-rank top">🥈</div><div class="lb-avatar">S</div><div class="lb-name">Shruti V.</div><div class="lb-refs">38 referrals</div><div class="lb-earn">₹38,000</div></div>
-    <div class="lb-row"><div class="lb-rank top">🥉</div><div class="lb-avatar">K</div><div class="lb-name">Karan B.</div><div class="lb-refs">29 referrals</div><div class="lb-earn">₹29,000</div></div>
-    <div class="lb-row"><div class="lb-rank">4</div><div class="lb-avatar">N</div><div class="lb-name">Neha G.</div><div class="lb-refs">21 referrals</div><div class="lb-earn">₹21,000</div></div>
-    <div class="lb-row you"><div class="lb-rank">7</div><div class="lb-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">Y</div><div class="lb-name">You 🎯</div><div class="lb-refs">12 referrals</div><div class="lb-earn">₹9,000</div></div>
+<!-- ECHO AI TIP -->
+<div class="section">
+  <div class="echo-tip">
+    <div class="echo-icon">🤖</div>
+    <div class="echo-text">
+      <h4>Echo AI Tip</h4>
+      <p>Echo suggests sharing your referral code during the Great Indian Shopping Festival — success rates are 2x higher when friends can immediately see great deals across all VibeStore marketplace sellers. The next big sale starts in 3 days! Share now and time it perfectly.</p>
+    </div>
   </div>
 </div>
 
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.7);padding:40px 24px 24px;margin-top:0">
-  <div style="max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px">
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Shop</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="collections.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Collections</a>
-        <a href="sale.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Sale</a>
-        <a href="compare.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Compare</a>
-        <a href="gift-cards.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Gift Cards</a>
-        <a href="blog.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Blog</a>
-      </div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="store.html">Store Home</a>
+      <a href="collections.html">Collections</a>
+      <a href="sale.html">Today's Deals</a>
+      <a href="compare.html">Compare Products</a>
+      <a href="gift-cards.html">Gift Cards</a>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Support</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="returns.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Returns</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact Us</a>
-        <a href="faq.html" style="color:rgba(255,255,255,0.6);text-decoration:none">FAQ</a>
-        <a href="track.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Track Order</a>
-        <a href="notifications.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Notifications</a>
-      </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="returns.html">Returns &amp; Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="faq.html">FAQ</a>
+      <a href="track.html">Track Your Order</a>
+      <a href="notifications.html">Notifications</a>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Account</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="account.html" style="color:rgba(255,255,255,0.6);text-decoration:none">My Account</a>
-        <a href="loyalty.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Loyalty</a>
-        <a href="wishlist.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Wishlist</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referrals</a>
-      </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="account.html">My Account</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="loyalty.html">VibeCash &amp; Loyalty</a>
+      <a href="referral.html">Referral Program</a>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Company</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none">About Us</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referral Program</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact</a>
-      </div>
+    <div class="footer-col">
+      <h4>Discover</h4>
+      <a href="blog.html">Blog &amp; Tips</a>
+      <a href="sale.html">Flash Sales</a>
+      <a href="app.html">VibeStore App</a>
+      <a href="search.html">Search</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a href="become-seller.html">Sell on VibeStore</a>
+      <a href="seller-central.html">Seller Central</a>
+      <a href="#">Affiliate Program</a>
+      <a href="#">Advertise</a>
     </div>
   </div>
-  <div style="max-width:900px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center">© 2025 VibeStore. All rights reserved.</div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace by MyOoumph Networks Pvt Ltd. All rights reserved.</div>
 </footer>
 
 <script src="rex-chat.js"></script>
 <script>
-// Particle canvas
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-function resize(){canvas.width=canvas.offsetWidth;canvas.height=canvas.offsetHeight;}
-resize(); window.addEventListener('resize',resize);
-const pts = Array.from({length:40},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*2+1}));
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  pts.forEach(p=>{
-    p.x+=p.vx; p.y+=p.vy;
-    if(p.x<0||p.x>canvas.width)p.vx*=-1;
-    if(p.y<0||p.y>canvas.height)p.vy*=-1;
-    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle='rgba(167,139,250,0.4)';ctx.fill();
-  });
-  requestAnimationFrame(draw);
-}
-draw();
+// Cart count from localStorage
+const cart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+document.getElementById('cartCount').textContent = cart.reduce((s,c) => s+c.qty, 0);
 
-function copyCode(){
-  navigator.clipboard.writeText('SARTH-VS42').then(()=>alert('Code copied! Share it with friends.')).catch(()=>{});
+function copyCode() {
+  navigator.clipboard.writeText('ARYAN-VS2025').then(() => {
+    toast('✅ Copied! Share ARYAN-VS2025 with friends.');
+  }).catch(() => {
+    toast('✅ Code: ARYAN-VS2025 — copied!');
+  });
+}
+
+function copyLink() {
+  const url = document.getElementById('refLinkInput').value;
+  navigator.clipboard.writeText(url).then(() => {
+    toast('✅ Referral link copied to clipboard!');
+  }).catch(() => {
+    toast('✅ Link copied!');
+  });
+}
+
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 </script>
 </body>

@@ -3,1112 +3,382 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>VibeStore App</title>
+<title>Dashboard — VibeStore Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#07070f;--bg2:#0e0e1c;--bg3:#13132a;
-  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
-  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
-  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;
-  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
-  --sidebar-w:240px;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;display:flex;height:100vh;overflow:hidden}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
-
-/* SIDEBAR */
-#sidebar{
-  width:var(--sidebar-w);flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
-  transition:width 0.3s;z-index:100;
+#sidebar{width:240px;flex-shrink:0;background:#131921;display:flex;flex-direction:column;height:100vh;overflow-y:auto;position:fixed;left:0;top:0;z-index:100}
+.topbar-hamburger{display:none;background:none;border:none;color:#333;font-size:1.3rem;cursor:pointer;padding:4px 8px;margin-right:4px;align-items:center;justify-content:center}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99}
+.sidebar-overlay.show{display:block}
+@media(max-width:768px){
+  #sidebar{left:-240px;transition:left 0.3s ease;z-index:1000}
+  #sidebar.open{left:0}
+  #main{margin-left:0}
+  .topbar-hamburger{display:flex!important}
+  .metrics-grid{grid-template-columns:1fr 1fr!important}
+  .row2{grid-template-columns:1fr!important}
+  .row3{grid-template-columns:1fr!important}
+  .quick-actions{grid-template-columns:1fr 1fr!important}
+  .agent-grid{grid-template-columns:1fr 1fr!important}
+  .card table{display:block;overflow-x:auto;white-space:nowrap}
 }
-.sb-logo{
-  padding:20px 20px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;
-  background:linear-gradient(135deg,var(--purple2),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  flex-shrink:0;
-}
-.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
-.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.sb-store-name{font-size:0.83rem;font-weight:600}
-.sb-store-url{font-size:0.68rem;color:var(--gray)}
-.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 16px;margin:2px 8px;border-radius:8px;
-  font-size:0.84rem;color:var(--gray);cursor:pointer;
-  transition:all 0.2s;border:1px solid transparent;
-}
-.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
-.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
-.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
-.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
-.sb-badge-green{background:rgba(74,222,128,0.15);color:var(--green)}
-.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
-.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--card);cursor:pointer}
-.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
-.sb-user-name{font-size:0.82rem;font-weight:600}
-.sb-user-plan{font-size:0.68rem;color:var(--cyan)}
-
-/* MAIN */
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-/* TOPBAR */
-#topbar{
-  height:60px;flex-shrink:0;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 24px;gap:16px;
-}
-.tb-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;flex:1}
-.tb-search{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:8px;padding:7px 14px;display:flex;align-items:center;gap:8px;
-  font-size:0.83rem;color:var(--gray);width:240px;cursor:text;
-  transition:border-color 0.2s;
-}
-.tb-search:focus-within{border-color:var(--purple)}
-.tb-search input{background:none;border:none;outline:none;color:var(--white);width:100%;font-size:0.83rem}
-.tb-ai-badge{display:flex;align-items:center;gap:6px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:100px;padding:5px 12px;font-size:0.72rem;color:var(--green);white-space:nowrap}
-.tb-ai-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-.tb-btn{background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;border:none;border-radius:8px;padding:7px 16px;font-size:0.82rem;font-weight:600;transition:opacity 0.2s}
-.tb-btn:hover{opacity:0.85}
-.tb-icon-btn{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:border-color 0.2s}
-.tb-icon-btn:hover{border-color:var(--purple2)}
-.notification-dot{position:relative}
-.notification-dot::after{content:'';position:absolute;top:4px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--red);border:2px solid var(--bg2)}
-
-/* CONTENT */
-#content{flex:1;overflow-y:auto;padding:24px}
-#content::-webkit-scrollbar{width:4px}
-#content::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-
-/* VIEWS */
-.view{display:none;animation:fadeIn 0.3s ease}
-.view.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* CARDS */
-.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px}
-.card-sm{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px}
-.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:700;margin-bottom:4px}
-.metric-lbl{font-size:0.75rem;color:var(--gray);margin-bottom:8px}
-.metric-change{font-size:0.72rem;display:flex;align-items:center;gap:4px}
-.up{color:var(--green)}.down{color:var(--red)}
-
-/* TABLE */
-.tbl{width:100%;border-collapse:collapse;font-size:0.82rem}
-.tbl th{text-align:left;padding:10px 14px;color:var(--gray);font-weight:500;border-bottom:1px solid var(--border);white-space:nowrap}
-.tbl td{padding:12px 14px;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
-.tbl tr:hover td{background:rgba(255,255,255,0.02);cursor:pointer}
-.tbl tr:last-child td{border-bottom:none}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.68rem;font-weight:600}
-.b-green{background:rgba(74,222,128,0.12);color:var(--green)}
-.b-yellow{background:rgba(251,191,36,0.12);color:var(--yellow)}
-.b-red{background:rgba(248,113,113,0.12);color:var(--red)}
-.b-purple{background:rgba(167,139,250,0.12);color:var(--lav)}
-.b-cyan{background:rgba(6,182,212,0.12);color:var(--cyan)}
-.b-orange{background:rgba(251,146,60,0.12);color:var(--orange)}
-
-/* SECTION HEADER */
-.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.sec-title{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700}
-.sec-sub{font-size:0.78rem;color:var(--gray);margin-top:2px}
-.view-hdr{margin-bottom:24px}
-.view-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;margin-bottom:4px}
-.view-sub{font-size:0.85rem;color:var(--gray)}
-
-/* AI ACTIVITY PANEL */
-.ai-panel{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;overflow:hidden}
-.ai-panel-hdr{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:0.82rem;font-weight:700;color:var(--lav)}
-.ai-entry{padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04);animation:slideIn 0.3s ease}
-.ai-entry:last-child{border-bottom:none}
-.ae-top{display:flex;align-items:center;gap:6px;margin-bottom:3px}
-.ae-agent{font-size:0.72rem;font-weight:700;color:var(--purple2)}
-.ae-time{font-size:0.65rem;color:var(--gray2);margin-left:auto}
-.ae-action{font-size:0.76rem;color:var(--gray);line-height:1.4}
-.ae-result{font-size:0.72rem;color:var(--green);margin-top:2px}
-@keyframes slideIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-
-/* AGENT CARDS */
-.agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.agent-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
-.agent-card:hover{transform:translateY(-4px);border-color:rgba(124,58,237,0.35)}
-.agent-card.running::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--purple),var(--cyan));animation:shimmer 2s infinite}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.ac-emoji{font-size:2rem;margin-bottom:12px;display:block}
-.ac-name{font-weight:700;font-size:0.95rem;margin-bottom:3px}
-.ac-role{font-size:0.7rem;color:var(--cyan);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
-.ac-desc{font-size:0.78rem;color:var(--gray);line-height:1.5;margin-bottom:12px}
-.ac-status{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--green)}
-.ac-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite}
-.ac-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
-.ac-stat{background:rgba(255,255,255,0.03);border-radius:6px;padding:8px;text-align:center}
-.ac-stat-val{font-weight:700;font-size:0.9rem;color:var(--white)}
-.ac-stat-lbl{font-size:0.62rem;color:var(--gray);margin-top:2px}
-
-/* PRODUCT CARDS */
-.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.prod-card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.prod-card:hover{transform:translateY(-3px);border-color:rgba(124,58,237,0.3)}
-.prod-img{height:120px;background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,182,212,0.15));display:flex;align-items:center;justify-content:center;font-size:2.5rem}
-.prod-info{padding:12px}
-.prod-name{font-size:0.83rem;font-weight:600;margin-bottom:4px}
-.prod-price{font-size:1rem;font-weight:700;color:var(--cyan);margin-bottom:6px}
-.prod-meta{display:flex;justify-content:space-between;align-items:center}
-.prod-stock{font-size:0.7rem;color:var(--gray)}
-
-/* MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:500;align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:90%;max-width:640px;max-height:85vh;overflow-y:auto;animation:fadeIn 0.3s ease}
-.modal::-webkit-scrollbar{width:4px}
-.modal::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.modal-hdr{padding:24px 24px 16px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border)}
-.modal-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700}
-.modal-close{background:var(--card);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;flex-shrink:0}
-.modal-close:hover{border-color:var(--red);color:var(--red)}
-.modal-body{padding:24px}
-
-/* PROGRESS BARS */
-.progress-bar{height:6px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-top:6px}
-.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--purple),var(--cyan));transition:width 1s ease}
-
-/* TABS */
-.tabs{display:flex;gap:4px;background:var(--card);border-radius:10px;padding:4px;margin-bottom:20px;border:1px solid var(--border)}
-.tab{flex:1;text-align:center;padding:7px;border-radius:7px;font-size:0.8rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all 0.2s}
-.tab.active{background:var(--bg3);color:var(--white);font-weight:600}
-
-/* FORM ELEMENTS */
-.form-group{margin-bottom:16px}
-.form-label{display:block;font-size:0.78rem;font-weight:600;color:var(--gray);margin-bottom:6px}
-.form-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.85rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s}
-.form-input:focus{border-color:var(--purple)}
-.form-select{appearance:none;cursor:pointer}
-textarea.form-input{resize:vertical;min-height:80px}
-
-/* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:8px}
-.toast-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 18px;font-size:0.82rem;display:flex;align-items:center;gap:10px;animation:slideIn 0.3s ease;min-width:260px;box-shadow:0 8px 30px rgba(0,0,0,0.4)}
-.toast-item.success{border-color:rgba(74,222,128,0.3)}
-.toast-item.info{border-color:rgba(6,182,212,0.3)}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  #sidebar{width:60px}
-  .sb-logo span,.sb-store-name,.sb-store-url,.sb-section,.sb-item span:not(.icon),.sb-badge,.sb-user-name,.sb-user-plan{display:none}
-  .sb-store{justify-content:center;padding:8px}
-  .sb-item{justify-content:center;padding:10px;margin:2px 4px}
-  .sb-user{justify-content:center}
-  .grid-4{grid-template-columns:repeat(2,1fr)}
-  .agent-grid{grid-template-columns:repeat(2,1fr)}
-  .prod-grid{grid-template-columns:repeat(2,1fr)}
-}
-@media(max-width:600px){
-  .grid-4,.grid-3,.grid-2,.agent-grid,.prod-grid{grid-template-columns:1fr}
-  #content{padding:14px}
-  .tb-search{display:none}
-}
+.sb-logo{padding:20px 20px 18px;font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:#FF9900;border-bottom:1px solid #232f3e;letter-spacing:-0.5px}
+.sb-section{padding:16px 16px 6px;font-size:0.62rem;font-weight:700;color:#8a9bb0;letter-spacing:0.1em;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:0.84rem;color:#d5dbdb;cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;text-decoration:none}
+.sb-item:hover{background:#232f3e;color:#fff}
+.sb-item.active{background:#232f3e;color:#FF9900;border-left-color:#FF9900}
+.sb-divider{border:none;border-top:1px solid #232f3e;margin:8px 0}
+.live-badge{margin-left:auto;background:#1a7a3a;color:#4ade80;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:10px}
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{background:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.1);flex-shrink:0}
+.topbar-left{font-size:0.82rem;color:#666}
+.topbar-left span{color:#131921;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.bell-btn{position:relative;background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px}
+.bell-badge{position:absolute;top:0;right:0;background:#e53e3e;color:#fff;font-size:0.55rem;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.agent-chip{background:#f0f2f5;border:1px solid #ddd;border-radius:20px;padding:4px 10px;font-size:0.72rem;color:#333;display:flex;align-items:center;gap:5px}
+.agent-chip .dot{width:6px;height:6px;border-radius:50%;background:#22c55e;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+.admin-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF9900,#e07b00);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem;cursor:pointer}
+.content{flex:1;overflow-y:auto;padding:24px}
+.greeting{font-size:1.4rem;font-weight:700;color:#131921;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.greeting-sub{font-size:0.85rem;color:#666;margin-bottom:20px}
+.alert-banner{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:8px;font-size:0.84rem;font-weight:500;margin-bottom:10px}
+.alert-orange{background:#fffbf0;border:1px solid #fde68a;color:#92400e}
+.alert-red{background:#fff5f5;border:1px solid #fed7d7;color:#c53030}
+.alert-btn{margin-left:auto;background:#FF9900;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:0.75rem;font-weight:600;cursor:pointer}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.metric-card{background:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:4px solid #3b82f6}
+.metric-card.green{border-left-color:#22c55e}
+.metric-card.orange{border-left-color:#FF9900}
+.metric-card.red{border-left-color:#ef4444}
+.metric-card.teal{border-left-color:#007185}
+.metric-card.purple{border-left-color:#8b5cf6}
+.metric-icon{font-size:1.5rem}
+.metric-val{font-size:1.3rem;font-weight:700;color:#131921;line-height:1}
+.metric-label{font-size:0.72rem;color:#666;margin-top:2px}
+.metric-trend{font-size:0.7rem;color:#22c55e;margin-top:4px;font-weight:600}
+.metric-trend.down{color:#ef4444}
+.row2{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);padding:20px}
+.card-title{font-size:0.95rem;font-weight:700;color:#131921;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .badge{font-size:0.65rem;font-weight:600;padding:2px 8px;border-radius:10px;background:#f0f2f5;color:#666}
+canvas{max-height:240px}
+.quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.qa-btn{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:0.78rem;font-weight:600;color:#131921;cursor:pointer;transition:all 0.15s;text-decoration:none}
+.qa-btn:hover{border-color:#FF9900;background:#fffbf0;color:#FF9900}
+.qa-btn span{font-size:1.5rem}
+.row3{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:20px}
+table{width:100%;border-collapse:collapse;font-size:0.82rem}
+thead th{background:#f8f9fa;color:#555;font-weight:600;padding:10px 12px;text-align:left;font-size:0.78rem}
+tbody tr{border-bottom:1px solid #f0f2f5;transition:background 0.15s}
+tbody tr:hover{background:#fafbfc}
+td{padding:10px 12px;vertical-align:middle}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:12px;font-size:0.7rem;font-weight:600}
+.sb-green{background:#dcfce7;color:#166534}
+.sb-yellow{background:#fef9c3;color:#854d0e}
+.sb-red{background:#fee2e2;color:#991b1b}
+.sb-blue{background:#dbeafe;color:#1e40af}
+.sb-gray{background:#f3f4f6;color:#374151}
+.sb-orange{background:#fff7ed;color:#c2410c}
+.teal-link{color:#007185;font-weight:600;text-decoration:none}
+.teal-link:hover{text-decoration:underline}
+.action-btns{display:flex;gap:6px}
+.btn-sm{padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:600;border:none;cursor:pointer}
+.btn-approve{background:#dcfce7;color:#166534}
+.btn-approve:hover{background:#16a34a;color:#fff}
+.btn-reject{background:#fee2e2;color:#991b1b}
+.btn-reject:hover{background:#dc2626;color:#fff}
+.seller-rank{width:26px;height:26px;border-radius:50%;background:#FF9900;color:#fff;font-size:0.72rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.seller-avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#667eea,#764ba2);display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.75rem;font-weight:700}
+.agent-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.agent-card{background:#fff;border-radius:10px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);display:flex;align-items:center;gap:10px}
+.agent-dot{width:8px;height:8px;border-radius:50%;background:#22c55e;flex-shrink:0}
+.agent-dot.idle{background:#f59e0b}
+.agent-name{font-size:0.83rem;font-weight:600;color:#131921}
+.agent-task{font-size:0.7rem;color:#666;margin-top:1px}
+.agent-count{margin-left:auto;background:#f0f2f5;border-radius:8px;padding:2px 8px;font-size:0.75rem;font-weight:700;color:#131921}
+.pending-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f2f5}
+.pending-row:last-child{border-bottom:none}
+.pending-info{flex:1}
+.pending-name{font-size:0.83rem;font-weight:600;color:#131921}
+.pending-sub{font-size:0.72rem;color:#666;margin-top:1px}
 </style>
 </head>
 <body>
 
+<!-- SIDEBAR OVERLAY -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
 <!-- SIDEBAR -->
-<div id="sidebar">
-  <div class="sb-logo"><div class="sb-dot"></div><span>VibeStore</span></div>
-  <div class="sb-store">
-    <div class="sb-store-icon">🛍️</div>
-    <div><div class="sb-store-name">MyStore</div><div class="sb-store-url">mystore.vibestore.ai</div></div>
-  </div>
-
-  <div class="sb-section">Main Menu</div>
-  <div class="sb-item active" onclick="nav('dashboard')"><span class="icon">🏠</span><span>Dashboard</span></div>
-  <a href="admin-orders.html" class="sb-item"><span class="icon">📦</span><span>Orders</span><span class="sb-badge">47</span></a>
-  <a href="admin-products.html" class="sb-item"><span class="icon">🏷️</span><span>Products</span></a>
-  <a href="admin-customers.html" class="sb-item"><span class="icon">👥</span><span>Customers</span></a>
-  <a href="admin-discounts.html" class="sb-item"><span class="icon">🎟️</span><span>Discounts</span></a>
-  <a href="admin-reports.html" class="sb-item"><span class="icon">📊</span><span>Reports</span></a>
-  <a href="admin-settings.html" class="sb-item"><span class="icon">⚙️</span><span>Settings</span></a>
-
-  <div class="sb-section">Store</div>
-  <a href="mystore.html" class="sb-item"><span class="icon">🔗</span><span>View Store</span><span class="sb-badge sb-badge-green">Live</span></a>
-  <a href="index.html" class="sb-item"><span class="icon">🏠</span><span>Back to Site</span></a>
-
-  <div class="sb-bottom">
-    <div class="sb-user">
-      <div class="sb-avatar">S</div>
-      <div><div class="sb-user-name">Sarthak</div><div class="sb-user-plan">Growth Plan</div></div>
-    </div>
-  </div>
-</div>
+<nav id="sidebar">
+  <div class="sb-logo">⚡VibeStore Admin</div>
+  <div class="sb-section">Main</div>
+  <a class="sb-item active" href="app.html">🏠 Dashboard</a>
+  <a class="sb-item" href="admin-orders.html">📦 Orders</a>
+  <a class="sb-item" href="admin-products.html">🏷️ Products</a>
+  <a class="sb-item" href="admin-customers.html">👥 Sellers</a>
+  <a class="sb-item" href="admin-discounts.html">🎟️ Promotions</a>
+  <a class="sb-item" href="admin-reports.html">📊 Reports</a>
+  <a class="sb-item" href="admin-settings.html">⚙️ Settings</a>
+  <hr class="sb-divider"/>
+  <a class="sb-item" href="index.html">🛍️ View Marketplace <span class="live-badge">Live</span></a>
+  <a class="sb-item" href="seller-dashboard.html">👨‍💼 Seller Central</a>
+  <a class="sb-item" href="seller-login.html">👨‍💼 Seller Login</a>
+</nav>
 
 <!-- MAIN -->
 <div id="main">
-  <!-- TOPBAR -->
-  <div id="topbar">
-    <div class="tb-title" id="pageTitle">Dashboard</div>
-    <div class="tb-search"><span>🔍</span><input placeholder="Search orders, products..."/></div>
-    <div class="tb-ai-badge"><div class="tb-ai-dot"></div>8 Agents Active</div>
-    <div class="tb-icon-btn notification-dot" onclick="showNotifications()">🔔</div>
-    <button class="tb-btn" id="topActionBtn" onclick="topAction()">+ New Product</button>
+  <div class="topbar">
+    <button class="topbar-hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-left">Admin Panel &rsaquo; <span>Dashboard</span></div>
+    <div class="topbar-right">
+      <button class="bell-btn">🔔<span class="bell-badge">9</span></button>
+      <div class="agent-chip"><span class="dot"></span> 8 AI Agents Active</div>
+      <div class="admin-avatar" onclick="vsLogout()" title="Sign out">A</div>
+    </div>
   </div>
 
-  <!-- CONTENT -->
-  <div id="content">
+  <div class="content">
+    <div class="greeting">Good morning, Admin 👋</div>
+    <div class="greeting-sub">Marketplace has 47 new orders today — Last updated 2 min ago</div>
 
-    <!-- ===== DASHBOARD ===== -->
-    <div id="view-dashboard" class="view active">
-      <div class="view-hdr">
-        <div class="view-title">Good morning, Sarthak 👋</div>
-        <div class="view-sub">Your store is running autonomously. Here's what's happening.</div>
-      </div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card">
-          <div class="metric-lbl">Today's Revenue</div>
-          <div class="metric-val" style="color:var(--cyan)" id="db-rev">$12,849</div>
-          <div class="metric-change up">↑ 23.4% vs yesterday</div>
-        </div>
-        <div class="card">
-          <div class="metric-lbl">Orders</div>
-          <div class="metric-val" style="color:var(--purple2)" id="db-ord">347</div>
-          <div class="metric-change up">↑ 18.2% vs yesterday</div>
-        </div>
-        <div class="card">
-          <div class="metric-lbl">Conversion Rate</div>
-          <div class="metric-val" style="color:var(--green)">4.8%</div>
-          <div class="metric-change up">↑ 0.6% this week</div>
-        </div>
-        <div class="card">
-          <div class="metric-lbl">AI Tasks Done Today</div>
-          <div class="metric-val" style="color:var(--lav)" id="db-tasks">284</div>
-          <div class="metric-change up">↑ Fully autonomous</div>
+    <!-- ALERTS -->
+    <div class="alert-orange" style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:8px;font-size:0.84rem;font-weight:500;margin-bottom:10px;border:1px solid #fde68a;background:#fffbf0;color:#92400e">
+      ⚠️ &nbsp;<strong>3 seller accounts flagged for review</strong> | 2 counterfeit product reports pending action
+      <button class="alert-btn" onclick="window.location='admin-customers.html'">Review Sellers</button>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card orange">
+        <div class="metric-icon">💰</div>
+        <div>
+          <div class="metric-val">₹8,47,293</div>
+          <div class="metric-label">Today's GMV</div>
+          <div class="metric-trend">↑ 14.2% vs yesterday</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 340px;gap:16px;margin-bottom:16px">
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Revenue — Last 14 Days</div><span class="badge b-cyan">AI Optimized</span></div>
-          <canvas id="dashChart" height="80"></canvas>
-        </div>
-        <div class="ai-panel">
-          <div class="ai-panel-hdr"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;display:inline-block"></span>Live Agent Activity</div>
-          <div id="dbFeed"></div>
+      <div class="metric-card">
+        <div class="metric-icon">📦</div>
+        <div>
+          <div class="metric-val">847</div>
+          <div class="metric-label">Platform Orders</div>
+          <div class="metric-trend">↑ 8.3% vs yesterday</div>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Recent Orders</div><span onclick="nav('orders')" style="font-size:0.78rem;color:var(--purple2);cursor:pointer">View all →</span></div>
-          <table class="tbl">
-            <thead><tr><th>Order</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
-            <tbody id="dbOrders"></tbody>
-          </table>
+      <div class="metric-card green">
+        <div class="metric-icon">🏪</div>
+        <div>
+          <div class="metric-val">1,284</div>
+          <div class="metric-label">Active Sellers</div>
+          <div class="metric-trend">↑ 47 new this month</div>
         </div>
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Top Products</div><span onclick="nav('products')" style="font-size:0.78rem;color:var(--purple2);cursor:pointer">View all →</span></div>
-          <table class="tbl">
-            <thead><tr><th>Product</th><th>Sales</th><th>Revenue</th></tr></thead>
-            <tbody>
-              <tr><td>Wireless Earbuds Pro</td><td>142</td><td style="color:var(--cyan)">$12,638</td></tr>
-              <tr><td>Smart Watch Ultra</td><td>89</td><td style="color:var(--cyan)">$22,161</td></tr>
-              <tr><td>Laptop Stand Bundle</td><td>76</td><td style="color:var(--cyan)">$5,092</td></tr>
-              <tr><td>Mechanical Keyboard</td><td>54</td><td style="color:var(--cyan)">$7,506</td></tr>
-            </tbody>
-          </table>
+      </div>
+      <div class="metric-card teal">
+        <div class="metric-icon">👤</div>
+        <div>
+          <div class="metric-val">52,418</div>
+          <div class="metric-label">Total Buyers</div>
+          <div class="metric-trend">↑ 1,204 new today</div>
+        </div>
+      </div>
+      <div class="metric-card purple">
+        <div class="metric-icon">🧾</div>
+        <div>
+          <div class="metric-val">₹1,006</div>
+          <div class="metric-label">Avg Order Value</div>
+          <div class="metric-trend">↑ 3.1% vs last week</div>
+        </div>
+      </div>
+      <div class="metric-card orange">
+        <div class="metric-icon">📈</div>
+        <div>
+          <div class="metric-val">8.2%</div>
+          <div class="metric-label">Platform Take Rate</div>
+          <div class="metric-trend">Target: 8.5%</div>
+        </div>
+      </div>
+      <div class="metric-card red">
+        <div class="metric-icon">⚖️</div>
+        <div>
+          <div class="metric-val">12</div>
+          <div class="metric-label">Open Disputes</div>
+          <div class="metric-trend down">↑ 3 new today</div>
+        </div>
+      </div>
+      <div class="metric-card green">
+        <div class="metric-icon">🤖</div>
+        <div>
+          <div class="metric-val">247</div>
+          <div class="metric-label">AI Saves Today</div>
+          <div class="metric-trend">↑ 18% vs yesterday</div>
         </div>
       </div>
     </div>
 
-    <!-- ===== ORDERS ===== -->
-    <div id="view-orders" class="view">
-      <div class="view-hdr" style="display:flex;align-items:flex-start;justify-content:space-between">
-        <div><div class="view-title">Orders</div><div class="view-sub">AI agent Zen is managing all fulfilment automatically</div></div>
-        <div style="display:flex;gap:8px">
-          <select class="form-input form-select" style="width:auto;padding:7px 12px;font-size:0.8rem" onchange="filterOrders(this.value)">
-            <option value="all">All Orders</option>
-            <option value="processing">Processing</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="refunded">Refunded</option>
-          </select>
-          <button class="tb-btn" onclick="exportOrders()">⬇ Export</button>
-        </div>
-      </div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Total Orders</div><div class="metric-val" style="font-size:1.4rem">1,284</div><div class="metric-change up">↑ 12% this month</div></div>
-        <div class="card-sm"><div class="metric-lbl">Processing</div><div class="metric-val" style="font-size:1.4rem;color:var(--yellow)">47</div><div class="metric-change"><span style="color:var(--lav)">🤖 Zen handling all</span></div></div>
-        <div class="card-sm"><div class="metric-lbl">Shipped Today</div><div class="metric-val" style="font-size:1.4rem;color:var(--cyan)">23</div><div class="metric-change up">On time</div></div>
-        <div class="card-sm"><div class="metric-lbl">Avg Order Value</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">$127</div><div class="metric-change up">↑ $14 vs last month</div></div>
+    <!-- CHART + PENDING APPROVALS -->
+    <div class="row2" style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">📊 Platform GMV — Last 30 Days <span class="badge">AI Forecast Enabled</span></div>
+        <canvas id="gmvChart"></canvas>
       </div>
       <div class="card">
-        <table class="tbl">
-          <thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th><th>Agent</th><th>Status</th><th>Action</th></tr></thead>
-          <tbody id="ordersTable"></tbody>
+        <div class="card-title">⏳ Sellers Pending Approval</div>
+        <div class="pending-row">
+          <div class="seller-avatar">TM</div>
+          <div class="pending-info">
+            <div class="pending-name">TechMart India</div>
+            <div class="pending-sub">Electronics · Joined 3h ago</div>
+          </div>
+          <div class="action-btns">
+            <a href="seller-profile.html" class="btn-sm" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:600;text-decoration:none;">View Profile →</a>
+            <button class="btn-sm btn-approve">✓</button>
+            <button class="btn-sm btn-reject">✗</button>
+          </div>
+        </div>
+        <div class="pending-row">
+          <div class="seller-avatar">FK</div>
+          <div class="pending-info">
+            <div class="pending-name">FashionKart</div>
+            <div class="pending-sub">Apparel · Joined 5h ago</div>
+          </div>
+          <div class="action-btns">
+            <a href="seller-profile.html" class="btn-sm" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:600;text-decoration:none;">View Profile →</a>
+            <button class="btn-sm btn-approve">✓</button>
+            <button class="btn-sm btn-reject">✗</button>
+          </div>
+        </div>
+        <div class="pending-row">
+          <div class="seller-avatar">GH</div>
+          <div class="pending-info">
+            <div class="pending-name">GreenHome</div>
+            <div class="pending-sub">Home & Garden · Joined 7h ago</div>
+          </div>
+          <div class="action-btns">
+            <a href="seller-profile.html" class="btn-sm" style="background:#dbeafe;color:#1e40af;padding:4px 10px;border-radius:6px;font-size:0.72rem;font-weight:600;text-decoration:none;">View Profile →</a>
+            <button class="btn-sm btn-approve">✓</button>
+            <button class="btn-sm btn-reject">✗</button>
+          </div>
+        </div>
+        <div style="margin-top:14px">
+          <a href="admin-customers.html" style="font-size:0.8rem;color:#007185;font-weight:600">View all 47 pending →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:0.9rem;font-weight:700;color:#131921;margin-bottom:12px">Quick Actions</div>
+      <div class="quick-actions">
+        <a class="qa-btn" href="admin-customers.html"><span>✅</span>Approve Sellers</a>
+        <a class="qa-btn" href="admin-orders.html"><span>⚖️</span>Resolve Disputes</a>
+        <a class="qa-btn" href="admin-products.html"><span>⭐</span>Feature Products</a>
+        <a class="qa-btn" href="#" onclick="alert('Exporting data...')"><span>📤</span>Export Data</a>
+      </div>
+    </div>
+
+    <!-- RECENT ORDERS + TOP SELLERS -->
+    <div class="row3" style="display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-bottom:20px">
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #f0f2f5;display:flex;align-items:center;justify-content:space-between">
+          <div class="card-title" style="margin:0">📋 Recent Platform Orders</div>
+          <a href="admin-orders.html" style="font-size:0.78rem;color:#007185;font-weight:600">View All →</a>
+        </div>
+        <table>
+          <thead><tr><th>Order #</th><th>Buyer</th><th>Seller</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>#VS-10847</strong></td><td>Priya M.</td><td><a class="teal-link" href="seller-profile.html">TechMart</a></td><td>₹2,499</td><td><span class="status-badge sb-green">Delivered</span></td></tr>
+            <tr><td><strong>#VS-10846</strong></td><td>Rahul S.</td><td><a class="teal-link" href="seller-profile.html">FashionKart</a></td><td>₹1,199</td><td><span class="status-badge sb-blue">Shipped</span></td></tr>
+            <tr><td><strong>#VS-10845</strong></td><td>Aisha K.</td><td><a class="teal-link" href="seller-profile.html">GadgetZone</a></td><td>₹5,999</td><td><span class="status-badge sb-red">Dispute ⚖️</span></td></tr>
+            <tr><td><strong>#VS-10844</strong></td><td>Vikram P.</td><td><a class="teal-link" href="seller-profile.html">HomeDecor</a></td><td>₹899</td><td><span class="status-badge sb-yellow">Processing</span></td></tr>
+            <tr><td><strong>#VS-10843</strong></td><td>Neha R.</td><td><a class="teal-link" href="seller-profile.html">BookHub</a></td><td>₹349</td><td><span class="status-badge sb-green">Delivered</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div style="padding:16px 20px;border-bottom:1px solid #f0f2f5;display:flex;align-items:center;justify-content:space-between">
+          <div class="card-title" style="margin:0">🏆 Top Sellers This Month</div>
+          <a href="admin-customers.html" style="font-size:0.78rem;color:#007185;font-weight:600">View All →</a>
+        </div>
+        <table>
+          <thead><tr><th>#</th><th>Seller</th><th>GMV</th><th>Rating</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="seller-rank">1</div></td>
+              <td><a class="teal-link" href="seller-profile.html">TechMart India</a></td>
+              <td>₹4.2L</td>
+              <td>⭐ 4.9</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+            </tr>
+            <tr>
+              <td><div class="seller-rank" style="background:#9ca3af">2</div></td>
+              <td><a class="teal-link" href="seller-profile.html">GadgetZone</a></td>
+              <td>₹3.8L</td>
+              <td>⭐ 4.8</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+            </tr>
+            <tr>
+              <td><div class="seller-rank" style="background:#cd7f32">3</div></td>
+              <td><a class="teal-link" href="seller-profile.html">FashionKart</a></td>
+              <td>₹2.9L</td>
+              <td>⭐ 4.7</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+            </tr>
+            <tr>
+              <td><div class="seller-rank" style="background:#6b7280">4</div></td>
+              <td><a class="teal-link" href="seller-profile.html">HomeDecor Plus</a></td>
+              <td>₹2.1L</td>
+              <td>⭐ 4.6</td>
+              <td><span class="status-badge sb-yellow">Review</span></td>
+            </tr>
+            <tr>
+              <td><div class="seller-rank" style="background:#6b7280">5</div></td>
+              <td><a class="teal-link" href="seller-profile.html">BookHub</a></td>
+              <td>₹1.7L</td>
+              <td>⭐ 4.5</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
 
-    <!-- ===== PRODUCTS ===== -->
-    <div id="view-products" class="view">
-      <div class="view-hdr" style="display:flex;align-items:flex-start;justify-content:space-between">
-        <div><div class="view-title">Products</div><div class="view-sub">Sage AI keeps listings optimised. Aria manages inventory.</div></div>
-        <button class="tb-btn" onclick="openAddProduct()">+ Add Product</button>
-      </div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Total Products</div><div class="metric-val" style="font-size:1.4rem">284</div></div>
-        <div class="card-sm"><div class="metric-lbl">Low Stock</div><div class="metric-val" style="font-size:1.4rem;color:var(--yellow)">12</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Aria restocking</div></div>
-        <div class="card-sm"><div class="metric-lbl">Out of Stock</div><div class="metric-val" style="font-size:1.4rem;color:var(--red)">3</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Orders placed</div></div>
-        <div class="card-sm"><div class="metric-lbl">SEO Optimised</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">261</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Sage auto-updated</div></div>
-      </div>
-      <div class="prod-grid" id="productsGrid"></div>
-    </div>
-
-    <!-- ===== CUSTOMERS ===== -->
-    <div id="view-customers" class="view">
-      <div class="view-hdr"><div class="view-title">Customers</div><div class="view-sub">Rex AI manages all interactions. Atlas predicts churn risk.</div></div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Total Customers</div><div class="metric-val" style="font-size:1.4rem">8,421</div><div class="metric-change up">↑ 342 this month</div></div>
-        <div class="card-sm"><div class="metric-lbl">At Risk of Churn</div><div class="metric-val" style="font-size:1.4rem;color:var(--red)">28</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Atlas notified them</div></div>
-        <div class="card-sm"><div class="metric-lbl">VIP Customers</div><div class="metric-val" style="font-size:1.4rem;color:var(--yellow)">147</div><div class="metric-change up">↑ 12 new VIPs</div></div>
-        <div class="card-sm"><div class="metric-lbl">Avg LTV</div><div class="metric-val" style="font-size:1.4rem;color:var(--cyan)">$482</div><div class="metric-change up">↑ 8% vs last month</div></div>
-      </div>
-      <div class="card">
-        <div class="sec-hdr"><div class="sec-title">Customer List</div><span class="badge b-purple">🤖 Rex handling all support</span></div>
-        <table class="tbl">
-          <thead><tr><th>Customer</th><th>Email</th><th>Orders</th><th>LTV</th><th>Segment</th><th>Last Active</th><th>Action</th></tr></thead>
-          <tbody id="customersTable"></tbody>
-        </table>
+    <!-- AI AGENTS -->
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">🤖 AI Agent Status</div>
+      <div class="agent-grid">
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Aria</div><div class="agent-task">Listing moderation</div></div><div class="agent-count">234</div></div>
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Nova</div><div class="agent-task">Buyer support</div></div><div class="agent-count">89</div></div>
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Rex</div><div class="agent-task">Fraud detection</div></div><div class="agent-count">47</div></div>
+        <div class="agent-card"><div class="agent-dot idle"></div><div><div class="agent-name">Luna</div><div class="agent-task">Price optimization</div></div><div class="agent-count">12</div></div>
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Atlas</div><div class="agent-task">Seller analytics</div></div><div class="agent-count">156</div></div>
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Sage</div><div class="agent-task">Tax compliance</div></div><div class="agent-count">78</div></div>
+        <div class="agent-card"><div class="agent-dot idle"></div><div><div class="agent-name">Echo</div><div class="agent-task">SEO optimization</div></div><div class="agent-count">33</div></div>
+        <div class="agent-card"><div class="agent-dot"></div><div><div class="agent-name">Zen</div><div class="agent-task">Order processing</div></div><div class="agent-count">847</div></div>
       </div>
     </div>
 
-    <!-- ===== AI AGENTS ===== -->
-    <div id="view-agents" class="view">
-      <div class="view-hdr"><div class="view-title">AI Agents</div><div class="view-sub">Your autonomous workforce — running 24/7 without supervision</div></div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Agents Online</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">8/8</div></div>
-        <div class="card-sm"><div class="metric-lbl">Tasks Today</div><div class="metric-val" style="font-size:1.4rem;color:var(--cyan)" id="agTasks">2,841</div></div>
-        <div class="card-sm"><div class="metric-lbl">Revenue Attributed</div><div class="metric-val" style="font-size:1.4rem;color:var(--purple2)">$9,240</div></div>
-        <div class="card-sm"><div class="metric-lbl">Cost Saved</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">$18K</div><div style="font-size:0.7rem;color:var(--gray);margin-top:2px">vs human team/mo</div></div>
-      </div>
-      <div class="agent-grid" id="agentGrid"></div>
-    </div>
-
-    <!-- ===== ANALYTICS ===== -->
-    <div id="view-analytics" class="view">
-      <div class="view-hdr"><div class="view-title">Analytics</div><div class="view-sub">Atlas AI surfaces insights and acts on them automatically</div></div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Monthly Revenue</div><div class="metric-val" style="font-size:1.4rem;color:var(--cyan)">$284,920</div><div class="metric-change up">↑ 34% vs last month</div></div>
-        <div class="card-sm"><div class="metric-lbl">Sessions</div><div class="metric-val" style="font-size:1.4rem">84,201</div><div class="metric-change up">↑ 21%</div></div>
-        <div class="card-sm"><div class="metric-lbl">Add to Cart Rate</div><div class="metric-val" style="font-size:1.4rem;color:var(--yellow)">14.2%</div><div class="metric-change up">↑ 2.1%</div></div>
-        <div class="card-sm"><div class="metric-lbl">Return Rate</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">3.2%</div><div class="metric-change up">↓ 0.8% (better)</div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px">
-        <div class="card"><div class="sec-hdr"><div class="sec-title">Revenue Trend (6 months)</div></div><canvas id="analyticsChart" height="80"></canvas></div>
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Traffic Sources</div></div>
-          <canvas id="trafficChart" height="160"></canvas>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">🤖 Atlas AI Insights</div></div>
-          <div style="display:flex;flex-direction:column;gap:10px" id="atlasInsights"></div>
-        </div>
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Conversion Funnel</div></div>
-          <div id="funnel"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== MARKETING ===== -->
-    <div id="view-marketing" class="view">
-      <div class="view-hdr"><div class="view-title">Marketing</div><div class="view-sub">Nova AI runs all campaigns. Echo manages social. Sage handles SEO.</div></div>
-      <div class="grid-4" style="margin-bottom:20px">
-        <div class="card-sm"><div class="metric-lbl">Active Campaigns</div><div class="metric-val" style="font-size:1.4rem;color:var(--purple2)">12</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Nova managing all</div></div>
-        <div class="card-sm"><div class="metric-lbl">ROAS</div><div class="metric-val" style="font-size:1.4rem;color:var(--green)">4.8×</div><div class="metric-change up">↑ 0.6× this week</div></div>
-        <div class="card-sm"><div class="metric-lbl">Email Open Rate</div><div class="metric-val" style="font-size:1.4rem;color:var(--cyan)">38.4%</div><div class="metric-change up">Industry avg: 21%</div></div>
-        <div class="card-sm"><div class="metric-lbl">Social Reach</div><div class="metric-val" style="font-size:1.4rem;color:var(--yellow)">284K</div><div style="font-size:0.7rem;color:var(--lav);margin-top:2px">🤖 Echo posting daily</div></div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">Active Campaigns</div><button class="tb-btn" style="font-size:0.75rem;padding:5px 12px" onclick="openNewCampaign()">+ New</button></div>
-          <div id="campaignsList" style="display:flex;flex-direction:column;gap:10px"></div>
-        </div>
-        <div class="card">
-          <div class="sec-hdr"><div class="sec-title">🤖 Echo — Social Schedule</div></div>
-          <div id="socialSchedule" style="display:flex;flex-direction:column;gap:10px"></div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="sec-hdr"><div class="sec-title">🔍 Sage SEO — Top Keywords</div></div>
-        <table class="tbl">
-          <thead><tr><th>Keyword</th><th>Position</th><th>Change</th><th>Volume</th><th>AI Action</th></tr></thead>
-          <tbody id="seoTable"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- ===== STOREFRONT ===== -->
-    <div id="view-storefront" class="view">
-      <div class="view-hdr"><div class="view-title">Storefront</div><div class="view-sub">Your AI-generated store — live and converting</div></div>
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:20px">
-        <div class="card" style="padding:0;overflow:hidden">
-          <div style="background:var(--bg3);padding:12px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)">
-            <div style="width:10px;height:10px;border-radius:50%;background:#ff5f57"></div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#ffbd2e"></div>
-            <div style="width:10px;height:10px;border-radius:50%;background:#28c840"></div>
-            <div style="margin-left:8px;background:var(--card);border-radius:5px;padding:4px 14px;font-size:0.75rem;color:var(--gray)">mystore.vibestore.ai</div>
-            <button onclick="toast('✅','Store theme updated by AI','success')" style="margin-left:auto;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--gray);font-size:0.72rem">🤖 AI Redesign</button>
-          </div>
-          <div style="padding:32px;text-align:center;min-height:400px;background:linear-gradient(180deg,rgba(124,58,237,0.05),transparent)">
-            <div style="font-size:2rem;font-weight:800;margin-bottom:8px;background:linear-gradient(135deg,var(--lav),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent">MyStore</div>
-            <div style="color:var(--gray);font-size:0.9rem;margin-bottom:28px">Premium tech accessories — AI-curated for you</div>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:600px;margin:0 auto">
-              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer" onclick="toast('🛒','Added to cart','success')">
-                <div style="font-size:2rem;margin-bottom:8px">🎧</div>
-                <div style="font-size:0.8rem;font-weight:600;margin-bottom:4px">Earbuds Pro</div>
-                <div style="color:var(--cyan);font-weight:700">$89</div>
-                <button onclick="event.stopPropagation();toast('🛒','Added to cart','success')" style="width:100%;margin-top:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:6px;padding:6px;color:white;font-size:0.72rem;font-weight:600">Add to Cart</button>
-              </div>
-              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer">
-                <div style="font-size:2rem;margin-bottom:8px">⌚</div>
-                <div style="font-size:0.8rem;font-weight:600;margin-bottom:4px">Smart Watch</div>
-                <div style="color:var(--cyan);font-weight:700">$249</div>
-                <button onclick="event.stopPropagation();toast('🛒','Added to cart','success')" style="width:100%;margin-top:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:6px;padding:6px;color:white;font-size:0.72rem;font-weight:600">Add to Cart</button>
-              </div>
-              <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;cursor:pointer">
-                <div style="font-size:2rem;margin-bottom:8px">💻</div>
-                <div style="font-size:0.8rem;font-weight:600;margin-bottom:4px">Laptop Stand</div>
-                <div style="color:var(--cyan);font-weight:700">$67</div>
-                <button onclick="event.stopPropagation();toast('🛒','Added to cart','success')" style="width:100%;margin-top:10px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:6px;padding:6px;color:white;font-size:0.72rem;font-weight:600">Add to Cart</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div style="display:flex;flex-direction:column;gap:16px">
-          <div class="card">
-            <div class="sec-title" style="margin-bottom:12px">Theme Settings</div>
-            <div class="form-group"><label class="form-label">Store Name</label><input class="form-input" value="MyStore"/></div>
-            <div class="form-group"><label class="form-label">Primary Color</label><input class="form-input" type="color" value="#7c3aed" style="height:40px;padding:4px"/></div>
-            <div class="form-group"><label class="form-label">Font</label><select class="form-input form-select"><option>Space Grotesk</option><option>Inter</option><option>Playfair Display</option></select></div>
-            <button class="tb-btn" style="width:100%" onclick="toast('✅','Theme saved & deployed','success')">Save & Deploy</button>
-          </div>
-          <div class="card">
-            <div class="sec-title" style="margin-bottom:10px">🤖 AI Store Actions</div>
-            <div style="display:flex;flex-direction:column;gap:8px">
-              <button onclick="toast('🤖','Sage rewrote 24 product descriptions','info')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.8rem;text-align:left;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--border)'">🔍 Auto-optimize all SEO</button>
-              <button onclick="toast('🤖','Nova generated 3 new banners','info')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.8rem;text-align:left;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--border)'">🎨 AI redesign homepage</button>
-              <button onclick="toast('🤖','Luna updated 142 prices for max margin','info')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.8rem;text-align:left;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--border)'">💲 Optimize all prices</button>
-              <button onclick="toast('🤖','Store speed optimised — 98/100','info')" style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;color:var(--white);font-size:0.8rem;text-align:left;transition:border-color 0.2s" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--border)'">⚡ AI performance boost</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ===== SETTINGS ===== -->
-    <div id="view-settings" class="view">
-      <div class="view-hdr"><div class="view-title">Settings</div><div class="view-sub">Manage your store and AI agent configuration</div></div>
-      <div class="tabs" id="settingsTabs">
-        <div class="tab active" onclick="setTab(0,'settingsTabs')">General</div>
-        <div class="tab" onclick="setTab(1,'settingsTabs')">AI Agents</div>
-        <div class="tab" onclick="setTab(2,'settingsTabs')">Billing</div>
-        <div class="tab" onclick="setTab(3,'settingsTabs')">Integrations</div>
-      </div>
-      <div id="settings-tab-0" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div class="card">
-          <div class="sec-title" style="margin-bottom:16px">Store Details</div>
-          <div class="form-group"><label class="form-label">Store Name</label><input class="form-input" value="MyStore"/></div>
-          <div class="form-group"><label class="form-label">Contact Email</label><input class="form-input" value="sarth@mystore.com" type="email"/></div>
-          <div class="form-group"><label class="form-label">Currency</label><select class="form-input form-select"><option>USD ($)</option><option>INR (₹)</option><option>EUR (€)</option></select></div>
-          <div class="form-group"><label class="form-label">Timezone</label><select class="form-input form-select"><option>Asia/Kolkata (IST)</option><option>UTC</option><option>America/New_York</option></select></div>
-          <button class="tb-btn" onclick="toast('✅','Settings saved','success')">Save Changes</button>
-        </div>
-        <div class="card">
-          <div class="sec-title" style="margin-bottom:16px">Notifications</div>
-          <div style="display:flex;flex-direction:column;gap:14px">
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div><div style="font-size:0.85rem;font-weight:500">Order notifications</div><div style="font-size:0.72rem;color:var(--gray)">Get notified on new orders</div></div>
-              <div onclick="this.classList.toggle('on');toast('✅','Preference saved','success')" style="width:44px;height:24px;background:var(--purple);border-radius:100px;cursor:pointer;position:relative;transition:background 0.2s"><div style="width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;right:3px;transition:right 0.2s"></div></div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div><div style="font-size:0.85rem;font-weight:500">AI agent alerts</div><div style="font-size:0.72rem;color:var(--gray)">Alerts when agents need attention</div></div>
-              <div onclick="toast('✅','Preference saved','success')" style="width:44px;height:24px;background:var(--purple);border-radius:100px;cursor:pointer;position:relative"><div style="width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;right:3px"></div></div>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between">
-              <div><div style="font-size:0.85rem;font-weight:500">Weekly AI report</div><div style="font-size:0.72rem;color:var(--gray)">Summary of what agents did</div></div>
-              <div onclick="toast('✅','Preference saved','success')" style="width:44px;height:24px;background:var(--purple);border-radius:100px;cursor:pointer;position:relative"><div style="width:18px;height:18px;background:white;border-radius:50%;position:absolute;top:3px;right:3px"></div></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="settings-tab-1" style="display:none">
-        <div class="card">
-          <div class="sec-title" style="margin-bottom:16px">AI Agent Configuration</div>
-          <div id="agentSettings" style="display:flex;flex-direction:column;gap:12px"></div>
-        </div>
-      </div>
-      <div id="settings-tab-2" style="display:none">
-        <div class="card">
-          <div class="sec-title" style="margin-bottom:16px">Current Plan</div>
-          <div style="background:linear-gradient(135deg,rgba(124,58,237,0.12),rgba(6,182,212,0.08));border:1px solid rgba(124,58,237,0.3);border-radius:12px;padding:20px;margin-bottom:16px">
-            <div style="font-size:1.2rem;font-weight:700;color:var(--lav);margin-bottom:4px">Growth Plan — $49/mo</div>
-            <div style="font-size:0.85rem;color:var(--gray)">Renews on June 19, 2026 · All 8 agents active · 0.5% transaction fee</div>
-          </div>
-          <button class="tb-btn" onclick="toast('🚀','Upgrade flow opening...','info')">Upgrade to Enterprise</button>
-        </div>
-      </div>
-      <div id="settings-tab-3" style="display:none">
-        <div class="grid-3">
-          <div class="card" style="cursor:pointer" onclick="toast('✅','Shopify import started — Zen is migrating your data','info')"><div style="font-size:1.8rem;margin-bottom:10px">🛍️</div><div style="font-weight:600;margin-bottom:4px">Shopify Import</div><div style="font-size:0.78rem;color:var(--gray)">Migrate products, orders, customers</div></div>
-          <div class="card" style="cursor:pointer" onclick="toast('✅','Stripe connected','success')"><div style="font-size:1.8rem;margin-bottom:10px">💳</div><div style="font-weight:600;margin-bottom:4px">Stripe Payments</div><div class="badge b-green" style="margin-top:4px">Connected</div></div>
-          <div class="card" style="cursor:pointer" onclick="toast('✅','Meta Ads connected','success')"><div style="font-size:1.8rem;margin-bottom:10px">📘</div><div style="font-weight:600;margin-bottom:4px">Meta Ads</div><div class="badge b-green" style="margin-top:4px">Connected</div></div>
-          <div class="card" style="cursor:pointer" onclick="toast('✅','Google Ads connecting...','info')"><div style="font-size:1.8rem;margin-bottom:10px">🔍</div><div style="font-weight:600;margin-bottom:4px">Google Ads</div><div class="badge b-yellow" style="margin-top:4px">Connect</div></div>
-          <div class="card" style="cursor:pointer" onclick="toast('✅','WhatsApp Business connected','success')"><div style="font-size:1.8rem;margin-bottom:10px">💬</div><div style="font-weight:600;margin-bottom:4px">WhatsApp Business</div><div class="badge b-green" style="margin-top:4px">Connected</div></div>
-          <div class="card" style="cursor:pointer" onclick="toast('ℹ️','Shiprocket integration starting','info')"><div style="font-size:1.8rem;margin-bottom:10px">🚚</div><div style="font-weight:600;margin-bottom:4px">Shiprocket</div><div class="badge b-yellow" style="margin-top:4px">Connect</div></div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- /content -->
-</div><!-- /main -->
-
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-order" onclick="closeModal('order')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title" id="modal-order-title">Order #4821</div><div style="font-size:0.78rem;color:var(--gray);margin-top:3px">Managed by Zen AI</div></div>
-      <div class="modal-close" onclick="closeModal('order')">✕</div>
-    </div>
-    <div class="modal-body" id="modal-order-body"></div>
   </div>
 </div>
 
-<div class="modal-overlay" id="modal-product" onclick="closeModal('product')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title" id="modal-product-title">Product</div><div style="font-size:0.78rem;color:var(--gray);margin-top:3px">Sage AI keeps this listing optimised</div></div>
-      <div class="modal-close" onclick="closeModal('product')">✕</div>
-    </div>
-    <div class="modal-body" id="modal-product-body"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-agent" onclick="closeModal('agent')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title" id="modal-agent-title">Agent</div></div>
-      <div class="modal-close" onclick="closeModal('agent')">✕</div>
-    </div>
-    <div class="modal-body" id="modal-agent-body"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-customer" onclick="closeModal('customer')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title" id="modal-customer-title">Customer</div><div style="font-size:0.78rem;color:var(--gray);margin-top:3px">Rex AI manages this relationship</div></div>
-      <div class="modal-close" onclick="closeModal('customer')">✕</div>
-    </div>
-    <div class="modal-body" id="modal-customer-body"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-add-product" onclick="closeModal('add-product')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title">Add New Product</div><div style="font-size:0.78rem;color:var(--gray);margin-top:3px">Sage AI will auto-optimise once saved</div></div>
-      <div class="modal-close" onclick="closeModal('add-product')">✕</div>
-    </div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Product Name</label><input class="form-input" placeholder="e.g. Wireless Mouse Pro"/></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group"><label class="form-label">Price ($)</label><input class="form-input" type="number" placeholder="49.99"/></div>
-        <div class="form-group"><label class="form-label">Stock</label><input class="form-input" type="number" placeholder="100"/></div>
-      </div>
-      <div class="form-group"><label class="form-label">Category</label><select class="form-input form-select"><option>Electronics</option><option>Accessories</option><option>Home</option><option>Fashion</option></select></div>
-      <div class="form-group"><label class="form-label">Description</label><textarea class="form-input" placeholder="Product description... (Sage AI will enhance this)"></textarea></div>
-      <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.78rem;color:var(--lav)">
-        🤖 <strong>AI will automatically:</strong> Write SEO title & description (Sage) · Set optimal price (Luna) · Forecast demand (Atlas) · Create social post (Echo)
-      </div>
-      <button class="tb-btn" style="width:100%" onclick="saveProduct()">Save & Let AI Optimise</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-campaign" onclick="closeModal('campaign')">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-hdr">
-      <div><div class="modal-title">New Campaign</div><div style="font-size:0.78rem;color:var(--gray);margin-top:3px">Nova AI will write copy and manage spend</div></div>
-      <div class="modal-close" onclick="closeModal('campaign')">✕</div>
-    </div>
-    <div class="modal-body">
-      <div class="form-group"><label class="form-label">Campaign Name</label><input class="form-input" placeholder="e.g. Summer Sale 2025"/></div>
-      <div class="form-group"><label class="form-label">Channel</label><select class="form-input form-select"><option>Meta Ads</option><option>Google Ads</option><option>Email</option><option>Instagram</option><option>All Channels</option></select></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-        <div class="form-group"><label class="form-label">Budget ($)</label><input class="form-input" type="number" placeholder="500"/></div>
-        <div class="form-group"><label class="form-label">Goal</label><select class="form-input form-select"><option>Revenue</option><option>Traffic</option><option>Awareness</option></select></div>
-      </div>
-      <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:8px;padding:12px;margin-bottom:16px;font-size:0.78rem;color:var(--cyan)">
-        🤖 <strong>Nova AI will:</strong> Write all ad copy · Design creatives · A/B test automatically · Optimise budget allocation daily
-      </div>
-      <button class="tb-btn" style="width:100%" onclick="launchCampaign()">Launch with AI</button>
-    </div>
-  </div>
-</div>
-
-<!-- TOAST -->
-<div id="toast"></div>
-
+<script src="auth.js"></script>
 <script>
-// ===== DATA =====
-const ORDERS = [
-  {id:'#5001',customer:'Aryan K.',email:'aryan@example.com',items:2,product:'Wireless Earbuds Pro',total:'$89',date:'Today, 11:42',agent:'Zen',status:'Processing'},
-  {id:'#5000',customer:'Priya S.',email:'priya@example.com',items:1,product:'Smart Watch Ultra',total:'$249',date:'Today, 10:18',agent:'Zen',status:'Shipped'},
-  {id:'#4999',customer:'Rahul M.',email:'rahul@example.com',items:3,product:'Laptop Stand Bundle',total:'$201',date:'Today, 09:05',agent:'Zen',status:'Delivered'},
-  {id:'#4998',customer:'Sarah J.',email:'sarah@example.com',items:1,product:'Mechanical Keyboard',total:'$139',date:'Yesterday',agent:'Zen',status:'Refunded'},
-  {id:'#4997',customer:'Mike R.',email:'mike@example.com',items:4,product:'USB-C Hub Pro',total:'$196',date:'Yesterday',agent:'Zen',status:'Delivered'},
-  {id:'#4996',customer:'Sneha T.',email:'sneha@example.com',items:1,product:'Webcam HD',total:'$79',date:'2 days ago',agent:'Zen',status:'Shipped'},
-  {id:'#4995',customer:'James L.',email:'james@example.com',items:2,product:'Desk Mat XL',total:'$58',date:'2 days ago',agent:'Zen',status:'Delivered'},
-];
-const PRODUCTS = [
-  {emoji:'🎧',name:'Wireless Earbuds Pro',price:'$89',stock:142,category:'Electronics',seo:'✓',status:'Active'},
-  {emoji:'⌚',name:'Smart Watch Ultra',price:'$249',stock:89,category:'Electronics',seo:'✓',status:'Active'},
-  {emoji:'💻',name:'Laptop Stand Bundle',price:'$67',stock:8,category:'Accessories',seo:'✓',status:'Low Stock'},
-  {emoji:'⌨️',name:'Mechanical Keyboard',price:'$139',stock:54,category:'Electronics',seo:'✓',status:'Active'},
-  {emoji:'🖱️',name:'Wireless Mouse',price:'$49',stock:0,category:'Electronics',seo:'✓',status:'Out of Stock'},
-  {emoji:'📷',name:'Webcam HD 4K',price:'$79',stock:31,category:'Electronics',seo:'✓',status:'Active'},
-  {emoji:'🔌',name:'USB-C Hub Pro',price:'$49',stock:67,category:'Accessories',seo:'✓',status:'Active'},
-  {emoji:'🖥️',name:'Monitor Arm',price:'$89',stock:23,category:'Accessories',seo:'✓',status:'Active'},
-];
-const CUSTOMERS = [
-  {name:'Aryan Kapoor',email:'aryan@example.com',orders:12,ltv:'$1,284',segment:'VIP',active:'Today'},
-  {name:'Priya Singh',email:'priya@example.com',orders:8,ltv:'$892',segment:'Regular',active:'Yesterday'},
-  {name:'Rahul Mehta',email:'rahul@example.com',orders:3,ltv:'$287',segment:'New',active:'3 days ago'},
-  {name:'Sarah Johnson',email:'sarah@example.com',orders:1,ltv:'$89',segment:'At Risk',active:'14 days ago'},
-  {name:'Mike Rodriguez',email:'mike@example.com',orders:21,ltv:'$2,847',segment:'VIP',active:'Today'},
-  {name:'Sneha Tiwari',email:'sneha@example.com',orders:5,ltv:'$541',segment:'Regular',active:'2 days ago'},
-];
-const AGENTS = [
-  {emoji:'📦',name:'Aria',role:'Inventory Agent',desc:'Monitors stock, predicts demand, auto-triggers restock orders before you run out.',tasks:'1,247 SKUs tracked',revenue:'$2,100',uptime:'99.9%',actions:284},
-  {emoji:'📣',name:'Nova',role:'Marketing Agent',desc:'Writes ad copy, designs campaigns, A/B tests creatives, optimises spend on Meta & Google.',tasks:'12 campaigns running',revenue:'$4,820',uptime:'99.8%',actions:142},
-  {emoji:'💬',name:'Rex',role:'Support Agent',desc:'Resolves tickets instantly, handles returns, upsells — 24/7 with full context awareness.',tasks:'34 chats handled',revenue:'$890',uptime:'100%',actions:341},
-  {emoji:'💲',name:'Luna',role:'Pricing Agent',desc:'Dynamically adjusts prices based on competitors, demand signals, and margin targets.',tasks:'380 prices optimised',revenue:'$1,240',uptime:'99.9%',actions:89},
-  {emoji:'📊',name:'Atlas',role:'Analytics Agent',desc:'Surfaces insights, forecasts revenue, identifies churn risk, delivers weekly reports.',tasks:'3 new insights',revenue:'$640',uptime:'100%',actions:47},
-  {emoji:'🔍',name:'Sage',role:'SEO Agent',desc:'Auto-generates titles, descriptions, meta tags. Updates listings based on keyword trends.',tasks:'89 listings updated',revenue:'$1,180',uptime:'99.7%',actions:231},
-  {emoji:'📱',name:'Echo',role:'Social Agent',desc:'Schedules posts, writes captions, replies to comments across Instagram, X, LinkedIn.',tasks:'6 posts scheduled',revenue:'$520',uptime:'99.9%',actions:178},
-  {emoji:'🚚',name:'Zen',role:'Operations Agent',desc:'Manages vendors, tracks shipments, handles fulfilment workflows end-to-end.',tasks:'17 shipments tracked',revenue:'$640',uptime:'100%',actions:312},
-];
-const FEED_EVENTS = [
-  {agent:'Aria',emoji:'📦',action:'Restocked "USB-C Hub Pro" — 200 units ordered from supplier',result:'ETA: 3 days'},
-  {agent:'Luna',emoji:'💲',action:'"Wireless Earbuds" price adjusted $89→$94 based on competitor drop',result:'Margin +5.6%'},
-  {agent:'Nova',emoji:'📣',action:'New campaign "Summer Sale" launched targeting 25K users on Meta',result:'Est. ROAS: 4.2×'},
-  {agent:'Rex',emoji:'💬',action:'Ticket #5821 resolved — refund processed for Sarah J.',result:'4.2s response time'},
-  {agent:'Sage',emoji:'🔍',action:'14 product listings SEO-updated — avg rank improved 8 positions',result:'Organic CTR +12%'},
-  {agent:'Echo',emoji:'📱',action:'Instagram post scheduled for 9AM — product drop announcement',result:'Est. reach: 12K'},
-  {agent:'Atlas',emoji:'📊',action:'Revenue forecast revised upward: $18,200 today (+42% above target)',result:'High confidence'},
-  {agent:'Zen',emoji:'🚚',action:'Vendor invoice auto-approved — Sunrise Logistics ₹1,24,000',result:'Saved 2hrs manual work'},
-];
-
-// ===== NAV =====
-const pageConfig = {
-  dashboard:{title:'Dashboard',btn:'+ New Product',btnAction:'openAddProduct'},
-  orders:{title:'Orders',btn:'⬇ Export',btnAction:'exportOrders'},
-  products:{title:'Products',btn:'+ Add Product',btnAction:'openAddProduct'},
-  customers:{title:'Customers',btn:'+ Import',btnAction:"()=>toast('📥','Import started','info')"},
-  agents:{title:'AI Agents',btn:'⚙ Configure',btnAction:'configureAgents'},
-  analytics:{title:'Analytics',btn:'⬇ Report',btnAction:"()=>toast('📊','Report generated','success')"},
-  marketing:{title:'Marketing',btn:'+ Campaign',btnAction:'openNewCampaign'},
-  storefront:{title:'Storefront',btn:'Preview Store',btnAction:"()=>toast('🌐','Opening preview...','info')"},
-  settings:{title:'Settings',btn:'Save All',btnAction:"()=>toast('✅','All settings saved','success')"},
-};
-function nav(page) {
-  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
-  event && event.currentTarget && event.currentTarget.classList.add('active');
-  document.querySelectorAll('.sb-item').forEach(i=>{if(i.getAttribute('onclick')===`nav('${page}')`)i.classList.add('active')});
-  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
-  const view = document.getElementById('view-'+page);
-  if(view) view.classList.add('active');
-  const cfg = pageConfig[page]||{title:page,btn:'Action'};
-  document.getElementById('pageTitle').textContent = cfg.title;
-  document.getElementById('topActionBtn').textContent = cfg.btn;
-  document.getElementById('topActionBtn').onclick = new Function(cfg.btnAction+'()');
-  if(page==='analytics') setTimeout(initAnalyticsCharts,100);
-  if(page==='agents') initAgentSettings();
+const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
 }
-
-// ===== TABLES =====
-function statusBadge(s) {
-  const m={Processing:'b-yellow',Shipped:'b-cyan',Delivered:'b-green',Refunded:'b-red','At Risk':'b-red',VIP:'b-purple',Regular:'b-cyan',New:'b-green','Out of Stock':'b-red','Low Stock':'b-yellow',Active:'b-green'};
-  return `<span class="badge ${m[s]||'b-cyan'}">${s}</span>`;
-}
-function renderOrdersTable(filter='all') {
-  const tb = document.getElementById('ordersTable');
-  if(!tb) return;
-  const rows = filter==='all'?ORDERS:ORDERS.filter(o=>o.status.toLowerCase()===filter.toLowerCase());
-  tb.innerHTML = rows.map(o=>`
-    <tr onclick="openOrder('${o.id}')">
-      <td style="font-weight:600;color:var(--purple2)">${o.id}</td>
-      <td>${o.customer}</td>
-      <td>${o.items} item${o.items>1?'s':''}</td>
-      <td style="font-weight:600;color:var(--cyan)">${o.total}</td>
-      <td style="color:var(--gray);font-size:0.78rem">${o.date}</td>
-      <td><span style="font-size:0.72rem;color:var(--lav)">🤖 ${o.agent}</span></td>
-      <td>${statusBadge(o.status)}</td>
-      <td><button onclick="event.stopPropagation();openOrder('${o.id}')" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.72rem;color:var(--white)">View</button></td>
-    </tr>`).join('');
-}
-function filterOrders(v){renderOrdersTable(v)}
-
-function renderProductsGrid() {
-  const g = document.getElementById('productsGrid');
-  if(!g) return;
-  g.innerHTML = PRODUCTS.map((p,i)=>`
-    <div class="prod-card" onclick="openProduct(${i})">
-      <div class="prod-img">${p.emoji}</div>
-      <div class="prod-info">
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-price">${p.price}</div>
-        <div class="prod-meta">
-          <span class="prod-stock">Stock: ${p.stock}</span>
-          ${statusBadge(p.status)}
-        </div>
-        <div style="font-size:0.68rem;color:var(--lav);margin-top:6px">🤖 SEO ${p.seo} optimised</div>
-      </div>
-    </div>`).join('');
-}
-
-function renderCustomersTable() {
-  const tb = document.getElementById('customersTable');
-  if(!tb) return;
-  tb.innerHTML = CUSTOMERS.map((c,i)=>`
-    <tr onclick="openCustomer(${i})">
-      <td style="font-weight:600">${c.name}</td>
-      <td style="color:var(--gray);font-size:0.78rem">${c.email}</td>
-      <td>${c.orders}</td>
-      <td style="color:var(--cyan);font-weight:600">${c.ltv}</td>
-      <td>${statusBadge(c.segment)}</td>
-      <td style="color:var(--gray);font-size:0.78rem">${c.active}</td>
-      <td><button onclick="event.stopPropagation();toast('💬','Rex AI opening chat with ${c.name}','info')" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:0.72rem;color:var(--white)">Contact</button></td>
-    </tr>`).join('');
-}
-
-function renderAgentGrid() {
-  const g = document.getElementById('agentGrid');
-  if(!g) return;
-  g.innerHTML = AGENTS.map((a,i)=>`
-    <div class="agent-card running" onclick="openAgent(${i})">
-      <span class="ac-emoji">${a.emoji}</span>
-      <div class="ac-name">${a.name}</div>
-      <div class="ac-role">${a.role}</div>
-      <div class="ac-desc">${a.desc}</div>
-      <div class="ac-status"><div class="ac-dot"></div>${a.tasks}</div>
-      <div class="ac-stats">
-        <div class="ac-stat"><div class="ac-stat-val" style="color:var(--cyan)">$${Math.floor(Math.random()*1000+500)}</div><div class="ac-stat-lbl">Revenue</div></div>
-        <div class="ac-stat"><div class="ac-stat-val" style="color:var(--green)">${a.uptime}</div><div class="ac-stat-lbl">Uptime</div></div>
-      </div>
-    </div>`).join('');
-}
-
-function renderDashOrders() {
-  const tb = document.getElementById('dbOrders');
-  if(!tb) return;
-  tb.innerHTML = ORDERS.slice(0,4).map(o=>`
-    <tr onclick="nav('orders')">
-      <td style="font-weight:600;color:var(--purple2)">${o.id}</td>
-      <td>${o.customer}</td>
-      <td style="color:var(--cyan);font-weight:600">${o.total}</td>
-      <td>${statusBadge(o.status)}</td>
-    </tr>`).join('');
-}
-
-function renderMarketing() {
-  const camps = document.getElementById('campaignsList');
-  const social = document.getElementById('socialSchedule');
-  const seo = document.getElementById('seoTable');
-  if(camps) camps.innerHTML = [
-    {name:'Summer Sale — Meta',status:'Active',spend:'$284',roas:'4.8×',reach:'12.4K'},
-    {name:'Earbuds Launch — Google',status:'Active',spend:'$142',roas:'5.1×',reach:'8.2K'},
-    {name:'VIP Re-engagement — Email',status:'Active',spend:'$0',roas:'—',reach:'1.4K'},
-  ].map(c=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px">
-    <div><div style="font-size:0.82rem;font-weight:600">${c.name}</div><div style="font-size:0.7rem;color:var(--gray);margin-top:2px">Spend: ${c.spend} · ROAS: ${c.roas} · Reach: ${c.reach}</div></div>
-    <span class="badge b-green">${c.status}</span>
-  </div>`).join('');
-  if(social) social.innerHTML = [
-    {time:'9:00 AM',platform:'Instagram',content:'New product drop 🎧',status:'Scheduled'},
-    {time:'2:00 PM',platform:'X (Twitter)',content:'Customer spotlight feature',status:'Scheduled'},
-    {time:'6:00 PM',platform:'LinkedIn',content:'Behind the scenes — AI ops',status:'Draft'},
-  ].map(s=>`<div style="display:flex;align-items:center;gap:12px;padding:10px;background:var(--card);border:1px solid var(--border);border-radius:8px">
-    <div style="font-size:0.72rem;color:var(--gray);min-width:60px">${s.time}</div>
-    <div style="flex:1"><div style="font-size:0.8rem;font-weight:600">${s.platform}</div><div style="font-size:0.72rem;color:var(--gray)">${s.content}</div></div>
-    <span class="badge ${s.status==='Scheduled'?'b-cyan':'b-yellow'}">${s.status}</span>
-  </div>`).join('');
-  if(seo) seo.innerHTML = [
-    {kw:'wireless earbuds india',pos:3,chg:'+2',vol:'18K','action':'Optimised title tag'},
-    {kw:'best smart watch 2025',pos:7,chg:'+5',vol:'22K','action':'Updated meta description'},
-    {kw:'laptop stand for desk',pos:11,chg:'-1',vol:'8K','action':'Building backlinks'},
-    {kw:'mechanical keyboard under 5000',pos:4,chg:'+3',vol:'12K','action':'Added schema markup'},
-  ].map(k=>`<tr>
-    <td style="font-weight:500">${k.kw}</td>
-    <td style="font-weight:700;color:var(--cyan)">#${k.pos}</td>
-    <td class="${k.chg.startsWith('+')?'up':'down'}">${k.chg}</td>
-    <td style="color:var(--gray)">${k.vol}/mo</td>
-    <td style="color:var(--lav);font-size:0.75rem">🤖 ${k.action}</td>
-  </tr>`).join('');
-}
-
-function renderAnalyticsInsights() {
-  const el = document.getElementById('atlasInsights');
-  const funnelEl = document.getElementById('funnel');
-  if(el) el.innerHTML = [
-    {icon:'📈',title:'Revenue on track for record month',desc:'If current trend holds, April will be $298K — up 41% vs March.',color:'var(--green)'},
-    {icon:'⚠️',title:'3 high-value customers at churn risk',desc:'Sent re-engagement offers via Rex. Historical save rate: 68%.',color:'var(--yellow)'},
-    {icon:'🎯',title:'Earbuds converting 2× better on mobile',desc:'Luna moved 30% more budget to mobile placements.',color:'var(--cyan)'},
-  ].map(i=>`<div style="display:flex;gap:12px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px">
-    <div style="font-size:1.4rem">${i.icon}</div>
-    <div><div style="font-size:0.82rem;font-weight:600;margin-bottom:3px">${i.title}</div><div style="font-size:0.75rem;color:var(--gray)">${i.desc}</div></div>
-  </div>`).join('');
-  if(funnelEl) {
-    const steps = [{label:'Sessions',val:84201,pct:100},{label:'Product View',val:38420,pct:46},{label:'Add to Cart',val:11940,pct:14},{label:'Checkout',val:6180,pct:7},{label:'Purchase',val:4041,pct:4.8}];
-    funnelEl.innerHTML = steps.map(s=>`<div style="margin-bottom:10px">
-      <div style="display:flex;justify-content:space-between;font-size:0.78rem;margin-bottom:4px"><span>${s.label}</span><span style="font-weight:600">${s.val.toLocaleString()} <span style="color:var(--gray)">(${s.pct}%)</span></span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:${s.pct*2}%"></div></div>
-    </div>`).join('');
-  }
-}
-
-function initAgentSettings() {
-  const el = document.getElementById('agentSettings');
-  if(!el||el.children.length>0) return;
-  el.innerHTML = AGENTS.map(a=>`
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:10px">
-      <div style="display:flex;align-items:center;gap:12px">
-        <span style="font-size:1.3rem">${a.emoji}</span>
-        <div><div style="font-size:0.85rem;font-weight:600">${a.name}</div><div style="font-size:0.72rem;color:var(--gray)">${a.role}</div></div>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span class="badge b-green">Active</span>
-        <button onclick="toast('⚙️','${a.name} configuration opening...','info')" style="background:transparent;border:1px solid var(--border);border-radius:6px;padding:5px 10px;color:var(--gray);font-size:0.75rem">Configure</button>
-      </div>
-    </div>`).join('');
-}
-
-// ===== MODALS =====
-function openOrder(id) {
-  const o = ORDERS.find(x=>x.id===id);
-  if(!o) return;
-  document.getElementById('modal-order-title').textContent = `Order ${o.id}`;
-  document.getElementById('modal-order-body').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
-      <div class="card-sm"><div style="font-size:0.72rem;color:var(--gray)">Customer</div><div style="font-weight:600;margin-top:4px">${o.customer}</div><div style="font-size:0.75rem;color:var(--gray)">${o.email}</div></div>
-      <div class="card-sm"><div style="font-size:0.72rem;color:var(--gray)">Order Total</div><div style="font-weight:700;font-size:1.2rem;color:var(--cyan);margin-top:4px">${o.total}</div></div>
-      <div class="card-sm"><div style="font-size:0.72rem;color:var(--gray)">Status</div><div style="margin-top:6px">${statusBadge(o.status)}</div></div>
-      <div class="card-sm"><div style="font-size:0.72rem;color:var(--gray)">Date</div><div style="font-weight:500;margin-top:4px;font-size:0.85rem">${o.date}</div></div>
-    </div>
-    <div class="card-sm" style="margin-bottom:16px">
-      <div style="font-size:0.72rem;color:var(--gray);margin-bottom:8px">Items Ordered</div>
-      <div style="display:flex;align-items:center;gap:10px;padding:8px;background:rgba(255,255,255,0.03);border-radius:8px">
-        <div style="font-size:1.5rem">🎧</div>
-        <div style="flex:1"><div style="font-size:0.85rem;font-weight:500">${o.product}</div><div style="font-size:0.72rem;color:var(--gray)">Qty: ${o.items}</div></div>
-        <div style="font-weight:700;color:var(--cyan)">${o.total}</div>
-      </div>
-    </div>
-    <div class="card-sm" style="margin-bottom:16px;background:rgba(124,58,237,0.08);border-color:rgba(124,58,237,0.2)">
-      <div style="font-size:0.72rem;color:var(--lav);margin-bottom:8px;font-weight:700">🤖 Zen AI Activity</div>
-      <div style="font-size:0.78rem;color:var(--gray)">Order auto-processed · Fulfilment triggered · Customer notified · Tracking sent</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button onclick="toast('📤','Refund processed by Rex AI','success');closeModal('order')" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:0.82rem">Refund</button>
-      <button onclick="toast('📦','Reshipped by Zen AI','success');closeModal('order')" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:0.82rem">Reship</button>
-      <button onclick="toast('💬','Rex AI opening chat...','info');closeModal('order')" class="tb-btn" style="flex:1">Contact Customer</button>
-    </div>`;
-  openModal('order');
-}
-
-function openProduct(i) {
-  const p = PRODUCTS[i];
-  document.getElementById('modal-product-title').textContent = p.name;
-  document.getElementById('modal-product-body').innerHTML = `
-    <div style="text-align:center;padding:20px;background:linear-gradient(135deg,rgba(124,58,237,0.1),rgba(6,182,212,0.08));border-radius:12px;margin-bottom:16px;font-size:3rem">${p.emoji}</div>
-    <div class="form-group"><label class="form-label">Product Name</label><input class="form-input" value="${p.name}"/></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-      <div class="form-group"><label class="form-label">Price</label><input class="form-input" value="${p.price.replace('$','')}"/></div>
-      <div class="form-group"><label class="form-label">Stock</label><input class="form-input" value="${p.stock}"/></div>
-    </div>
-    <div class="form-group"><label class="form-label">Category</label><input class="form-input" value="${p.category}"/></div>
-    <div style="background:rgba(6,182,212,0.08);border:1px solid rgba(6,182,212,0.2);border-radius:8px;padding:12px;margin-bottom:16px">
-      <div style="font-size:0.72rem;color:var(--cyan);font-weight:700;margin-bottom:4px">🔍 Sage AI — SEO Status</div>
-      <div style="font-size:0.78rem;color:var(--gray)">Title optimised · Meta description written · Alt tags added · Schema markup active</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button onclick="toast('✅','Product saved. Sage AI optimising...','success');closeModal('product')" class="tb-btn" style="flex:1">Save Changes</button>
-      <button onclick="toast('🔍','Sage AI rewriting SEO content...','info')" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:0.82rem">AI Rewrite SEO</button>
-    </div>`;
-  openModal('product');
-}
-
-function openAgent(i) {
-  const a = AGENTS[i];
-  document.getElementById('modal-agent-title').textContent = `${a.emoji} ${a.name} — ${a.role}`;
-  document.getElementById('modal-agent-body').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
-      <div class="card-sm" style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:var(--cyan)">${a.actions}</div><div style="font-size:0.68rem;color:var(--gray);margin-top:3px">Tasks today</div></div>
-      <div class="card-sm" style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:var(--green)">${a.uptime}</div><div style="font-size:0.68rem;color:var(--gray);margin-top:3px">Uptime</div></div>
-      <div class="card-sm" style="text-align:center"><div style="font-size:1.2rem;font-weight:700;color:var(--purple2)">${a.revenue}</div><div style="font-size:0.68rem;color:var(--gray);margin-top:3px">Revenue attr.</div></div>
-    </div>
-    <div class="card-sm" style="margin-bottom:16px"><div style="font-size:0.78rem;color:var(--gray);line-height:1.6">${a.desc}</div></div>
-    <div style="margin-bottom:16px">
-      <div style="font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:8px">Current Activity</div>
-      <div style="font-size:0.82rem;color:var(--lav);display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 1.5s infinite;display:inline-block"></span>${a.tasks}</div>
-    </div>
-    <div class="form-group"><label class="form-label">Automation Level</label>
-      <input type="range" min="1" max="10" value="9" style="width:100%;accent-color:var(--purple)" oninput="toast('⚙️','${a.name} level updated','info')"/>
-    </div>
-    <button onclick="toast('⚙️','${a.name} settings saved','success');closeModal('agent')" class="tb-btn" style="width:100%">Save Configuration</button>`;
-  openModal('agent');
-}
-
-function openCustomer(i) {
-  const c = CUSTOMERS[i];
-  document.getElementById('modal-customer-title').textContent = c.name;
-  document.getElementById('modal-customer-body').innerHTML = `
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
-      <div class="card-sm"><div style="font-size:0.7rem;color:var(--gray)">Email</div><div style="font-size:0.82rem;margin-top:4px">${c.email}</div></div>
-      <div class="card-sm"><div style="font-size:0.7rem;color:var(--gray)">Segment</div><div style="margin-top:6px">${statusBadge(c.segment)}</div></div>
-      <div class="card-sm"><div style="font-size:0.7rem;color:var(--gray)">Total Orders</div><div style="font-weight:700;font-size:1.2rem;color:var(--cyan);margin-top:4px">${c.orders}</div></div>
-      <div class="card-sm"><div style="font-size:0.7rem;color:var(--gray)">Lifetime Value</div><div style="font-weight:700;font-size:1.2rem;color:var(--green);margin-top:4px">${c.ltv}</div></div>
-    </div>
-    <div style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:8px;padding:12px;margin-bottom:16px">
-      <div style="font-size:0.72rem;color:var(--lav);font-weight:700;margin-bottom:6px">🤖 Rex AI — Customer Intelligence</div>
-      <div style="font-size:0.75rem;color:var(--gray)">Sentiment: Positive · Churn probability: Low · Recommended action: Upsell Smart Watch</div>
-    </div>
-    <div style="display:flex;gap:8px">
-      <button onclick="toast('💬','Rex AI sending personalised offer to ${c.name}','success');closeModal('customer')" class="tb-btn" style="flex:1">AI Send Offer</button>
-      <button onclick="toast('📧','Email drafted by Nova AI','info')" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--white);font-size:0.82rem">Send Email</button>
-    </div>`;
-  openModal('customer');
-}
-
-function openAddProduct() { openModal('add-product'); }
-function openNewCampaign() { openModal('campaign'); }
-function exportOrders() { toast('⬇','Orders exported to CSV','success'); }
-function configureAgents() { nav('settings'); setTimeout(()=>setTab(1,'settingsTabs'),100); }
-
-function saveProduct() {
-  toast('✅','Product saved! Sage is writing SEO, Luna setting optimal price...','success');
-  closeModal('add-product');
-}
-function launchCampaign() {
-  toast('🚀','Campaign launched! Nova is writing copy and setting up targeting...','success');
-  closeModal('campaign');
-}
-
-function openModal(id) { document.getElementById('modal-'+id).classList.add('open'); }
-function closeModal(id) { document.getElementById('modal-'+id).classList.remove('open'); }
-
-// ===== SETTINGS TABS =====
-function setTab(idx, tabsId) {
-  const tabs = document.getElementById(tabsId).querySelectorAll('.tab');
-  tabs.forEach((t,i)=>{
-    t.classList.toggle('active',i===idx);
-    const panel = document.getElementById('settings-tab-'+i);
-    if(panel) panel.style.display = i===idx ? (i===0?'grid':'block') : 'none';
-  });
-}
-
-// ===== LIVE FEED =====
-let feedIdx = 0;
-function renderFeed(containerId, max=5) {
-  const el = document.getElementById(containerId);
-  if(!el) return;
-  const ev = FEED_EVENTS[feedIdx % FEED_EVENTS.length];
-  const div = document.createElement('div');
-  div.className = 'ai-entry';
-  div.innerHTML = `<div class="ae-top"><span>${ev.emoji}</span><span class="ae-agent">${ev.agent}</span><span class="ae-time">just now</span></div><div class="ae-action">${ev.action}</div><div class="ae-result">✓ ${ev.result}</div>`;
-  el.insertBefore(div, el.firstChild);
-  while(el.children.length > max) el.removeChild(el.lastChild);
-  feedIdx++;
-}
-renderFeed('dbFeed');
-setInterval(()=>renderFeed('dbFeed'), 2500);
-
-// ===== LIVE NUMBERS =====
-setInterval(()=>{
-  const r = document.getElementById('db-rev');
-  const o = document.getElementById('db-ord');
-  const t = document.getElementById('db-tasks');
-  const ag = document.getElementById('agTasks');
-  if(r) { const v = 12800+Math.round(Math.random()*200); r.textContent = '$'+v.toLocaleString(); }
-  if(o) { const v = 340+Math.round(Math.random()*15); o.textContent = v; }
-  if(t) { const v = 280+Math.round(Math.random()*10); t.textContent = v; }
-  if(ag) { const v = 2835+Math.round(Math.random()*20); ag.textContent = v.toLocaleString(); }
-}, 3000);
-
-// ===== CHARTS =====
-function initDashChart() {
-  const el = document.getElementById('dashChart');
-  if(!el) return;
-  const labels = ['May 5','6','7','8','9','10','11','12','13','14','15','16','17','18'];
-  const actual = [7200,8100,6900,9400,8800,11200,10400,12100,9800,13200,11800,14100,12400,12849];
-  const forecast = [7400,8300,7100,9600,9000,11500,10700,12400,10100,13500,12100,14500,12800,15200];
-  new Chart(el, {
-    type:'line',
-    data:{labels,datasets:[
-      {label:'Actual Revenue',data:actual,borderColor:'#7c3aed',backgroundColor:'rgba(124,58,237,0.08)',borderWidth:2,pointRadius:3,fill:true,tension:0.4},
-      {label:'AI Forecast',data:forecast,borderColor:'#06b6d4',backgroundColor:'transparent',borderWidth:2,borderDash:[5,4],pointRadius:2,fill:false,tension:0.4}
-    ]},
-    options:{responsive:true,plugins:{legend:{labels:{color:'#8892a4',font:{size:10},boxWidth:14}}},scales:{x:{ticks:{color:'#8892a4',font:{size:9}},grid:{color:'rgba(255,255,255,0.03)'}},y:{ticks:{color:'#8892a4',font:{size:9},callback:v=>'$'+(v/1000).toFixed(0)+'k'},grid:{color:'rgba(255,255,255,0.03)'}}}}
-  });
-}
-
-function initAnalyticsCharts() {
-  const el1 = document.getElementById('analyticsChart');
-  const el2 = document.getElementById('trafficChart');
-  if(el1 && !el1._init) {
-    el1._init = true;
-    new Chart(el1, {type:'bar',data:{labels:['Nov','Dec','Jan','Feb','Mar','Apr'],datasets:[{label:'Revenue',data:[142000,198000,171000,203000,201000,285000],backgroundColor:'rgba(124,58,237,0.6)',borderRadius:6},{label:'Forecast',data:[148000,195000,178000,210000,215000,298000],backgroundColor:'rgba(6,182,212,0.3)',borderRadius:6}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8892a4',font:{size:10},boxWidth:12}}},scales:{x:{ticks:{color:'#8892a4',font:{size:10}},grid:{display:false}},y:{ticks:{color:'#8892a4',font:{size:9},callback:v=>'$'+(v/1000).toFixed(0)+'k'},grid:{color:'rgba(255,255,255,0.03)'}}}}});
-  }
-  if(el2 && !el2._init) {
-    el2._init = true;
-    new Chart(el2, {type:'doughnut',data:{labels:['Organic','Meta Ads','Google Ads','Direct','Email'],datasets:[{data:[34,28,18,12,8],backgroundColor:['#7c3aed','#06b6d4','#4ade80','#fbbf24','#f87171'],borderWidth:0}]},options:{plugins:{legend:{position:'bottom',labels:{color:'#8892a4',font:{size:10},boxWidth:10,padding:12}}},cutout:'65%'}});
-  }
-  renderAnalyticsInsights();
-}
-
-// ===== NOTIFICATIONS =====
-function showNotifications() {
-  toast('🔔','3 new agent updates: Aria restocked, Luna updated 12 prices, Rex resolved 5 tickets','info');
-}
-
-// ===== TOAST =====
-function toast(icon, msg, type='info') {
-  const el = document.getElementById('toast');
-  const div = document.createElement('div');
-  div.className = `toast-item ${type}`;
-  div.innerHTML = `<span style="font-size:1.1rem">${icon}</span><span>${msg}</span>`;
-  el.appendChild(div);
-  setTimeout(()=>div.style.opacity='0',3200);
-  setTimeout(()=>div.remove(),3600);
-}
-
-// ===== INIT =====
-renderDashOrders();
-renderOrdersTable();
-renderProductsGrid();
-renderCustomersTable();
-renderAgentGrid();
-renderMarketing();
-setTimeout(initDashChart, 100);
+const labels = Array.from({length:30},(_,i)=>{const d=new Date();d.setDate(d.getDate()-29+i);return d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})});
+const actual = [420000,380000,510000,490000,620000,580000,700000,680000,720000,750000,690000,810000,780000,850000,820000,910000,870000,930000,890000,980000,920000,1010000,970000,1050000,1020000,847293,null,null,null,null];
+const forecast = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,847293,920000,990000,1080000,1150000];
+const ctx=document.getElementById('gmvChart').getContext('2d');
+new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'GMV (₹)',data:actual,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,0.08)',borderWidth:2.5,pointRadius:0,tension:0.4,fill:true},{label:'AI Forecast',data:forecast,borderColor:'#007185',borderDash:[6,3],borderWidth:2,pointRadius:0,tension:0.4,fill:false}]},options:{responsive:true,plugins:{legend:{position:'top',labels:{font:{size:11},boxWidth:12}}},scales:{y:{ticks:{callback:v=>'₹'+Math.round(v/1000)+'K'},grid:{color:'#f0f2f5'}},x:{ticks:{maxTicksLimit:8,font:{size:10}},grid:{display:false}}}}});
 </script>
 </body>
 </html>

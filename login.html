@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign In — VibeStore</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; display: flex; background: #0f1111; }
+
+  /* ── LEFT PANEL ── */
+  .left-panel {
+    width: 55%;
+    background: linear-gradient(160deg, #0f1111 0%, #1a2a1a 60%, #0f1f0f 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+  .left-panel::before {
+    content: '';
+    position: absolute;
+    top: -120px; left: -120px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,153,0,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .left-panel::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(0,200,100,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .logo {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #FF9900;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+  .logo span { color: #fff; }
+  .tagline {
+    font-size: 1.05rem;
+    color: #8a9a8a;
+    margin-bottom: 48px;
+    font-style: italic;
+  }
+
+  .portal-cards { display: flex; flex-direction: column; gap: 14px; margin-bottom: 40px; }
+  .portal-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: background 0.2s;
+  }
+  .portal-card:hover { background: rgba(255,255,255,0.07); }
+  .portal-card .icon { font-size: 1.6rem; flex-shrink: 0; }
+  .portal-card .info h3 { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .portal-card .info p { font-size: 0.8rem; color: #6a7a6a; }
+  .portal-card.buyer { border-left: 3px solid #3b82f6; }
+  .portal-card.seller { border-left: 3px solid #FF9900; }
+  .portal-card.admin { border-left: 3px solid #a855f7; }
+
+  .auto-route-note {
+    font-size: 0.78rem;
+    color: #4a5a4a;
+    margin-bottom: 36px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 8px;
+    border: 1px dashed rgba(255,255,255,0.07);
+  }
+
+  .stats-row { display: flex; gap: 24px; }
+  .stat { text-align: center; }
+  .stat .num { font-size: 1.2rem; font-weight: 800; color: #FF9900; }
+  .stat .lbl { font-size: 0.7rem; color: #5a6a5a; margin-top: 2px; }
+
+  /* ── RIGHT PANEL ── */
+  .right-panel {
+    width: 45%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 32px;
+    overflow-y: auto;
+  }
+  .card { width: 100%; max-width: 440px; }
+
+  .card-header { margin-bottom: 28px; }
+  .card-header h1 { font-size: 1.7rem; font-weight: 800; color: #111; margin-bottom: 6px; }
+  .card-header p { font-size: 0.88rem; color: #666; }
+
+  /* FORM TABS */
+  .form-view { display: none; }
+  .form-view.active { display: block; }
+
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: #333; margin-bottom: 6px; }
+
+  .input-wrap { position: relative; }
+  .input-wrap .prefix-icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 1rem; pointer-events: none;
+  }
+  .input-wrap input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    color: #111;
+  }
+  .input-wrap input:focus { border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.12); }
+  .input-wrap input.no-icon { padding-left: 14px; }
+  .input-wrap .eye-btn {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; font-size: 1.1rem; color: #888;
+  }
+
+  /* Role badge */
+  .role-badge {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 20px;
+    margin-top: 7px;
+    width: fit-content;
+    transition: all 0.2s;
+  }
+  .role-badge.show { display: flex; }
+  .role-badge.buyer { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+  .role-badge.seller { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+  .role-badge.admin { background: #faf5ff; color: #7c3aed; border: 1px solid #ddd6fe; }
+
+  /* Portal indicator bar */
+  .portal-bar {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .portal-bar.show { display: flex; }
+  .portal-bar.buyer { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+  .portal-bar.seller { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+  .portal-bar.admin { background: #faf5ff; color: #6d28d9; border: 1px solid #ddd6fe; }
+
+  .name-field { display: none; }
+  .name-field.show { display: block; }
+
+  .row-between { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .remember-wrap { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #444; cursor: pointer; }
+  .remember-wrap input[type=checkbox] { accent-color: #FF9900; width: 15px; height: 15px; cursor: pointer; }
+  .forgot-link { font-size: 0.82rem; color: #0d9488; text-decoration: none; font-weight: 500; }
+  .forgot-link:hover { text-decoration: underline; }
+
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: #FF9900;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-bottom: 14px;
+  }
+  .btn-primary:hover { background: #e68900; }
+  .btn-primary:active { transform: scale(0.98); }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 0.8rem; color: #aaa; margin: 4px 0 14px;
+  }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: #e5e5e5; }
+
+  .btn-google {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    border: 1.5px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.93rem;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s, border-color 0.2s;
+    margin-bottom: 18px;
+  }
+  .btn-google:hover { background: #f8f8f8; border-color: #bbb; }
+
+  /* Demo accounts */
+  .demo-section { background: #f8f9fa; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+  .demo-section h4 { font-size: 0.8rem; color: #666; margin-bottom: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .demo-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background 0.15s;
+    margin-bottom: 4px;
+  }
+  .demo-row:last-child { margin-bottom: 0; }
+  .demo-row:hover { background: #eee; }
+  .demo-badge {
+    font-size: 0.7rem; font-weight: 700; padding: 3px 7px; border-radius: 4px; flex-shrink: 0;
+  }
+  .demo-badge.buyer { background: #dbeafe; color: #1d4ed8; }
+  .demo-badge.seller { background: #ffedd5; color: #c2410c; }
+  .demo-badge.admin { background: #ede9fe; color: #6d28d9; }
+  .demo-email { font-size: 0.8rem; color: #555; font-family: monospace; }
+  .demo-arrow { font-size: 0.7rem; color: #aaa; margin-left: auto; }
+
+  .bottom-links { text-align: center; font-size: 0.83rem; color: #555; margin-top: 10px; }
+  .bottom-links a { color: #0d9488; text-decoration: none; font-weight: 500; }
+  .bottom-links a:hover { text-decoration: underline; }
+
+  /* Error/Success messages */
+  .msg { padding: 10px 14px; border-radius: 7px; font-size: 0.84rem; font-weight: 500; margin-bottom: 14px; display: none; }
+  .msg.show { display: block; }
+  .msg.error { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
+  .msg.success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
+
+  /* Inline register form */
+  .register-seller-note {
+    display: none;
+    text-align: center;
+    padding: 12px;
+    background: #fff7ed;
+    border-radius: 8px;
+    font-size: 0.84rem;
+    color: #7c2d12;
+    border: 1px solid #fed7aa;
+    margin-top: 10px;
+  }
+  .register-seller-note a { color: #ea580c; font-weight: 700; text-decoration: none; }
+  .register-seller-note.show { display: block; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    body { flex-direction: column; background: #fff; }
+    .left-panel {
+      width: 100%;
+      padding: 20px 20px 18px;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      min-height: unset;
+    }
+    .left-panel::before, .left-panel::after { display: none; }
+    .logo { font-size: 1.5rem; margin-bottom: 0; }
+    .tagline { font-size: 0.78rem; margin-bottom: 0; color: #aaa; }
+    .portal-cards, .auto-route-note, .stats-row { display: none; }
+    .left-panel > .logo-wrap { display: flex; flex-direction: column; }
+    .right-panel { width: 100%; padding: 24px 18px 40px; align-items: flex-start; }
+    .card { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══ LEFT PANEL ══ -->
+<div class="left-panel">
+  <div>
+    <div class="logo">⚡ Vibe<span>Store</span></div>
+    <div class="tagline">One marketplace. Three portals.</div>
+  </div>
+
+  <div class="portal-cards">
+    <div class="portal-card buyer">
+      <div class="icon">🛍️</div>
+      <div class="info">
+        <h3>Buyer Portal</h3>
+        <p>Shop from 50,000+ sellers across India</p>
+      </div>
+    </div>
+    <div class="portal-card seller">
+      <div class="icon">🏪</div>
+      <div class="info">
+        <h3>Seller Central</h3>
+        <p>Manage your marketplace business</p>
+      </div>
+    </div>
+    <div class="portal-card admin">
+      <div class="icon">⚙️</div>
+      <div class="info">
+        <h3>Platform Admin</h3>
+        <p>Operate the VibeStore marketplace</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="auto-route-note">
+    🔀 Your email decides which portal opens automatically
+  </div>
+
+  <div class="stats-row">
+    <div class="stat"><div class="num">50K+</div><div class="lbl">Sellers</div></div>
+    <div class="stat"><div class="num">2M+</div><div class="lbl">Products</div></div>
+    <div class="stat"><div class="num">8</div><div class="lbl">AI Agents</div></div>
+  </div>
+</div>
+
+<!-- ══ RIGHT PANEL ══ -->
+<div class="right-panel">
+  <div class="card">
+
+    <div class="card-header">
+      <h1>Sign in to VibeStore</h1>
+      <p>Enter your email — we'll route you to the right portal</p>
+    </div>
+
+    <!-- ── SIGN IN VIEW ── -->
+    <div class="form-view active" id="view-signin">
+
+      <div id="signin-msg" class="msg"></div>
+
+      <div class="form-group">
+        <label for="email-input">Email address</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">✉️</span>
+          <input type="email" id="email-input" placeholder="you@example.com" autocomplete="email">
+        </div>
+        <div class="role-badge" id="role-badge"></div>
+      </div>
+
+      <div class="form-group name-field" id="name-field">
+        <label for="name-input">Full Name</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">👤</span>
+          <input type="text" id="name-input" placeholder="Aryan Kapoor" autocomplete="name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password-input">Password</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">🔒</span>
+          <input type="password" id="password-input" placeholder="Enter your password">
+          <button class="eye-btn" type="button" id="eye-btn" title="Toggle visibility">👁️</button>
+        </div>
+      </div>
+
+      <div class="row-between">
+        <label class="remember-wrap">
+          <input type="checkbox" id="remember-me"> Remember me
+        </label>
+        <a href="#" class="forgot-link" id="forgot-link">Forgot password?</a>
+      </div>
+
+      <div class="portal-bar" id="portal-bar"></div>
+
+      <button class="btn-primary" id="signin-btn">Sign In</button>
+
+      <div class="divider">— OR —</div>
+
+      <button class="btn-google" id="google-btn">
+        <span style="font-size:1.1rem">G</span> Continue with Google
+      </button>
+
+      <!-- Demo accounts -->
+      <div class="demo-section">
+        <h4>Try a demo account</h4>
+        <div class="demo-row" data-email="buyer@gmail.com" data-name="Raj Sharma">
+          <span class="demo-badge buyer">🛍️ Buyer</span>
+          <span class="demo-email">buyer@gmail.com</span>
+          <span class="demo-arrow">→ Buyer Portal</span>
+        </div>
+        <div class="demo-row" data-email="seller@techhub.com" data-name="Tech Hub">
+          <span class="demo-badge seller">🏪 Seller</span>
+          <span class="demo-email">seller@techhub.com</span>
+          <span class="demo-arrow">→ Seller Central</span>
+        </div>
+        <div class="demo-row" data-email="admin@vibestore.com" data-name="Platform Admin">
+          <span class="demo-badge admin">⚙️ Admin</span>
+          <span class="demo-email">admin@vibestore.com</span>
+          <span class="demo-arrow">→ Platform Admin</span>
+        </div>
+      </div>
+
+      <div class="bottom-links" id="bottom-links">
+        <span>New to VibeStore? </span>
+        <a href="#" id="register-link">Create account →</a>
+      </div>
+
+      <div class="register-seller-note" id="seller-note">
+        Want to sell on VibeStore? <a href="become-seller.html">Register as a Seller →</a>
+      </div>
+
+    </div><!-- /view-signin -->
+
+    <!-- ── REGISTER VIEW (Buyer) ── -->
+    <div class="form-view" id="view-register">
+      <div class="card-header">
+        <h1>Create Account</h1>
+        <p>Join millions of VibeStore shoppers</p>
+      </div>
+      <div id="register-msg" class="msg"></div>
+      <div class="form-group">
+        <label>Full Name</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">👤</span>
+          <input type="text" id="reg-name" placeholder="Your full name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">✉️</span>
+          <input type="email" id="reg-email" placeholder="you@gmail.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">📱</span>
+          <input type="tel" id="reg-phone" placeholder="+91 98765 43210">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">🔒</span>
+          <input type="password" id="reg-pass" placeholder="Create a password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">🔒</span>
+          <input type="password" id="reg-pass2" placeholder="Repeat your password">
+        </div>
+      </div>
+      <button class="btn-primary" id="reg-btn">Create Account</button>
+      <div class="bottom-links">
+        Already have an account? <a href="#" id="back-signin">Sign In →</a>
+      </div>
+    </div><!-- /view-register -->
+
+    <!-- ── FORGOT PASSWORD VIEW ── -->
+    <div class="form-view" id="view-forgot">
+      <div class="card-header">
+        <h1>Reset Password</h1>
+        <p>We'll send a reset link to your email</p>
+      </div>
+      <div id="forgot-msg" class="msg"></div>
+      <div class="form-group">
+        <label>Email address</label>
+        <div class="input-wrap">
+          <span class="prefix-icon">✉️</span>
+          <input type="email" id="forgot-email" placeholder="you@example.com">
+        </div>
+      </div>
+      <button class="btn-primary" id="reset-btn">Send Reset Link</button>
+      <div class="bottom-links">
+        <a href="#" id="back-signin-forgot">← Back to Sign In</a>
+      </div>
+    </div><!-- /view-forgot -->
+
+  </div><!-- /card -->
+</div><!-- /right-panel -->
+
+<script src="auth.js"></script>
+<script>
+(function() {
+  // ── Redirect if already logged in ──
+  const existing = vsGetAuth();
+  if (existing) {
+    if (existing.role === 'admin') location.href = 'app.html';
+    else if (existing.role === 'seller') location.href = 'seller-dashboard.html';
+    else location.href = 'index.html';
+    return;
+  }
+
+  // ── Elements ──
+  const emailInput   = document.getElementById('email-input');
+  const nameField    = document.getElementById('name-field');
+  const nameInput    = document.getElementById('name-input');
+  const passInput    = document.getElementById('password-input');
+  const eyeBtn       = document.getElementById('eye-btn');
+  const roleBadge    = document.getElementById('role-badge');
+  const portalBar    = document.getElementById('portal-bar');
+  const signinBtn    = document.getElementById('signin-btn');
+  const googleBtn    = document.getElementById('google-btn');
+  const forgotLink   = document.getElementById('forgot-link');
+  const registerLink = document.getElementById('register-link');
+  const bottomLinks  = document.getElementById('bottom-links');
+  const sellerNote   = document.getElementById('seller-note');
+  const signinMsg    = document.getElementById('signin-msg');
+
+  let detectedRole = 'buyer';
+  let debounceTimer = null;
+
+  // ── View switching ──
+  function showView(id) {
+    document.querySelectorAll('.form-view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+  }
+  document.getElementById('back-signin').addEventListener('click', e => { e.preventDefault(); showView('view-signin'); });
+  document.getElementById('back-signin-forgot').addEventListener('click', e => { e.preventDefault(); showView('view-signin'); });
+
+  forgotLink.addEventListener('click', e => { e.preventDefault(); showView('view-forgot'); });
+  registerLink.addEventListener('click', e => {
+    e.preventDefault();
+    if (detectedRole === 'seller') {
+      location.href = 'become-seller.html';
+    } else {
+      showView('view-register');
+    }
+  });
+
+  // ── Password toggle ──
+  eyeBtn.addEventListener('click', () => {
+    passInput.type = passInput.type === 'password' ? 'text' : 'password';
+    eyeBtn.textContent = passInput.type === 'password' ? '👁️' : '🙈';
+  });
+
+  // ── Role detection live ──
+  const ROLE_CONFIG = {
+    buyer:  { icon: '🛍️', label: 'Buyer Portal',       portal: "🛍️ You'll be signed into the Buyer Portal",    barClass: 'buyer' },
+    seller: { icon: '🏪', label: 'Seller Central',     portal: "🏪 You'll be signed into Seller Central",       barClass: 'seller' },
+    admin:  { icon: '⚙️', label: 'Platform Admin',     portal: "⚙️ You'll be signed into the Platform Admin",  barClass: 'admin' }
+  };
+
+  function updateRoleUI(email) {
+    const val = email.trim();
+    if (!val || !val.includes('@')) {
+      roleBadge.className = 'role-badge';
+      portalBar.className = 'portal-bar';
+      nameField.className = 'form-group name-field';
+      sellerNote.className = 'register-seller-note';
+      bottomLinks.style.display = '';
+      return;
+    }
+    detectedRole = vsDetectRole(val);
+    const cfg = ROLE_CONFIG[detectedRole];
+
+    roleBadge.className = `role-badge show ${detectedRole}`;
+    roleBadge.innerHTML = `${cfg.icon} ${cfg.label}`;
+
+    portalBar.className = `portal-bar show ${detectedRole}`;
+    portalBar.innerHTML = cfg.portal;
+
+    nameField.className = 'form-group name-field show';
+
+    // Show seller register note or buyer register link
+    if (detectedRole === 'seller') {
+      sellerNote.className = 'register-seller-note show';
+      bottomLinks.style.display = 'none';
+    } else {
+      sellerNote.className = 'register-seller-note';
+      bottomLinks.style.display = '';
+      registerLink.textContent = detectedRole === 'buyer' ? 'Register as buyer →' : 'Create account →';
+    }
+  }
+
+  emailInput.addEventListener('keyup', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => updateRoleUI(emailInput.value), 300);
+  });
+  emailInput.addEventListener('change', () => updateRoleUI(emailInput.value));
+
+  // ── Sign In ──
+  function doSignIn(email, name, skipValidate) {
+    if (!skipValidate) {
+      if (!email) { showMsg(signinMsg, 'error', 'Please enter your email.'); return; }
+      if (!name)  { showMsg(signinMsg, 'error', 'Please enter your name.'); return; }
+      if (!passInput.value) { showMsg(signinMsg, 'error', 'Please enter your password.'); return; }
+    }
+    const auth = vsLogin(email, name || 'VibeStore User');
+    showMsg(signinMsg, 'success', `Welcome, ${auth.name.split(' ')[0]}! Redirecting…`);
+    setTimeout(() => {
+      if (auth.role === 'admin')  location.href = 'app.html';
+      else if (auth.role === 'seller') location.href = 'seller-dashboard.html';
+      else location.href = 'index.html';
+    }, 700);
+  }
+
+  signinBtn.addEventListener('click', () => {
+    doSignIn(emailInput.value.trim(), nameInput.value.trim(), false);
+  });
+
+  // ── Google Sign In ──
+  googleBtn.addEventListener('click', () => {
+    const gname = prompt('Enter name for Google demo:');
+    if (!gname) return;
+    const gemail = emailInput.value.trim() || 'googleuser@gmail.com';
+    doSignIn(gemail, gname, true);
+  });
+
+  // ── Demo accounts ──
+  document.querySelectorAll('.demo-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const email = row.dataset.email;
+      const name  = row.dataset.name;
+      emailInput.value = email;
+      nameInput.value  = name;
+      updateRoleUI(email);
+    });
+  });
+
+  // ── Register ──
+  document.getElementById('reg-btn').addEventListener('click', () => {
+    const n  = document.getElementById('reg-name').value.trim();
+    const e  = document.getElementById('reg-email').value.trim();
+    const p  = document.getElementById('reg-pass').value;
+    const p2 = document.getElementById('reg-pass2').value;
+    const msg = document.getElementById('register-msg');
+    if (!n || !e || !p) { showMsg(msg, 'error', 'Please fill in all fields.'); return; }
+    if (p !== p2) { showMsg(msg, 'error', 'Passwords do not match.'); return; }
+    const auth = vsLogin(e, n);
+    showMsg(msg, 'success', `Account created! Redirecting…`);
+    setTimeout(() => {
+      if (auth.role === 'seller') location.href = 'seller-dashboard.html';
+      else location.href = 'index.html';
+    }, 800);
+  });
+
+  // ── Forgot password ──
+  document.getElementById('reset-btn').addEventListener('click', () => {
+    const fe = document.getElementById('forgot-email').value.trim();
+    const msg = document.getElementById('forgot-msg');
+    if (!fe) { showMsg(msg, 'error', 'Please enter your email.'); return; }
+    showMsg(msg, 'success', `✅ Reset link sent to ${fe}. Check your inbox.`);
+  });
+
+  // ── Helper ──
+  function showMsg(el, type, text) {
+    el.className = `msg show ${type}`;
+    el.textContent = text;
+  }
+})();
+</script>
+</body>
+</html>

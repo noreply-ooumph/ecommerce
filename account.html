@@ -3,525 +3,725 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>My Account — MyStore</title>
+<title>Your Account — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#fafaf8;--bg2:#f3f3ef;--white:#fff;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;--gray:#6b7280;--gray2:#9ca3af;--border:#e5e5e0;--green:#16a34a;--red:#dc2626;--yellow:#d97706}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+:root{
+  --nav:#131921;--orange:#FF9900;--orange2:#FF6600;--teal:#007185;--bg:#f0f2f5;
+  --white:#fff;--border:#d5d9d9;--gray:#565959;--gray2:#888c8c;--dark:#0f1111;
+  --red:#cc0c39;--green:#007600;--gold:#c45500;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
 
-/* NAV */
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1200px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px}
-.ai-tag{font-size:0.5rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-weight:700}
-.nav-links{flex:1;display:flex;align-items:center;gap:24px}
-.nav-links a{font-size:0.85rem;color:var(--gray);font-weight:500;transition:color 0.2s}
-.nav-links a:hover{color:var(--dark)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;position:relative}
-.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+/* ===== NAV ===== */
+nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:10px;padding:8px 16px;height:60px}
+.nav-logo{color:white;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;white-space:nowrap;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;flex-shrink:0}
+.nav-logo:hover{border-color:white}
+.nav-logo span{color:var(--orange)}
+.nav-search{flex:1;display:flex;border-radius:4px;overflow:hidden;max-width:900px}
+.nav-search-cat{background:#f3f3f3;border:none;padding:0 10px;font-size:0.78rem;color:var(--dark);cursor:pointer;border-right:1px solid #ccc;min-width:60px}
+.nav-search input{flex:1;padding:0 12px;border:none;font-size:0.92rem;outline:none;height:40px}
+.nav-search-btn{background:var(--orange);border:none;width:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+.nav-search-btn:hover{background:#e68900}
+.nav-btn{color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;font-size:0.82rem;cursor:pointer;white-space:nowrap;line-height:1.4;transition:border-color .15s;background:none}
+.nav-btn:hover{border-color:white}
+.nav-btn span{color:rgba(255,255,255,0.8);font-size:0.7rem;display:block}
+.nav-btn strong{font-size:0.88rem}
+.nav-cart{display:flex;align-items:flex-end;gap:4px;color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;cursor:pointer;background:none}
+.nav-cart:hover{border-color:white}
+.nav-cart-count{color:var(--orange);font-size:1.1rem;font-weight:800;line-height:1}
+.nav-cart-text{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+.nav-bottom{background:#232f3e;padding:4px 16px;display:flex;gap:4px;overflow-x:auto}
+.nav-bottom::-webkit-scrollbar{display:none}
+.nav-bot-btn{color:white;font-size:0.82rem;padding:6px 10px;border:1px solid transparent;border-radius:3px;white-space:nowrap;cursor:pointer;background:none}
+.nav-bot-btn:hover{border-color:white}
+.nav-bot-btn.active{border-color:var(--orange);color:var(--orange)}
 
-/* AUTH SCREEN */
-#auth-screen{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 64px);padding:40px 24px}
-.auth-card{background:white;border:1px solid var(--border);border-radius:20px;width:100%;max-width:440px;overflow:hidden}
-.auth-hdr{padding:32px 32px 24px;text-align:center;border-bottom:1px solid var(--border)}
-.auth-logo{font-size:2.5rem;margin-bottom:12px}
-.auth-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:4px}
-.auth-sub{font-size:0.83rem;color:var(--gray)}
-.auth-tabs{display:flex;padding:16px 32px 0}
-.auth-tab{flex:1;text-align:center;padding:10px;font-size:0.85rem;font-weight:600;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s}
-.auth-tab.active{color:var(--purple);border-bottom-color:var(--purple)}
-.auth-body{padding:24px 32px 32px}
-.form-group{margin-bottom:14px}
-.form-label{display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:5px}
-.form-input{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--dark);font-size:0.85rem;outline:none;transition:all 0.2s}
-.form-input:focus{border-color:var(--purple);background:white;box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
-.form-input::placeholder{color:var(--gray2)}
-.btn-auth{width:100%;background:linear-gradient(135deg,#1a0533,var(--purple));color:white;border:none;border-radius:10px;padding:13px;font-size:0.92rem;font-weight:700;transition:all 0.3s;margin-bottom:12px}
-.btn-auth:hover{opacity:0.9;transform:translateY(-1px)}
-.social-btns{display:flex;gap:8px}
-.btn-social{flex:1;background:white;border:1px solid var(--border);border-radius:10px;padding:11px;font-size:0.82rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:6px;transition:border-color 0.2s}
-.btn-social:hover{border-color:var(--purple)}
-.auth-divider{display:flex;align-items:center;gap:10px;margin:14px 0;color:var(--gray2);font-size:0.75rem}
-.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.forgot{font-size:0.75rem;color:var(--purple);cursor:pointer;text-align:right;margin-top:-8px;margin-bottom:14px}
-.ai-login-note{background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.12);border-radius:8px;padding:10px 14px;font-size:0.75rem;color:var(--purple);text-align:center;margin-top:12px}
+/* ===== PAGE ===== */
+.page{max-width:1300px;margin:0 auto;padding:24px 16px 48px}
 
-/* DASHBOARD */
-#dash-screen{display:none;max-width:1200px;margin:0 auto;padding:32px 24px}
-.dash-grid{display:grid;grid-template-columns:260px 1fr;gap:24px}
-.dash-sidebar{display:flex;flex-direction:column;gap:8px}
-.dash-user-card{background:white;border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;margin-bottom:8px}
-.dash-avatar{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;color:white;margin:0 auto 12px}
-.dash-name{font-weight:700;font-size:0.95rem;margin-bottom:2px}
-.dash-email{font-size:0.75rem;color:var(--gray)}
-.dash-plan{display:inline-flex;align-items:center;gap:4px;background:rgba(109,40,217,0.08);color:var(--purple);border-radius:100px;padding:3px 10px;font-size:0.7rem;font-weight:700;margin-top:6px}
-.sb-nav-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;font-size:0.83rem;color:var(--gray);cursor:pointer;transition:all 0.2s;font-weight:500;border:1px solid transparent}
-.sb-nav-item:hover{background:white;border-color:var(--border);color:var(--dark)}
-.sb-nav-item.active{background:white;border-color:var(--border);color:var(--dark);font-weight:600}
-.sb-nav-item .icon{font-size:1rem;width:20px;text-align:center}
-.dash-main{display:flex;flex-direction:column;gap:20px}
+/* ===== HELLO HEADING ===== */
+.hello-row{margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.hello-left{}
+.hello-h{font-size:1.6rem;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.vibepass-badge{background:linear-gradient(90deg,#b8860b,#d4a017,#b8860b);color:white;font-size:0.72rem;font-weight:800;padding:3px 10px;border-radius:20px;letter-spacing:0.03em;vertical-align:middle}
+.hello-sub{font-size:0.88rem;color:var(--gray)}
+.hello-actions{display:flex;gap:10px}
+.btn-signout{background:white;color:var(--dark);border:1px solid var(--border);border-radius:4px;padding:8px 16px;font-size:0.82rem;font-weight:600;transition:all 0.15s}
+.btn-signout:hover{border-color:#888;background:#f7f7f7}
 
-/* PANELS */
-.panel{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;display:none}
-.panel.active{display:block}
-.panel-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+/* ===== TILE GRID 3×4 ===== */
+.section-heading{font-size:1.1rem;font-weight:700;margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.tile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.tile{background:white;border:1px solid var(--border);border-radius:8px;padding:20px;cursor:pointer;transition:all 0.2s;position:relative;display:flex;flex-direction:column;gap:10px;color:var(--dark);box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.tile:hover{box-shadow:0 4px 20px rgba(0,0,0,0.12);border-color:#c4c4c4;transform:translateY(-2px)}
+.tile-icon{font-size:2.6rem;line-height:1}
+.tile-body{flex:1}
+.tile-title{font-size:0.95rem;font-weight:700;margin-bottom:4px;line-height:1.2}
+.tile-desc{font-size:0.78rem;color:var(--gray);line-height:1.4}
+.tile-arrow{position:absolute;top:16px;right:16px;color:var(--teal);font-size:1rem;font-weight:700;transition:transform 0.2s}
+.tile:hover .tile-arrow{transform:translateX(3px)}
+.tile-badge{display:inline-block;font-size:0.68rem;font-weight:700;padding:2px 8px;border-radius:10px;margin-top:6px}
+.badge-green{background:#e8f5e9;color:#1b5e20}
+.badge-gold{background:#fff3cd;color:var(--gold)}
+.badge-teal{background:#e8f7f8;color:var(--teal)}
+.badge-red{background:#fce4ec;color:#880e4f}
 
-/* ORDER CARDS */
-.order-card-item{border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;transition:box-shadow 0.2s;cursor:pointer}
-.order-card-item:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08)}
-.oc-hdr{background:var(--bg2);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.oc-id{font-weight:700;font-size:0.83rem;color:var(--purple)}
-.oc-date{font-size:0.75rem;color:var(--gray)}
-.oc-status-badge{margin-left:auto}
-.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:100px;font-size:0.68rem;font-weight:700}
-.b-green{background:rgba(22,163,74,0.1);color:var(--green)}
-.b-yellow{background:rgba(217,119,6,0.1);color:var(--yellow)}
-.b-cyan{background:rgba(8,145,178,0.1);color:var(--cyan)}
-.b-purple{background:rgba(109,40,217,0.1);color:var(--purple)}
-.b-red{background:rgba(220,38,38,0.1);color:var(--red)}
-.oc-body{padding:14px 16px;display:flex;align-items:center;gap:12px}
-.oc-emojis{display:flex;gap:6px}
-.oc-emoji{width:44px;height:44px;background:var(--bg2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem}
-.oc-info{flex:1}
-.oc-items-text{font-size:0.82rem;font-weight:500;margin-bottom:2px}
-.oc-total{font-size:0.8rem;color:var(--gray)}
-.oc-ai{font-size:0.7rem;color:var(--purple);margin-top:3px}
-.oc-actions{display:flex;gap:6px}
-.oc-btn{padding:6px 14px;border:1px solid var(--border);border-radius:7px;font-size:0.75rem;font-weight:600;background:white;transition:all 0.2s}
-.oc-btn:hover{border-color:var(--purple);color:var(--purple)}
-.oc-btn-primary{background:var(--dark);color:white;border-color:var(--dark)}
-.oc-btn-primary:hover{background:var(--purple2);border-color:var(--purple2);color:white}
+/* ===== SECTION CARD ===== */
+.section-card{background:white;border:1px solid var(--border);border-radius:8px;margin-bottom:20px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.section-hdr{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#fafafa}
+.section-hdr h2{font-size:1rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.section-hdr-link{color:var(--teal);font-size:0.83rem;font-weight:600;cursor:pointer}
+.section-hdr-link:hover{text-decoration:underline;color:var(--orange)}
 
-/* WISHLIST */
-.wish-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.wish-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative}
-.wish-img{height:90px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:2.2rem}
-.wish-info{padding:10px}
-.wish-name{font-size:0.78rem;font-weight:600;margin-bottom:3px}
-.wish-price{font-weight:700;font-size:0.85rem;color:var(--purple);margin-bottom:8px}
-.wish-add{width:100%;background:var(--dark);color:white;border:none;border-radius:6px;padding:7px;font-size:0.72rem;font-weight:600}
-.wish-add:hover{background:var(--purple2)}
-.wish-rm{position:absolute;top:6px;right:6px;width:24px;height:24px;background:white;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.7rem;cursor:pointer}
-.wish-rm:hover{background:var(--red);color:white;border-color:var(--red)}
+/* ===== ORDERS TABLE ===== */
+.orders-table{width:100%;border-collapse:collapse}
+.orders-table th{background:#f7f7f7;font-size:0.73rem;font-weight:700;color:var(--gray2);text-transform:uppercase;letter-spacing:0.04em;padding:10px 16px;text-align:left;border-bottom:1px solid var(--border)}
+.orders-table td{padding:14px 16px;border-bottom:1px solid var(--border);font-size:0.84rem;vertical-align:middle}
+.orders-table tr:last-child td{border-bottom:none}
+.orders-table tr:hover td{background:#fafafa}
+.order-id-cell{color:var(--teal);font-weight:700;cursor:pointer;font-size:0.85rem}
+.order-id-cell:hover{text-decoration:underline}
+.order-seller-link{color:var(--teal);font-size:0.78rem;font-weight:600;cursor:pointer}
+.order-seller-link:hover{text-decoration:underline}
+.order-items-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.order-emoji{width:36px;height:36px;background:#f5f5f5;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.order-name{font-size:0.82rem;font-weight:500;line-height:1.3;color:var(--dark)}
+.status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:12px;font-size:0.71rem;font-weight:700;white-space:nowrap}
+.s-green{background:#e8f5e9;color:#1b5e20}
+.s-blue{background:#e3f2fd;color:#1565c0}
+.s-orange{background:#fff3e0;color:#e65100}
+.s-yellow{background:#fffde7;color:#f57f17}
+.s-red{background:#fce4ec;color:#880e4f}
+.s-dot{width:6px;height:6px;border-radius:50%;background:currentColor;display:inline-block}
+.tbl-btns{display:flex;gap:6px;flex-wrap:wrap}
+.tbl-btn{padding:5px 11px;border:1px solid var(--border);border-radius:3px;font-size:0.75rem;font-weight:600;background:white;cursor:pointer;white-space:nowrap;transition:all 0.15s;color:var(--dark)}
+.tbl-btn:hover{border-color:#888;background:#f7f7f7}
+.tbl-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
+.tbl-btn.primary:hover{background:#e68900}
 
-/* PROFILE FORM */
-.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.save-btn{background:var(--dark);color:white;border:none;border-radius:10px;padding:11px 24px;font-size:0.85rem;font-weight:700;transition:all 0.2s;margin-top:4px}
-.save-btn:hover{background:var(--purple2)}
+/* ===== VIBEPASS CARD ===== */
+.vibepass-card{background:linear-gradient(135deg,#0d0d0d,#1a1a2e,#16213e);border:1px solid #2a3f6f;border-radius:8px;padding:24px 28px;color:white;position:relative;overflow:hidden;margin-bottom:20px}
+.vibepass-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 75% 40%, rgba(255,153,0,0.18), transparent 65%)}
+.vp-inner{position:relative;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+.vp-left{}
+.vp-active-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,153,0,0.2);border:1px solid rgba(255,153,0,0.4);border-radius:20px;padding:4px 14px;font-size:0.78rem;font-weight:800;color:var(--orange);margin-bottom:10px}
+.vp-name{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:4px}
+.vp-sub{font-size:0.8rem;color:rgba(255,255,255,0.6);margin-bottom:14px}
+.vp-benefits{display:flex;gap:20px;flex-wrap:wrap}
+.vp-benefit{display:flex;align-items:center;gap:7px;font-size:0.8rem;color:rgba(255,255,255,0.85)}
+.vp-benefit .icon{font-size:1.1rem}
+.vp-right{text-align:center}
+.vp-renews{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:12px}
+.btn-manage{background:var(--orange);color:white;border:none;border-radius:4px;padding:10px 22px;font-size:0.85rem;font-weight:700;transition:background 0.15s}
+.btn-manage:hover{background:#e68900}
 
-/* ADDRESS CARDS */
-.addr-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.addr-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative}
-.addr-card.default{border-color:rgba(109,40,217,0.3);background:rgba(109,40,217,0.03)}
-.addr-default-badge{font-size:0.65rem;font-weight:700;color:var(--purple);background:rgba(109,40,217,0.1);padding:2px 8px;border-radius:100px;margin-bottom:8px;display:inline-block}
-.addr-name{font-weight:700;font-size:0.85rem;margin-bottom:4px}
-.addr-text{font-size:0.78rem;color:var(--gray);line-height:1.5}
-.addr-actions{display:flex;gap:6px;margin-top:10px}
-.addr-btn{padding:5px 12px;border:1px solid var(--border);border-radius:6px;font-size:0.72rem;font-weight:600;background:white;transition:all 0.2s;cursor:pointer}
-.addr-btn:hover{border-color:var(--purple);color:var(--purple)}
-.add-addr-card{background:var(--bg2);border:2px dashed var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;min-height:120px}
-.add-addr-card:hover{border-color:var(--purple);background:rgba(109,40,217,0.03)}
+/* ===== BUY AGAIN SCROLL ===== */
+.buy-again-scroll{display:flex;gap:14px;overflow-x:auto;padding:16px 16px 20px;scrollbar-width:thin}
+.buy-again-scroll::-webkit-scrollbar{height:4px}
+.buy-again-scroll::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px}
+.ba-card{flex-shrink:0;width:160px;background:#fafafa;border:1px solid var(--border);border-radius:6px;overflow:hidden;cursor:pointer;transition:box-shadow 0.2s}
+.ba-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.1)}
+.ba-img{height:110px;background:white;display:flex;align-items:center;justify-content:center;font-size:3.2rem;border-bottom:1px solid var(--border)}
+.ba-info{padding:10px 10px 12px}
+.ba-name{font-size:0.76rem;font-weight:600;margin-bottom:3px;line-height:1.3;color:var(--dark)}
+.ba-seller{font-size:0.67rem;color:var(--teal);margin-bottom:6px}
+.ba-price{font-size:0.82rem;font-weight:700;margin-bottom:8px;color:var(--dark)}
+.btn-ba{width:100%;background:var(--orange);color:white;border:none;border-radius:3px;padding:6px;font-size:0.75rem;font-weight:700;transition:background 0.15s}
+.btn-ba:hover{background:#e68900}
 
-/* METRICS ROW */
-.acc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
-.acc-metric{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
-.acc-metric-val{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:2px}
-.acc-metric-lbl{font-size:0.7rem;color:var(--gray)}
+/* ===== FOLLOWED SELLERS ===== */
+.sellers-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px}
+.seller-card{border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center;transition:all 0.2s;background:white}
+.seller-card:hover{box-shadow:0 2px 12px rgba(0,0,0,0.1);border-color:#bbb}
+.seller-logo{font-size:2.5rem;margin-bottom:8px}
+.seller-name{font-size:0.88rem;font-weight:700;margin-bottom:3px}
+.seller-rating{font-size:0.75rem;color:var(--orange);margin-bottom:2px}
+.seller-rating span{color:var(--gray2)}
+.seller-items{font-size:0.72rem;color:var(--teal);margin-bottom:12px}
+.btn-follow{width:100%;border-radius:3px;padding:7px;font-size:0.78rem;font-weight:700;transition:all 0.2s;border:1px solid}
+.btn-follow.following{background:white;color:var(--gray);border-color:var(--border)}
+.btn-follow.following:hover{background:#fce4ec;border-color:#e0a0a0;color:var(--red)}
+.btn-follow.follow{background:var(--orange);color:white;border-color:var(--orange)}
+.btn-follow.follow:hover{background:#e68900}
 
-/* AI RECOMMENDATIONS */
-.ai-rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.ai-rec-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.ai-rec-card:hover{transform:translateY(-2px);border-color:rgba(109,40,217,0.25)}
-.ai-rec-img{height:80px;background:white;display:flex;align-items:center;justify-content:center;font-size:2rem}
-.ai-rec-info{padding:10px}
-.ai-rec-name{font-size:0.78rem;font-weight:600;margin-bottom:3px}
-.ai-rec-price{font-weight:700;font-size:0.85rem;color:var(--purple)}
-.ai-rec-reason{font-size:0.65rem;color:var(--gray);margin-top:3px}
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;border-radius:100px;padding:10px 22px;font-size:0.84rem;font-weight:600;z-index:9999;transition:transform 0.3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
 
-/* LOGOUT */
-.logout-btn{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;font-size:0.83rem;color:var(--red);cursor:pointer;transition:all 0.2s;border:1px solid transparent;margin-top:4px}
-.logout-btn:hover{background:rgba(220,38,38,0.06);border-color:rgba(220,38,38,0.15)}
+/* ===== FOOTER ===== */
+footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;margin-top:32px}
+.foot-inner{max-width:1300px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:20px}
+.foot-col h4{color:white;font-size:0.85rem;margin-bottom:10px}
+.foot-col a{display:block;font-size:0.78rem;color:rgba(255,255,255,0.7);margin-bottom:6px;transition:color .2s}
+.foot-col a:hover{color:white}
+.foot-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.45)}
 
-/* TOAST */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
-.ti{background:var(--dark);color:white;border-radius:100px;padding:10px 20px;font-size:0.82rem;font-weight:500;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:su 0.3s ease}
-@keyframes su{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-
-/* RESPONSIVE */
-@media(max-width:768px){.dash-grid{grid-template-columns:1fr}.dash-sidebar{flex-direction:row;overflow-x:auto;gap:6px}.dash-user-card{display:none}.wish-grid{grid-template-columns:repeat(2,1fr)}.profile-grid{grid-template-columns:1fr}.addr-grid{grid-template-columns:1fr}.acc-metrics{grid-template-columns:repeat(3,1fr)}.ai-rec-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:480px){.wish-grid,.ai-rec-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.tile-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:860px){.tile-grid{grid-template-columns:repeat(2,1fr)}.sellers-grid{grid-template-columns:repeat(2,1fr)}.orders-table th:nth-child(3),.orders-table td:nth-child(3){display:none}.foot-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+  .tile-grid{grid-template-columns:repeat(2,1fr);}
+  .orders-table{overflow-x:auto;display:block;}
+  .buy-again-scroll,.buy-again-strip{overflow-x:auto;}
+  .sellers-grid,.followed-sellers{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:560px){.tile-grid{grid-template-columns:repeat(2,1fr)}.sellers-grid{grid-template-columns:repeat(2,1fr)}.vp-inner{flex-direction:column}}
+@media(max-width:480px){
+  .tile-grid{grid-template-columns:repeat(2,1fr);}
+  .hello-row,.account-header{flex-direction:column;align-items:flex-start;}
+}
 </style>
 </head>
 <body>
 
+<!-- ===== NAV ===== -->
 <nav>
-  <div class="nav-inner">
-    <a class="nav-logo" href="mystore.html">MyStore <span class="ai-tag">AI</span></a>
-    <div class="nav-links">
-      <a href="collections.html">Collections</a>
-      <a href="sale.html">Sale</a>
-      <a href="blog.html">Blog</a>
-      <a href="account.html">Account</a>
-      <a href="track.html">Orders</a>
-      <a href="wishlist.html">Wishlist</a>
+  <div class="nav-top">
+    <a class="nav-logo" href="index.html">Vibe<span>Store</span></a>
+    <div class="nav-search">
+      <select class="nav-search-cat"><option>All</option><option>Electronics</option><option>Fashion</option><option>Beauty</option><option>Home</option></select>
+      <input placeholder="Search VibeStore..."/>
+      <button class="nav-search-btn">🔍</button>
     </div>
-    <div class="nav-right">
-      <div class="nav-icon" onclick="window.location.href='mystore.html'">🛒<div class="cart-count" id="cartCount">0</div></div>
-    </div>
+    <a href="account.html" class="nav-btn" id="navAccLink"><span class="vs-nav-greeting">Hello, Sign in</span><strong>Account &amp; Lists</strong></a>
+    <a href="returns.html" class="nav-btn"><span>Returns</span><strong>&amp; Orders</strong></a>
+    <a href="cart.html" class="nav-cart">
+      <div>
+        <div class="nav-cart-count" id="cartCount">0</div>
+        <div class="nav-cart-text">Cart 🛒</div>
+      </div>
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-bot-btn">☰ All</button>
+    <a href="sale.html" class="nav-bot-btn">Today's Deals</a>
+    <a href="collections.html" class="nav-bot-btn">New Arrivals</a>
+    <a href="account.html" class="nav-bot-btn active">Your Account</a>
+    <a href="gift-cards.html" class="nav-bot-btn">Gift Cards</a>
+    <a href="become-seller.html" class="nav-bot-btn">Sell</a>
+    <a href="blog.html" class="nav-bot-btn">Blog</a>
   </div>
 </nav>
 
-<!-- AUTH SCREEN -->
-<div id="auth-screen">
-  <div class="auth-card">
-    <div class="auth-hdr">
-      <div class="auth-logo">🛍️</div>
-      <div class="auth-title">Welcome Back</div>
-      <div class="auth-sub">Sign in to your MyStore account</div>
-    </div>
-    <div style="padding:0 32px">
-      <div class="auth-tabs">
-        <div class="auth-tab active" onclick="switchAuth('login',this)">Sign In</div>
-        <div class="auth-tab" onclick="switchAuth('signup',this)">Create Account</div>
-      </div>
-    </div>
+<!-- ===== PAGE ===== -->
+<div class="page">
 
-    <!-- LOGIN -->
-    <div class="auth-body" id="auth-login">
-      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com" id="loginEmail"/></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="••••••••" id="loginPass"/></div>
-      <div class="forgot" onclick="toast_('📧 Password reset link sent!')">Forgot password?</div>
-      <button class="btn-auth" onclick="login()">Sign In →</button>
-      <div class="auth-divider">or continue with</div>
-      <div class="social-btns">
-        <button class="btn-social" onclick="login()">🔵 Google</button>
-        <button class="btn-social" onclick="login()">⬛ Apple</button>
+  <!-- HELLO HEADING -->
+  <div class="hello-row">
+    <div class="hello-left">
+      <div class="hello-h" id="helloHeading">
+        Hello, Aryan Kapoor 👋
+        <span class="vibepass-badge">⚡ VibePass Active</span>
       </div>
-      <div class="ai-login-note">🤖 Rex AI will personalise your experience after sign-in</div>
+      <div class="hello-sub">Member since January 2024 · Multi-seller marketplace account</div>
     </div>
-
-    <!-- SIGNUP -->
-    <div class="auth-body" id="auth-signup" style="display:none">
-      <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" placeholder="Aryan Kapoor"/></div>
-      <div class="form-group"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password" placeholder="Min 8 characters"/></div>
-      <button class="btn-auth" onclick="login()">Create Account →</button>
-      <div class="ai-login-note">🤖 Atlas AI will start building your personalised feed immediately</div>
+    <div class="hello-actions">
+      <button class="btn-signout vs-logout-btn" style="display:none">Sign Out</button>
+      <button class="btn-signout" id="signOutBtn" onclick="vsLogout ? vsLogout() : toast('👋 Signed out')">Sign Out</button>
     </div>
   </div>
-</div>
 
-<!-- DASHBOARD -->
-<div id="dash-screen">
-  <div class="dash-grid">
-    <!-- SIDEBAR -->
-    <div class="dash-sidebar">
-      <div class="dash-user-card">
-        <div class="dash-avatar" id="dashAvatar">AK</div>
-        <div class="dash-name" id="dashName">Aryan Kapoor</div>
-        <div class="dash-email" id="dashEmail">aryan@example.com</div>
-        <div class="dash-plan">⭐ VIP Member</div>
-      </div>
-      <div class="sb-nav-item active" onclick="showPanel('overview',this)"><span class="icon">🏠</span>Overview</div>
-      <div class="sb-nav-item" onclick="showPanel('orders',this)"><span class="icon">📦</span>My Orders</div>
-      <div class="sb-nav-item" onclick="showPanel('wishlist',this)"><span class="icon">♡</span>Wishlist</div>
-      <div class="sb-nav-item" onclick="showPanel('addresses',this)"><span class="icon">📍</span>Addresses</div>
-      <div class="sb-nav-item" onclick="showPanel('profile',this)"><span class="icon">👤</span>Profile</div>
-      <div class="sb-nav-item" onclick="showPanel('aiinsights',this)"><span class="icon">🤖</span>AI Insights</div>
-      <div class="sb-nav-item logout-btn" onclick="logout()"><span class="icon">🚪</span>Sign Out</div>
-    </div>
-
-    <!-- MAIN PANELS -->
-    <div class="dash-main">
-
-      <!-- OVERVIEW -->
-      <div class="panel active" id="panel-overview">
-        <div class="panel-title">Good to see you, <span id="greetName">Aryan</span> 👋</div>
-        <div class="acc-metrics">
-          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--purple)">12</div><div class="acc-metric-lbl">Total Orders</div></div>
-          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--cyan)">$1,284</div><div class="acc-metric-lbl">Total Spent</div></div>
-          <div class="acc-metric"><div class="acc-metric-val" style="color:var(--green)">4</div><div class="acc-metric-lbl">Wishlist Items</div></div>
-        </div>
-        <div style="font-size:0.82rem;font-weight:700;color:var(--gray);margin-bottom:10px">Recent Order</div>
-        <div class="order-card-item" onclick="showPanel('orders',document.querySelector('[onclick*=orders]'))">
-          <div class="oc-hdr">
-            <span class="oc-id">#VS-48291</span>
-            <span class="oc-date">May 18, 2025</span>
-            <span class="oc-status-badge"><span class="badge b-cyan">In Transit</span></span>
-          </div>
-          <div class="oc-body">
-            <div class="oc-emojis"><div class="oc-emoji">🎧</div><div class="oc-emoji">🔌</div></div>
-            <div class="oc-info">
-              <div class="oc-items-text">Wireless Earbuds Pro + USB-C Hub Pro</div>
-              <div class="oc-total">2 items · $138.00 · Standard Delivery</div>
-              <div class="oc-ai">🤖 Zen AI: Dispatched 1hr ago · Arrives May 22</div>
-            </div>
-            <div class="oc-actions">
-              <button class="oc-btn oc-btn-primary" onclick="event.stopPropagation();window.location.href='track.html'">Track</button>
-            </div>
-          </div>
-        </div>
-        <div style="font-size:0.82rem;font-weight:700;color:var(--gray);margin:16px 0 10px;display:flex;align-items:center;gap:6px">🤖 Atlas AI recommends for you</div>
-        <div class="ai-rec-grid" id="overviewRecs"></div>
-      </div>
-
-      <!-- ORDERS -->
-      <div class="panel" id="panel-orders">
-        <div class="panel-title">My Orders <span class="badge b-purple">12 total</span></div>
-        <div id="ordersList"></div>
-      </div>
-
-      <!-- WISHLIST -->
-      <div class="panel" id="panel-wishlist">
-        <div class="panel-title">Wishlist <span style="font-size:0.75rem;color:var(--gray);font-weight:400">4 saved items</span></div>
-        <div class="wish-grid" id="wishGrid"></div>
-      </div>
-
-      <!-- ADDRESSES -->
-      <div class="panel" id="panel-addresses">
-        <div class="panel-title">Saved Addresses</div>
-        <div class="addr-grid">
-          <div class="addr-card default">
-            <div class="addr-default-badge">✓ Default</div>
-            <div class="addr-name">Aryan Kapoor</div>
-            <div class="addr-text">42 Tech Park, Hazratganj<br/>Lucknow, UP 226001<br/>+91 98765 43210</div>
-            <div class="addr-actions">
-              <button class="addr-btn" onclick="toast_('✏️ Edit address')">Edit</button>
-              <button class="addr-btn" onclick="toast_('✓ Set as default')">Set Default</button>
-            </div>
-          </div>
-          <div class="addr-card">
-            <div class="addr-name">Office</div>
-            <div class="addr-text">12 Gomti Nagar, Sector 7<br/>Lucknow, UP 226010<br/>+91 98765 43210</div>
-            <div class="addr-actions">
-              <button class="addr-btn" onclick="toast_('✏️ Edit address')">Edit</button>
-              <button class="addr-btn" onclick="toast_('✓ Set as default')">Set Default</button>
-            </div>
-          </div>
-          <div class="add-addr-card" onclick="toast_('➕ Add new address')">
-            <div style="text-align:center;color:var(--gray)"><div style="font-size:1.5rem;margin-bottom:6px">+</div><div style="font-size:0.8rem;font-weight:600">Add New Address</div></div>
-          </div>
+  <!-- VIBEPASS MEMBERSHIP CARD -->
+  <div class="vibepass-card">
+    <div class="vp-inner">
+      <div class="vp-left">
+        <div class="vp-active-badge">⚡ VibePass Active</div>
+        <div class="vp-name">VibePass Gold</div>
+        <div class="vp-sub">Member since Jan 2024 · Auto-renews June 2026</div>
+        <div class="vp-benefits">
+          <div class="vp-benefit"><span class="icon">🚚</span> Free Express Delivery on all orders</div>
+          <div class="vp-benefit"><span class="icon">💸</span> 5% cashback on every purchase</div>
+          <div class="vp-benefit"><span class="icon">⚡</span> Early access to Lightning Deals (24h)</div>
+          <div class="vp-benefit"><span class="icon">🎁</span> Exclusive member-only seller discounts</div>
         </div>
       </div>
-
-      <!-- PROFILE -->
-      <div class="panel" id="panel-profile">
-        <div class="panel-title">Profile Settings</div>
-        <div class="dash-user-card" style="display:flex;align-items:center;gap:16px;text-align:left;margin-bottom:20px;border-radius:12px">
-          <div class="dash-avatar" style="width:56px;height:56px;font-size:1.2rem;flex-shrink:0">AK</div>
-          <div><div class="dash-name">Aryan Kapoor</div><div class="dash-email">aryan@example.com</div></div>
-          <button class="addr-btn" style="margin-left:auto" onclick="toast_('📷 Upload photo')">Change Photo</button>
-        </div>
-        <div class="profile-grid">
-          <div class="form-group"><label class="form-label">First Name</label><input class="form-input" value="Aryan"/></div>
-          <div class="form-group"><label class="form-label">Last Name</label><input class="form-input" value="Kapoor"/></div>
-          <div class="form-group"><label class="form-label">Email</label><input class="form-input" type="email" value="aryan@example.com"/></div>
-          <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" value="+91 98765 43210"/></div>
-          <div class="form-group"><label class="form-label">Birthday</label><input class="form-input" type="date" value="1995-03-15"/></div>
-          <div class="form-group"><label class="form-label">Gender</label><select class="form-input" style="appearance:none"><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px">Communication Preferences</div>
-          <div style="display:flex;flex-direction:column;gap:8px">
-            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--purple)"/>Order updates via email</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" checked style="accent-color:var(--purple)"/>🤖 AI-curated deal alerts</label>
-            <label style="display:flex;align-items:center;gap:8px;font-size:0.82rem;cursor:pointer"><input type="checkbox" style="accent-color:var(--purple)"/>Promotional SMS</label>
-          </div>
-        </div>
-        <button class="save-btn" onclick="toast_('✅ Profile saved!')">Save Changes</button>
-        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border)">
-          <div style="font-size:0.78rem;font-weight:700;margin-bottom:8px;color:var(--red)">Danger Zone</div>
-          <button onclick="toast_('🔒 Change password email sent')" style="padding:8px 16px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;font-weight:600;background:white;margin-right:8px">Change Password</button>
-          <button onclick="toast_('⚠️ Contact support to delete account')" style="padding:8px 16px;border:1px solid rgba(220,38,38,0.3);border-radius:8px;font-size:0.78rem;font-weight:600;color:var(--red);background:white">Delete Account</button>
-        </div>
-      </div>
-
-      <!-- AI INSIGHTS -->
-      <div class="panel" id="panel-aiinsights">
-        <div class="panel-title">🤖 Your AI Insights</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
-          <div style="background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.15);border-radius:12px;padding:16px">
-            <div style="font-size:1rem;margin-bottom:6px">📊</div>
-            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Atlas AI — Spending Pattern</div>
-            <div style="font-size:0.75rem;color:var(--gray)">You spend most on Electronics (68%). Best time to buy: Tuesday morning — prices are 12% lower on average.</div>
-          </div>
-          <div style="background:rgba(8,145,178,0.05);border:1px solid rgba(8,145,178,0.15);border-radius:12px;padding:16px">
-            <div style="font-size:1rem;margin-bottom:6px">🎯</div>
-            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Luna AI — Price Watch</div>
-            <div style="font-size:0.75rem;color:var(--gray)">2 wishlist items have dropped in price this week. Smart Watch Ultra is at its lowest in 60 days.</div>
-          </div>
-          <div style="background:rgba(22,163,74,0.05);border:1px solid rgba(22,163,74,0.15);border-radius:12px;padding:16px">
-            <div style="font-size:1rem;margin-bottom:6px">🌟</div>
-            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Rex AI — Loyalty Status</div>
-            <div style="font-size:0.75rem;color:var(--gray)">You're a VIP member! You've saved ₹2,840 through AI-optimised pricing over your order history.</div>
-          </div>
-          <div style="background:rgba(217,119,6,0.05);border:1px solid rgba(217,119,6,0.15);border-radius:12px;padding:16px">
-            <div style="font-size:1rem;margin-bottom:6px">🔔</div>
-            <div style="font-weight:700;font-size:0.85rem;margin-bottom:4px">Aria AI — Restock Alert</div>
-            <div style="font-size:0.75rem;color:var(--gray)">Wireless Earbuds Pro (your wishlist) has only 8 units left. Buy now before it sells out.</div>
-          </div>
-        </div>
-        <div style="font-size:0.82rem;font-weight:700;margin-bottom:10px">Recommended for You</div>
-        <div class="ai-rec-grid" id="insightRecs"></div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<div id="toast"></div>
-
-<footer style="background:var(--dark);color:rgba(255,255,255,0.7);padding:40px 24px 24px;margin-top:40px">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px">
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Shop</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="collections.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Collections</a>
-        <a href="sale.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Sale</a>
-        <a href="compare.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Compare</a>
-        <a href="gift-cards.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Gift Cards</a>
-        <a href="blog.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Blog</a>
-      </div>
-    </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Support</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="returns.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Returns</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact Us</a>
-        <a href="faq.html" style="color:rgba(255,255,255,0.6);text-decoration:none">FAQ</a>
-        <a href="track.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Track Order</a>
-        <a href="notifications.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Notifications</a>
-      </div>
-    </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Account</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="account.html" style="color:rgba(255,255,255,0.6);text-decoration:none">My Account</a>
-        <a href="loyalty.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Loyalty</a>
-        <a href="wishlist.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Wishlist</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referrals</a>
-      </div>
-    </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Company</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none">About Us</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referral Program</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact</a>
+      <div class="vp-right">
+        <div class="vp-renews">Next billing: June 15, 2026</div>
+        <button class="btn-manage" onclick="location.href='vibepass.html'">Manage Membership →</button>
       </div>
     </div>
   </div>
-  <div style="max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center">© 2025 MyStore. All rights reserved.</div>
+
+  <!-- 3×4 TILE GRID -->
+  <div class="section-heading">Your Account</div>
+  <div class="tile-grid">
+
+    <a class="tile" href="track.html">
+      <div class="tile-icon">📦</div>
+      <div class="tile-body">
+        <div class="tile-title">Your Orders</div>
+        <div class="tile-desc">Track, return, or buy again from your order history across all sellers</div>
+        <span class="tile-badge badge-teal">3 active orders</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="#">
+      <div class="tile-icon">💳</div>
+      <div class="tile-body">
+        <div class="tile-title">Payment Methods</div>
+        <div class="tile-desc">Add, manage cards, UPI, and net banking options</div>
+        <span class="tile-badge badge-teal">2 cards saved</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="#">
+      <div class="tile-icon">📍</div>
+      <div class="tile-body">
+        <div class="tile-title">Your Addresses</div>
+        <div class="tile-desc">Edit and manage saved delivery addresses for faster checkout</div>
+        <span class="tile-badge badge-teal">2 saved</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="#">
+      <div class="tile-icon">🔐</div>
+      <div class="tile-body">
+        <div class="tile-title">Login &amp; Security</div>
+        <div class="tile-desc">Update password, email, and two-step verification settings</div>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="gift-cards.html">
+      <div class="tile-icon">🎁</div>
+      <div class="tile-body">
+        <div class="tile-title">Gift Cards</div>
+        <div class="tile-desc">View balance, redeem, and send VibeStore gift cards</div>
+        <span class="tile-badge badge-red">₹500 balance</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="vibepass.html">
+      <div class="tile-icon">⭐</div>
+      <div class="tile-body">
+        <div class="tile-title">VibePass</div>
+        <div class="tile-desc">Your premium membership — free delivery, cashback &amp; early deals</div>
+        <span class="tile-badge badge-gold">Gold Member · Active</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="wishlist.html">
+      <div class="tile-icon">♡</div>
+      <div class="tile-body">
+        <div class="tile-title">Wish List</div>
+        <div class="tile-desc">Your saved items and price-drop alerts from multiple sellers</div>
+        <span class="tile-badge badge-teal">4 items saved</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="#">
+      <div class="tile-icon">🤖</div>
+      <div class="tile-body">
+        <div class="tile-title">AI Preferences</div>
+        <div class="tile-desc">Tune your personalized product recommendations and AI assistant</div>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="notifications.html">
+      <div class="tile-icon">📢</div>
+      <div class="tile-body">
+        <div class="tile-title">Notifications</div>
+        <div class="tile-desc">Manage email, SMS, and push notification preferences</div>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="returns.html">
+      <div class="tile-icon">🔄</div>
+      <div class="tile-body">
+        <div class="tile-title">Returns &amp; Exchanges</div>
+        <div class="tile-desc">Initiate a return or exchange — works with all sellers on VibeStore</div>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="referral.html">
+      <div class="tile-icon">👥</div>
+      <div class="tile-body">
+        <div class="tile-title">Refer a Friend</div>
+        <div class="tile-desc">Earn ₹200 for every friend you refer to VibeStore marketplace</div>
+        <span class="tile-badge badge-green">₹1,400 earned</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="product.html#reviews">
+      <div class="tile-icon">📋</div>
+      <div class="tile-body">
+        <div class="tile-title">Your Reviews</div>
+        <div class="tile-desc">Manage seller reviews and product ratings you've written</div>
+        <span class="tile-badge badge-teal">8 reviews</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+    <a class="tile" href="loyalty.html">
+      <div class="tile-icon">⭐</div>
+      <div class="tile-body">
+        <div class="tile-title">Loyalty Rewards</div>
+        <div class="tile-desc">View your loyalty points, tiers, and exclusive rewards on VibeStore</div>
+        <span class="tile-badge badge-gold">Points &amp; Perks</span>
+      </div>
+      <div class="tile-arrow">›</div>
+    </a>
+
+  </div>
+
+  <!-- RECENT ORDERS TABLE (MULTI-SELLER) -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <h2>📦 Recent Orders</h2>
+      <a href="track.html" class="section-hdr-link">View all orders →</a>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Date</th>
+            <th>Seller</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="order-id-cell" onclick="window.location.href='track.html'">#VS-2025-58201</div>
+              <div style="font-size:0.7rem;color:var(--gray2);margin-top:2px">VibeStore Fulfilled</div>
+            </td>
+            <td style="font-size:0.82rem">May 20, 2026<br><span style="font-size:0.72rem;color:var(--gray2)">2 items</span></td>
+            <td>
+              <a href="seller-profile.html" class="order-seller-link">🏪 TechHub Electronics</a>
+              <div style="font-size:0.68rem;color:var(--gray2)">★ 4.8 · 2,341 reviews</div>
+            </td>
+            <td>
+              <div class="order-items-wrap">
+                <div class="order-emoji">🎧</div>
+                <div class="order-emoji">🔌</div>
+                <div class="order-name">Wireless Headphones<br/>+ USB-C Cable ×2</div>
+              </div>
+            </td>
+            <td style="font-weight:700">₹3,395</td>
+            <td><span class="status-badge s-orange"><span class="s-dot"></span>Out for Delivery</span></td>
+            <td>
+              <div class="tbl-btns">
+                <button class="tbl-btn primary" onclick="window.location.href='track.html'">Track Package</button>
+                <button class="tbl-btn" onclick="buyAgain('TechHub Electronics')">Buy Again</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="order-id-cell" onclick="window.location.href='track.html'">#VS-2025-57844</div>
+              <div style="font-size:0.7rem;color:var(--gray2);margin-top:2px">Seller Fulfilled</div>
+            </td>
+            <td style="font-size:0.82rem">May 14, 2026<br><span style="font-size:0.72rem;color:var(--gray2)">1 item</span></td>
+            <td>
+              <a href="seller-profile.html" class="order-seller-link">👗 FashionFirst India</a>
+              <div style="font-size:0.68rem;color:var(--gray2)">★ 4.5 · 1,102 reviews</div>
+            </td>
+            <td>
+              <div class="order-items-wrap">
+                <div class="order-emoji">👔</div>
+                <div class="order-name">Blue Denim Jacket (M)</div>
+              </div>
+            </td>
+            <td style="font-weight:700">₹1,348</td>
+            <td><span class="status-badge s-green"><span class="s-dot"></span>Delivered</span></td>
+            <td>
+              <div class="tbl-btns">
+                <button class="tbl-btn" onclick="window.location.href='product.html#reviews'">Write a Review</button>
+                <button class="tbl-btn" onclick="buyAgain('FashionFirst India')">Buy Again</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="order-id-cell" onclick="window.location.href='track.html'">#VS-2025-56210</div>
+              <div style="font-size:0.7rem;color:var(--gray2);margin-top:2px">VibeStore Fulfilled</div>
+            </td>
+            <td style="font-size:0.82rem">May 8, 2026<br><span style="font-size:0.72rem;color:var(--gray2)">3 items</span></td>
+            <td>
+              <a href="seller-profile.html" class="order-seller-link">🍎 AppleZone Official</a>
+              <div style="font-size:0.68rem;color:var(--gray2)">★ 4.9 · 8,770 reviews</div>
+            </td>
+            <td>
+              <div class="order-items-wrap">
+                <div class="order-emoji">💻</div>
+                <div class="order-emoji">🖱️</div>
+                <div class="order-emoji">⌨️</div>
+                <div class="order-name">MacBook Air M2<br/>+ Mouse + Keyboard</div>
+              </div>
+            </td>
+            <td style="font-weight:700">₹81,288</td>
+            <td><span class="status-badge s-green"><span class="s-dot"></span>Delivered</span></td>
+            <td>
+              <div class="tbl-btns">
+                <button class="tbl-btn" onclick="window.location.href='returns.html'">Return</button>
+                <button class="tbl-btn primary" onclick="buyAgain('AppleZone Official')">Buy Again</button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="order-id-cell" onclick="">#VS-2025-54990</div>
+              <div style="font-size:0.7rem;color:var(--gray2);margin-top:2px">Seller Fulfilled</div>
+            </td>
+            <td style="font-size:0.82rem">Apr 28, 2026<br><span style="font-size:0.72rem;color:var(--gray2)">1 item</span></td>
+            <td>
+              <a href="seller-profile.html" class="order-seller-link">🌿 OrganicNest India</a>
+              <div style="font-size:0.68rem;color:var(--gray2)">★ 4.6 · 430 reviews</div>
+            </td>
+            <td>
+              <div class="order-items-wrap">
+                <div class="order-emoji">🧴</div>
+                <div class="order-name">Vitamin C Serum Set (3-pack)</div>
+              </div>
+            </td>
+            <td style="font-weight:700">₹1,499</td>
+            <td><span class="status-badge s-red"><span class="s-dot"></span>Cancelled</span></td>
+            <td>
+              <div class="tbl-btns">
+                <button class="tbl-btn" onclick="toast('🔄 Refund processed — ₹1,499 in 3-5 days')">Refund Status</button>
+                <button class="tbl-btn" onclick="buyAgain('OrganicNest India')">Buy Again</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BUY AGAIN SECTION -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <h2>🔁 Buy Again</h2>
+      <span class="section-hdr-link" onclick="toast('Showing all previously purchased items...')">See all →</span>
+    </div>
+    <div class="buy-again-scroll">
+      <div class="ba-card">
+        <div class="ba-img">🎧</div>
+        <div class="ba-info">
+          <div class="ba-name">Wireless Headphones Pro</div>
+          <div class="ba-seller">TechHub Electronics</div>
+          <div class="ba-price">₹2,499</div>
+          <button class="btn-ba" onclick="addToCart('Wireless Headphones Pro',2499)">Buy Again</button>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-img">🔌</div>
+        <div class="ba-info">
+          <div class="ba-name">USB-C Cable 2m</div>
+          <div class="ba-seller">TechHub Electronics</div>
+          <div class="ba-price">₹299</div>
+          <button class="btn-ba" onclick="addToCart('USB-C Cable 2m',299)">Buy Again</button>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-img">👔</div>
+        <div class="ba-info">
+          <div class="ba-name">Blue Denim Jacket</div>
+          <div class="ba-seller">FashionFirst India</div>
+          <div class="ba-price">₹1,299</div>
+          <button class="btn-ba" onclick="addToCart('Blue Denim Jacket',1299)">Buy Again</button>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-img">💻</div>
+        <div class="ba-info">
+          <div class="ba-name">MacBook Air M2 13"</div>
+          <div class="ba-seller">AppleZone Official</div>
+          <div class="ba-price">₹74,990</div>
+          <button class="btn-ba" onclick="addToCart('MacBook Air M2',74990)">Buy Again</button>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-img">🧴</div>
+        <div class="ba-info">
+          <div class="ba-name">Vitamin C Serum Set</div>
+          <div class="ba-seller">OrganicNest India</div>
+          <div class="ba-price">₹1,499</div>
+          <button class="btn-ba" onclick="addToCart('Vitamin C Serum Set',1499)">Buy Again</button>
+        </div>
+      </div>
+      <div class="ba-card">
+        <div class="ba-img">🖱️</div>
+        <div class="ba-info">
+          <div class="ba-name">Wireless Ergonomic Mouse</div>
+          <div class="ba-seller">TechHub Electronics</div>
+          <div class="ba-price">₹1,799</div>
+          <button class="btn-ba" onclick="addToCart('Wireless Ergonomic Mouse',1799)">Buy Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SELLER INTERACTIONS -->
+  <div class="section-card">
+    <div class="section-hdr">
+      <h2>🏪 Your Followed Sellers</h2>
+      <span class="section-hdr-link" onclick="location.href='seller-profile.html'">Browse all sellers →</span>
+    </div>
+    <div class="sellers-grid">
+      <div class="seller-card">
+        <div class="seller-logo">🖥️</div>
+        <div class="seller-name">TechHub Electronics</div>
+        <div class="seller-rating">★★★★★ <span>(2,341)</span></div>
+        <div class="seller-items">1,240 products · Electronics</div>
+        <a href="seller-profile.html" style="display:block;text-align:center;color:var(--teal);font-size:0.78rem;font-weight:600;margin-bottom:6px;">Visit Store →</a>
+        <button class="btn-follow following" onclick="toggleFollow(this)">✓ Following</button>
+      </div>
+      <div class="seller-card">
+        <div class="seller-logo">👗</div>
+        <div class="seller-name">FashionFirst India</div>
+        <div class="seller-rating">★★★★½ <span>(1,102)</span></div>
+        <div class="seller-items">890 products · Fashion</div>
+        <a href="seller-profile.html" style="display:block;text-align:center;color:var(--teal);font-size:0.78rem;font-weight:600;margin-bottom:6px;">Visit Store →</a>
+        <button class="btn-follow following" onclick="toggleFollow(this)">✓ Following</button>
+      </div>
+      <div class="seller-card">
+        <div class="seller-logo">🍎</div>
+        <div class="seller-name">AppleZone Official</div>
+        <div class="seller-rating">★★★★★ <span>(8,770)</span></div>
+        <div class="seller-items">85 products · Electronics</div>
+        <a href="seller-profile.html" style="display:block;text-align:center;color:var(--teal);font-size:0.78rem;font-weight:600;margin-bottom:6px;">Visit Store →</a>
+        <button class="btn-follow following" onclick="toggleFollow(this)">✓ Following</button>
+      </div>
+      <div class="seller-card">
+        <div class="seller-logo">🌿</div>
+        <div class="seller-name">OrganicNest India</div>
+        <div class="seller-rating">★★★★½ <span>(430)</span></div>
+        <div class="seller-items">340 products · Beauty</div>
+        <a href="seller-profile.html" style="display:block;text-align:center;color:var(--teal);font-size:0.78rem;font-weight:600;margin-bottom:6px;">Visit Store →</a>
+        <button class="btn-follow follow" onclick="toggleFollow(this)">+ Follow</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="collections.html">All Collections</a>
+        <a href="sale.html">Today's Deals</a>
+        <a href="compare.html">Compare Products</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Customer Service</h4>
+        <a href="returns.html">Returns &amp; Refunds</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+      <div class="foot-col">
+        <h4>Your Account</h4>
+        <a href="account.html">My Account</a>
+        <a href="vibepass.html">VibePass</a>
+        <a href="wishlist.html">Wish List</a>
+        <a href="referral.html">Referral Program</a>
+        <a href="returns.html">Returns</a>
+      </div>
+      <div class="foot-col">
+        <h4>Sell on VibeStore</h4>
+        <a href="become-seller.html">Become a Seller</a>
+        <a href="seller-central.html">Seller Central</a>
+        <a href="seller-profile.html">Seller Directory</a>
+        <a href="index.html">About VibeStore</a>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
+  </div>
 </footer>
 
+<div class="toast" id="toast"></div>
+
 <script>
-const ORDERS_DATA = [
-  {id:'#VS-48291',date:'May 18, 2025',items:'Wireless Earbuds Pro, USB-C Hub Pro',emojis:['🎧','🔌'],total:'$138.00',status:'In Transit',agent:'Zen AI dispatched 1hr ago · Arrives May 22',statusClass:'b-cyan'},
-  {id:'#VS-47820',date:'May 10, 2025',items:'Smart Watch Ultra',emojis:['⌚'],total:'$249.00',status:'Delivered',agent:'Delivered May 13 · Rex AI sent review request',statusClass:'b-green'},
-  {id:'#VS-46410',date:'Apr 28, 2025',items:'Mechanical Keyboard TKL',emojis:['⌨️'],total:'$139.00',status:'Delivered',agent:'Delivered May 2 · Rated 5★',statusClass:'b-green'},
-  {id:'#VS-44100',date:'Apr 12, 2025',items:'Webcam 4K HD, Laptop Stand',emojis:['📷','💻'],total:'$146.00',status:'Delivered',agent:'Delivered Apr 16',statusClass:'b-green'},
-  {id:'#VS-41220',date:'Mar 30, 2025',items:'USB-C Hub Pro',emojis:['🔌'],total:'$49.00',status:'Returned',agent:'Refunded Mar 31 by Rex AI',statusClass:'b-red'},
-];
-const WISHLIST = [
-  {emoji:'⌚',name:'Smart Watch Ultra',price:'$249',og:'$299'},
-  {emoji:'🎙️',name:'Studio Condenser Mic',price:'$129',og:'$159'},
-  {emoji:'🖥️',name:'Monitor Arm Dual',price:'$89',og:'$89'},
-  {emoji:'🔋',name:'Power Bank 20000mAh',price:'$59',og:'$79'},
-];
-const RECS = [
-  {emoji:'🖱️',name:'Ergonomic Mouse',price:'$49',reason:'Based on your keyboard purchase'},
-  {emoji:'📱',name:'Phone Stand MagSafe',price:'$29',reason:'Trending in your category'},
-  {emoji:'🎧',name:'Earpad Replacement Kit',price:'$19',reason:'Accessory for your earbuds'},
-];
-
-let loggedIn = false;
-
-function switchAuth(type, el){
-  document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  document.getElementById('auth-login').style.display = type==='login'?'block':'none';
-  document.getElementById('auth-signup').style.display = type==='signup'?'block':'none';
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
 }
 
-function login(){
-  loggedIn = true;
-  document.getElementById('auth-screen').style.display = 'none';
-  document.getElementById('dash-screen').style.display = 'block';
-  renderDash();
-  toast_('👋 Welcome back, Aryan!');
+function addToCart(name, price) {
+  const c = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+  const ex = c.find(i => i.name === name);
+  if (ex) ex.qty = (ex.qty || 1) + 1;
+  else c.push({name, price, qty:1, emoji:'🛍️', seller:'VibeStore', fulfilled:'vs'});
+  localStorage.setItem('vs_cart', JSON.stringify(c));
+  const el = document.getElementById('cartCount');
+  if (el) el.textContent = c.reduce((s, i) => s + (i.qty || 1), 0);
+  toast('🛒 ' + name + ' added to cart!');
 }
 
-function logout(){
-  loggedIn = false;
-  document.getElementById('dash-screen').style.display = 'none';
-  document.getElementById('auth-screen').style.display = 'flex';
-  toast_('👋 Signed out');
+function buyAgain(seller) {
+  toast('🛒 Items from ' + seller + ' added to cart!');
 }
 
-function showPanel(id, el){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sb-nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('panel-'+id).classList.add('active');
-  if(el) el.classList.add('active');
+function toggleFollow(btn) {
+  const isFollowing = btn.classList.contains('following');
+  if (isFollowing) {
+    btn.className = 'btn-follow follow';
+    btn.textContent = '+ Follow';
+    toast('Unfollowed seller');
+  } else {
+    btn.className = 'btn-follow following';
+    btn.textContent = '✓ Following';
+    toast('✅ Now following seller!');
+  }
 }
 
-function renderDash(){
-  // Orders
-  const ol = document.getElementById('ordersList');
-  if(ol) ol.innerHTML = ORDERS_DATA.map(o=>`
-    <div class="order-card-item">
-      <div class="oc-hdr"><span class="oc-id">${o.id}</span><span class="oc-date">${o.date}</span><span class="oc-status-badge"><span class="badge ${o.statusClass}">${o.status}</span></span></div>
-      <div class="oc-body">
-        <div class="oc-emojis">${o.emojis.map(e=>`<div class="oc-emoji">${e}</div>`).join('')}</div>
-        <div class="oc-info"><div class="oc-items-text">${o.items}</div><div class="oc-total">${o.total}</div><div class="oc-ai">🤖 ${o.agent}</div></div>
-        <div class="oc-actions">
-          ${o.status==='In Transit'?`<button class="oc-btn oc-btn-primary" onclick="window.location.href='track.html'">Track</button>`:''}
-          ${o.status==='Delivered'?`<button class="oc-btn" onclick="toast_('🔄 Reorder placed!')">Reorder</button>`:''}
-          <button class="oc-btn" onclick="toast_('💬 Rex AI opening...')">Help</button>
-        </div>
-      </div>
-    </div>`).join('');
-
-  // Wishlist
-  const wg = document.getElementById('wishGrid');
-  if(wg) wg.innerHTML = WISHLIST.map((w,i)=>`
-    <div class="wish-card">
-      <div class="wish-img">${w.emoji}</div>
-      <div class="wish-info">
-        <div class="wish-name">${w.name}</div>
-        <div class="wish-price">${w.price} <span style="text-decoration:line-through;color:var(--gray2);font-size:0.72rem;font-weight:400">${w.og}</span></div>
-        <button class="wish-add" onclick="addWishToCart('${w.name}')">Add to Cart</button>
-      </div>
-      <div class="wish-rm" onclick="removeWish(this,'${w.name}')">✕</div>
-    </div>`).join('');
-
-  // Recs
-  ['overviewRecs','insightRecs'].forEach(id=>{
-    const el = document.getElementById(id);
-    if(el) el.innerHTML = RECS.map(r=>`
-      <div class="ai-rec-card" onclick="window.location.href='product.html'">
-        <div class="ai-rec-img">${r.emoji}</div>
-        <div class="ai-rec-info"><div class="ai-rec-name">${r.name}</div><div class="ai-rec-price">${r.price}</div><div class="ai-rec-reason">🤖 ${r.reason}</div></div>
-      </div>`).join('');
+(function () {
+  const c = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+  const el = document.getElementById('cartCount');
+  if (el) el.textContent = c.reduce((s, i) => s + (i.qty || 1), 0);
+})();
+</script>
+<script src="auth.js"></script>
+<script>
+// AUTH GUARD — buyers only
+const _auth = vsRequireAuth(['buyer']);
+if (_auth) {
+  vsUpdateNav(_auth);
+  // Update greeting
+  const heading = document.getElementById('helloHeading');
+  if (heading) {
+    const badge = heading.querySelector('.vibepass-badge');
+    heading.textContent = 'Hello, ' + _auth.name + ' 👋 ';
+    if (badge) heading.appendChild(badge);
+  }
+  // Sign out button
+  const soBtn = document.getElementById('signOutBtn');
+  if (soBtn) soBtn.onclick = vsLogout;
+  // Update nav account link
+  const navBtns = document.querySelectorAll('.nav-btn');
+  navBtns.forEach(btn => {
+    const strong = btn.querySelector('strong');
+    if (strong && strong.textContent.includes('Account')) btn.href = 'account.html';
   });
 }
-
-function addWishToCart(name){ toast_('🛒 '+name+' added to cart'); }
-function removeWish(el, name){ el.closest('.wish-card').style.opacity='0.3'; toast_('✕ '+name+' removed from wishlist'); }
-
-function toast_(msg){
-  const el=document.getElementById('toast');
-  el.innerHTML=`<div class="ti">${msg}</div>`;
-  setTimeout(()=>el.innerHTML='',2600);
-}
-
-// auto-login for demo
-const cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
-document.getElementById('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0);
 </script>
+<script src="rex-chat.js"></script>
 </body>
 </html>

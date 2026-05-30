@@ -3,359 +3,546 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Contact Us — Rex AI responds instantly</title>
+<title>Help &amp; Contact — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#f8f8f5;--card:#ffffff;--accent:#6d28d9;--text:#111111;--muted:#6b7280;--border:#e5e5e0;
-  --bg2:#f3f3ef;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;
-  --gray:#6b7280;--gray2:#9ca3af;--green:#16a34a;--red:#dc2626;
+  --nav:#131921;--orange:#FF9900;--orange2:#FF6600;--bg:#f0f2f5;--white:#fff;
+  --dark:#0f1111;--teal:#007185;--red:#CC0C39;--green:#067D62;--gray:#565959;
+  --gray2:#888c8c;--border:#d5d9d9;
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark)}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
 
-/* TOP BANNER */
-.top-banner{background:var(--dark);color:white;text-align:center;padding:10px;font-size:0.8rem;letter-spacing:0.02em}
-.top-banner span{color:#a78bfa}
-
 /* NAV */
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1300px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:var(--dark);display:flex;align-items:center;gap:8px;cursor:pointer}
-.nav-logo .ai-tag{font-size:0.55rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:0.04em}
-.nav-links{display:flex;gap:4px;flex:1;justify-content:center}
-.nav-lnk{padding:6px 13px;border-radius:6px;font-size:0.83rem;font-weight:500;color:var(--gray);cursor:pointer;transition:all 0.2s;border:1px solid transparent;white-space:nowrap}
-.nav-lnk:hover,.nav-lnk.active{background:var(--bg2);color:var(--dark);border-color:var(--border)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-search{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.83rem;color:var(--gray);width:190px;transition:all 0.2s}
-.nav-search:focus-within{border-color:var(--purple);background:white}
-.nav-search input{background:none;border:none;outline:none;color:var(--text);width:100%;font-size:0.83rem}
-.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;position:relative;text-decoration:none}
-.nav-icon:hover{border-color:var(--purple);background:var(--bg2)}
-.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.site-nav{background:var(--nav);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:200}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;color:white;cursor:pointer;white-space:nowrap}
+.nav-logo span{color:var(--orange)}
+.search-box{flex:1;max-width:620px;display:flex;height:38px}
+.search-input{flex:1;border:none;border-radius:4px 0 0 4px;padding:0 14px;font-size:0.88rem;outline:none;font-family:'Inter',sans-serif;background:white;color:var(--dark)}
+.search-btn{background:var(--orange);border:none;border-radius:0 4px 4px 0;width:48px;font-size:1.1rem;cursor:pointer;transition:background 0.2s}
+.search-btn:hover{background:var(--orange2)}
+.nav-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-action{display:flex;flex-direction:column;align-items:center;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all 0.2s;min-width:52px;border:1px solid transparent}
+.nav-action:hover{border-color:var(--orange)}
+.nav-action-label{font-size:0.65rem;color:rgba(255,255,255,0.8);white-space:nowrap}
+.nav-action-val{font-size:0.82rem;font-weight:700;color:white;white-space:nowrap}
+.nav-cart{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.nav-cart:hover{border-color:var(--orange)}
+.nav-cart-emoji{font-size:1.6rem;color:white}
+.nav-cart-info{display:flex;flex-direction:column}
+.nav-cart-label{font-size:0.65rem;color:rgba(255,255,255,0.8)}
+.nav-cart-val{font-size:0.82rem;font-weight:700;color:white}
+
+/* SUB-NAV */
+.sub-nav{background:#232f3e;padding:0 24px;height:38px;display:flex;align-items:center;gap:4px}
+.sub-link{color:rgba(255,255,255,0.8);font-size:0.82rem;padding:0 10px;height:38px;display:flex;align-items:center;white-space:nowrap;cursor:pointer;border:1px solid transparent;border-radius:3px;transition:all 0.18s}
+.sub-link:hover{border-color:white;color:white}
+.sub-link.active{border-color:white;color:white}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#1a0533 0%,#0a1a2e 60%,#001a1a 100%);color:white;padding:72px 24px 56px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(109,40,217,0.3),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(8,145,178,0.2),transparent 60%)}
+.hero{background:linear-gradient(135deg,var(--nav) 0%,#1e2a38 50%,#0d1b2a 100%);padding:56px 24px 48px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 60%,rgba(255,153,0,0.1),transparent 60%),radial-gradient(ellipse at 70% 40%,rgba(0,113,133,0.15),transparent 60%)}
 .hero-inner{max-width:700px;margin:0 auto;position:relative;z-index:1}
-.live-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,0.15);border:1px solid rgba(74,222,128,0.3);border-radius:100px;padding:6px 16px;font-size:0.78rem;color:#4ade80;margin-bottom:20px;font-weight:600}
+.live-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(74,222,128,0.12);border:1px solid rgba(74,222,128,0.3);border-radius:100px;padding:6px 16px;font-size:0.78rem;color:#4ade80;font-weight:600;margin-bottom:20px}
 .live-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;line-height:1.1;margin-bottom:12px;letter-spacing:-0.02em}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{color:rgba(255,255,255,0.65);font-size:1rem;margin-bottom:12px}
-.live-counter{font-size:0.82rem;color:rgba(255,255,255,0.5)}
-.live-counter strong{color:#a78bfa}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.3)}}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:800;color:white;margin-bottom:12px;line-height:1.15}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{color:rgba(255,255,255,0.65);font-size:1rem;margin-bottom:24px}
+
+/* Hero search */
+.hero-search{max-width:560px;margin:0 auto;display:flex;height:46px;border-radius:6px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.hero-search-input{flex:1;border:none;padding:0 18px;font-size:0.95rem;font-family:'Inter',sans-serif;outline:none;color:var(--dark)}
+.hero-search-btn{background:var(--orange);border:none;padding:0 22px;font-size:1rem;font-weight:700;color:white;white-space:nowrap;cursor:pointer;transition:background 0.2s}
+.hero-search-btn:hover{background:var(--orange2)}
+.live-count{margin-top:16px;font-size:0.84rem;color:rgba(255,255,255,0.55)}
+.live-count strong{color:var(--orange)}
+
+/* QUICK CARDS */
+.quick-section{max-width:1100px;margin:0 auto;padding:32px 16px 0}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.quick-card{background:white;border:1px solid var(--border);border-radius:8px;padding:22px 18px;text-align:center;cursor:pointer;transition:all 0.22s;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.quick-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.12);border-color:var(--orange)}
+.quick-icon{font-size:2.2rem;margin-bottom:10px}
+.quick-name{font-weight:700;font-size:0.9rem;margin-bottom:5px}
+.quick-desc{font-size:0.77rem;color:var(--gray);line-height:1.45}
+
+/* REX SECTION */
+.rex-section{max-width:1100px;margin:0 auto;padding:32px 16px 0}
+.rex-card{background:white;border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,0.07);overflow:hidden}
+.rex-card-hdr{background:linear-gradient(135deg,var(--nav),#2d3f55);padding:18px 24px;display:flex;align-items:center;justify-content:space-between}
+.rex-card-hdr-left{display:flex;align-items:center;gap:12px}
+.rex-avatar{width:44px;height:44px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;color:white;flex-shrink:0}
+.rex-hdr-name{font-weight:700;font-size:1rem;color:white}
+.rex-hdr-status{font-size:0.75rem;color:#4ade80;display:flex;align-items:center;gap:5px;margin-top:2px}
+.rex-online-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
+.rex-counter{font-size:0.78rem;color:rgba(255,255,255,0.65)}
+.rex-chat-area{padding:20px 24px;min-height:200px;background:#f8f9fa;display:flex;flex-direction:column;gap:14px}
+.msg-bubble{max-width:70%;padding:12px 16px;border-radius:12px;font-size:0.86rem;line-height:1.5}
+.msg-rex{background:white;border:1px solid var(--border);border-radius:12px 12px 12px 4px;align-self:flex-start;display:flex;gap:10px;align-items:flex-start}
+.msg-rex-avatar{width:28px;height:28px;background:var(--orange);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:800;color:white;flex-shrink:0;margin-top:2px}
+.msg-rex-body{flex:1}
+.msg-rex-name{font-size:0.7rem;font-weight:700;color:var(--orange);margin-bottom:3px}
+.msg-rex-text{font-size:0.85rem;color:var(--dark);line-height:1.5}
+.msg-user{background:var(--orange);color:white;border-radius:12px 12px 4px 12px;align-self:flex-end;font-size:0.85rem;line-height:1.5;padding:12px 16px}
+.quick-replies{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.qr-btn{border:2px solid var(--teal);color:var(--teal);background:white;border-radius:100px;padding:7px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all 0.18s}
+.qr-btn:hover{background:var(--teal);color:white}
 
 /* CONTACT METHODS */
-.methods-section{max-width:1000px;margin:0 auto;padding:56px 24px 0}
-.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;text-align:center;margin-bottom:6px}
-.section-sub{text-align:center;color:var(--gray);font-size:0.85rem;margin-bottom:32px}
-.methods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.method-card{background:white;border:1px solid var(--border);border-radius:16px;padding:28px 24px;text-align:center;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
-.method-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity 0.25s}
-.method-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,0.1)}
-.method-card.rex::before{background:linear-gradient(135deg,rgba(109,40,217,0.04),rgba(8,145,178,0.02))}
-.method-card.rex:hover::before{opacity:1}
-.method-card.rex:hover{border-color:rgba(109,40,217,0.3)}
-.method-card.email:hover{border-color:rgba(8,145,178,0.3)}
-.method-card.whatsapp:hover{border-color:rgba(22,163,74,0.3)}
+.methods-section{max-width:1100px;margin:0 auto;padding:32px 16px 0}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:6px}
+.section-sub{color:var(--gray);font-size:0.85rem;margin-bottom:22px}
+.methods-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.method-card{background:white;border:1px solid var(--border);border-radius:8px;padding:26px 22px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.22s}
+.method-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.1)}
 .method-icon{font-size:2.4rem;margin-bottom:12px}
 .method-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.05rem;margin-bottom:6px}
-.method-desc{font-size:0.8rem;color:var(--gray);line-height:1.5;margin-bottom:14px}
-.method-time{display:inline-flex;align-items:center;gap:6px;border-radius:100px;padding:4px 12px;font-size:0.72rem;font-weight:700}
-.time-instant{background:rgba(109,40,217,0.1);color:var(--purple)}
-.time-fast{background:rgba(8,145,178,0.1);color:var(--cyan)}
-.time-quick{background:rgba(22,163,74,0.1);color:var(--green)}
-.method-btn{display:block;margin-top:16px;width:100%;border:none;border-radius:8px;padding:10px;font-size:0.85rem;font-weight:600;transition:all 0.2s}
-.btn-rex{background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white}
-.btn-rex:hover{opacity:0.9}
-.btn-email{background:var(--dark);color:white}
-.btn-email:hover{opacity:0.85}
-.btn-wa{background:#25d366;color:white}
-.btn-wa:hover{opacity:0.9}
+.method-desc{font-size:0.8rem;color:var(--gray);line-height:1.55;margin-bottom:14px}
+.method-avail{display:inline-flex;align-items:center;gap:5px;border-radius:100px;padding:4px 12px;font-size:0.73rem;font-weight:700;margin-bottom:14px}
+.avail-instant{background:#fff3cd;color:#6d4c00}
+.avail-email{background:#e8f4f8;color:#006b7e}
+.avail-call{background:#d4edda;color:#155724}
+.btn-method{width:100%;border:none;border-radius:5px;padding:11px;font-size:0.87rem;font-weight:700;transition:all 0.2s}
+.btn-rex-method{background:var(--orange);color:white}
+.btn-rex-method:hover{background:var(--orange2)}
+.btn-email-method{background:var(--teal);color:white}
+.btn-email-method:hover{background:#005c6e}
+.btn-call-method{background:var(--green);color:white}
+.btn-call-method:hover{opacity:0.88}
 
-/* CONTACT FORM */
-.form-section{max-width:700px;margin:0 auto;padding:56px 24px 0}
-.form-card{background:white;border:1px solid var(--border);border-radius:20px;overflow:hidden}
-.form-header{padding:28px 32px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(109,40,217,0.04),rgba(8,145,178,0.02))}
-.form-header h2{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:4px}
-.form-header p{font-size:0.82rem;color:var(--gray)}
-.form-body{padding:32px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.form-group{margin-bottom:16px}
-.form-label{font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:6px;display:block}
-.form-label span{color:var(--gray);font-weight:400}
-.form-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;background:white;color:var(--text)}
-.form-input:focus{border-color:var(--purple);box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
-.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+/* EMAIL FORM */
+.email-section{max-width:780px;margin:0 auto;padding:32px 16px 0}
+.form-card{background:white;border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);overflow:hidden}
+.form-card-hdr{padding:16px 22px;border-bottom:1px solid var(--border);background:#fafafa}
+.form-card-hdr h2{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700}
+.form-card-hdr p{font-size:0.8rem;color:var(--gray);margin-top:3px}
+.form-card-body{padding:22px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:0.79rem;font-weight:600;color:var(--dark);margin-bottom:5px}
+.form-input{width:100%;border:1px solid var(--border);border-radius:4px;padding:9px 12px;font-size:0.87rem;font-family:'Inter',sans-serif;outline:none;transition:border 0.18s;color:var(--dark);background:white}
+.form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,153,0,0.12)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23565959' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;cursor:pointer}
 textarea.form-input{resize:vertical;min-height:120px;line-height:1.5}
-.btn-send{width:100%;background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:12px;padding:13px;font-size:0.95rem;font-weight:700;transition:all 0.3s;box-shadow:0 4px 14px rgba(109,40,217,0.3)}
-.btn-send:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(109,40,217,0.45)}
-.form-sent{display:none;padding:40px 32px;text-align:center}
-.form-sent.visible{display:block;animation:appear 0.4s ease}
-@keyframes appear{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.sent-icon{font-size:3rem;margin-bottom:14px}
-.sent-title{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:8px}
-.sent-sub{color:var(--gray);font-size:0.88rem}
+.btn-send{background:var(--orange);color:white;border:none;border-radius:5px;padding:13px 32px;font-size:0.92rem;font-weight:700;transition:all 0.2s}
+.btn-send:hover{background:var(--orange2)}
+.form-sent{display:none;padding:40px;text-align:center}
+.form-sent.visible{display:block}
+.sent-icon{font-size:3rem;margin-bottom:12px}
+.sent-title{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:8px}
+.sent-sub{color:var(--gray);font-size:0.87rem}
 
-/* RESPONSE BADGES */
-.resp-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
-.resp-badge{display:flex;align-items:center;gap:6px;background:white;border:1px solid var(--border);border-radius:100px;padding:6px 16px;font-size:0.78rem;font-weight:600}
-.resp-dot{width:8px;height:8px;border-radius:50%}
-.dot-purple{background:var(--purple)}
-.dot-cyan{background:var(--cyan)}
-.dot-green{background:var(--green)}
+/* ACCORDION */
+.accordion-section{max-width:1100px;margin:0 auto;padding:32px 16px 0}
+.accordion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.acc-item{background:white;border:1px solid var(--border);border-radius:6px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05)}
+.acc-q{padding:14px 18px;font-weight:600;font-size:0.87rem;display:flex;align-items:center;justify-content:space-between;cursor:pointer;gap:10px;user-select:none}
+.acc-q:hover{color:var(--teal)}
+.acc-arrow{font-size:0.7rem;transition:transform 0.22s;color:var(--gray2);flex-shrink:0}
+.acc-item.open .acc-arrow{transform:rotate(180deg);color:var(--teal)}
+.acc-a{max-height:0;overflow:hidden;transition:max-height 0.3s ease}
+.acc-item.open .acc-a{max-height:200px}
+.acc-a p{padding:0 18px 14px;font-size:0.82rem;color:var(--gray);line-height:1.65;border-top:1px solid var(--border)}
+.acc-a p a{color:var(--teal);font-weight:600}
 
-/* FAQ QUICK LINKS */
-.faq-section{max-width:1000px;margin:0 auto;padding:56px 24px 0}
-.faq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
-.faq-item{background:white;border:1px solid var(--border);border-radius:14px;padding:20px 24px;cursor:pointer;transition:all 0.2s}
-.faq-item:hover{border-color:rgba(109,40,217,0.3);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.07)}
-.faq-q{font-weight:600;font-size:0.88rem;margin-bottom:6px;display:flex;align-items:flex-start;gap:8px}
-.faq-q::before{content:'❓';flex-shrink:0}
-.faq-a{font-size:0.8rem;color:var(--gray);line-height:1.5}
+/* ATLAS NOTE */
+.atlas-note{max-width:1100px;margin:0 auto;padding:24px 16px 0}
+.atlas-inner{background:linear-gradient(135deg,#232f3e,#1a2533);border-radius:8px;padding:18px 22px;display:flex;align-items:center;gap:16px;color:white}
+.atlas-icon{font-size:1.8rem;flex-shrink:0}
+.atlas-text{font-size:0.83rem;line-height:1.6;color:rgba(255,255,255,0.82)}
+.atlas-text strong{color:var(--orange)}
 
-/* OFFICE CARD */
-.office-section{max-width:1000px;margin:0 auto;padding:48px 24px}
-.office-card{background:white;border:1px solid var(--border);border-radius:16px;padding:28px 32px;display:flex;align-items:flex-start;gap:24px;flex-wrap:wrap}
-.office-icon{font-size:3rem;flex-shrink:0}
-.office-info h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:8px}
-.office-info p{font-size:0.83rem;color:var(--gray);line-height:1.7}
-.office-info strong{color:var(--text)}
+/* CALLBACK SECTION */
+.callback-section{max-width:780px;margin:0 auto;padding:24px 16px 0}
+.callback-card{background:white;border:1px solid var(--border);border-radius:8px;padding:24px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.callback-info{flex:1;min-width:200px}
+.callback-info h3{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:4px}
+.callback-info p{font-size:0.82rem;color:var(--gray);line-height:1.5}
+.callback-phone{font-size:1.5rem;font-weight:800;color:var(--dark);margin:8px 0;font-family:'Space Grotesk',sans-serif}
+.btn-callback{background:var(--green);color:white;border:none;border-radius:5px;padding:11px 22px;font-size:0.87rem;font-weight:700;white-space:nowrap;transition:all 0.2s}
+.btn-callback:hover{opacity:0.88}
 
-footer{background:var(--dark);color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem}
-footer a{color:#a78bfa;margin:0 8px}
+/* FOOTER */
+.site-footer{background:var(--nav);color:rgba(255,255,255,0.65);padding:40px 24px 20px;margin-top:40px}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:28px;margin-bottom:28px}
+.footer-col-title{color:white;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.12)}
+.footer-links{display:flex;flex-direction:column;gap:7px}
+.footer-links a{color:rgba(255,255,255,0.6);font-size:0.8rem;transition:color 0.2s}
+.footer-links a:hover{color:white}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center}
 
-@media(max-width:768px){
-  .methods-grid{grid-template-columns:1fr}
-  .form-row{grid-template-columns:1fr}
-  .faq-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .nav-search{display:none}
-}
+#toastEl{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
+
+@media(max-width:900px){.methods-grid{grid-template-columns:1fr}.quick-grid{grid-template-columns:repeat(2,1fr)}.accordion-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.form-row{grid-template-columns:1fr}.footer-inner{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
-<div class="top-banner">🤖 AI Agents running 24/7 — <span>Rex AI is live right now</span> · Average response: under 2 seconds</div>
-
-<nav>
-  <div class="nav-inner">
-    <div class="nav-logo" onclick="window.location.href='mystore.html'">
-      VibeStore <div class="ai-tag">AI</div>
-    </div>
-    <div class="nav-links">
-      <a href="collections.html" class="nav-lnk">Shop</a>
-      <a href="sale.html" class="nav-lnk">Sale 🔥</a>
-      <a href="blog.html" class="nav-lnk">Blog</a>
-      <a href="returns.html" class="nav-lnk">Returns</a>
-      <a href="faq.html" class="nav-lnk">Help</a>
-      <a href="contact.html" class="nav-lnk active">Contact</a>
-    </div>
-    <div class="nav-right">
-      <div class="nav-search"><span>🔍</span><input placeholder="Search products..."/></div>
-      <a href="account.html" class="nav-icon" title="Account">👤</a>
-      <a href="track.html" class="nav-icon" title="Orders">📦</a>
-      <a href="wishlist.html" class="nav-icon" title="Wishlist">♡</a>
-      <a href="cart.html" class="nav-icon" title="Cart" style="position:relative">
-        🛒<div class="cart-count" id="cartCount">0</div>
-      </a>
-    </div>
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-logo" onclick="location.href='store.html'">Vibe<span>Store</span></div>
+  <div class="search-box">
+    <input class="search-input" placeholder="Search VibeStore"/>
+    <button class="search-btn">🔍</button>
+  </div>
+  <div class="nav-actions">
+    <a href="account.html" class="nav-action">
+      <div class="nav-action-label">Hello, Sign In</div>
+      <div class="nav-action-val">Account &amp; Lists</div>
+    </a>
+    <a href="returns.html" class="nav-action">
+      <div class="nav-action-label">Returns</div>
+      <div class="nav-action-val">&amp; Orders</div>
+    </a>
+    <a href="cart.html" class="nav-cart">
+      <div class="nav-cart-emoji">🛒</div>
+      <div class="nav-cart-info">
+        <div class="nav-cart-label" id="cartCountLabel">0 items</div>
+        <div class="nav-cart-val">Cart</div>
+      </div>
+    </a>
   </div>
 </nav>
+<div class="sub-nav">
+  <a href="store.html" class="sub-link">All</a>
+  <a href="collections.html" class="sub-link">Collections</a>
+  <a href="sale.html" class="sub-link">Sale 🔥</a>
+  <a href="track.html" class="sub-link">Track Orders</a>
+  <a href="returns.html" class="sub-link">Returns</a>
+  <a href="faq.html" class="sub-link">Help</a>
+  <a href="contact.html" class="sub-link active">Contact</a>
+  <a href="become-seller.html" class="sub-link">Become a Seller</a>
+  <a href="seller-central.html" class="sub-link">Seller Central</a>
+</div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="live-badge"><div class="live-dot"></div> Rex AI is live</div>
-    <h1>We're here <em>24/7</em></h1>
-    <p class="hero-sub">Questions, issues, or just need help — we've got you covered instantly.</p>
-    <p class="live-counter">Rex AI is handling <strong id="convCount">34</strong> conversations right now</p>
-    <div class="resp-row">
-      <div class="resp-badge"><div class="resp-dot dot-purple"></div> Chat &lt;2s</div>
-      <div class="resp-badge"><div class="resp-dot dot-cyan"></div> Email &lt;1hr</div>
-      <div class="resp-badge"><div class="resp-dot dot-green"></div> WhatsApp &lt;5min</div>
+    <div class="live-badge"><div class="live-dot"></div> Rex AI is live now</div>
+    <h1>💬 How can we <em>help you?</em></h1>
+    <p class="hero-sub">Search our help center or choose a support channel below — we respond instantly.</p>
+    <div class="hero-search">
+      <input class="hero-search-input" id="heroSearch" placeholder="Search help topics... e.g. 'track my order'" onkeydown="if(event.key==='Enter')searchHelp()"/>
+      <button class="hero-search-btn" onclick="searchHelp()">Search</button>
+    </div>
+    <div class="live-count">🟢 Rex helps both buyers AND sellers on VibeStore — helping <strong id="convCount">34</strong> users right now</div>
+  </div>
+</div>
+
+<!-- QUICK CARDS -->
+<div class="quick-section">
+  <div class="quick-grid">
+    <div class="quick-card" onclick="location.href='track.html'">
+      <div class="quick-icon">📦</div>
+      <div class="quick-name">Track Order</div>
+      <div class="quick-desc">Get real-time updates on where your package is right now</div>
+    </div>
+    <div class="quick-card" onclick="location.href='returns.html'">
+      <div class="quick-icon">↩️</div>
+      <div class="quick-name">Returns</div>
+      <div class="quick-desc">Start a return or exchange — Zen AI handles it in 60 seconds</div>
+    </div>
+    <div class="quick-card" onclick="document.getElementById('emailForm').scrollIntoView({behavior:'smooth'})">
+      <div class="quick-icon">💳</div>
+      <div class="quick-name">Payments</div>
+      <div class="quick-desc">Payment issues, refund status, failed transactions</div>
+    </div>
+    <div class="quick-card" onclick="location.href='account.html'">
+      <div class="quick-icon">🔒</div>
+      <div class="quick-name">Account</div>
+      <div class="quick-desc">Password reset, profile updates, security settings</div>
+    </div>
+  </div>
+</div>
+
+<!-- REX CHAT SECTION -->
+<div class="rex-section">
+  <div class="rex-card">
+    <div class="rex-card-hdr">
+      <div class="rex-card-hdr-left">
+        <div class="rex-avatar">R</div>
+        <div>
+          <div class="rex-hdr-name">Rex AI — Support Agent</div>
+          <div class="rex-hdr-status"><div class="rex-online-dot"></div> Online · Responds instantly</div>
+        </div>
+      </div>
+      <div class="rex-counter">🟢 Rex is helping <span id="convCount2">34</span> customers right now</div>
+    </div>
+    <div class="rex-chat-area">
+      <div class="msg-rex">
+        <div class="msg-rex-avatar">R</div>
+        <div class="msg-rex-body">
+          <div class="msg-rex-name">Rex AI</div>
+          <div class="msg-rex-text">Hi there! 👋 I'm Rex, your AI support agent. I can help you track orders, start returns, answer payment questions, and more. What can I help you with today?</div>
+          <div class="quick-replies" style="margin-top:10px">
+            <button class="qr-btn" onclick="rexReply('Track my order')">📦 Track my order</button>
+            <button class="qr-btn" onclick="rexReply('Return an item')">↩️ Return an item</button>
+            <button class="qr-btn" onclick="rexReply('Payment issue')">💳 Payment issue</button>
+            <button class="qr-btn" onclick="rexReply('Talk to a human')">👤 Talk to human</button>
+          </div>
+        </div>
+      </div>
+      <div id="rexUserMsg" style="display:none" class="msg-user"></div>
+      <div class="msg-rex" id="rexReplyBubble" style="display:none">
+        <div class="msg-rex-avatar">R</div>
+        <div class="msg-rex-body">
+          <div class="msg-rex-name">Rex AI</div>
+          <div class="msg-rex-text" id="rexReplyText"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SELLER SUPPORT CARD -->
+<div class="methods-section" style="padding-bottom:0;">
+  <div class="quick-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px;max-width:1100px;margin:0 auto;padding:0 16px 24px;">
+    <div class="quick-card" onclick="location.href='seller-central.html'" style="border-color:var(--teal);background:linear-gradient(135deg,#f0f9fa,#e8f4ff);">
+      <div class="quick-icon">🏪</div>
+      <div class="quick-name" style="color:var(--teal);">Seller Issues</div>
+      <div class="quick-desc">Seller account, payouts, listings, and marketplace support — visit Seller Central Help</div>
+      <div style="margin-top:12px;"><a href="seller-central.html" style="background:var(--teal);color:white;border-radius:5px;padding:8px 16px;font-size:0.82rem;font-weight:700;display:inline-block;">Visit Seller Central Help →</a></div>
+    </div>
+    <div class="quick-card" style="background:#f9f9f9;">
+      <div class="quick-icon">💡</div>
+      <div class="quick-name">Are you a seller?</div>
+      <div class="quick-desc">Get dedicated support for your seller account, product listings, payments, and performance metrics.</div>
+      <div style="margin-top:12px;"><a href="seller-central.html" style="background:var(--orange);color:var(--nav);border-radius:5px;padding:8px 16px;font-size:0.82rem;font-weight:700;display:inline-block;">Go to Seller Central →</a></div>
     </div>
   </div>
 </div>
 
 <!-- CONTACT METHODS -->
 <div class="methods-section">
-  <h2 class="section-title">Choose how to reach us</h2>
-  <p class="section-sub">All channels monitored 24/7 by Rex AI and our human support team</p>
+  <div class="section-title">Buyer Contact Support</div>
+  <div class="section-sub">Choose the channel that works best for you — all monitored 24/7</div>
   <div class="methods-grid">
-    <div class="method-card rex" onclick="if(typeof window.rexToggle==='function'){window.rexToggle();}else{openRexChat();}">
+    <div class="method-card">
       <div class="method-icon">🤖</div>
       <div class="method-name">Chat with Rex AI</div>
-      <div class="method-desc">Get instant answers from Rex AI — our always-on support agent that knows your orders, products, and policies.</div>
-      <div class="method-time time-instant">⚡ Responds in &lt;2 seconds</div>
-      <button class="method-btn btn-rex" onclick="if(typeof window.rexToggle==='function'){window.rexToggle();}else{openRexChat();}">Start Chat with Rex →</button>
+      <div class="method-desc">Get instant answers from our AI agent. Available 24/7 for orders, returns, payments, and anything else. 89% of issues resolved instantly.</div>
+      <div class="method-avail avail-instant">⚡ 24/7 — responds in &lt;2 seconds</div>
+      <button class="btn-method btn-rex-method" onclick="openRex()">Start Chat with Rex →</button>
     </div>
-    <div class="method-card email">
+    <div class="method-card">
       <div class="method-icon">📧</div>
-      <div class="method-name">Email Us</div>
-      <div class="method-desc">Send us a detailed message and our team will follow up with a thorough resolution — great for complex issues.</div>
-      <div class="method-time time-fast">📬 Response within 1 hour</div>
-      <button class="method-btn btn-email" onclick="document.getElementById('contactForm').scrollIntoView({behavior:'smooth'})">Send an Email →</button>
+      <div class="method-name">Email Support</div>
+      <div class="method-desc">Send us a detailed message and our team will respond with a thorough resolution. Great for complex issues that need a human touch.</div>
+      <div class="method-avail avail-email">📬 Replies within 2 hours</div>
+      <button class="btn-method btn-email-method" onclick="document.getElementById('emailForm').scrollIntoView({behavior:'smooth'})">Send an Email →</button>
     </div>
-    <div class="method-card whatsapp">
-      <div class="method-icon">💬</div>
-      <div class="method-name">WhatsApp</div>
-      <div class="method-desc">Chat on WhatsApp for quick support. Perfect for sharing screenshots and getting fast, friendly help.</div>
-      <div class="method-time time-quick">🟢 Response within 5 minutes</div>
-      <button class="method-btn btn-wa" onclick="window.open('https://wa.me/917000000000?text=Hi%20VibeStore%2C%20I%20need%20help%20with%20my%20order','_blank')">Open WhatsApp →</button>
+    <div class="method-card">
+      <div class="method-icon">📞</div>
+      <div class="method-name">Call Us</div>
+      <div class="method-desc">Speak directly with our support team for urgent issues. Available 9AM–6PM IST, Monday to Saturday. Or schedule a callback at your convenience.</div>
+      <div class="method-avail avail-call">📞 9AM–6PM IST, Mon–Sat</div>
+      <button class="btn-method btn-call-method" onclick="document.getElementById('callbackCard').scrollIntoView({behavior:'smooth'})">Schedule a Callback →</button>
     </div>
   </div>
 </div>
 
-<!-- CONTACT FORM -->
-<div class="form-section" id="contactForm">
+<!-- EMAIL FORM -->
+<div class="email-section" id="emailForm">
   <div class="form-card">
-    <div class="form-header">
-      <h2>✉️ Send us a message</h2>
-      <p>Rex AI will read your message and route it to the right team instantly</p>
+    <div class="form-card-hdr">
+      <h2>✉️ Send Us a Message</h2>
+      <p>Rex AI will read and route your message to the right team instantly</p>
     </div>
-    <div class="form-body" id="formBody">
+    <div class="form-card-body" id="formBody">
       <div class="form-row">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Your Name</label>
-          <input class="form-input" placeholder="John Doe" />
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Email Address</label>
-          <input class="form-input" type="email" placeholder="john@example.com" />
-        </div>
+        <div class="form-group" style="margin:0"><label class="form-label">Your Name</label><input class="form-input" placeholder="Full name"/></div>
+        <div class="form-group" style="margin:0"><label class="form-label">Email Address</label><input class="form-input" type="email" placeholder="you@example.com"/></div>
       </div>
       <div class="form-row">
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Order Number <span>(optional)</span></label>
-          <input class="form-input" placeholder="VS-2024-XXXX" />
-        </div>
-        <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Subject</label>
+        <div class="form-group" style="margin:0"><label class="form-label">Subject</label>
           <select class="form-input form-select">
-            <option>Select a subject...</option>
+            <option>Select subject...</option>
             <option>Order issue</option>
-            <option>Product question</option>
             <option>Return / Refund</option>
-            <option>Billing / Payment</option>
+            <option>Payment problem</option>
+            <option>Product question</option>
             <option>Partnership inquiry</option>
             <option>Other</option>
           </select>
         </div>
+        <div class="form-group" style="margin:0"><label class="form-label">Order Number <span style="font-weight:400;color:var(--gray2)">(optional)</span></label><input class="form-input" placeholder="VS-2026-XXXX"/></div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-input" placeholder="Describe your issue or question in detail — the more context you give, the faster we can help..."></textarea>
-      </div>
-      <button class="btn-send" onclick="sendMessage()">🚀 Send Message</button>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" placeholder="Describe your issue in detail — the more context you give, the faster we can help..."></textarea></div>
+      <button class="btn-send" onclick="sendEmail()">🚀 Send Message</button>
     </div>
     <div class="form-sent" id="formSent">
       <div class="sent-icon">✅</div>
-      <div class="sent-title">Message received!</div>
-      <div class="sent-sub">Rex AI has acknowledged your message and our team will respond within the hour. Check your email for a confirmation.</div>
+      <div class="sent-title">Message Received!</div>
+      <div class="sent-sub">Rex AI has acknowledged your message. Our team will respond within 2 hours. Check your email for confirmation.</div>
     </div>
   </div>
 </div>
 
-<!-- FAQ QUICK LINKS -->
-<div class="faq-section">
-  <h2 class="section-title" style="margin-bottom:6px">Common Questions</h2>
-  <p class="section-sub">Quick answers to what most customers ask</p>
-  <div class="faq-grid">
-    <div class="faq-item">
-      <div class="faq-q">How do I track my order?</div>
-      <div class="faq-a">Visit our <a href="track.html" style="color:var(--purple);font-weight:600">Track Order</a> page, enter your order number and email. You'll see real-time updates from our courier partner.</div>
+<!-- CALLBACK CARD -->
+<div class="callback-section" id="callbackCard">
+  <div class="callback-card">
+    <div style="font-size:2.5rem">📞</div>
+    <div class="callback-info">
+      <h3>Talk to Our Support Team</h3>
+      <p>Available Monday–Saturday, 9:00 AM – 6:00 PM IST. For urgent issues, call us directly.</p>
+      <div class="callback-phone">+91 (522) 400-0000</div>
+      <div style="font-size:0.78rem;color:var(--gray2)">Standard call rates apply · Not toll-free</div>
     </div>
-    <div class="faq-item">
-      <div class="faq-q">Can I cancel or modify my order?</div>
-      <div class="faq-a">Yes — orders can be cancelled or modified within 2 hours of placement. After that, please initiate a return once it's delivered.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">How long do refunds take?</div>
-      <div class="faq-a">Refunds to original payment take 5–7 business days. Store credit is instant. UPI refunds arrive in 24–48 hours.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q">Is my payment information secure?</div>
-      <div class="faq-a">Yes — we use bank-grade encryption (256-bit SSL) and never store card details. All payments processed via Razorpay / Stripe.</div>
-    </div>
-  </div>
-  <div style="text-align:center;margin-top:24px">
-    <a href="faq.html" style="display:inline-flex;align-items:center;gap:6px;background:var(--purple);color:white;border-radius:8px;padding:10px 22px;font-size:0.85rem;font-weight:600">
-      View All Help Articles →
-    </a>
+    <button class="btn-callback" onclick="toast('📅 Callback scheduled! We'll call you within 30 minutes.')">📅 Schedule Callback</button>
   </div>
 </div>
 
-<!-- OFFICE CARD -->
-<div class="office-section">
-  <div class="office-card">
-    <div class="office-icon">🏢</div>
-    <div class="office-info">
-      <h3>MyOoumph Networks Pvt Ltd</h3>
-      <p>
-        <strong>Address:</strong> Lucknow, Uttar Pradesh, India 226001<br/>
-        <strong>Business Hours:</strong> Mon–Sat, 10:00 AM – 7:00 PM IST (Rex AI available 24/7)<br/>
-        <strong>Email:</strong> support@vibestore.in<br/>
-        <strong>GST:</strong> 09XXXXX1234X1ZX<br/>
-        <strong>CIN:</strong> U74999UP2024PTC000000
-      </p>
-    </div>
+<!-- FAQ ACCORDION -->
+<div class="accordion-section">
+  <div class="section-title" style="margin-bottom:6px">Common Questions</div>
+  <div class="section-sub">Quick answers to what most customers ask</div>
+  <div class="accordion-grid">
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">How do I track my order?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Visit our <a href="track.html">Track Order</a> page, enter your order number and email. You'll see real-time courier updates and estimated delivery time.</p></div></div>
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">Can I cancel or modify my order?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Yes — orders can be cancelled or modified within 2 hours of placement. After that, the order is in fulfilment. Once delivered, initiate a return instead.</p></div></div>
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">How long do refunds take?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Store credit is instant. UPI refunds arrive in 24–48 hours. Card refunds take 5–7 business days depending on your bank.</p></div></div>
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">Is my payment information secure?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Yes — 256-bit SSL encryption, PCI DSS compliant, and we never store card details. All payments via Razorpay/Stripe with bank-grade security.</p></div></div>
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">How do I start a return?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Visit our <a href="returns.html">Returns Center</a> and enter your order details. Zen AI processes returns in under 60 seconds — free door pickup arranged automatically.</p></div></div>
+    <div class="acc-item"><div class="acc-q" onclick="toggleAcc(this)">Do you offer EMI options?<span class="acc-arrow">▼</span></div><div class="acc-a"><p>Yes! No-cost EMI on orders over ₹2,999 via HDFC, ICICI, SBI, Axis, and Kotak credit cards for 3, 6, and 12-month tenures. Select at checkout.</p></div></div>
+  </div>
+  <div style="text-align:center;margin-top:20px">
+    <a href="faq.html" style="display:inline-flex;align-items:center;gap:7px;background:var(--teal);color:white;border-radius:5px;padding:10px 22px;font-size:0.87rem;font-weight:700;transition:all 0.2s" onmouseover="this.style.background='#005c6e'" onmouseout="this.style.background='var(--teal)'">View All FAQs (36 articles) →</a>
   </div>
 </div>
 
-<footer>
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html">Collections</a><a href="sale.html">Sale</a><a href="compare.html">Compare</a><a href="gift-cards.html">Gift Cards</a><a href="blog.html">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track.html">Track Order</a><a href="notifications.html">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html">My Account</a><a href="loyalty.html">Loyalty</a><a href="wishlist.html">Wishlist</a><a href="referral.html">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html">Home</a><a href="referral.html">Referrals</a><a href="contact.html">Contact</a>
+<!-- ATLAS NOTE -->
+<div class="atlas-note">
+  <div class="atlas-inner">
+    <div class="atlas-icon">🤖</div>
+    <div class="atlas-text"><strong>Atlas AI</strong> analyzed 10,000 support tickets — <strong>89% of issues are resolved by Rex AI instantly</strong> without human escalation. Start a chat with Rex for the fastest resolution.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer" style="margin-top:32px">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <div class="footer-links">
+        <a href="collections.html">Collections</a>
+        <a href="sale.html">Sale</a>
+        <a href="compare.html">Compare</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <div class="footer-links">
+        <a href="returns.html">Returns</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Account</div>
+      <div class="footer-links">
+        <a href="account.html">My Account</a>
+        <a href="loyalty.html">Loyalty</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="referral.html">Referrals</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <div class="footer-links">
+        <a href="index.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="blog.html">Blog</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Make Money with Us</div>
+      <div class="footer-links">
+        <a href="become-seller.html">Sell on VibeStore</a>
+        <a href="seller-central.html">Seller Central</a>
+        <a href="#">Affiliate Program</a>
+        <a href="#">Advertise</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace · MyOoumph Networks Pvt Ltd · Lucknow, India · All rights reserved</div>
 </footer>
 
-<script src="rex-chat.js"></script>
+<div id="toastEl"></div>
+
 <script>
-function updateCartCount(){
-  try{
-    const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
-    const count=cart.reduce((s,i)=>s+(i.qty||1),0);
-    const el=document.getElementById('cartCount');
-    if(el) el.textContent=count;
-  }catch(e){}
+try{const c=JSON.parse(localStorage.getItem('vs_cart')||'[]');const n=c.reduce((s,i)=>s+(i.qty||1),0);const el=document.getElementById('cartCountLabel');if(el)el.textContent=n+' item'+(n!==1?'s':'');}catch(e){}
+
+// Live counter animation
+let conv = 34;
+function animateCounter(){
+  conv += Math.random()<0.5 ? 1 : -1;
+  conv = Math.max(22, Math.min(60, conv));
+  const v = Math.round(conv);
+  const el1 = document.getElementById('convCount'), el2 = document.getElementById('convCount2');
+  if(el1) el1.textContent = v;
+  if(el2) el2.textContent = v;
 }
-updateCartCount();
+setInterval(animateCounter, 3000);
 
-// Animate live conversation counter
-let conv=34;
-setInterval(()=>{
-  conv+=Math.random()<0.5?1:-1;
-  conv=Math.max(20,Math.min(60,conv));
-  const el=document.getElementById('convCount');
-  if(el) el.textContent=Math.round(conv);
-},3000);
+const rexResponses = {
+  'Track my order': '📦 Sure! Head to our <a href="track.html" style="color:var(--orange)">Track Order</a> page and enter your order number + email. You\'ll see real-time updates. Need help with a specific order number?',
+  'Return an item': '↩️ I\'d be happy to help! Visit our <a href="returns.html" style="color:var(--orange)">Returns Center</a> and I\'ll process your return in under 60 seconds. Do you have your order number handy?',
+  'Payment issue': '💳 I understand payment issues can be stressful. Common causes: insufficient funds, bank block, or network timeout. If amount was deducted but order wasn\'t placed, it\'ll refund in 5–7 days. Want me to check a specific transaction?',
+  'Talk to a human': '👤 Of course! I\'ll connect you to our human support team. You can also reach them at <strong>+91 (522) 400-0000</strong> (9AM–6PM IST) or use the email form below. Average human response: under 2 hours.'
+};
 
-function openRexChat(){
-  // Trigger rex-chat.js widget
-  if(typeof window.rexToggle==='function') window.rexToggle();
-  else if(window.RexChat&&window.RexChat.open) window.RexChat.open();
-  else if(document.querySelector('.rex-chat-btn')) document.querySelector('.rex-chat-btn').click();
-  else alert('Rex AI chat is loading...');
+function rexReply(msg){
+  const userBubble = document.getElementById('rexUserMsg');
+  const replyBubble = document.getElementById('rexReplyBubble');
+  const replyText = document.getElementById('rexReplyText');
+  userBubble.textContent = msg;
+  userBubble.style.display = 'block';
+  replyBubble.style.display = 'none';
+  setTimeout(()=>{
+    replyText.innerHTML = rexResponses[msg] || 'Let me look into that for you! Can you share more details?';
+    replyBubble.style.display = 'flex';
+  }, 800);
 }
 
-function sendMessage(){
-  document.getElementById('formBody').style.display='none';
+function openRex(){
+  if(typeof window.rexToggle === 'function') window.rexToggle();
+  else if(typeof window.RexChat !== 'undefined') window.RexChat.open();
+  else { document.querySelector('.rex-chat-area').scrollIntoView({behavior:'smooth'}); toast('💬 Rex AI chat opened below'); }
+}
+
+function toggleAcc(el){
+  const item = el.closest('.acc-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.acc-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+function searchHelp(){
+  const q = document.getElementById('heroSearch').value.trim();
+  if(!q) return;
+  window.location.href = 'faq.html?q=' + encodeURIComponent(q);
+}
+
+function sendEmail(){
+  document.getElementById('formBody').style.display = 'none';
   document.getElementById('formSent').classList.add('visible');
+  toast('✅ Message sent! We\'ll respond within 2 hours.');
+}
+
+function toast(msg){
+  const el = document.getElementById('toastEl');
+  el.innerHTML = `<div style="background:#0f1111;color:white;border-radius:100px;padding:10px 22px;font-size:0.82rem;font-weight:500;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2)">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='', 3000);
 }
 </script>
+<script src="rex-chat.js"></script>
 </body>
 </html>

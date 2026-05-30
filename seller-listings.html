@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Listings — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: #232f3e; position: fixed; top: 0; left: 0;
+    height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: #FF9900;
+    border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: -0.3px;
+  }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px; color: #c8cdd4; text-decoration: none;
+    font-size: 13.5px; font-weight: 500; transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent; cursor: pointer;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  /* TOPBAR */
+  .topbar {
+    position: fixed; top: 0; left: 220px; right: 0; height: 60px;
+    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    display: flex; align-items: center; padding: 0 24px; z-index: 99; gap: 16px;
+  }
+  .breadcrumb { font-size: 13px; color: #555; flex: 1; }
+  .breadcrumb a { color: #007185; text-decoration: none; }
+  .breadcrumb strong { color: #0f1111; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #CC0C39; color: #fff; font-size: 9px; font-weight: 700; min-width: 15px; height: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF9900, #e68a00); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #0f1111; font-size: 13px; }
+  .seller-info .store { color: #666; }
+
+  /* MAIN */
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* ARIA PANEL */
+  .aria-panel {
+    background: linear-gradient(135deg, #FF9900 0%, #e68a00 60%, #cc7a00 100%);
+    border-radius: 12px; padding: 22px 24px; margin-bottom: 20px;
+    display: flex; align-items: flex-start; gap: 20px; position: relative; overflow: hidden;
+  }
+  .aria-panel::before {
+    content: '🤖';
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 72px; opacity: 0.15;
+  }
+  .aria-panel-left { flex: 1; }
+  .aria-panel-left h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+  .aria-bullets { list-style: none; margin-bottom: 16px; }
+  .aria-bullets li { color: rgba(255,255,255,0.9); font-size: 13.5px; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+  .aria-bullets li::before { content: '✓'; font-weight: 700; color: #fff; }
+  .aria-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-white {
+    background: #fff; color: #e68a00; border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background 0.2s;
+  }
+  .btn-white:hover { background: #f5f5f5; }
+  .btn-teal-outline {
+    background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.6);
+    border-radius: 8px; padding: 10px 18px; font-size: 13.5px; font-weight: 700;
+    cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s;
+  }
+  .btn-teal-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; }
+  .aria-stats { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 16px; }
+  .aria-stat {
+    background: rgba(0,0,0,0.15); color: #fff; border-radius: 20px;
+    padding: 5px 12px; font-size: 12px; font-weight: 600;
+  }
+  .aria-stat em { font-style: normal; opacity: 0.75; font-weight: 400; margin-left: 4px; }
+
+  /* FILTER TABS */
+  .filter-tabs { display: flex; gap: 2px; background: #e8eaed; border-radius: 8px; padding: 3px; margin-bottom: 16px; width: fit-content; }
+  .tab-btn {
+    padding: 7px 16px; border: none; background: transparent; border-radius: 6px;
+    font-size: 13px; font-weight: 500; color: #666; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .tab-btn.active { background: #fff; color: #0f1111; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .tab-btn .tab-count { font-size: 11px; color: inherit; opacity: 0.7; margin-left: 4px; }
+  .tab-btn.active .tab-count { opacity: 1; }
+
+  /* FILTER BAR */
+  .filter-bar {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .search-input {
+    flex: 1; min-width: 200px; max-width: 320px;
+    padding: 9px 14px; border: 1.5px solid #d0d5dd; border-radius: 8px;
+    font-size: 13.5px; font-family: 'Inter', sans-serif; outline: none; background: #fff;
+    transition: border-color 0.2s;
+  }
+  .search-input:focus { border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.1); }
+  select {
+    padding: 9px 12px; border: 1.5px solid #d0d5dd; border-radius: 8px;
+    font-size: 13.5px; font-family: 'Inter', sans-serif; background: #fff; color: #333;
+    cursor: pointer; outline: none;
+  }
+  select:focus { border-color: #FF9900; }
+  .btn-orange {
+    background: #FF9900; color: #0f1111; border: none; border-radius: 8px;
+    padding: 9px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer;
+    font-family: 'Inter', sans-serif; transition: background 0.2s; white-space: nowrap;
+  }
+  .btn-orange:hover { background: #e68a00; }
+  .filter-bar-spacer { flex: 1; }
+
+  /* PENDING REVIEW SECTION */
+  .pending-section { margin-bottom: 20px; }
+  .pending-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+  }
+  .pending-header h3 { font-size: 14px; font-weight: 700; color: #0f1111; }
+  .pending-badge { background: #CC0C39; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .pending-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .pending-card {
+    background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    border: 2px solid #FF9900; padding: 18px; position: relative;
+  }
+  .pending-card::before {
+    content: 'NEEDS APPROVAL';
+    position: absolute; top: 12px; right: 12px;
+    font-size: 9px; font-weight: 800; letter-spacing: 0.5px;
+    background: #fff3e0; color: #e65c00; padding: 3px 8px; border-radius: 4px;
+  }
+  .pending-top { display: flex; gap: 14px; margin-bottom: 14px; }
+  .pending-img { width: 60px; height: 60px; border-radius: 8px; background: #f5f7fa; display: flex; align-items: center; justify-content: center; font-size: 28px; flex-shrink: 0; }
+  .pending-info h4 { font-size: 14px; font-weight: 700; color: #0f1111; margin-bottom: 4px; }
+  .pending-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+  .pending-meta span { font-size: 11.5px; }
+  .meta-price { color: #067D62; font-weight: 700; }
+  .meta-cat { background: #f0f2f5; color: #555; padding: 2px 8px; border-radius: 4px; }
+  .bullet-preview { font-size: 12px; color: #555; line-height: 1.6; }
+  .aria-notes { background: #f5fff8; border-left: 3px solid #067D62; border-radius: 0 6px 6px 0; padding: 8px 12px; font-size: 12px; color: #067D62; margin-bottom: 14px; }
+  .aria-notes strong { display: block; margin-bottom: 2px; }
+  .pending-actions { display: flex; gap: 8px; align-items: center; }
+  .btn-approve { background: #067D62; color: #fff; border: none; border-radius: 7px; padding: 9px 16px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+  .btn-approve:hover { background: #055f4a; }
+  .btn-edit-first { background: #FF9900; color: #0f1111; border: none; border-radius: 7px; padding: 9px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; }
+  .btn-edit-first:hover { background: #e68a00; }
+  .btn-reject { background: none; border: none; color: #CC0C39; font-size: 12.5px; font-weight: 600; cursor: pointer; padding: 4px 8px; text-decoration: underline; }
+
+  /* BULK ACTIONS BAR */
+  .bulk-bar {
+    background: #0f1111; color: #fff; border-radius: 8px; padding: 10px 16px;
+    display: none; align-items: center; gap: 12px; margin-bottom: 14px; font-size: 13px;
+  }
+  .bulk-bar.visible { display: flex; }
+  .bulk-count { font-weight: 700; margin-right: 8px; }
+  .btn-bulk { background: rgba(255,255,255,0.12); color: #fff; border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; padding: 5px 12px; font-size: 12px; font-weight: 500; cursor: pointer; transition: background 0.15s; }
+  .btn-bulk:hover { background: rgba(255,255,255,0.2); }
+  .btn-bulk.danger { color: #ff6b6b; border-color: rgba(255,107,107,0.3); }
+  .bulk-spacer { flex: 1; }
+
+  /* LISTINGS TABLE */
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 20px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 11px 12px; background: #f7f8fa; font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; border-bottom: 1px solid #eee; white-space: nowrap; }
+  td { padding: 11px 12px; border-bottom: 1px solid #f5f6f8; color: #333; vertical-align: middle; }
+  tr:hover td { background: #fafbfd; }
+  .cb-cell { width: 36px; text-align: center; }
+  input[type=checkbox] { width: 15px; height: 15px; cursor: pointer; accent-color: #FF9900; }
+  .product-cell { display: flex; align-items: center; gap: 10px; }
+  .prod-img { width: 42px; height: 42px; border-radius: 8px; background: #f5f7fa; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .prod-name { font-weight: 600; color: #0f1111; font-size: 13px; max-width: 200px; }
+  .prod-name a { color: inherit; text-decoration: none; }
+  .prod-name a:hover { color: #007185; }
+  .prod-name small { font-weight: 400; color: #999; font-size: 11px; display: block; }
+  .cat-pill { background: #f0f2f5; color: #555; padding: 3px 9px; border-radius: 10px; font-size: 11.5px; font-weight: 500; white-space: nowrap; }
+  .price-editable {
+    font-weight: 700; color: #0f1111; cursor: pointer; border: none; background: transparent;
+    font-family: 'Inter', sans-serif; font-size: 13px; width: 80px; padding: 3px 4px;
+    border-radius: 4px; border: 1px dashed transparent; transition: border-color 0.2s;
+  }
+  .price-editable:hover { border-color: #FF9900; background: #fff8ee; }
+  .price-editable:focus { outline: none; border-color: #FF9900; background: #fff; border-style: solid; }
+  .fee-cell { color: #888; font-size: 12px; }
+  .earnings-cell { color: #067D62; font-weight: 700; }
+  .stock-wrap { display: flex; flex-direction: column; gap: 3px; min-width: 60px; }
+  .stock-num { font-size: 12px; font-weight: 600; }
+  .stock-bar { height: 4px; background: #eee; border-radius: 2px; }
+  .stock-fill { height: 100%; border-radius: 2px; }
+  .status-badge { display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .s-active { background: #e6f9f2; color: #067D62; }
+  .s-pending { background: #fff8e1; color: #e65c00; }
+  .s-draft { background: #f0f2f5; color: #666; }
+  .s-rejected { background: #fce8ec; color: #CC0C39; }
+  .s-oos { background: #fff3e0; color: #e65c00; }
+  .creator-pill { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 10px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .creator-aria { background: #fff3e0; color: #c07000; }
+  .creator-manual { background: #f0f2f5; color: #666; }
+  .actions-cell { display: flex; align-items: center; gap: 4px; }
+  .icon-btn { background: none; border: 1px solid #e8eaed; border-radius: 6px; padding: 5px 8px; font-size: 13px; cursor: pointer; transition: background 0.15s; color: #555; }
+  .icon-btn:hover { background: #f5f5f5; border-color: #ccc; }
+  .more-btn { position: relative; }
+  .dropdown { display: none; position: absolute; right: 0; top: 32px; background: #fff; border: 1px solid #e8eaed; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.12); z-index: 50; min-width: 130px; }
+  .dropdown.open { display: block; }
+  .dropdown a { display: block; padding: 9px 14px; font-size: 13px; color: #333; text-decoration: none; transition: background 0.1s; }
+  .dropdown a:hover { background: #f5f7fa; }
+  .dropdown a.danger { color: #CC0C39; }
+
+  /* IMPORT SECTION */
+  .import-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 24px; }
+  .import-card h3 { font-size: 16px; font-weight: 700; color: #0f1111; margin-bottom: 6px; }
+  .import-card p { font-size: 13.5px; color: #666; margin-bottom: 20px; }
+  .drop-zone {
+    border: 2px dashed #d0d5dd; border-radius: 10px; padding: 36px 24px; text-align: center;
+    background: #fafbfc; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+  }
+  .drop-zone:hover { border-color: #FF9900; background: #fff8ee; }
+  .drop-zone .drop-icon { font-size: 36px; margin-bottom: 10px; }
+  .drop-zone p { font-size: 14px; color: #555; margin-bottom: 6px; }
+  .drop-zone small { font-size: 12px; color: #999; }
+  .drop-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+  .btn-outline { background: transparent; border: 1.5px solid #d0d5dd; border-radius: 7px; padding: 8px 16px; font-size: 13px; font-weight: 600; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-outline:hover { border-color: #FF9900; color: #FF9900; }
+  .aria-note { margin-top: 12px; font-size: 12.5px; color: #067D62; display: flex; align-items: center; gap: 6px; }
+  .aria-note::before { content: '🤖'; }
+
+  @media (max-width: 900px) {
+    .pending-grid { grid-template-columns: 1fr; }
+    .aria-panel { flex-direction: column; }
+  }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #333; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .pending-grid { grid-template-columns: 1fr; }
+    .filter-bar { flex-direction: column; align-items: stretch; }
+    .filter-bar .search-input { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a class="nav-item" href="seller-dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item active" href="seller-listings.html"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a class="nav-item" href="seller-orders.html"><span class="nav-icon">📦</span> Orders</a>
+    <a class="nav-item" href="seller-messages.html"><span class="nav-icon">💬</span> Messages</a>
+    <a class="nav-item" href="seller-payouts.html"><span class="nav-icon">💰</span> Payouts</a>
+    <a class="nav-item" href="seller-analytics.html"><span class="nav-icon">📈</span> Analytics</a>
+    <a class="nav-item" href="seller-promotions.html"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a class="nav-item" href="seller-returns.html"><span class="nav-icon">↩️</span> Returns</a>
+    <a class="nav-item" href="seller-settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a class="nav-item" href="seller-profile.html"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="breadcrumb">
+    <a href="seller-dashboard.html">Seller Central</a> &rsaquo; <strong>My Listings</strong>
+  </div>
+  <div class="topbar-bell">🔔<span class="bell-badge">5</span></div>
+  <div class="seller-info">
+    <div class="sname">Rahul Sharma</div>
+    <div class="store">MyStore Electronics</div>
+  </div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#999">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ARIA AI PANEL -->
+  <div class="aria-panel">
+    <div class="aria-panel-left">
+      <h2>🤖 Aria is managing your listings</h2>
+      <ul class="aria-bullets">
+        <li>Aria auto-created <strong>12 listings</strong> from your product catalog last week</li>
+        <li>Aria is <strong>optimizing titles and descriptions</strong> for SEO right now</li>
+        <li>Aria monitors competitor prices and suggests updates daily</li>
+      </ul>
+      <div class="aria-btns">
+        <button class="btn-white">📂 Upload Product Catalog (CSV/Excel)</button>
+        <button class="btn-teal-outline">✨ Let Aria Create Listings</button>
+      </div>
+      <div class="aria-stats">
+        <span class="aria-stat">847 <em>Total Listings</em></span>
+        <span class="aria-stat">634 <em>Aria-created (75%)</em></span>
+        <span class="aria-stat">213 <em>Manual</em></span>
+        <span class="aria-stat" style="background:rgba(204,12,57,0.3);">2 <em>Pending Review</em></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PENDING REVIEW PINNED SECTION -->
+  <div class="pending-section">
+    <div class="pending-header">
+      <h3>⚠️ Pending Your Approval</h3>
+      <span class="pending-badge">2 listings</span>
+      <span style="font-size:12px;color:#888;margin-left:4px;">Aria prepared these — they're ready to go live once you approve</span>
+    </div>
+    <div class="pending-grid">
+
+      <div class="pending-card">
+        <div class="pending-top">
+          <div class="pending-img">🎮</div>
+          <div class="pending-info">
+            <h4>Sony DualSense Wireless Controller — Midnight Black</h4>
+            <div class="pending-meta">
+              <span class="meta-price">₹5,499</span>
+              <span class="meta-cat">Gaming</span>
+              <span class="meta-cat">Electronics</span>
+            </div>
+            <div class="bullet-preview">
+              • Compatible with PS5 &amp; PC via Bluetooth<br>
+              • Haptic feedback + adaptive triggers<br>
+              • Built-in microphone, 12-hour battery
+            </div>
+          </div>
+        </div>
+        <div class="aria-notes">
+          <strong>🤖 Aria's notes:</strong>
+          SEO title optimized for "PS5 controller". Competitive pricing — 3% below top competitor. 6 product images enhanced and background-removed. Bullet points follow VibeStore best practices.
+        </div>
+        <div class="pending-actions">
+          <button class="btn-approve" onclick="approveListing(this)">✓ Approve &amp; Go Live</button>
+          <button class="btn-edit-first">✏️ Edit First</button>
+          <button class="btn-reject">Reject</button>
+        </div>
+      </div>
+
+      <div class="pending-card">
+        <div class="pending-top">
+          <div class="pending-img">🖨️</div>
+          <div class="pending-info">
+            <h4>HP LaserJet Pro MFP M183fw Color Printer</h4>
+            <div class="pending-meta">
+              <span class="meta-price">₹18,999</span>
+              <span class="meta-cat">Office</span>
+              <span class="meta-cat">Printers</span>
+            </div>
+            <div class="bullet-preview">
+              • Print, Scan, Copy, Fax with Wi-Fi Direct<br>
+              • Up to 19 ppm black, 4 ppm color output<br>
+              • Compatible with Alexa &amp; Apple AirPrint
+            </div>
+          </div>
+        </div>
+        <div class="aria-notes">
+          <strong>🤖 Aria's notes:</strong>
+          High-margin category. Title includes top search keyword "color laser printer". Warranty details pulled from product manual. Price matches buy-box requirement with 12% margin for you.
+        </div>
+        <div class="pending-actions">
+          <button class="btn-approve" onclick="approveListing(this)">✓ Approve &amp; Go Live</button>
+          <button class="btn-edit-first">✏️ Edit First</button>
+          <button class="btn-reject">Reject</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="filter-tabs" id="filter-tabs">
+    <button class="tab-btn active" onclick="setTab(this,'all')">All <span class="tab-count">(847)</span></button>
+    <button class="tab-btn" onclick="setTab(this,'active')">Active <span class="tab-count">(812)</span></button>
+    <button class="tab-btn" onclick="setTab(this,'pending')">Pending Review <span class="tab-count">(2)</span></button>
+    <button class="tab-btn" onclick="setTab(this,'draft')">Draft <span class="tab-count">(18)</span></button>
+    <button class="tab-btn" onclick="setTab(this,'oos')">Out of Stock <span class="tab-count">(12)</span></button>
+    <button class="tab-btn" onclick="setTab(this,'rejected')">Rejected <span class="tab-count">(3)</span></button>
+  </div>
+
+  <!-- FILTER BAR -->
+  <div class="filter-bar">
+    <input type="text" class="search-input" placeholder="🔍  Search listings...">
+    <select>
+      <option>All Categories</option>
+      <option>Electronics</option>
+      <option>Gaming</option>
+      <option>Office Supplies</option>
+      <option>Smart Home</option>
+      <option>Audio</option>
+    </select>
+    <select>
+      <option>Sort: Newest First</option>
+      <option>Best Selling</option>
+      <option>Price: High to Low</option>
+      <option>Price: Low to High</option>
+      <option>Stock: Low First</option>
+    </select>
+    <div class="filter-bar-spacer"></div>
+    <button class="btn-orange" onclick="alert('Add product form coming soon!')">+ Add Single Product</button>
+  </div>
+
+  <!-- BULK ACTIONS BAR -->
+  <div class="bulk-bar" id="bulk-bar">
+    <span class="bulk-count" id="bulk-count">0 items selected</span>
+    <button class="btn-bulk">Activate</button>
+    <button class="btn-bulk">Deactivate</button>
+    <button class="btn-bulk">Change Price</button>
+    <button class="btn-bulk">Export CSV</button>
+    <button class="btn-bulk danger">🗑 Delete</button>
+    <div class="bulk-spacer"></div>
+    <button class="btn-bulk" onclick="clearSelection()">✕ Clear</button>
+  </div>
+
+  <!-- LISTINGS TABLE -->
+  <div class="card">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="cb-cell"><input type="checkbox" id="select-all" onchange="toggleAll(this)"></th>
+            <th style="min-width:240px;">Product</th>
+            <th>Category</th>
+            <th>Your Price</th>
+            <th>Fee %</th>
+            <th>Your Earnings</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th style="min-width:110px;">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="listings-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BULK IMPORT -->
+  <div class="import-card">
+    <h3>📂 Bulk Import Products</h3>
+    <p>Upload a CSV or Excel file with your product details. Aria will automatically fill in missing descriptions, keywords, and pricing suggestions.</p>
+    <div class="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="event.preventDefault();this.style.borderColor='#FF9900'" ondragleave="this.style.borderColor='#d0d5dd'">
+      <div class="drop-icon">⬆️</div>
+      <p><strong>Drag &amp; drop your file here</strong></p>
+      <small>Supports .CSV, .XLSX, .XLS — up to 10,000 products per import</small>
+      <div class="drop-actions">
+        <button class="btn-orange" type="button" style="font-size:13px;padding:8px 16px;">Browse Files</button>
+        <button class="btn-outline" type="button">📄 Download Template</button>
+      </div>
+    </div>
+    <input type="file" id="file-input" style="display:none;" accept=".csv,.xlsx,.xls">
+    <div class="aria-note">Aria will auto-fill missing titles, descriptions, keywords and suggest optimal pricing for each product.</div>
+  </div>
+
+</main>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+// ---- LISTINGS DATA ----
+const listings = [
+  { emoji: '🎧', name: 'Sony WH-1000XM5 Wireless Headphones', sub: 'Sony · 30hr battery · ANC', cat: 'Audio', price: 24999, fee: 8, stock: 23, status: 'active', creator: 'aria' },
+  { emoji: '⌨️', name: 'Redragon K552 Mechanical Gaming Keyboard', sub: 'RGB Backlit · Brown switches', cat: 'Gaming', price: 3499, fee: 10, stock: 7, status: 'active', creator: 'aria' },
+  { emoji: '🖱️', name: 'Logitech MX Master 3S Wireless Mouse', sub: '8000 DPI · Ergonomic', cat: 'Electronics', price: 7499, fee: 8, stock: 34, status: 'active', creator: 'manual' },
+  { emoji: '💡', name: 'Philips Hue White &amp; Color Ambiance Starter', sub: '4 bulbs + Bridge · Works with Alexa', cat: 'Smart Home', price: 8999, fee: 12, stock: 4, status: 'active', creator: 'aria' },
+  { emoji: '🔋', name: 'Anker 737 Power Bank 26800mAh', sub: 'USB-C · 140W output', cat: 'Electronics', price: 5999, fee: 8, stock: 15, status: 'active', creator: 'aria' },
+  { emoji: '📷', name: 'GoPro HERO12 Black Action Camera', sub: '5.3K60 · HyperSmooth 6.0', cat: 'Cameras', price: 34999, fee: 6, stock: 6, status: 'active', creator: 'manual' },
+  { emoji: '🎮', name: 'Xbox Wireless Controller — Robot White', sub: 'Bluetooth · Windows compatible', cat: 'Gaming', price: 5799, fee: 10, stock: 0, status: 'oos', creator: 'aria' },
+  { emoji: '🔊', name: 'JBL Charge 5 Portable Bluetooth Speaker', sub: 'IP67 · Powerbank feature · 20hr', cat: 'Audio', price: 12999, fee: 9, stock: 19, status: 'active', creator: 'aria' },
+  { emoji: '📱', name: 'Anker 622 Magnetic Battery MagSafe', sub: '5000mAh · Slim folding stand', cat: 'Electronics', price: 3799, fee: 8, stock: 2, status: 'active', creator: 'manual' },
+  { emoji: '🖥️', name: 'LG UltraGear 27" QHD Gaming Monitor', sub: '165Hz · 1ms · HDR10', cat: 'Displays', price: 29999, fee: 6, stock: 11, status: 'draft', creator: 'aria' },
+  { emoji: '🎙️', name: 'HyperX QuadCast USB Condenser Microphone', sub: 'LED indicator · Anti-vibration', cat: 'Audio', price: 11499, fee: 9, stock: 8, status: 'active', creator: 'aria' },
+  { emoji: '🧲', name: 'Elago Magnetic Phone Wallet (MagSafe)', sub: 'Holds 3 cards · Vegan leather', cat: 'Accessories', price: 1299, fee: 15, stock: 0, status: 'rejected', creator: 'manual' },
+];
+
+function getStockColor(s) { return s <= 0 ? '#CC0C39' : s < 5 ? '#CC0C39' : s < 20 ? '#FF9900' : '#067D62'; }
+function getStatusBadge(s) {
+  const map = { active: ['s-active','Active'], pending: ['s-pending','Pending Review'], draft: ['s-draft','Draft'], rejected: ['s-rejected','Rejected'], oos: ['s-oos','Out of Stock'] };
+  const [cls, label] = map[s] || ['s-draft','Unknown'];
+  return `<span class="status-badge ${cls}">${label}</span>`;
+}
+
+let selectedCount = 0;
+const tbody = document.getElementById('listings-tbody');
+listings.forEach((l, idx) => {
+  const earnings = (l.price * (1 - l.fee/100)).toFixed(0);
+  const stockPct = Math.min(100, (l.stock / 40) * 100);
+  const stockColor = getStockColor(l.stock);
+  tbody.innerHTML += `<tr id="row-${idx}">
+    <td class="cb-cell"><input type="checkbox" class="row-cb" data-idx="${idx}" onchange="updateSelection()"></td>
+    <td>
+      <div class="product-cell">
+        <div class="prod-img">${l.emoji}</div>
+        <div class="prod-name">
+          <a href="product.html">${l.name}</a>
+          <small>${l.sub}</small>
+        </div>
+      </div>
+    </td>
+    <td><span class="cat-pill">${l.cat}</span></td>
+    <td><input type="text" class="price-editable" value="₹${l.price.toLocaleString('en-IN')}" title="Click to edit price"></td>
+    <td class="fee-cell">${l.fee}%</td>
+    <td class="earnings-cell">₹${parseInt(earnings).toLocaleString('en-IN')}</td>
+    <td>
+      <div class="stock-wrap">
+        <span class="stock-num" style="color:${stockColor}">${l.stock > 0 ? l.stock : 'OOS'}</span>
+        <div class="stock-bar"><div class="stock-fill" style="width:${stockPct}%;background:${stockColor};"></div></div>
+      </div>
+    </td>
+    <td>${getStatusBadge(l.status)}</td>
+    <td>
+      <span class="creator-pill ${l.creator === 'aria' ? 'creator-aria' : 'creator-manual'}">
+        ${l.creator === 'aria' ? '🤖 Aria' : '👤 Manual'}
+      </span>
+    </td>
+    <td>
+      <div class="actions-cell">
+        <button class="icon-btn" title="Edit">✏️</button>
+        <button class="icon-btn" title="View on store">👁️</button>
+        <button class="icon-btn" title="Duplicate">⧉</button>
+        <div class="more-btn" style="position:relative;">
+          <button class="icon-btn" title="More" onclick="toggleDropdown(${idx})">⋮</button>
+          <div class="dropdown" id="dd-${idx}">
+            <a href="#">📋 Duplicate</a>
+            <a href="#">📦 Update Stock</a>
+            <a href="#">🔇 Deactivate</a>
+            <a href="#" class="danger">🗑 Delete</a>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>`;
+});
+
+function toggleDropdown(idx) {
+  document.querySelectorAll('.dropdown').forEach(d => { if (d.id !== `dd-${idx}`) d.classList.remove('open'); });
+  document.getElementById(`dd-${idx}`).classList.toggle('open');
+}
+document.addEventListener('click', e => { if (!e.target.closest('.more-btn')) document.querySelectorAll('.dropdown').forEach(d => d.classList.remove('open')); });
+
+function toggleAll(cb) {
+  document.querySelectorAll('.row-cb').forEach(c => c.checked = cb.checked);
+  updateSelection();
+}
+function updateSelection() {
+  const checked = document.querySelectorAll('.row-cb:checked');
+  selectedCount = checked.length;
+  const bar = document.getElementById('bulk-bar');
+  bar.classList.toggle('visible', selectedCount > 0);
+  document.getElementById('bulk-count').textContent = `${selectedCount} item${selectedCount !== 1 ? 's' : ''} selected`;
+}
+function clearSelection() {
+  document.querySelectorAll('.row-cb, #select-all').forEach(c => c.checked = false);
+  updateSelection();
+}
+
+function setTab(btn, type) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function approveListing(btn) {
+  const card = btn.closest('.pending-card');
+  card.style.opacity = '0.5';
+  card.style.pointerEvents = 'none';
+  const name = card.querySelector('h4').textContent;
+  btn.textContent = '✓ Approved!';
+  btn.style.background = '#067D62';
+  setTimeout(() => {
+    card.style.transition = 'all 0.4s';
+    card.style.maxHeight = '0';
+    card.style.padding = '0';
+    card.style.margin = '0';
+    card.style.overflow = 'hidden';
+  }, 800);
+}
+
+// Inline price edit
+document.querySelectorAll('.price-editable').forEach(inp => {
+  inp.addEventListener('focus', () => { inp.style.borderColor = '#FF9900'; });
+  inp.addEventListener('blur', () => {
+    let v = inp.value.replace(/[₹,\s]/g, '');
+    if (!isNaN(v) && v > 0) inp.value = '₹' + parseInt(v).toLocaleString('en-IN');
+    inp.style.borderColor = 'transparent';
+  });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') inp.blur(); });
+});
+</script>
+</body>
+</html>

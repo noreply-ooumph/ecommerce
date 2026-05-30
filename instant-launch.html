@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Launching Your Store — VibeStore AI</title>
+<title>Quick Seller Registration — VibeStore Marketplace</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -157,39 +157,39 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
   <!-- PHASE 1: INTRO -->
   <div id="phase-intro">
-    <div class="intro-title">Your store, built in<br/><em>one click.</em></div>
-    <div class="intro-sub">Our 8 AI agents will analyse market trends, pick your category, choose a theme, configure pricing, and launch your fully operational store — in under 10 seconds.</div>
+    <div class="intro-title">Become a seller in<br/><em>one click.</em></div>
+    <div class="intro-sub">Our 8 AI agents will analyse the marketplace, match your ideal product category, configure your seller account, set up pricing intelligence, and get you live on VibeStore — in under 10 seconds.</div>
 
     <div class="vs-shopify">
       <div class="cmp-card theirs">
-        <div class="cmp-title">Shopify Setup</div>
-        <div class="cmp-row"><span class="x">✕</span> 14-step signup process</div>
-        <div class="cmp-row"><span class="x">✕</span> Credit card required</div>
-        <div class="cmp-row"><span class="x">✕</span> Manual theme selection</div>
-        <div class="cmp-row"><span class="x">✕</span> You configure everything</div>
-        <div class="cmp-row"><span class="x">✕</span> Avg 3 hours to first sale</div>
+        <div class="cmp-title">Traditional Signup</div>
+        <div class="cmp-row"><span class="x">✕</span> 14-step seller onboarding</div>
+        <div class="cmp-row"><span class="x">✕</span> Manual document upload</div>
+        <div class="cmp-row"><span class="x">✕</span> Wait days for approval</div>
+        <div class="cmp-row"><span class="x">✕</span> Configure everything yourself</div>
+        <div class="cmp-row"><span class="x">✕</span> Avg 3 days to first listing</div>
       </div>
       <div class="cmp-card ours">
-        <div class="cmp-title">VibeStore AI</div>
-        <div class="cmp-row"><span class="check">✓</span> One click — no forms</div>
+        <div class="cmp-title">VibeStore Quick Register</div>
+        <div class="cmp-row"><span class="check">✓</span> One click — no long forms</div>
         <div class="cmp-row"><span class="check">✓</span> No credit card ever</div>
-        <div class="cmp-row"><span class="check">✓</span> AI selects optimal theme</div>
-        <div class="cmp-row"><span class="check">✓</span> 8 agents configure for you</div>
+        <div class="cmp-row"><span class="check">✓</span> AI configures your account</div>
+        <div class="cmp-row"><span class="check">✓</span> 8 agents set up for you</div>
         <div class="cmp-row"><span class="check">✓</span> Live in under 10 seconds</div>
       </div>
     </div>
 
     <button class="btn-start" onclick="startLaunch()">
       <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-      Launch My Store Now — It's Free
+      Register as a Seller Now — It's Free
     </button>
-    <div class="skip-note">No account needed &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Live in seconds &nbsp;·&nbsp; <a onclick="window.location.href='setup.html'">Prefer to customise?</a></div>
+    <div class="skip-note">No payment needed &nbsp;·&nbsp; Instant activation &nbsp;·&nbsp; <a onclick="window.location.href='setup.html'">Prefer to fill in details manually?</a></div>
   </div>
 
   <!-- PHASE 2: SCANNING -->
   <div id="phase-scan">
-    <div class="scan-title">AI scanning your market...</div>
-    <div class="scan-sub">Our agents are reading real-time trend data to configure the perfect store for today.</div>
+    <div class="scan-title">AI scanning the marketplace...</div>
+    <div class="scan-sub">Our agents are reading real-time marketplace data to configure the perfect seller account for you.</div>
     <div class="scan-grid" id="scanGrid">
       <div class="scan-item" id="sc0"><div class="scan-item-icon">📈</div><div class="scan-item-name">Trend Analysis</div><div class="scan-item-status">Queued</div></div>
       <div class="scan-item" id="sc1"><div class="scan-item-icon">🛍️</div><div class="scan-item-name">Category Match</div><div class="scan-item-status">Queued</div></div>
@@ -206,8 +206,8 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
   <!-- PHASE 3: BUILDING -->
   <div id="phase-build">
-    <div class="build-title">Agents are building your store...</div>
-    <div class="build-sub">Each AI agent is configuring its domain. Watch them work.</div>
+    <div class="build-title">Agents are setting up your seller account...</div>
+    <div class="build-sub">Each AI agent is configuring your marketplace seller account. Watch them work.</div>
     <div class="agent-queue" id="agentQueue"></div>
     <div class="big-progress-wrap">
       <div class="big-bar"><div class="big-fill" id="buildBar"></div></div>
@@ -217,9 +217,32 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
   <!-- PHASE 4: REVEAL -->
   <div id="phase-reveal">
-    <div class="reveal-icon">🚀</div>
-    <div class="reveal-title">Your store is live!</div>
-    <div class="reveal-sub">All 8 AI agents are active and running your store autonomously. You didn't fill a single form.</div>
+    <div class="reveal-icon" style="animation:bounceIn 0.6s ease">✅</div>
+    <div class="reveal-title">Your seller account is being set up!</div>
+    <div class="reveal-sub">All 8 AI agents are active and managing your seller account on the VibeStore marketplace. You're now a registered seller — what's next?</div>
+
+    <!-- NEXT STEPS -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;text-align:left">
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:18px 16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(255,153,0,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'" onclick="window.location.href='seller-central.html'">
+        <div style="font-size:1.8rem;margin-bottom:10px">📦</div>
+        <div style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:5px">Add Products</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5">List your products with AI-assisted descriptions and pricing.</div>
+        <div style="margin-top:10px;font-size:0.72rem;color:#FF9900;font-weight:600">Start listing →</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:18px 16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(255,153,0,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'" onclick="window.location.href='seller-central.html'">
+        <div style="font-size:1.8rem;margin-bottom:10px">🚚</div>
+        <div style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:5px">Set Up Shipping</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5">Configure delivery zones, rates, and courier partnerships.</div>
+        <div style="margin-top:10px;font-size:0.72rem;color:#FF9900;font-weight:600">Configure shipping →</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:18px 16px;cursor:pointer;transition:border-color 0.2s" onmouseover="this.style.borderColor='rgba(255,153,0,0.5)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.12)'" onclick="window.location.href='seller-central.html'">
+        <div style="font-size:1.8rem;margin-bottom:10px">🏦</div>
+        <div style="font-size:0.88rem;font-weight:700;color:white;margin-bottom:5px">Link Bank Account</div>
+        <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.5">Add your bank details to receive weekly payouts from sales.</div>
+        <div style="margin-top:10px;font-size:0.72rem;color:#FF9900;font-weight:600">Add bank account →</div>
+      </div>
+    </div>
+
     <div class="reveal-config" id="revealConfig"></div>
     <div class="reveal-agents">
       <div class="ra-tag"><div class="ra-dot"></div>Zen AI — Operations</div>
@@ -231,12 +254,12 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
       <div class="ra-tag"><div class="ra-dot"></div>Sage AI — Content</div>
       <div class="ra-tag"><div class="ra-dot"></div>Echo AI — Reviews</div>
     </div>
-    <button class="btn-enter" id="enterBtn" onclick="window.location.href='mystore.html'">
-      Enter My Store →
+    <button class="btn-enter" id="enterBtn" onclick="window.location.href='seller-central.html'" style="background:linear-gradient(135deg,#FF9900,#e68900);box-shadow:0 8px 32px rgba(255,153,0,0.4)">
+      Go to Seller Central →
     </button>
     <div class="reveal-links">
-      <span class="reveal-link" onclick="window.location.href='app.html'">Open Admin Dashboard</span>
-      <span class="reveal-link" onclick="window.location.href='setup.html'">Change store settings</span>
+      <span class="reveal-link" onclick="window.location.href='seller-central.html'">Open Seller Central</span>
+      <span class="reveal-link" onclick="window.location.href='setup.html'">Edit seller account settings</span>
     </div>
   </div>
 
@@ -335,8 +358,8 @@ async function startLaunch(){
   const btn = document.getElementById('enterBtn');
   const intv = setInterval(()=>{
     t--;
-    btn.textContent = t>0 ? `Enter My Store → (${t})` : 'Enter My Store →';
-    if(t<=0){ clearInterval(intv); window.location.href='mystore.html'; }
+    btn.textContent = t>0 ? `Go to Seller Central → (${t})` : 'Go to Seller Central →';
+    if(t<=0){ clearInterval(intv); window.location.href='seller-central.html'; }
   },1000);
 }
 
@@ -344,12 +367,12 @@ async function startLaunch(){
 // SCAN PHASE
 // ============================================================
 const SCAN_LABELS = [
-  {active:'Reading market trends...',done:'Trends analysed'},
-  {active:'Matching best category...',done:`Category: ${()=>chosen.cat}`},
-  {active:'Selecting optimal theme...',done:`Theme: ${()=>chosen.theme}`},
-  {active:'Configuring price engine...',done:'Pricing live'},
-  {active:'Generating SEO metadata...',done:'SEO ready'},
-  {active:'Booting 8 AI agents...',done:'All agents ready'},
+  {active:'Reading marketplace trends...',done:'Marketplace data analysed'},
+  {active:'Matching best seller category...',done:`Category: ${()=>chosen.cat}`},
+  {active:'Analysing competitor sellers...',done:'Competitor insights ready'},
+  {active:'Configuring seller price engine...',done:'Pricing intelligence live'},
+  {active:'Generating SEO-optimised listings...',done:'Listing templates ready'},
+  {active:'Booting 8 seller AI agents...',done:'All agents ready'},
 ];
 async function runScan(){
   const bar = document.getElementById('scanBar');
@@ -381,14 +404,14 @@ async function runScan(){
 // BUILD PHASE
 // ============================================================
 const AGENTS = [
-  {icon:'🚀',name:'Zen AI',task:'Setting up order management & fulfilment routes',done:'Order system configured'},
-  {icon:'💰',name:'Luna AI',task:'Calibrating price tracking for your category',done:'Price monitoring active — 8,000 items'},
-  {icon:'✍️',name:'Sage AI',task:'Writing your homepage copy and product descriptions',done:'Homepage copy published'},
-  {icon:'🎨',name:'Nova AI',task:'Applying your theme and curating product catalogue',done:`Theme "${()=>chosen.theme}" applied`},
-  {icon:'🔍',name:'Atlas AI',task:'Indexing catalogue and building search relevance',done:'Search index ready'},
-  {icon:'💬',name:'Rex AI',task:'Activating 24/7 chat support widget',done:'Chat support live on all pages'},
-  {icon:'🎯',name:'Aria AI',task:'Scheduling your launch week promotions',done:'Launch campaign ready — LAUNCH20 code live'},
-  {icon:'⭐',name:'Echo AI',task:'Collecting product reviews from similar stores',done:'Review data imported'},
+  {icon:'🚀',name:'Zen AI',task:'Setting up seller order management & fulfilment routes',done:'Seller order system configured'},
+  {icon:'💰',name:'Luna AI',task:'Calibrating price intelligence for your category',done:'Price monitoring active — 8,000 competitor listings'},
+  {icon:'✍️',name:'Sage AI',task:'Generating SEO-optimised product listing templates',done:'Listing templates ready for your products'},
+  {icon:'🛍️',name:'Nova AI',task:'Configuring seller profile and product catalogue',done:'Seller profile set up on marketplace'},
+  {icon:'🔍',name:'Atlas AI',task:'Indexing your seller account in marketplace search',done:'Seller search profile ready'},
+  {icon:'💬',name:'Rex AI',task:'Activating 24/7 seller support and buyer chat',done:'Seller support live — buyers can reach you'},
+  {icon:'🎯',name:'Aria AI',task:'Setting up your new seller promotional campaigns',done:'Welcome campaign ready — NEWSELLER20 live'},
+  {icon:'⭐',name:'Echo AI',task:'Setting up review collection for your listings',done:'Review automation active'},
 ];
 
 async function runBuild(){
@@ -435,23 +458,23 @@ function saveConfig(){
   const config = {
     name: chosen.name,
     category: chosen.cat,
-    theme: chosen.theme,
-    tagline: 'Powered by 8 AI agents — running 24/7',
+    tagline: 'Seller account powered by 8 AI agents — running 24/7',
     country: 'India',
     currency: 'INR (₹)',
-    autoLaunched: true,
+    sellerType: 'marketplace',
+    autoRegistered: true,
   };
   localStorage.setItem('vs_store_config', JSON.stringify(config));
 }
 
 function buildReveal(){
   document.getElementById('revealConfig').innerHTML = [
-    {l:'Store Name',v:`<em>${chosen.name}</em>`},
+    {l:'Seller Name',v:`<em>${chosen.name}</em>`},
     {l:'Category',v:chosen.cat},
-    {l:'Theme',v:chosen.theme},
     {l:'AI Agents',v:'All 8 active'},
-    {l:'Currency',v:'INR (₹)'},
-    {l:'Launch Promo',v:'LAUNCH20 — 20% off'},
+    {l:'Payout Currency',v:'INR (₹)'},
+    {l:'Payout Schedule',v:'Weekly (every Monday)'},
+    {l:'Welcome Promo',v:'NEWSELLER20 — 20% off commission'},
   ].map(r=>`<div class="rc-item"><div class="rc-label">${r.l}</div><div class="rc-val">${r.v}</div></div>`).join('');
 }
 

@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>VibePass — India's Best Shopping Membership — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nav:#131921;--orange:#FF9900;--teal:#007185;--body:#f0f2f5;
+  --white:#fff;--border:#ddd;--gray:#555;--gray2:#888;--dark:#0f1111;
+  --green:#007600;--red:#cc0c39;
+}
+body{font-family:'Inter',sans-serif;background:var(--body);color:var(--dark);line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+
+/* ===== NAV ===== */
+nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:10px;padding:8px 16px;height:60px}
+.nav-logo{color:white;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;white-space:nowrap;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;flex-shrink:0}
+.nav-logo:hover{border-color:white}
+.nav-logo span{color:var(--orange)}
+.nav-search{flex:1;display:flex;border-radius:4px;overflow:hidden;max-width:900px}
+.nav-search-cat{background:#f3f3f3;border:none;padding:0 10px;font-size:0.78rem;color:var(--dark);cursor:pointer;border-right:1px solid #ccc;min-width:60px}
+.nav-search input{flex:1;padding:0 12px;border:none;font-size:0.92rem;outline:none;height:40px}
+.nav-search-btn{background:var(--orange);border:none;width:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+.nav-search-btn:hover{background:#e68900}
+.nav-right{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.nav-btn{color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;font-size:0.82rem;cursor:pointer;white-space:nowrap;line-height:1.4;transition:border-color .15s;background:none}
+.nav-btn:hover{border-color:white}
+.nav-btn span{color:rgba(255,255,255,0.8);font-size:0.7rem;display:block}
+.nav-btn strong{font-size:0.88rem}
+.nav-cart{display:flex;align-items:flex-end;gap:4px;color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;cursor:pointer;background:none}
+.nav-cart:hover{border-color:white}
+.nav-cart-count{color:var(--orange);font-size:1.1rem;font-weight:800;line-height:1}
+.nav-cart-text{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+.nav-bottom{background:#232f3e;padding:4px 16px;display:flex;gap:4px;overflow-x:auto}
+.nav-bottom::-webkit-scrollbar{display:none}
+.nav-bot-btn{color:white;font-size:0.82rem;padding:6px 10px;border:1px solid transparent;border-radius:3px;white-space:nowrap;cursor:pointer;background:none}
+.nav-bot-btn:hover{border-color:white}
+.nav-bot-btn.active{border-color:var(--orange);color:var(--orange)}
+
+/* ===== HERO ===== */
+.hero{background:linear-gradient(135deg,#0a0e1a 0%,#131921 40%,#1a2332 70%,#0d1117 100%);padding:64px 16px;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(255,153,0,0.08),transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(0,113,133,0.1),transparent 50%);pointer-events:none}
+.hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 440px;gap:48px;align-items:center;position:relative;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,0,0.15);border:1px solid rgba(255,153,0,0.35);border-radius:100px;padding:6px 14px;font-size:0.75rem;font-weight:700;color:var(--orange);margin-bottom:20px;letter-spacing:0.04em}
+.hero-logo{font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:800;color:white;line-height:1;margin-bottom:14px}
+.hero-logo span{color:var(--orange)}
+.hero-tagline{font-size:1.15rem;color:rgba(255,255,255,0.7);margin-bottom:28px;line-height:1.5;max-width:420px}
+.hero-price{margin-bottom:8px}
+.hero-price-amount{font-family:'Space Grotesk',sans-serif;font-size:4rem;font-weight:800;color:white;line-height:1}
+.hero-price-amount sup{font-size:1.8rem;vertical-align:super;font-weight:700}
+.hero-price-period{font-size:1rem;color:rgba(255,255,255,0.5);margin-left:4px}
+.hero-price-note{font-size:0.8rem;color:rgba(255,255,255,0.4);margin-bottom:28px}
+.hero-cta{display:inline-block;background:var(--orange);color:var(--dark);font-size:1rem;font-weight:800;padding:16px 36px;border-radius:4px;margin-bottom:10px;transition:background .2s;border:none;cursor:pointer}
+.hero-cta:hover{background:#e68900}
+.hero-cancel{font-size:0.78rem;color:rgba(255,255,255,0.4);display:block}
+
+.hero-benefits{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:28px 28px 24px}
+.hero-benefits h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:white;margin-bottom:18px}
+.benefit-item{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.07)}
+.benefit-item:last-child{border:none;padding-bottom:0}
+.benefit-check{color:var(--orange);font-size:1rem;flex-shrink:0;margin-top:1px;font-weight:800}
+.benefit-text{color:rgba(255,255,255,0.85);font-size:0.88rem;line-height:1.4}
+.benefit-text strong{color:white;display:block;font-size:0.9rem;margin-bottom:1px}
+
+/* ===== PAGE SECTIONS ===== */
+.section{max-width:1200px;margin:0 auto;padding:56px 16px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:800;color:var(--dark);margin-bottom:8px;text-align:center}
+.section-sub{font-size:0.92rem;color:var(--gray);text-align:center;margin-bottom:40px;max-width:560px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ===== BENEFITS GRID ===== */
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.bcard{background:white;border-radius:8px;padding:28px 24px;box-shadow:0 1px 8px rgba(0,0,0,0.08);transition:box-shadow .2s,transform .2s;border:1px solid var(--border)}
+.bcard:hover{box-shadow:0 4px 20px rgba(0,0,0,0.12);transform:translateY(-2px)}
+.bcard-icon{font-size:2.4rem;margin-bottom:14px;display:block}
+.bcard-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700;margin-bottom:8px;color:var(--dark)}
+.bcard-desc{font-size:0.84rem;color:var(--gray);line-height:1.6}
+.bcard-tag{display:inline-block;background:rgba(255,153,0,0.1);color:#b36b00;border:1px solid rgba(255,153,0,0.3);border-radius:100px;padding:3px 10px;font-size:0.68rem;font-weight:700;margin-top:10px;letter-spacing:0.04em}
+
+/* ===== COMPARISON TABLE ===== */
+.compare-section{background:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);border:1px solid var(--border)}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th{padding:18px 20px;font-size:0.82rem;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
+.compare-table th:first-child{background:#f7f7f7;color:var(--gray);width:40%}
+.compare-table th.free-col{background:#f7f7f7;text-align:center;color:var(--gray);width:30%}
+.compare-table th.pass-col{background:linear-gradient(135deg,#1a2332,#0d1117);color:var(--orange);text-align:center;width:30%}
+.compare-table th.pass-col span{display:block;font-size:0.7rem;color:rgba(255,255,255,0.5);font-weight:500;margin-top:2px}
+.compare-table td{padding:14px 20px;font-size:0.85rem;border-bottom:1px solid #f5f5f5;vertical-align:middle}
+.compare-table tr:last-child td{border:none}
+.compare-table tr:nth-child(even) td:first-child{background:#fafafa}
+.compare-table tr:nth-child(odd) td:first-child{background:#fdfdfd}
+.compare-table td:first-child{font-weight:600;color:var(--dark)}
+.td-free{text-align:center;color:var(--gray2)}
+.td-pass{text-align:center;background:rgba(255,153,0,0.04)}
+.check-orange{color:var(--orange);font-size:1.1rem;font-weight:800}
+.cross-gray{color:var(--gray2);font-size:1rem}
+.td-pass-text{font-size:0.8rem;font-weight:600;color:var(--dark)}
+.td-free-text{font-size:0.8rem;color:var(--gray2)}
+
+/* ===== PRICING ===== */
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:860px;margin:0 auto}
+.pcard{background:white;border-radius:8px;padding:28px 24px;border:2px solid var(--border);position:relative;transition:box-shadow .2s}
+.pcard:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1)}
+.pcard.featured{border-color:var(--orange);box-shadow:0 4px 24px rgba(255,153,0,0.2)}
+.pcard-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--orange);color:var(--dark);font-size:0.68rem;font-weight:800;padding:4px 14px;border-radius:100px;letter-spacing:0.06em;white-space:nowrap}
+.pcard-name{font-size:0.78rem;font-weight:700;color:var(--gray2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:12px}
+.pcard-price{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:800;color:var(--dark);line-height:1;margin-bottom:4px}
+.pcard-price sup{font-size:1.2rem;vertical-align:super}
+.pcard-period{font-size:0.82rem;color:var(--gray2);margin-bottom:6px}
+.pcard-saving{font-size:0.78rem;color:var(--green);font-weight:600;margin-bottom:20px;min-height:20px}
+.pcard-features{list-style:none;margin-bottom:24px}
+.pcard-features li{font-size:0.83rem;color:var(--gray);padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;gap:8px}
+.pcard-features li:last-child{border:none}
+.pcard-features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.pcard-btn{width:100%;padding:12px;border-radius:4px;font-size:0.88rem;font-weight:700;border:2px solid var(--orange);cursor:pointer;transition:all .2s}
+.pcard.featured .pcard-btn{background:var(--orange);color:var(--dark)}
+.pcard.featured .pcard-btn:hover{background:#e68900}
+.pcard:not(.featured) .pcard-btn{background:white;color:var(--orange)}
+.pcard:not(.featured) .pcard-btn:hover{background:var(--orange);color:var(--dark)}
+.pcard-note{font-size:0.72rem;color:var(--gray2);text-align:center;margin-top:10px}
+
+/* ===== CTA STRIP ===== */
+.cta-strip{background:linear-gradient(135deg,#131921,#1e2d3d);padding:64px 16px;text-align:center}
+.cta-strip-inner{max-width:640px;margin:0 auto}
+.cta-strip h2{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;color:white;margin-bottom:10px}
+.cta-strip p{font-size:0.95rem;color:rgba(255,255,255,0.6);margin-bottom:28px;line-height:1.6}
+.cta-strip-btn{display:inline-block;background:var(--orange);color:var(--dark);font-size:1rem;font-weight:800;padding:16px 40px;border-radius:4px;border:none;cursor:pointer;transition:background .2s}
+.cta-strip-btn:hover{background:#e68900}
+.cta-strip-note{font-size:0.78rem;color:rgba(255,255,255,0.35);margin-top:12px}
+
+/* ===== FAQ ===== */
+.faq-wrap{max-width:720px;margin:0 auto}
+.faq-item{background:white;border:1px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden}
+.faq-q{width:100%;background:none;border:none;padding:18px 20px;display:flex;justify-content:space-between;align-items:center;font-size:0.92rem;font-weight:600;color:var(--dark);cursor:pointer;text-align:left;gap:12px}
+.faq-q:hover{background:#fafafa}
+.faq-chevron{color:var(--teal);font-size:1.1rem;flex-shrink:0;transition:transform .25s}
+.faq-item.open .faq-chevron{transform:rotate(180deg)}
+.faq-a{display:none;padding:0 20px 18px;font-size:0.85rem;color:var(--gray);line-height:1.7}
+.faq-item.open .faq-a{display:block}
+
+/* ===== FOOTER ===== */
+footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:40px 16px 20px;margin-top:0}
+.foot-inner{max-width:1200px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-bottom:28px}
+.foot-col h4{color:white;font-size:0.85rem;font-weight:700;margin-bottom:12px}
+.foot-col a{display:block;font-size:0.78rem;color:rgba(255,255,255,0.65);margin-bottom:7px;transition:color .2s}
+.foot-col a:hover{color:white}
+.foot-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.4)}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;border-radius:3px;padding:12px 20px;font-size:0.85rem;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:960px){
+  .hero-inner{grid-template-columns:1fr}
+  .hero-benefits{display:none}
+  .benefits-grid{grid-template-columns:repeat(2,1fr)}
+  .pricing-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .hero-logo{font-size:2.8rem}
+  .hero-price-amount{font-size:3rem}
+  .benefits-grid{grid-template-columns:1fr}
+  .section-title{font-size:1.5rem}
+  .compare-table{font-size:0.78rem}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-top">
+    <a class="nav-logo" href="index.html">Vibe<span>Store</span></a>
+    <div class="nav-search">
+      <select class="nav-search-cat"><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option></select>
+      <input placeholder="Search VibeStore..."/>
+      <button class="nav-search-btn">🔍</button>
+    </div>
+    <div class="nav-right">
+      <a href="account.html" class="nav-btn"><span>Hello, Sign in</span><strong>Account &amp; Lists</strong></a>
+      <a href="track.html" class="nav-btn"><span>Returns</span><strong>&amp; Orders</strong></a>
+      <a href="cart.html" class="nav-cart">
+        <div>
+          <div class="nav-cart-count" id="cartCount">0</div>
+          <div class="nav-cart-text">Cart 🛒</div>
+        </div>
+      </a>
+    </div>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-bot-btn">☰ All</button>
+    <a href="sale.html" class="nav-bot-btn">Today's Deals</a>
+    <a href="collections.html" class="nav-bot-btn">New Arrivals</a>
+    <a href="vibepass.html" class="nav-bot-btn active">⚡ VibePass</a>
+    <a href="become-seller.html" class="nav-bot-btn">Sell on VibeStore</a>
+    <a href="gift-cards.html" class="nav-bot-btn">Gift Cards</a>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge">⚡ Membership · Limited Time Offer</div>
+      <div class="hero-logo">⚡ Vibe<span>Pass</span></div>
+      <div class="hero-tagline">India's best shopping membership. Free delivery, exclusive deals, streaming &amp; more — all in one subscription.</div>
+      <div class="hero-price">
+        <div class="hero-price-amount"><sup>₹</sup>299<span class="hero-price-period">/year</span></div>
+        <div class="hero-price-note">That's less than ₹25/month · Cancel anytime</div>
+      </div>
+      <button class="hero-cta" onclick="toast('🎉 Starting your 30-day free trial!')">Start your 30-day FREE trial →</button>
+      <span class="hero-cancel">No payment needed today · Cancel anytime · Free trial auto-converts</span>
+    </div>
+
+    <div class="hero-benefits">
+      <h3>What's included in VibePass</h3>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>Free Delivery on every order</strong>No minimum order value. Always free.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>Same-day delivery</strong>On eligible items in select cities.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>Exclusive VibePass deals</strong>Extra 10–20% off, every single day.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>VibeStream included</strong>Movies, shows &amp; originals at no extra cost.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>VibeMusic included</strong>Ad-free music streaming, 60M+ tracks.</div>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-check">✓</div>
+        <div class="benefit-text"><strong>Priority AI Support (Rex)</strong>Responds in under 30 seconds — always.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BENEFITS GRID ===== -->
+<div style="background:white;padding:1px 0">
+<div class="section">
+  <div class="section-title">Everything you get with VibePass</div>
+  <div class="section-sub">One membership. Six powerful benefits. Built for serious shoppers who want more.</div>
+  <div class="benefits-grid">
+    <div class="bcard">
+      <span class="bcard-icon">🚀</span>
+      <div class="bcard-title">Free Delivery on All Orders</div>
+      <div class="bcard-desc">No minimum cart value. Every order, every seller, every city. Delivery fees are a thing of the past for VibePass members.</div>
+      <div class="bcard-tag">NO MINIMUM</div>
+    </div>
+    <div class="bcard">
+      <span class="bcard-icon">⚡</span>
+      <div class="bcard-title">Same-Day Delivery</div>
+      <div class="bcard-desc">Order before 12 PM and receive your package the same evening on thousands of eligible items across 50+ cities.</div>
+      <div class="bcard-tag">50+ CITIES</div>
+    </div>
+    <div class="bcard">
+      <span class="bcard-icon">💰</span>
+      <div class="bcard-title">Exclusive VibePass Deals</div>
+      <div class="bcard-desc">Get an extra 10–20% off on VibePass-exclusive products every day. Early access to flash sales and new arrivals.</div>
+      <div class="bcard-tag">10–20% EXTRA OFF</div>
+    </div>
+    <div class="bcard">
+      <span class="bcard-icon">🎬</span>
+      <div class="bcard-title">VibeStream Included</div>
+      <div class="bcard-desc">Watch movies, web series, originals, and live events. VibeStream is included in your membership — no separate subscription needed.</div>
+      <div class="bcard-tag">INCLUDED FREE</div>
+    </div>
+    <div class="bcard">
+      <span class="bcard-icon">🎵</span>
+      <div class="bcard-title">VibeMusic Included</div>
+      <div class="bcard-desc">60 million+ songs. Ad-free. Offline downloads on up to 5 devices. Bollywood, indie, international — everything in one place.</div>
+      <div class="bcard-tag">60M+ SONGS</div>
+    </div>
+    <div class="bcard">
+      <span class="bcard-icon">🤖</span>
+      <div class="bcard-title">Priority AI Support</div>
+      <div class="bcard-desc">Rex AI responds to VibePass members in under 30 seconds — guaranteed. Returns, refunds, tracking — resolved instantly, 24/7.</div>
+      <div class="bcard-tag">UNDER 30 SECONDS</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ===== COMPARISON TABLE ===== -->
+<div class="section" style="padding-top:48px;padding-bottom:48px">
+  <div class="section-title">Free vs VibePass</div>
+  <div class="section-sub">See exactly what you're missing — and why 2 million members chose to upgrade.</div>
+  <div class="compare-section">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th></th>
+          <th class="free-col">Free Account</th>
+          <th class="pass-col">⚡ VibePass <span>₹299/year</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Delivery fee</td>
+          <td class="td-free"><span class="td-free-text">₹40–₹80 per order</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">Always FREE</span></td>
+        </tr>
+        <tr>
+          <td>Delivery speed</td>
+          <td class="td-free"><span class="td-free-text">2–5 business days</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">Same-day &amp; next-day</span></td>
+        </tr>
+        <tr>
+          <td>Exclusive deals</td>
+          <td class="td-free"><span class="cross-gray">✕</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">10–20% extra off daily</span></td>
+        </tr>
+        <tr>
+          <td>Returns</td>
+          <td class="td-free"><span class="td-free-text">Standard 7-day</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">Extended 30-day returns</span></td>
+        </tr>
+        <tr>
+          <td>AI Support (Rex)</td>
+          <td class="td-free"><span class="td-free-text">Standard queue</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">Priority — &lt;30 sec response</span></td>
+        </tr>
+        <tr>
+          <td>VibeStream</td>
+          <td class="td-free"><span class="cross-gray">✕</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">Fully included</span></td>
+        </tr>
+        <tr>
+          <td>VibeMusic</td>
+          <td class="td-free"><span class="cross-gray">✕</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">60M+ songs, offline</span></td>
+        </tr>
+        <tr>
+          <td>Price</td>
+          <td class="td-free"><span class="td-free-text">Free</span></td>
+          <td class="td-pass"><span class="check-orange">✓</span> <span class="td-pass-text">₹299/year · 30-day free trial</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== PRICING ===== -->
+<div style="background:white;padding:1px 0">
+<div class="section">
+  <div class="section-title">Choose your plan</div>
+  <div class="section-sub">All plans include every VibePass benefit. Pick what works for you.</div>
+  <div class="pricing-grid">
+
+    <div class="pcard">
+      <div class="pcard-name">Monthly</div>
+      <div class="pcard-price"><sup>₹</sup>49</div>
+      <div class="pcard-period">per month · billed monthly</div>
+      <div class="pcard-saving">&nbsp;</div>
+      <ul class="pcard-features">
+        <li>Free delivery on all orders</li>
+        <li>Exclusive VibePass deals</li>
+        <li>VibeStream &amp; VibeMusic</li>
+        <li>Priority Rex AI support</li>
+        <li>Cancel anytime</li>
+      </ul>
+      <button class="pcard-btn" onclick="toast('Starting monthly VibePass trial...')">Start Free Trial</button>
+      <div class="pcard-note">30-day free trial included</div>
+    </div>
+
+    <div class="pcard featured">
+      <div class="pcard-badge">⭐ BEST VALUE — SAVE 49%</div>
+      <div class="pcard-name">Annual</div>
+      <div class="pcard-price"><sup>₹</sup>299</div>
+      <div class="pcard-period">per year · billed annually</div>
+      <div class="pcard-saving">You save ₹289 vs monthly</div>
+      <ul class="pcard-features">
+        <li>Everything in Monthly</li>
+        <li>Same-day delivery eligible</li>
+        <li>30-day returns (vs 7-day)</li>
+        <li>Early sale access</li>
+        <li>Family sharing (up to 2 accounts)</li>
+      </ul>
+      <button class="pcard-btn" onclick="toast('🎉 Starting annual VibePass trial!')">Start Free Trial →</button>
+      <div class="pcard-note">30-day free trial · Cancel anytime</div>
+    </div>
+
+    <div class="pcard">
+      <div class="pcard-name">Student</div>
+      <div class="pcard-price"><sup>₹</sup>149</div>
+      <div class="pcard-period">per year · .edu email required</div>
+      <div class="pcard-saving">50% off with valid student email</div>
+      <ul class="pcard-features">
+        <li>All VibePass benefits included</li>
+        <li>Free delivery on all orders</li>
+        <li>VibeStream &amp; VibeMusic</li>
+        <li>Priority Rex AI support</li>
+        <li>Verify with .edu email address</li>
+      </ul>
+      <button class="pcard-btn" onclick="toast('Verifying student status...')">Verify &amp; Start Trial</button>
+      <div class="pcard-note">Requires valid .edu email · Renews at ₹149/year</div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ===== CTA STRIP ===== -->
+<div class="cta-strip">
+  <div class="cta-strip-inner">
+    <h2>Join 2 million VibePass members</h2>
+    <p>India's fastest-growing shopping membership. Free delivery, exclusive deals, streaming — all under ₹25/month. Try free for 30 days.</p>
+    <button class="cta-strip-btn" onclick="toast('🎉 Starting your 30-day free trial!')">Start Free Trial — ₹299/year</button>
+    <div class="cta-strip-note">30-day free trial · No payment today · Cancel anytime · Auto-renews after trial</div>
+  </div>
+</div>
+
+<!-- ===== FAQ ===== -->
+<div class="section" style="padding-top:56px;padding-bottom:72px">
+  <div class="section-title">Frequently Asked Questions</div>
+  <div class="section-sub">Everything you need to know about VibePass.</div>
+  <div class="faq-wrap">
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What happens after my 30-day free trial ends?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">After your 30-day trial, your VibePass membership automatically converts to a paid subscription at the plan you selected (Monthly ₹49/month or Annual ₹299/year). We'll send you a reminder email 3 days before your trial ends. You can cancel at any time before the trial ends and you won't be charged anything.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Can I cancel my VibePass membership anytime?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">Yes, absolutely. You can cancel your VibePass membership at any time from your Account settings. If you cancel an annual plan, your benefits will continue until the end of the billing period — no partial refunds, but you keep everything you paid for. Monthly plans can be cancelled before the next billing cycle with no charges.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Does VibePass work with all sellers on VibeStore marketplace?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">Free delivery applies to all orders fulfilled by VibeStore directly (Fulfilled by VibeStore label). For orders shipped by individual marketplace sellers, free delivery applies to sellers enrolled in the VibePass Delivery Program — look for the ⚡ VibePass badge on product pages. Exclusive deals apply to all VibePass-tagged products across all sellers.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How do VibeStream and VibeMusic work with VibePass?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">VibeStream and VibeMusic are included in your VibePass subscription at no extra cost. Once your VibePass is active, you can access both services directly from your account. VibeStream offers movies, web series, and originals. VibeMusic gives you ad-free access to 60M+ tracks with offline downloads on up to 5 devices.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How is VibePass Student different, and how do I verify my student status?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-a">VibePass Student gives you all the same benefits as the Annual plan at 50% off (₹149/year instead of ₹299). To verify, you need a valid .edu email address from a recognised university or college. After signing up, we'll send a verification link to your .edu email. Once confirmed, your student pricing is locked in for up to 4 years or as long as you maintain a valid .edu email.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="collections.html">Collections</a>
+        <a href="sale.html">Today's Deals</a>
+        <a href="compare.html">Compare Products</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="foot-col">
+        <h4>VibePass</h4>
+        <a href="vibepass.html">Membership Benefits</a>
+        <a href="vibepass.html">Student Plan</a>
+        <a href="vibepass.html">Annual vs Monthly</a>
+        <a href="faq.html">VibePass FAQ</a>
+      </div>
+      <div class="foot-col">
+        <h4>Customer Service</h4>
+        <a href="returns.html">Returns &amp; Refunds</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">Help Centre</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+      <div class="foot-col">
+        <h4>Sell on VibeStore</h4>
+        <a href="become-seller.html">Become a Seller</a>
+        <a href="seller-central.html">Seller Central</a>
+        <a href="setup.html">Seller Setup</a>
+        <a href="seller-profile.html">Seller Profile</a>
+      </div>
+      <div class="foot-col">
+        <h4>VibeStore</h4>
+        <a href="index.html">About Us</a>
+        <a href="account.html">My Account</a>
+        <a href="loyalty.html">Loyalty Points</a>
+        <a href="referral.html">Referral Program</a>
+        <a href="contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="foot-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India · All rights reserved</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<script src="rex-chat.js"></script>
+<script>
+// Cart count
+(function(){
+  try{
+    const c=JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const n=c.reduce((s,i)=>s+(i.qty||1),0);
+    const el=document.getElementById('cartCount');if(el)el.textContent=n;
+  }catch(e){}
+})();
+
+// Toast
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2800);
+}
+
+// FAQ accordion
+function toggleFaq(btn){
+  const item=btn.closest('.faq-item');
+  const wasOpen=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>

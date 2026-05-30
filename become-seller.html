@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sell on VibeStore — Start Selling Today</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#111;}
+a{text-decoration:none;color:inherit;}
+
+/* NAV */
+.nav-top{background:#131921;padding:0 20px;display:flex;align-items:center;gap:16px;height:60px;}
+.nav-logo{color:#fff;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;white-space:nowrap;}
+.nav-logo span{color:#FF9900;}
+.nav-delivery{color:#ccc;font-size:12px;line-height:1.3;padding:8px 10px;border:1px solid transparent;cursor:pointer;border-radius:4px;}
+.nav-delivery:hover{border-color:#fff;}
+.nav-delivery b{color:#fff;font-size:14px;}
+.nav-search{flex:1;display:flex;max-width:700px;}
+.nav-search select{background:#f3f3f3;border:none;padding:0 8px;font-size:13px;border-radius:4px 0 0 4px;cursor:pointer;color:#333;}
+.nav-search input{flex:1;padding:10px 14px;font-size:15px;border:none;outline:none;}
+.nav-search button{background:#FF9900;border:none;padding:0 16px;cursor:pointer;border-radius:0 4px 4px 0;font-size:20px;}
+.nav-search button:hover{background:#FF6600;}
+.nav-right{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-right a{color:#fff;font-size:13px;padding:8px 10px;border:1px solid transparent;border-radius:4px;white-space:nowrap;}
+.nav-right a:hover{border-color:#fff;}
+.nav-right a span{display:block;font-size:11px;color:#ccc;}
+.nav-cart{display:flex;align-items:center;gap:4px;color:#fff;font-size:13px;padding:8px 10px;}
+.nav-cart .cart-count{color:#FF9900;font-weight:700;font-size:18px;}
+
+.nav-secondary{background:#232f3e;padding:8px 20px;display:flex;align-items:center;gap:4px;}
+.nav-secondary a{color:#fff;font-size:13px;padding:6px 10px;border-radius:3px;white-space:nowrap;}
+.nav-secondary a:hover{outline:1px solid #fff;}
+.nav-secondary a.active{font-weight:600;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#131921 0%,#232f3e 100%);padding:80px 5%;display:flex;align-items:center;gap:60px;min-height:500px;}
+.hero-left{flex:1;max-width:580px;}
+.hero-left h1{font-family:'Space Grotesk',sans-serif;font-size:48px;font-weight:700;color:#fff;line-height:1.15;margin-bottom:18px;}
+.hero-left h1 span{color:#FF9900;}
+.hero-left p{color:#c5c5c5;font-size:18px;margin-bottom:32px;line-height:1.6;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+.btn-primary{background:#FF9900;color:#111;padding:14px 28px;font-weight:700;font-size:16px;border-radius:6px;border:none;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:#FF6600;}
+.btn-outline{background:transparent;color:#fff;padding:14px 28px;font-weight:600;font-size:16px;border-radius:6px;border:2px solid #fff;cursor:pointer;transition:all .2s;}
+.btn-outline:hover{background:#fff;color:#131921;}
+.hero-right{display:flex;flex-direction:column;gap:20px;}
+.stat-card{background:rgba(255,255,255,0.07);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:24px 36px;text-align:center;}
+.stat-card .stat-num{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:#FF9900;}
+.stat-card .stat-label{color:#c5c5c5;font-size:14px;margin-top:4px;}
+
+/* SECTION COMMONS */
+.section{padding:60px 5%;}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:700;text-align:center;margin-bottom:12px;}
+.section-sub{text-align:center;color:#555;font-size:16px;margin-bottom:44px;}
+
+/* HOW IT WORKS */
+.how-it-works{background:#fff;}
+.steps{display:flex;justify-content:center;gap:40px;flex-wrap:wrap;}
+.step{flex:1;min-width:220px;max-width:280px;text-align:center;}
+.step-circle{width:64px;height:64px;background:#FF9900;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:#fff;margin:0 auto 18px;font-family:'Space Grotesk',sans-serif;}
+.step h3{font-size:18px;font-weight:600;margin-bottom:8px;}
+.step p{color:#555;font-size:14px;line-height:1.6;}
+.step-arrow{display:flex;align-items:center;color:#FF9900;font-size:32px;padding-top:24px;}
+
+/* PLANS */
+.plans-section{background:#f0f2f5;}
+.plans{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;}
+.plan-card{background:#fff;border-radius:12px;padding:36px 32px;flex:1;min-width:280px;max-width:360px;box-shadow:0 2px 12px rgba(0,0,0,0.08);position:relative;}
+.plan-card.featured{border:2px solid #FF9900;}
+.plan-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#FF9900;color:#fff;font-size:12px;font-weight:700;padding:4px 16px;border-radius:20px;letter-spacing:1px;white-space:nowrap;}
+.plan-name{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;margin-bottom:6px;}
+.plan-price{font-size:40px;font-weight:700;color:#131921;margin:12px 0;}
+.plan-price span{font-size:16px;color:#666;font-weight:400;}
+.plan-per{color:#555;font-size:14px;margin-bottom:20px;}
+.plan-features{list-style:none;margin-bottom:28px;}
+.plan-features li{padding:7px 0;font-size:14px;color:#333;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;gap:8px;}
+.plan-features li::before{content:"✓";color:#FF9900;font-weight:700;}
+.plan-btn{width:100%;padding:14px;background:#FF9900;border:none;border-radius:6px;font-size:15px;font-weight:700;cursor:pointer;transition:background .2s;}
+.plan-btn:hover{background:#FF6600;}
+
+/* BENEFITS */
+.benefits-section{background:#fff;}
+.benefits-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;max-width:1000px;margin:0 auto;}
+.benefit-card{background:#f8f9fa;border-radius:10px;padding:28px 24px;border:1px solid #e8e8e8;transition:transform .2s,box-shadow .2s;}
+.benefit-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+.benefit-icon{font-size:36px;margin-bottom:12px;}
+.benefit-card h3{font-size:17px;font-weight:600;margin-bottom:6px;}
+.benefit-card p{color:#666;font-size:14px;line-height:1.5;}
+
+/* FORM */
+.form-section{background:#f0f2f5;padding:60px 5%;}
+.form-card{background:#fff;border-radius:12px;max-width:620px;margin:0 auto;padding:44px 40px;box-shadow:0 4px 20px rgba(0,0,0,0.1);}
+.form-card h2{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;text-align:center;margin-bottom:6px;}
+.form-card p{text-align:center;color:#666;margin-bottom:28px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-group{margin-bottom:18px;}
+.form-group label{display:block;font-size:13px;font-weight:600;margin-bottom:6px;color:#333;}
+.form-group input,.form-group select{width:100%;padding:11px 14px;border:1.5px solid #ddd;border-radius:6px;font-size:14px;font-family:'Inter',sans-serif;transition:border .2s;}
+.form-group input:focus,.form-group select:focus{outline:none;border-color:#FF9900;}
+.form-group.full{grid-column:1/-1;}
+.file-input-wrap{border:2px dashed #ddd;border-radius:6px;padding:20px;text-align:center;cursor:pointer;color:#666;font-size:14px;}
+.file-input-wrap:hover{border-color:#FF9900;color:#FF9900;}
+.file-input-wrap input{display:none;}
+.terms-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:22px;font-size:13px;color:#555;}
+.terms-row input[type=checkbox]{margin-top:2px;width:16px;height:16px;accent-color:#FF9900;}
+.submit-btn{width:100%;padding:15px;background:#FF9900;border:none;border-radius:6px;font-size:16px;font-weight:700;cursor:pointer;transition:background .2s;font-family:'Inter',sans-serif;}
+.submit-btn:hover{background:#FF6600;}
+.form-footer{text-align:center;margin-top:16px;font-size:13px;color:#666;}
+.form-footer a{color:#007185;font-weight:500;}
+.success-state{display:none;text-align:center;padding:30px;}
+.success-state .check{font-size:60px;margin-bottom:16px;}
+.success-state h3{font-size:24px;font-weight:700;color:#007600;margin-bottom:8px;}
+
+/* TESTIMONIALS */
+.testimonials{background:#fff;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:1100px;margin:0 auto;}
+.testi-card{background:#f8f9fa;border-radius:12px;padding:28px;border:1px solid #e8e8e8;}
+.testi-top{display:flex;align-items:center;gap:14px;margin-bottom:16px;}
+.testi-avatar{width:52px;height:52px;background:#FF9900;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;}
+.testi-info h4{font-size:15px;font-weight:600;}
+.testi-info span{font-size:12px;color:#666;}
+.testi-quote{font-size:14px;color:#444;line-height:1.6;font-style:italic;margin-bottom:14px;}
+.testi-earnings{background:#e8f5e9;color:#1a7f37;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;display:inline-block;}
+.testi-stars{color:#FF9900;font-size:14px;margin-bottom:8px;}
+
+/* FAQ */
+.faq-section{background:#f0f2f5;}
+.faq-list{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+.faq-item{background:#fff;border-radius:8px;border:1px solid #e0e0e0;overflow:hidden;}
+.faq-q{padding:18px 22px;font-weight:600;font-size:15px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-q:hover{background:#fafafa;}
+.faq-q .icon{font-size:20px;color:#FF9900;transition:transform .3s;flex-shrink:0;}
+.faq-a{padding:0 22px;max-height:0;overflow:hidden;transition:all .3s;color:#555;font-size:14px;line-height:1.7;}
+.faq-item.open .faq-a{max-height:200px;padding:0 22px 18px;}
+.faq-item.open .icon{transform:rotate(45deg);}
+
+/* FOOTER */
+footer{background:#131921;color:#ccc;padding:48px 5% 24px;}
+.footer-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:30px;margin-bottom:36px;}
+.footer-col h4{color:#fff;font-size:14px;font-weight:600;margin-bottom:14px;}
+.footer-col a{display:block;color:#aaa;font-size:13px;margin-bottom:8px;}
+.footer-col a:hover{color:#FF9900;}
+.footer-bottom{border-top:1px solid #333;padding-top:20px;text-align:center;font-size:12px;color:#666;}
+
+@media(max-width:768px){
+  .hero{flex-direction:column;padding:50px 5%;}
+  .hero-left h1{font-size:32px;}
+  .benefits-grid{grid-template-columns:1fr 1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .footer-grid{grid-template-columns:repeat(2,1fr);}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="nav-top">
+  <a href="index.html" class="nav-logo">⚡<span>Vibe</span>Store</a>
+  <div class="nav-delivery">
+    <div>Deliver to</div>
+    <b>India 🇮🇳</b>
+  </div>
+  <div class="nav-search">
+    <select><option>All</option><option>Electronics</option><option>Fashion</option><option>Books</option></select>
+    <input type="text" placeholder="Search products, brands and more"/>
+    <button>🔍</button>
+  </div>
+  <div class="nav-right">
+    <a href="#"><span>Hello, Sign in</span>Account &amp; Lists</a>
+    <a href="#"><span>Returns</span>&amp; Orders</a>
+    <a href="become-seller.html"><span>Sell on</span>VibeStore</a>
+    <div class="nav-cart"><span class="cart-count">0</span> Cart</div>
+  </div>
+</nav>
+
+<!-- SECONDARY NAV -->
+<nav class="nav-secondary">
+  <a href="index.html">☰ All</a>
+  <a href="#" class="active">Sell on VibeStore</a>
+  <a href="seller-central.html">Seller Central</a>
+  <a href="#plans">Selling Plans</a>
+  <a href="#signup-form">Register Now</a>
+  <a href="#">Fulfillment</a>
+  <a href="#">Advertising</a>
+  <a href="#">Blog</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <h1>Start selling on <span>VibeStore</span> today</h1>
+    <p>Join 50,000+ sellers earning on India's fastest growing marketplace. Your products, your brand, our reach.</p>
+    <div class="hero-ctas">
+      <a href="#signup-form" class="btn-primary">Register Now — It's Free</a>
+      <a href="#plans" class="btn-outline">See Selling Plans</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="stat-card">
+      <div class="stat-num" id="stat-sellers">0</div>
+      <div class="stat-label">Active Sellers</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-gmv">₹0Cr</div>
+      <div class="stat-label">Total GMV Generated</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num" id="stat-products">0</div>
+      <div class="stat-label">Products Listed</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section how-it-works">
+  <h2 class="section-title">How It Works</h2>
+  <p class="section-sub">Start selling in three simple steps — no technical knowledge required</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-circle">1</div>
+      <h3>Create Your Seller Account</h3>
+      <p>Sign up for free in under 5 minutes. All you need is your business details and a bank account.</p>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step">
+      <div class="step-circle">2</div>
+      <h3>List Your Products</h3>
+      <p>Add products manually or use our bulk upload tool. AI helps you write optimized titles and descriptions.</p>
+    </div>
+    <div class="step-arrow">→</div>
+    <div class="step">
+      <div class="step-circle">3</div>
+      <h3>Start Selling</h3>
+      <p>We handle payments, delivery coordination and returns. You focus on growing your business.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SELLING PLANS -->
+<section class="section plans-section" id="plans">
+  <h2 class="section-title">Selling Plans</h2>
+  <p class="section-sub">Choose a plan that fits your business — upgrade or downgrade anytime</p>
+  <div class="plans">
+    <div class="plan-card">
+      <div class="plan-name">Individual</div>
+      <div class="plan-price">₹0<span>/month</span></div>
+      <div class="plan-per">+ ₹20 per item sold</div>
+      <ul class="plan-features">
+        <li>Up to 40 listings/month</li>
+        <li>Basic analytics dashboard</li>
+        <li>Email support (48h SLA)</li>
+        <li>Standard payment settlement (7 days)</li>
+        <li>Standard product categories</li>
+        <li>Basic seller protection</li>
+      </ul>
+      <button class="plan-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Start Free</button>
+    </div>
+    <div class="plan-card featured">
+      <div class="plan-badge">MOST POPULAR</div>
+      <div class="plan-name">Professional</div>
+      <div class="plan-price">₹999<span>/month</span></div>
+      <div class="plan-per">Unlimited listings, no per-item fee</div>
+      <ul class="plan-features">
+        <li>Unlimited product listings</li>
+        <li>Advanced analytics &amp; insights</li>
+        <li>Priority support (4h SLA)</li>
+        <li>Fast payment settlement (2 days)</li>
+        <li>AI-powered tools (Aria, Nova, Atlas)</li>
+        <li>Bulk upload &amp; inventory management</li>
+        <li>Advertising &amp; promotion tools</li>
+        <li>VibeStore Fulfilled (FBV) access</li>
+        <li>0% commission — first 3 months</li>
+      </ul>
+      <button class="plan-btn" onclick="document.getElementById('signup-form').scrollIntoView({behavior:'smooth'})">Start Pro</button>
+    </div>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="section benefits-section">
+  <h2 class="section-title">Why Sell on VibeStore?</h2>
+  <p class="section-sub">Everything you need to build and grow a successful online business</p>
+  <div class="benefits-grid">
+    <div class="benefit-card">
+      <div class="benefit-icon">🚀</div>
+      <h3>Fast Payments</h3>
+      <p>Get paid in 2 business days. No waiting weeks — your money, your timeline. Automated daily disbursements for Pro sellers.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🤖</div>
+      <h3>AI-Powered Tools</h3>
+      <p>8 built-in AI agents including Aria (insights), Nova (listings), Atlas (logistics) to supercharge your seller operations.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📦</div>
+      <h3>VibeStore Fulfilled</h3>
+      <p>Ship your inventory to our warehouses. We pick, pack, and ship orders. Earn "FBV" badge for higher visibility and trust.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">📊</div>
+      <h3>Real-time Analytics</h3>
+      <p>Live sales data, traffic insights, conversion funnels, competitor benchmarking and inventory forecasting in one dashboard.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">🛡️</div>
+      <h3>Seller Protection</h3>
+      <p>Our A-to-Z Seller Guarantee protects against fraudulent returns, payment disputes, and false claims by buyers.</p>
+    </div>
+    <div class="benefit-card">
+      <div class="benefit-icon">💰</div>
+      <h3>0% Commission</h3>
+      <p>New sellers enjoy zero platform commission for their first 3 months. Keep 100% of your revenue while you grow.</p>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTRATION FORM -->
+<section class="form-section" id="signup-form">
+  <div class="form-card">
+    <h2>Create Your Seller Account</h2>
+    <p>It's free and takes less than 5 minutes</p>
+    <form id="sellerForm" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Business Name *</label>
+          <input type="text" placeholder="e.g. TechHub Electronics" required/>
+        </div>
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" placeholder="Your legal name" required/>
+        </div>
+        <div class="form-group">
+          <label>Email Address *</label>
+          <input type="email" placeholder="you@business.com" required/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number *</label>
+          <input type="tel" placeholder="+91 98765 43210" required/>
+        </div>
+        <div class="form-group">
+          <label>Business Type *</label>
+          <select required>
+            <option value="">Select business type</option>
+            <option>Individual</option>
+            <option>Proprietorship</option>
+            <option>Private Limited Company</option>
+            <option>Limited Liability Partnership (LLP)</option>
+            <option>Partnership Firm</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>GST Number <small style="color:#999">(optional)</small></label>
+          <input type="text" placeholder="22AAAAA0000A1Z5"/>
+        </div>
+        <div class="form-group">
+          <label>Bank Account Number *</label>
+          <input type="text" placeholder="Account number" required/>
+        </div>
+        <div class="form-group">
+          <label>IFSC Code *</label>
+          <input type="text" placeholder="e.g. HDFC0001234" required/>
+        </div>
+        <div class="form-group full">
+          <label>Upload Business Documents</label>
+          <label class="file-input-wrap">
+            <input type="file" multiple accept=".pdf,.jpg,.png"/>
+            📎 Click to upload PAN, Aadhaar, Trade License, or GST Certificate
+            <br/><small style="color:#999;font-size:12px">Accepted: PDF, JPG, PNG — Max 5MB each</small>
+          </label>
+        </div>
+      </div>
+      <div class="terms-row">
+        <input type="checkbox" required/>
+        <span>I agree to VibeStore's <a href="#" style="color:#007185">Seller Terms of Service</a>, <a href="#" style="color:#007185">Privacy Policy</a>, and <a href="#" style="color:#007185">Marketplace Policies</a>. I confirm all business information provided is accurate.</span>
+      </div>
+      <button type="submit" class="submit-btn">Create Seller Account →</button>
+    </form>
+    <div class="success-state" id="successState">
+      <div class="check">🎉</div>
+      <h3>Account Created Successfully!</h3>
+      <p style="color:#555;margin-bottom:20px;">Welcome to VibeStore Sellers! Check your email for verification and next steps.</p>
+      <a href="seller-dashboard.html" class="submit-btn" style="display:inline-block;max-width:280px;text-align:center;color:#111;">Go to Seller Dashboard →</a>
+    </div>
+    <div class="form-footer">Already a seller? <a href="seller-login.html">Sign in to Seller Central →</a></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section testimonials">
+  <h2 class="section-title">Seller Success Stories</h2>
+  <p class="section-sub">Real sellers, real earnings — see what VibeStore has done for their businesses</p>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar">🧑‍💼</div>
+        <div class="testi-info">
+          <h4>Rajesh Sharma</h4>
+          <span>Electronics &amp; Gadgets • Delhi</span>
+        </div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"I started with just 20 products. Within 6 months, VibeStore's AI tools helped me scale to 500+ SKUs. The 2-day payment cycle changed my cash flow completely."</p>
+      <span class="testi-earnings">Earning ₹80,000/month</span>
+    </div>
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar">👩‍🍳</div>
+        <div class="testi-info">
+          <h4>Priya Nair</h4>
+          <span>Organic Foods &amp; Spices • Kerala</span>
+        </div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"The VibeStore Fulfilled program was a game-changer. I shipped my inventory to their warehouse and orders started shipping same day. My ratings jumped to 4.9 stars."</p>
+      <span class="testi-earnings">Earning ₹1,20,000/month</span>
+    </div>
+    <div class="testi-card">
+      <div class="testi-top">
+        <div class="testi-avatar">👨‍🎨</div>
+        <div class="testi-info">
+          <h4>Arjun Mehta</h4>
+          <span>Handmade Crafts &amp; Art • Jaipur</span>
+        </div>
+      </div>
+      <div class="testi-stars">★★★★★</div>
+      <p class="testi-quote">"As a small artisan, I was worried about competing with big brands. Aria AI helped me optimize my listings and now I'm selling nationally. VibeStore truly levels the playing field."</p>
+      <span class="testi-earnings">Earning ₹45,000/month</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section faq-section">
+  <h2 class="section-title">Frequently Asked Questions</h2>
+  <p class="section-sub">Everything you need to know about selling on VibeStore</p>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How much does it cost to sell on VibeStore? <span class="icon">+</span></div>
+      <div class="faq-a">The Individual plan is completely free — you only pay ₹20 per item sold. The Professional plan is ₹999/month with no per-item fees, unlimited listings, and advanced tools. New sellers on any plan enjoy 0% commission for the first 3 months.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What documents do I need to register as a seller? <span class="icon">+</span></div>
+      <div class="faq-a">You need: PAN card, Aadhaar card (for individual/proprietorship), GST registration (optional but recommended for higher limits), bank account details with cancelled cheque, and a mobile number linked to your bank. For companies/LLPs, you'll also need incorporation certificate and MOA/AOA.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">How and when do I get paid? <span class="icon">+</span></div>
+      <div class="faq-a">Individual plan sellers receive payments within 7 business days of order delivery. Professional plan sellers get paid within 2 business days. Payments are made directly to your registered bank account via NEFT/IMPS. You can view all pending and processed payments in your Seller Central dashboard.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What is VibeStore Fulfilled (FBV)? <span class="icon">+</span></div>
+      <div class="faq-a">VibeStore Fulfilled (FBV) means we store your products in our fulfillment centers across India. When an order is placed, we handle picking, packing, shipping, and returns. FBV products get a special badge, appear higher in search results, and are eligible for same-day and next-day delivery. This service is available to Professional plan sellers.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">Can I sell in multiple categories? <span class="icon">+</span></div>
+      <div class="faq-a">Yes! You can list products across multiple categories from a single seller account. Some restricted categories (like pharmaceuticals, food supplements, electronics with safety certifications) may require additional documentation and approval. Our onboarding team will guide you through category-specific requirements during registration.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="toggleFaq(this)">What AI tools are available for sellers? <span class="icon">+</span></div>
+      <div class="faq-a">Professional plan sellers get access to 8 AI agents: Aria (business insights &amp; demand forecasting), Nova (product listing optimization), Atlas (logistics &amp; shipping optimization), Luna (customer service automation), Rex (buyer interaction assistant), Zara (pricing intelligence), Bolt (inventory management), and Echo (review &amp; feedback analysis). These tools are available directly in your Seller Central dashboard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:14px;">⚡<span style="color:#FF9900">Vibe</span>Store</div>
+      <p style="font-size:13px;line-height:1.6;">India's fastest growing marketplace. Connecting sellers and buyers across the country.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Selling</h4>
+      <a href="#">Start Selling</a>
+      <a href="#">Seller University</a>
+      <a href="#">Success Stories</a>
+      <a href="#">Advertising</a>
+      <a href="seller-central.html">Seller Central</a>
+    </div>
+    <div class="footer-col">
+      <h4>Programs</h4>
+      <a href="#">VibeStore Fulfilled</a>
+      <a href="#">Brand Registry</a>
+      <a href="#">Global Selling</a>
+      <a href="#">B2B Marketplace</a>
+      <a href="#">Seller App</a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources</h4>
+      <a href="#">Seller Blog</a>
+      <a href="#">Help Center</a>
+      <a href="#">Policies</a>
+      <a href="#">Community Forum</a>
+      <a href="#">API for Sellers</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+      <a href="#">Investor Relations</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 MyOoumph Networks Pvt Ltd · <a href="#" style="color:#aaa;">Privacy Policy</a> · <a href="#" style="color:#aaa;">Terms of Service</a> · <a href="#" style="color:#aaa;">Sitemap</a>
+  </div>
+</footer>
+
+<script src="rex-chat.js"></script>
+<script>
+// Animated stat counters
+function animateCounter(el, target, suffix, prefix, duration) {
+  let start = 0;
+  const step = target / (duration / 16);
+  const timer = setInterval(() => {
+    start += step;
+    if (start >= target) { start = target; clearInterval(timer); }
+    el.textContent = prefix + Math.floor(start).toLocaleString('en-IN') + suffix;
+  }, 16);
+}
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    animateCounter(document.getElementById('stat-sellers'), 50000, '+', '', 2000);
+    animateCounter(document.getElementById('stat-gmv'), 100, 'Cr', '₹', 2000);
+    animateCounter(document.getElementById('stat-products'), 2000000, '+', '', 2000);
+  }, 400);
+});
+
+// FAQ toggle
+function toggleFaq(el) {
+  const item = el.parentElement;
+  item.classList.toggle('open');
+}
+
+// Form submit
+function handleSubmit(e) {
+  e.preventDefault();
+  document.getElementById('sellerForm').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+}
+</script>
+</body>
+</html>

@@ -3,399 +3,616 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Track Order — MyStore</title>
+<title>Track Package — Order #5001 — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#fafaf8;--bg2:#f3f3ef;--white:#fff;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;--gray:#6b7280;--gray2:#9ca3af;--border:#e5e5e0;--green:#16a34a;--yellow:#d97706}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);min-height:100vh}
+:root{
+  --nav:#131921;--orange:#FF9900;--teal:#007185;--body:#f0f2f5;
+  --white:#fff;--border:#ddd;--gray:#555;--gray2:#888;--dark:#0f1111;
+  --red:#cc0c39;--green:#007600;--blue:#1565c0;
+}
+body{font-family:'Inter',sans-serif;background:var(--body);color:var(--dark);line-height:1.5}
+a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:8px}
-.ai-tag{font-size:0.5rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-weight:700}
-.nav-links{flex:1;display:flex;gap:4px}
-.nb{padding:6px 14px;border-radius:7px;font-size:0.83rem;color:var(--gray);cursor:pointer;font-weight:500;transition:all 0.2s;border:none;background:none}
-.nb:hover{background:var(--bg2);color:var(--dark)}
-.page{max-width:1100px;margin:0 auto;padding:36px 24px}
 
-/* SEARCH BAR */
-.search-section{background:white;border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px}
-.search-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:4px}
-.search-sub{font-size:0.82rem;color:var(--gray);margin-bottom:16px}
-.search-row{display:flex;gap:10px}
-.search-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:11px 16px;font-size:0.88rem;outline:none;color:var(--dark);font-family:'Inter',sans-serif;transition:all 0.2s}
-.search-input:focus{border-color:var(--purple);background:white;box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
-.search-input::placeholder{color:var(--gray2)}
-.search-btn{background:var(--dark);color:white;border:none;border-radius:10px;padding:11px 24px;font-size:0.88rem;font-weight:700;transition:all 0.2s}
-.search-btn:hover{background:var(--purple2)}
+/* ===== AMAZON NAV ===== */
+nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:10px;padding:8px 16px;height:60px}
+.nav-logo{color:white;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;white-space:nowrap;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;flex-shrink:0}
+.nav-logo:hover{border-color:white}
+.nav-logo span{color:var(--orange)}
+.nav-search{flex:1;display:flex;border-radius:4px;overflow:hidden;max-width:900px}
+.nav-search-cat{background:#f3f3f3;border:none;padding:0 10px;font-size:0.78rem;color:var(--dark);cursor:pointer;border-right:1px solid #ccc;min-width:60px}
+.nav-search input{flex:1;padding:0 12px;border:none;font-size:0.92rem;outline:none;height:40px}
+.nav-search-btn{background:var(--orange);border:none;width:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+.nav-search-btn:hover{background:#e68900}
+.nav-right{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.nav-btn{color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;font-size:0.82rem;cursor:pointer;white-space:nowrap;line-height:1.4;transition:border-color .15s;background:none}
+.nav-btn:hover{border-color:white}
+.nav-btn span{color:rgba(255,255,255,0.8);font-size:0.7rem;display:block}
+.nav-btn strong{font-size:0.88rem}
+.nav-cart{display:flex;align-items:flex-end;gap:4px;color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;cursor:pointer;background:none}
+.nav-cart:hover{border-color:white}
+.nav-cart-count{color:var(--orange);font-size:1.1rem;font-weight:800;line-height:1}
+.nav-cart-text{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+.nav-bottom{background:#232f3e;padding:4px 16px;display:flex;gap:4px;overflow-x:auto}
+.nav-bottom::-webkit-scrollbar{display:none}
+.nav-bot-btn{color:white;font-size:0.82rem;padding:6px 10px;border:1px solid transparent;border-radius:3px;white-space:nowrap;cursor:pointer;background:none}
+.nav-bot-btn:hover{border-color:white}
+.nav-bot-btn.active{border-color:var(--orange);color:var(--orange)}
 
-/* LAYOUT */
-.track-layout{display:grid;grid-template-columns:1fr 340px;gap:20px}
+/* ===== PAGE ===== */
+.page{max-width:1200px;margin:0 auto;padding:24px 16px 48px}
+.page-breadcrumb{font-size:0.82rem;color:var(--teal);margin-bottom:16px;display:flex;align-items:center;gap:6px}
+.page-breadcrumb a{color:var(--teal);cursor:pointer}
+.page-breadcrumb a:hover{text-decoration:underline;color:var(--orange)}
+.page-breadcrumb span{color:var(--gray2)}
 
-/* MAIN CARD */
-.track-card{background:white;border:1px solid var(--border);border-radius:16px;overflow:hidden}
-.track-hdr{background:linear-gradient(135deg,#1a0533,#0a1a2e);color:white;padding:24px}
-.track-hdr-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px}
-.order-id{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800}
-.order-date{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:3px}
-.status-pill{background:rgba(34,211,238,0.15);border:1px solid rgba(34,211,238,0.3);color:#67e8f9;border-radius:100px;padding:6px 16px;font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:6px}
-.status-dot{width:7px;height:7px;border-radius:50%;background:#67e8f9;animation:pulse 1.5s infinite}
-.track-items{display:flex;gap:10px;flex-wrap:wrap}
-.track-item-chip{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;display:flex;align-items:center;gap:8px;font-size:0.78rem}
+/* ===== ORDER HEADING ===== */
+.order-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.order-h{font-size:1.3rem;font-weight:700}
+.order-sub{font-size:0.83rem;color:var(--gray);margin-top:2px}
+.view-all-link{color:var(--teal);font-size:0.85rem;font-weight:600;cursor:pointer}
+.view-all-link:hover{text-decoration:underline;color:var(--orange)}
 
-/* PROGRESS BAR */
-.progress-section{padding:28px}
-.progress-steps{display:flex;align-items:flex-start;gap:0;margin-bottom:28px;position:relative}
-.progress-steps::before{content:'';position:absolute;top:18px;left:18px;right:18px;height:3px;background:var(--border);z-index:0}
-.progress-fill-line{position:absolute;top:18px;left:18px;height:3px;background:linear-gradient(90deg,var(--purple),var(--cyan));z-index:1;transition:width 1.5s ease}
-.prog-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;z-index:2}
-.prog-dot{width:36px;height:36px;border-radius:50%;border:3px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:0.9rem;transition:all 0.5s;flex-shrink:0}
-.prog-dot.done{background:var(--green);border-color:var(--green);color:white}
-.prog-dot.active{background:var(--purple);border-color:var(--purple);color:white;box-shadow:0 0 0 4px rgba(109,40,217,0.15)}
-.prog-dot.pending{background:var(--bg2);border-color:var(--border);color:var(--gray2)}
-.prog-label{font-size:0.72rem;font-weight:600;text-align:center;color:var(--dark)}
-.prog-sub{font-size:0.65rem;color:var(--gray);text-align:center;max-width:80px}
+/* ===== LAYOUT ===== */
+.track-layout{display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start}
 
-/* TIMELINE */
-.timeline{display:flex;flex-direction:column;gap:0}
-.tl-item{display:flex;gap:16px;padding-bottom:20px;position:relative}
-.tl-item:last-child{padding-bottom:0}
-.tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--border)}
-.tl-item.done::before{background:var(--green)}
-.tl-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;border:2px solid var(--border);background:white;z-index:1}
-.tl-item.done .tl-icon{background:rgba(22,163,74,0.1);border-color:rgba(22,163,74,0.3)}
-.tl-item.active-tl .tl-icon{background:rgba(109,40,217,0.1);border-color:rgba(109,40,217,0.3);animation:borderPulse 2s infinite}
-@keyframes borderPulse{0%,100%{box-shadow:0 0 0 0 rgba(109,40,217,0.3)}50%{box-shadow:0 0 0 6px rgba(109,40,217,0)}}
-.tl-content{flex:1;padding-top:4px}
-.tl-title{font-size:0.85rem;font-weight:700;margin-bottom:3px}
-.tl-desc{font-size:0.76rem;color:var(--gray);line-height:1.5}
-.tl-time{font-size:0.68rem;color:var(--gray2);margin-top:3px}
-.tl-ai{font-size:0.72rem;color:var(--purple);margin-top:4px;display:flex;align-items:center;gap:4px}
+/* ===== TIMELINE CARD ===== */
+.track-card{background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:16px}
+.track-card-hdr{background:#232f3e;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.track-order-id{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;color:white}
+.track-order-meta{font-size:0.75rem;color:rgba(255,255,255,0.6);margin-top:2px}
+.track-status-pill{background:rgba(255,153,0,0.15);border:1px solid rgba(255,153,0,0.4);color:var(--orange);border-radius:20px;padding:5px 14px;font-size:0.78rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.track-status-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.4)}}
 
-/* RIGHT PANEL */
-.side-card{background:white;border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:16px}
-.side-title{font-weight:700;font-size:0.88rem;margin-bottom:14px;display:flex;align-items:center;gap:8px}
-.detail-row{display:flex;justify-content:space-between;font-size:0.8rem;padding:7px 0;border-bottom:1px solid var(--border)}
-.detail-row:last-child{border:none;font-weight:700}
-.detail-lbl{color:var(--gray)}
-.map-placeholder{background:linear-gradient(135deg,rgba(109,40,217,0.08),rgba(8,145,178,0.06));border:1px solid rgba(109,40,217,0.12);border-radius:10px;height:160px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;margin-bottom:14px;cursor:pointer;transition:all 0.2s}
-.map-placeholder:hover{background:linear-gradient(135deg,rgba(109,40,217,0.12),rgba(8,145,178,0.1))}
-.delivery-eta{background:linear-gradient(135deg,rgba(22,163,74,0.06),rgba(8,145,178,0.04));border:1px solid rgba(22,163,74,0.2);border-radius:10px;padding:14px;text-align:center}
-.eta-label{font-size:0.72rem;color:var(--gray);margin-bottom:4px}
-.eta-date{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;color:var(--green)}
-.eta-note{font-size:0.7rem;color:var(--gray);margin-top:3px}
-.action-btns{display:flex;flex-direction:column;gap:8px}
-.action-btn{width:100%;padding:11px;border-radius:10px;font-size:0.83rem;font-weight:600;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.action-btn-primary{background:var(--dark);color:white;border:none}
-.action-btn-primary:hover{background:var(--purple2)}
-.action-btn-outline{background:white;color:var(--dark);border:1px solid var(--border)}
-.action-btn-outline:hover{border-color:var(--dark)}
+/* ===== HORIZONTAL TIMELINE ===== */
+.h-timeline-wrap{padding:28px 20px 20px;overflow-x:auto}
+.h-timeline{display:flex;align-items:flex-start;min-width:560px;position:relative}
+.h-timeline::before{content:'';position:absolute;top:28px;left:28px;right:28px;height:3px;background:var(--border);z-index:0}
+.h-progress-bar{position:absolute;top:28px;left:28px;height:3px;background:linear-gradient(90deg,var(--green),var(--teal));z-index:1;transition:width 1.2s ease}
+.h-step{flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;position:relative;z-index:2}
+.h-step-dot{width:56px;height:56px;border-radius:50%;border:3px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;font-size:1.5rem;transition:all 0.4s;flex-shrink:0}
+.h-step-dot.done{background:#e8f5e9;border-color:var(--green);font-size:1.1rem}
+.h-step-dot.done::after{content:'✅';font-size:1.3rem}
+.h-step-dot.done .dot-inner{display:none}
+.h-step-dot.active{background:#e3f2fd;border-color:#1565c0;border-width:3px;animation:ringPulse 2s infinite}
+@keyframes ringPulse{0%,100%{box-shadow:0 0 0 0 rgba(21,101,192,0.3)}50%{box-shadow:0 0 0 8px rgba(21,101,192,0)}}
+.h-step-dot.pending{background:#f7f7f7;border-color:#ddd;opacity:0.55}
+.h-step-info{text-align:center}
+.h-step-name{font-size:0.78rem;font-weight:700;color:var(--dark);margin-bottom:2px}
+.h-step-date{font-size:0.68rem;color:var(--gray2);line-height:1.4}
+.h-step.active-step .h-step-name{color:var(--blue)}
+.h-step.pending-step .h-step-name{color:var(--gray2)}
 
-/* NOTIFICATIONS */
-.notif-item{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.notif-item:last-child{border:none}
-.notif-icon{width:32px;height:32px;border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0}
-.notif-text{font-size:0.76rem;color:var(--gray);line-height:1.4}
-.notif-time{font-size:0.65rem;color:var(--gray2);margin-top:3px}
+/* ===== DETAIL TIMELINE (vertical) ===== */
+.v-timeline{padding:4px 20px 20px;border-top:1px solid var(--border)}
+.v-tl-label{font-size:0.72rem;font-weight:700;color:var(--gray2);text-transform:uppercase;letter-spacing:0.06em;padding:14px 0 10px}
+.v-tl-item{display:flex;gap:14px;padding-bottom:18px;position:relative}
+.v-tl-item:not(:last-child)::before{content:'';position:absolute;left:15px;top:34px;bottom:0;width:2px;background:var(--border)}
+.v-tl-item.done-item::before{background:#c8e6c9}
+.v-tl-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0;border:2px solid var(--border);background:white;z-index:1}
+.v-tl-item.done-item .v-tl-icon{background:#e8f5e9;border-color:#a5d6a7}
+.v-tl-item.active-item .v-tl-icon{background:#e3f2fd;border-color:#90caf9;animation:ringPulse 2s infinite}
+.v-tl-item.future-item .v-tl-icon{opacity:0.45}
+.v-tl-body{flex:1;padding-top:3px}
+.v-tl-title{font-size:0.88rem;font-weight:700;margin-bottom:3px}
+.v-tl-item.active-item .v-tl-title{color:var(--blue)}
+.v-tl-item.future-item .v-tl-title{color:var(--gray2)}
+.v-tl-desc{font-size:0.78rem;color:var(--gray);line-height:1.5}
+.v-tl-time{font-size:0.7rem;color:var(--gray2);margin-top:3px}
 
-/* RELATED */
-.related-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:8px}
-.rel-mini{background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.rel-mini:hover{border-color:rgba(109,40,217,0.25);transform:translateY(-2px)}
-.rel-mini-img{height:70px;background:white;display:flex;align-items:center;justify-content:center;font-size:1.8rem}
-.rel-mini-info{padding:8px}
-.rel-mini-name{font-size:0.72rem;font-weight:600;margin-bottom:3px}
-.rel-mini-price{font-size:0.78rem;font-weight:700;color:var(--purple)}
+/* ===== RIGHT SIDEBAR ===== */
+.side-card{background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.side-card-hdr{background:#f7f7f7;border-bottom:1px solid var(--border);padding:12px 16px;font-size:0.85rem;font-weight:700}
 
-/* TOAST */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
-.ti{background:var(--dark);color:white;border-radius:100px;padding:10px 20px;font-size:0.82rem;font-weight:500;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2);animation:pop 0.3s ease}
-@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+/* ===== DELIVERY ESTIMATE ===== */
+.delivery-box{padding:16px}
+.delivery-truck{text-align:center;font-size:3rem;margin-bottom:10px}
+.delivery-arriving{font-size:0.78rem;color:var(--green);font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:4px}
+.delivery-date{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;text-align:center;color:var(--dark);margin-bottom:2px}
+.delivery-time{font-size:0.85rem;color:var(--gray);text-align:center;margin-bottom:14px}
+/* Map placeholder */
+.map-box{background:linear-gradient(135deg,#e8f5e9,#e3f2fd,#fff8e1);border:1px solid var(--border);border-radius:4px;height:160px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;transition:opacity 0.2s;margin-bottom:14px;position:relative;overflow:hidden}
+.map-box:hover{opacity:0.9}
+.map-box::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 40 L20 0 L40 40' fill='none' stroke='%23ddd' stroke-width='0.5'/%3E%3C/svg%3E") repeat;opacity:0.4}
+.map-pin{font-size:2.5rem;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.2))}
+.map-label{font-size:0.78rem;font-weight:700;color:var(--teal)}
+.map-sublabel{font-size:0.7rem;color:var(--gray2)}
 
+/* ===== CARRIER INFO ===== */
+.carrier-box{padding:14px 16px}
+.carrier-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f0f0f0;font-size:0.82rem}
+.carrier-row:last-of-type{border:none}
+.carrier-lbl{color:var(--gray);font-size:0.78rem}
+.carrier-val{font-weight:600;color:var(--dark)}
+.carrier-tracking{font-family:monospace;font-size:0.8rem;color:var(--dark)}
+.carrier-link{color:var(--teal);font-size:0.78rem;font-weight:600;cursor:pointer}
+.carrier-link:hover{text-decoration:underline;color:var(--orange)}
+
+/* ===== PACKAGE ITEMS ===== */
+.pkg-list{padding:14px 16px}
+.pkg-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.pkg-item:last-child{border:none;padding-bottom:0}
+.pkg-emoji{width:44px;height:44px;background:#f5f5f5;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0}
+.pkg-info{flex:1}
+.pkg-name{font-size:0.83rem;font-weight:600;margin-bottom:2px}
+.pkg-meta{font-size:0.72rem;color:var(--gray2)}
+.pkg-qty{font-size:0.8rem;font-weight:700;color:var(--gray);white-space:nowrap}
+
+/* ===== DELIVERY INSTRUCTIONS ===== */
+.instr-box{padding:14px 16px}
+.instr-label{font-size:0.78rem;font-weight:600;margin-bottom:6px;color:var(--gray)}
+.instr-textarea{width:100%;border:1px solid var(--border);border-radius:3px;padding:8px 10px;font-size:0.82rem;font-family:'Inter',sans-serif;resize:none;min-height:64px;outline:none;transition:border-color .15s}
+.instr-textarea:focus{border-color:var(--orange)}
+.instr-save{margin-top:8px;background:var(--orange);border:none;border-radius:3px;padding:8px 18px;font-size:0.82rem;font-weight:700;color:var(--dark);cursor:pointer;transition:background .15s}
+.instr-save:hover{background:#e68900}
+
+/* ===== ACTION BUTTONS ===== */
+.action-box{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.act-btn{width:100%;padding:11px 16px;border-radius:3px;font-size:0.85rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:all .2s;border:1px solid var(--border);background:white;cursor:pointer;color:var(--dark)}
+.act-btn:hover{background:#f7f7f7;border-color:#888}
+.act-btn.primary{background:var(--orange);border-color:var(--orange);color:var(--dark)}
+.act-btn.primary:hover{background:#e68900}
+.act-btn.danger{border-color:#f5c6c6;color:var(--red)}
+.act-btn.danger:hover{background:#fce4ec;border-color:var(--red)}
+
+/* ===== BUY AGAIN STRIP ===== */
+.buy-again-strip{background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.buy-again-body{padding:14px 16px}
+.buy-again-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
+.ba-card{border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;transition:box-shadow .2s}
+.ba-card:hover{box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+.ba-img{height:80px;background:#f7f7f7;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.ba-info{padding:8px}
+.ba-name{font-size:0.72rem;font-weight:600;margin-bottom:3px;line-height:1.3}
+.ba-price{font-size:0.8rem;font-weight:700;color:var(--dark);margin-bottom:6px}
+.ba-btn{width:100%;background:var(--orange);border:none;border-radius:3px;padding:5px;font-size:0.72rem;font-weight:700;cursor:pointer;color:var(--dark);transition:background .15s}
+.ba-btn:hover{background:#e68900}
+
+/* ===== TOAST ===== */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;border-radius:3px;padding:12px 20px;font-size:0.85rem;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ===== FOOTER ===== */
+footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;margin-top:32px}
+.foot-inner{max-width:1200px;margin:0 auto}
+.foot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:20px}
+.foot-col h4{color:white;font-size:0.85rem;margin-bottom:10px}
+.foot-col a{display:block;font-size:0.78rem;color:rgba(255,255,255,0.7);margin-bottom:6px;transition:color .2s}
+.foot-col a:hover{color:white}
+.foot-bottom{border-top:1px solid rgba(255,255,255,0.1);padding-top:14px;text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.45)}
+
+/* ===== RESPONSIVE ===== */
 @media(max-width:900px){.track-layout{grid-template-columns:1fr}}
-@media(max-width:600px){.page{padding:16px}.search-row{flex-direction:column}.progress-steps{gap:4px}.prog-sub{display:none}}
+@media(max-width:640px){.page{padding:12px 10px 40px}.buy-again-grid{grid-template-columns:repeat(2,1fr)}.foot-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.buy-again-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
 
+<!-- ===== AMAZON NAV ===== -->
 <nav>
-  <div class="nav-inner">
-    <a class="nav-logo" href="mystore.html" style="text-decoration:none;color:inherit">MyStore <span class="ai-tag">AI</span></a>
-    <div class="nav-links">
-      <button class="nb" onclick="window.location.href='mystore.html'">← Back to Store</button>
-      <button class="nb" onclick="window.location.href='collections.html'">Collections</button>
-      <button class="nb" onclick="window.location.href='sale.html'">Sale</button>
-      <button class="nb" onclick="window.location.href='blog.html'">Blog</button>
-      <button class="nb" onclick="window.location.href='account.html'">Account</button>
-      <button class="nb" onclick="window.location.href='track.html'">Orders</button>
-      <button class="nb" onclick="window.location.href='wishlist.html'">Wishlist</button>
+  <div class="nav-top">
+    <a class="nav-logo" href="index.html">Vibe<span>Store</span></a>
+    <div class="nav-search">
+      <select class="nav-search-cat"><option>All</option><option>Electronics</option><option>Fashion</option></select>
+      <input placeholder="Search VibeStore..."/>
+      <button class="nav-search-btn">🔍</button>
     </div>
-    <button onclick="toast_('💬 Rex AI connecting...')" style="background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:8px;padding:8px 16px;font-size:0.8rem;font-weight:600">🤖 Need Help?</button>
+    <a href="account.html" class="nav-btn"><span>Hello, Aryan</span><strong>Account &amp; Lists</strong></a>
+    <a href="track.html" class="nav-btn"><span>Returns</span><strong>&amp; Orders</strong></a>
+    <a href="cart.html" class="nav-cart" style="text-decoration:none">
+      <div>
+        <div class="nav-cart-count" id="cartCount">0</div>
+        <div class="nav-cart-text">Cart 🛒</div>
+      </div>
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-bot-btn">☰ All</button>
+    <a href="sale.html" class="nav-bot-btn">Today's Deals</a>
+    <a href="collections.html" class="nav-bot-btn">New Arrivals</a>
+    <a href="track.html" class="nav-bot-btn active">Track Order</a>
+    <a href="account.html" class="nav-bot-btn">Account</a>
+    <a href="gift-cards.html" class="nav-bot-btn">Gift Cards</a>
   </div>
 </nav>
 
+<!-- ===== PAGE ===== -->
 <div class="page">
-  <!-- SEARCH -->
-  <div class="search-section">
-    <div class="search-title">Track Your Order</div>
-    <div class="search-sub">🤖 Zen AI provides real-time updates on your shipment</div>
-    <div class="search-row">
-      <input class="search-input" placeholder="Enter Order ID (e.g. VS-48291) or tracking number" id="trackInput" value="VS-48291"/>
-      <button class="search-btn" onclick="trackOrder()">Track Now</button>
-    </div>
+
+  <!-- BREADCRUMB -->
+  <div class="page-breadcrumb">
+    <a href="index.html">VibeStore</a>
+    <span>›</span>
+    <a href="account.html">Your Account</a>
+    <span>›</span>
+    <a href="track.html">Your Orders</a>
+    <span>›</span>
+    <span style="color:var(--dark);font-weight:600">Order #5001</span>
   </div>
 
-  <div class="track-layout" id="trackResult">
-    <!-- MAIN -->
+  <!-- ORDER HEADING -->
+  <div class="order-heading">
     <div>
+      <div class="order-h">Order #5001</div>
+      <div class="order-sub">Placed May 18, 2026 · 2 items · ₹11,499 · Sold by <a href="seller-profile.html" style="color:var(--teal)">TechHub Electronics</a> · Standard Delivery</div>
+    </div>
+    <a href="account.html" class="view-all-link">← View all orders</a>
+  </div>
+
+  <div class="track-layout">
+    <!-- ===== LEFT MAIN COLUMN ===== -->
+    <div>
+
+      <!-- HORIZONTAL TIMELINE CARD -->
       <div class="track-card">
-        <div class="track-hdr">
-          <div class="track-hdr-top">
-            <div>
-              <div class="order-id">#VS-48291</div>
-              <div class="order-date">Placed May 18, 2025 · 2 items · $138.00</div>
-            </div>
-            <div class="status-pill"><div class="status-dot"></div>In Transit</div>
+        <div class="track-card-hdr">
+          <div>
+            <div class="track-order-id">#5001</div>
+            <div class="track-order-meta">Placed May 18, 2026 · Delhivery Express · #DL98421</div>
           </div>
-          <div class="track-items">
-            <div class="track-item-chip"><span>🎧</span>Wireless Earbuds Pro × 1</div>
-            <div class="track-item-chip"><span>🔌</span>USB-C Hub Pro × 1</div>
+          <div class="track-status-pill">
+            <div class="track-status-dot"></div>Out for Delivery
           </div>
         </div>
 
-        <div class="progress-section">
-          <!-- STEP PROGRESS -->
-          <div class="progress-steps" id="progressSteps">
-            <div class="prog-step">
-              <div class="prog-dot done">✓</div>
-              <div class="prog-label">Ordered</div>
-              <div class="prog-sub">May 18, 10:32 AM</div>
+        <!-- HORIZONTAL STEPS -->
+        <div class="h-timeline-wrap">
+          <div class="h-timeline" id="hTimeline">
+            <div class="h-step done-step">
+              <div class="h-step-dot done"><span class="dot-inner">📋</span></div>
+              <div class="h-step-info">
+                <div class="h-step-name">Order Placed</div>
+                <div class="h-step-date">May 18<br/>10:32 AM</div>
+              </div>
             </div>
-            <div class="prog-step">
-              <div class="prog-dot done">✓</div>
-              <div class="prog-label">Confirmed</div>
-              <div class="prog-sub">Rex AI, instant</div>
+            <div class="h-step done-step">
+              <div class="h-step-dot done"><span class="dot-inner">✅</span></div>
+              <div class="h-step-info">
+                <div class="h-step-name">Confirmed</div>
+                <div class="h-step-date">May 18<br/>10:33 AM</div>
+              </div>
             </div>
-            <div class="prog-step">
-              <div class="prog-dot done">✓</div>
-              <div class="prog-label">Packed</div>
-              <div class="prog-sub">Zen AI, 12:41 PM</div>
+            <div class="h-step done-step">
+              <div class="h-step-dot done"><span class="dot-inner">📦</span></div>
+              <div class="h-step-info">
+                <div class="h-step-name">Shipped</div>
+                <div class="h-step-date">May 19<br/>1:22 PM</div>
+              </div>
             </div>
-            <div class="prog-step">
-              <div class="prog-dot active">🚚</div>
-              <div class="prog-label">In Transit</div>
-              <div class="prog-sub">Since May 19</div>
+            <div class="h-step active-step">
+              <div class="h-step-dot active"><span class="dot-inner">🚚</span></div>
+              <div class="h-step-info">
+                <div class="h-step-name">Out for Delivery</div>
+                <div class="h-step-date">Today<br/>6:43 AM</div>
+              </div>
             </div>
-            <div class="prog-step">
-              <div class="prog-dot pending">🏠</div>
-              <div class="prog-label">Delivered</div>
-              <div class="prog-sub">Est. May 22</div>
+            <div class="h-step pending-step">
+              <div class="h-step-dot pending"><span class="dot-inner">🏠</span></div>
+              <div class="h-step-info">
+                <div class="h-step-name">Delivered</div>
+                <div class="h-step-date">Est. May 23<br/>By 9 PM</div>
+              </div>
             </div>
           </div>
-          <div class="progress-fill-line" id="progressLine" style="width:0%"></div>
+          <div class="h-progress-bar" id="hProgressBar" style="width:0%"></div>
+        </div>
 
-          <!-- TIMELINE -->
-          <div style="font-size:0.8rem;font-weight:700;color:var(--gray);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em">Shipment Timeline</div>
-          <div class="timeline" id="timeline"></div>
+        <!-- VERTICAL DETAIL TIMELINE -->
+        <div class="v-timeline">
+          <div class="v-tl-label">Shipment Updates</div>
+
+          <div class="v-tl-item active-item">
+            <div class="v-tl-icon">🚚</div>
+            <div class="v-tl-body">
+              <div class="v-tl-title">Out for Delivery — Lucknow Hub</div>
+              <div class="v-tl-desc">Your package is with the delivery partner and is on its way to your address.</div>
+              <div class="v-tl-time">Today, 6:43 AM · 42 km from delivery address</div>
+            </div>
+          </div>
+
+          <div class="v-tl-item done-item">
+            <div class="v-tl-icon">✓</div>
+            <div class="v-tl-body">
+              <div class="v-tl-title">In Transit — Delhi Sorting Facility</div>
+              <div class="v-tl-desc">Shipment arrived at the Delhi regional sorting centre and has been dispatched.</div>
+              <div class="v-tl-time">Yesterday, 11:20 PM</div>
+            </div>
+          </div>
+
+          <div class="v-tl-item done-item">
+            <div class="v-tl-icon">✓</div>
+            <div class="v-tl-body">
+              <div class="v-tl-title">Picked Up by Delhivery</div>
+              <div class="v-tl-desc">Package collected from the seller (TechHub Electronics) and dispatched from the VibeStore fulfilment centre. Tracking is live.</div>
+              <div class="v-tl-time">Yesterday, 1:22 PM · Tracking # DL98421</div>
+            </div>
+          </div>
+
+          <div class="v-tl-item done-item">
+            <div class="v-tl-icon">✓</div>
+            <div class="v-tl-body">
+              <div class="v-tl-title">Order Packed &amp; Ready to Ship</div>
+              <div class="v-tl-desc">Items verified and securely packaged by TechHub Electronics at the VibeStore marketplace fulfilment centre.</div>
+              <div class="v-tl-time">May 18, 12:41 PM · Auto-processed in 2h 9m</div>
+            </div>
+          </div>
+
+          <div class="v-tl-item done-item">
+            <div class="v-tl-icon">✓</div>
+            <div class="v-tl-body">
+              <div class="v-tl-title">Order Confirmed — Payment Verified</div>
+              <div class="v-tl-desc">Your order was confirmed and a confirmation email was sent.</div>
+              <div class="v-tl-time">May 18, 10:32 AM</div>
+            </div>
+          </div>
+
+        </div><!-- /v-timeline -->
+      </div><!-- /track-card -->
+
+      <!-- PACKAGE DETAILS CARD -->
+      <div class="track-card">
+        <div class="track-card-hdr" style="background:#f7f7f7;color:var(--dark)">
+          <div style="font-weight:700;font-size:0.9rem">📦 Package Contents</div>
+          <span style="font-size:0.8rem;color:var(--gray)">2 items in this shipment</span>
+        </div>
+        <div class="pkg-list">
+          <div style="padding:10px 0 14px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <div style="font-size:0.82rem;color:var(--gray)">Sold by: <a href="seller-profile.html" style="color:var(--teal);font-weight:600">TechHub Electronics</a></div>
+            <a href="seller-profile.html" style="color:var(--teal);font-size:0.75rem;font-weight:600">View Seller Profile ↗</a>
+          </div>
+          <div class="pkg-item">
+            <div class="pkg-emoji">🎧</div>
+            <div class="pkg-info">
+              <div class="pkg-name">Sony WH-1000XM5 Wireless Noise-Cancelling Headphones</div>
+              <div class="pkg-meta">Colour: Midnight Black · 1-year warranty</div>
+            </div>
+            <div class="pkg-qty">Qty: 1</div>
+          </div>
+          <div class="pkg-item">
+            <div class="pkg-emoji">🔌</div>
+            <div class="pkg-info">
+              <div class="pkg-name">USB-C Hub Pro 7-in-1 (HDMI, USB-A, SD Card)</div>
+              <div class="pkg-meta">Silver · Compatible with MacBook &amp; Windows</div>
+            </div>
+            <div class="pkg-qty">Qty: 1</div>
+          </div>
         </div>
       </div>
 
-      <!-- AI RECOMMENDATION -->
-      <div class="track-card" style="margin-top:16px;padding:20px">
-        <div style="font-size:0.82rem;font-weight:700;margin-bottom:4px">🤖 Atlas AI — While you wait, you might like</div>
-        <div style="font-size:0.74rem;color:var(--gray);margin-bottom:12px">Based on your order history</div>
-        <div class="related-row">
-          <div class="rel-mini" onclick="window.location.href='product.html?id=p2'"><div class="rel-mini-img">⌚</div><div class="rel-mini-info"><div class="rel-mini-name">Smart Watch Ultra</div><div class="rel-mini-price">$249</div></div></div>
-          <div class="rel-mini" onclick="window.location.href='product.html?id=p9'"><div class="rel-mini-img">🎙️</div><div class="rel-mini-info"><div class="rel-mini-name">Studio Mic</div><div class="rel-mini-price">$129</div></div></div>
-          <div class="rel-mini" onclick="window.location.href='product.html?id=p4'"><div class="rel-mini-img">⌨️</div><div class="rel-mini-info"><div class="rel-mini-name">Mech Keyboard</div><div class="rel-mini-price">$139</div></div></div>
+      <!-- BUY AGAIN STRIP -->
+      <div class="buy-again-strip">
+        <div class="side-card-hdr" style="background:#f7f7f7;padding:12px 16px;font-size:0.85rem;font-weight:700;border-bottom:1px solid var(--border)">🔁 Buy Again</div>
+        <div class="buy-again-body">
+          <div style="font-size:0.78rem;color:var(--gray)">Based on your order — you might want these again</div>
+          <div class="buy-again-grid">
+            <div class="ba-card">
+              <div class="ba-img">🎧</div>
+              <div class="ba-info">
+                <div class="ba-name">Sony WH-1000XM5 Headphones</div>
+                <div class="ba-price">₹9,999</div>
+                <button class="ba-btn" onclick="addToCartBA('Sony WH-1000XM5',9999)">Add to Cart</button>
+              </div>
+            </div>
+            <div class="ba-card">
+              <div class="ba-img">🔌</div>
+              <div class="ba-info">
+                <div class="ba-name">USB-C Hub Pro 7-in-1</div>
+                <div class="ba-price">₹1,499</div>
+                <button class="ba-btn" onclick="addToCartBA('USB-C Hub Pro',1499)">Add to Cart</button>
+              </div>
+            </div>
+            <div class="ba-card">
+              <div class="ba-img">🎵</div>
+              <div class="ba-info">
+                <div class="ba-name">Bose QC45 Wireless</div>
+                <div class="ba-price">₹14,999</div>
+                <button class="ba-btn" onclick="addToCartBA('Bose QC45',14999)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- RIGHT SIDEBAR -->
+    </div><!-- /left column -->
+
+    <!-- ===== RIGHT SIDEBAR ===== -->
     <div>
-      <!-- ETA -->
+
+      <!-- DELIVERY ESTIMATE -->
       <div class="side-card">
-        <div class="map-placeholder" onclick="toast_('🗺️ Live map opening...')">
-          <div style="font-size:2rem">🗺️</div>
-          <div style="font-size:0.78rem;font-weight:600;color:var(--purple)">View Live Map</div>
-          <div style="font-size:0.68rem;color:var(--gray)">Zen AI tracking in real-time</div>
-        </div>
-        <div class="delivery-eta">
-          <div class="eta-label">🤖 Zen AI Estimated Delivery</div>
-          <div class="eta-date" id="etaDate">Thursday, May 22</div>
-          <div class="eta-note">Between 10AM – 7PM · Standard Delivery</div>
+        <div class="side-card-hdr">🚚 Delivery Estimate</div>
+        <div class="delivery-box">
+          <div class="delivery-truck">🚛</div>
+          <div class="delivery-arriving">Arriving Tomorrow</div>
+          <div class="delivery-date" id="etaDate">Saturday, May 23</div>
+          <div class="delivery-time">By 9:00 PM · Standard Delivery (Free)</div>
+          <!-- Map -->
+          <div class="map-box" onclick="toast('🗺️ Live map loading...')">
+            <div class="map-pin">📍</div>
+            <div class="map-label">View Live Tracking Map</div>
+            <div class="map-sublabel">Real-time location updates</div>
+          </div>
         </div>
       </div>
 
-      <!-- ORDER DETAILS -->
+      <!-- CARRIER INFO -->
       <div class="side-card">
-        <div class="side-title">📦 Order Details</div>
-        <div class="detail-row"><span class="detail-lbl">Order ID</span><span style="color:var(--purple);font-weight:700">#VS-48291</span></div>
-        <div class="detail-row"><span class="detail-lbl">Carrier</span><span>Delhivery Express</span></div>
-        <div class="detail-row"><span class="detail-lbl">Tracking #</span><span style="font-family:monospace;font-size:0.75rem">DEL2948201847</span></div>
-        <div class="detail-row"><span class="detail-lbl">Shipping to</span><span>Lucknow, UP</span></div>
-        <div class="detail-row"><span class="detail-lbl">Method</span><span>Standard (Free)</span></div>
-        <div class="detail-row"><span class="detail-lbl">Payment</span><span>•••• 4821</span></div>
-        <div class="detail-row"><span class="detail-lbl">Total</span><span>$138.00</span></div>
-      </div>
-
-      <!-- NOTIFICATIONS -->
-      <div class="side-card">
-        <div class="side-title">🔔 Zen AI Notifications</div>
-        <div class="notif-item"><div class="notif-icon">📦</div><div><div class="notif-text">Your order has left the sorting facility in Delhi and is en route to Lucknow.</div><div class="notif-time">Today, 9:14 AM</div></div></div>
-        <div class="notif-item"><div class="notif-icon">🚚</div><div><div class="notif-text">Package picked up from warehouse. Zen AI confirmed dispatch.</div><div class="notif-time">Yesterday, 1:22 PM</div></div></div>
-        <div class="notif-item"><div class="notif-icon">✅</div><div><div class="notif-text">Order confirmed by Rex AI. Payment processed successfully.</div><div class="notif-time">May 18, 10:33 AM</div></div></div>
-      </div>
-
-      <!-- ACTIONS -->
-      <div class="side-card">
-        <div class="side-title">Actions</div>
-        <div class="action-btns">
-          <button class="action-btn action-btn-primary" onclick="toast_('💬 Rex AI connecting...')">💬 Chat with Rex AI</button>
-          <button class="action-btn action-btn-outline" onclick="toast_('📧 Update sent to your email')">📧 Email Update</button>
-          <button class="action-btn action-btn-outline" onclick="toast_('📱 SMS update sent')">📱 SMS Update</button>
-          <button class="action-btn action-btn-outline" onclick="openCancelModal()">↩️ Request Return/Cancel</button>
+        <div class="side-card-hdr">📋 Carrier &amp; Tracking</div>
+        <div class="carrier-box">
+          <div class="carrier-row">
+            <span class="carrier-lbl">Carrier</span>
+            <span class="carrier-val">Delhivery Express</span>
+          </div>
+          <div class="carrier-row">
+            <span class="carrier-lbl">Tracking #</span>
+            <span class="carrier-tracking">DL98421</span>
+          </div>
+          <div class="carrier-row">
+            <span class="carrier-lbl">Ship to</span>
+            <span class="carrier-val">Lucknow, UP 226001</span>
+          </div>
+          <div class="carrier-row">
+            <span class="carrier-lbl">Method</span>
+            <span class="carrier-val">Standard (Free)</span>
+          </div>
+          <div style="margin-top:10px">
+            <span class="carrier-link" onclick="toast('🌐 Opening Delhivery tracking...')">Track on Delhivery site ↗</span>
+          </div>
         </div>
       </div>
+
+      <!-- DELIVERY INSTRUCTIONS -->
+      <div class="side-card">
+        <div class="side-card-hdr">📝 Delivery Instructions</div>
+        <div class="instr-box">
+          <div class="instr-label">Add instructions for the delivery partner</div>
+          <textarea class="instr-textarea" placeholder="e.g. Leave at the door, call before delivery, gate code #1234..."></textarea>
+          <button class="instr-save" onclick="toast('✅ Instructions saved!')">Save Instructions</button>
+        </div>
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="side-card">
+        <div class="side-card-hdr">⚡ Actions</div>
+        <div class="action-box">
+          <button class="act-btn primary" onclick="toast('🤖 Connecting to Rex AI support...')">🤖 Contact Rex AI</button>
+          <a href="contact.html" class="act-btn" style="text-decoration:none;text-align:center">🏪 Contact Seller</a>
+          <button class="act-btn" onclick="toast('🚚 Modify delivery options opened')">📦 Modify Delivery</button>
+          <button class="act-btn" onclick="toast('📧 Update sent to aryan@example.com')">📧 Email Update</button>
+          <button class="act-btn" onclick="toast('📱 SMS update sent to +91 98765 43210')">📱 SMS Update</button>
+          <button class="act-btn danger" onclick="openCancelModal()">✕ Cancel Order</button>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+  </div><!-- /track-layout -->
+
+</div><!-- /page -->
+
+<!-- ===== CANCEL MODAL ===== -->
+<div id="cancelModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(3px)">
+  <div style="background:white;border-radius:4px;width:90%;max-width:460px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.25)">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:#f7f7f7">
+      <div style="font-weight:700;font-size:1rem">Cancel Order #5001</div>
+      <div onclick="document.getElementById('cancelModal').style.display='none'" style="cursor:pointer;width:28px;height:28px;border:1px solid var(--border);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;background:white">✕</div>
     </div>
-  </div>
-</div>
-
-<!-- CANCEL MODAL -->
-<div id="cancelModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)">
-  <div style="background:white;border-radius:20px;width:90%;max-width:460px;overflow:hidden">
-    <div style="padding:24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-      <div style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem">Request Return / Cancel</div>
-      <div onclick="document.getElementById('cancelModal').style.display='none'" style="cursor:pointer;width:30px;height:30px;background:var(--bg2);border-radius:7px;display:flex;align-items:center;justify-content:center">✕</div>
-    </div>
-    <div style="padding:24px">
-      <div style="background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.15);border-radius:10px;padding:12px;margin-bottom:16px;font-size:0.78rem;color:var(--purple)">🤖 Rex AI will process your request within 60 seconds — no forms, no waiting.</div>
-      <div style="margin-bottom:14px">
-        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:6px">Reason</label>
-        <select style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.85rem;outline:none;font-family:'Inter',sans-serif">
+    <div style="padding:20px">
+      <div style="background:#fff3e0;border:1px solid #ffe0b2;border-radius:3px;padding:10px 14px;font-size:0.8rem;color:#e65100;margin-bottom:14px">⚠️ Order is Out for Delivery. Cancellation may not be possible — we'll check with the carrier.</div>
+      <div style="margin-bottom:12px">
+        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:5px">Reason for Cancellation</label>
+        <select style="width:100%;border:1px solid var(--border);border-radius:3px;padding:9px 12px;font-size:0.85rem;outline:none;font-family:'Inter',sans-serif">
           <option>Changed my mind</option>
           <option>Ordered by mistake</option>
           <option>Found a better price</option>
-          <option>Delivery too slow</option>
+          <option>Delivery is too slow</option>
           <option>Other</option>
         </select>
       </div>
       <div style="margin-bottom:16px">
-        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:6px">Additional Notes (optional)</label>
-        <textarea style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.85rem;outline:none;resize:none;min-height:70px;font-family:'Inter',sans-serif" placeholder="Tell Rex AI more..."></textarea>
+        <label style="display:block;font-size:0.75rem;font-weight:700;color:var(--gray);margin-bottom:5px">Additional Notes (optional)</label>
+        <textarea style="width:100%;border:1px solid var(--border);border-radius:3px;padding:8px 12px;font-size:0.82rem;outline:none;resize:none;min-height:64px;font-family:'Inter',sans-serif" placeholder="Tell us more..."></textarea>
       </div>
-      <button onclick="submitCancel()" style="width:100%;background:var(--dark);color:white;border:none;border-radius:10px;padding:12px;font-size:0.9rem;font-weight:700">Submit to Rex AI</button>
+      <div style="display:flex;gap:8px">
+        <button onclick="document.getElementById('cancelModal').style.display='none'" style="flex:1;padding:10px;border:1px solid var(--border);border-radius:3px;font-size:0.85rem;font-weight:600;background:white;cursor:pointer">Keep Order</button>
+        <button onclick="submitCancel()" style="flex:1;background:var(--red);color:white;border:none;border-radius:3px;padding:10px;font-size:0.85rem;font-weight:700;cursor:pointer">Submit Cancellation</button>
+      </div>
     </div>
   </div>
 </div>
 
-<div id="toast"></div>
-
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.7);padding:40px 24px 24px;margin-top:40px">
-  <div style="max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px">
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Shop</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="collections.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Collections</a>
-        <a href="sale.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Sale</a>
-        <a href="compare.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Compare</a>
-        <a href="gift-cards.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Gift Cards</a>
-        <a href="blog.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Blog</a>
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="foot-inner">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h4>Shop</h4>
+        <a href="collections.html">Collections</a>
+        <a href="sale.html">Today's Deals</a>
+        <a href="compare.html">Compare</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Customer Service</h4>
+        <a href="returns.html">Returns &amp; Refunds</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+      <div class="foot-col">
+        <h4>Your Account</h4>
+        <a href="account.html">My Account</a>
+        <a href="loyalty.html">Loyalty Points</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="referral.html">Referral Program</a>
+      </div>
+      <div class="foot-col">
+        <h4>VibeStore</h4>
+        <a href="index.html">About Us</a>
+        <a href="referral.html">Referral Program</a>
+        <a href="contact.html">Contact</a>
       </div>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Support</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="returns.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Returns</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact Us</a>
-        <a href="faq.html" style="color:rgba(255,255,255,0.6);text-decoration:none">FAQ</a>
-        <a href="track.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Track Order</a>
-        <a href="notifications.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Notifications</a>
-      </div>
-    </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Account</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="account.html" style="color:rgba(255,255,255,0.6);text-decoration:none">My Account</a>
-        <a href="loyalty.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Loyalty</a>
-        <a href="wishlist.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Wishlist</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referrals</a>
-      </div>
-    </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Company</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none">About Us</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referral Program</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact</a>
-      </div>
-    </div>
+    <div class="foot-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
   </div>
-  <div style="max-width:1100px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center">© 2025 MyStore. All rights reserved.</div>
 </footer>
 
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="rex-chat.js"></script>
 <script>
-const TIMELINE_EVENTS = [
-  {icon:'🏠',title:'Out for Delivery',desc:'Package will arrive today between 10AM – 7PM',time:'Today, Est.',ai:'Zen AI: Delivery partner notified',done:false,active:false,upcoming:true},
-  {icon:'🚚',title:'In Transit — Lucknow Hub',desc:'Shipment arrived at Lucknow distribution centre',time:'Today, 6:43 AM',ai:'Zen AI: 42km from delivery address',done:false,active:true,upcoming:false},
-  {icon:'📍',title:'Departed — Delhi Sorting',desc:'Package left the regional sorting facility',time:'Yesterday, 11:20 PM',ai:'',done:true,active:false,upcoming:false},
-  {icon:'📦',title:'Dispatched from Warehouse',desc:'Zen AI confirmed handover to Delhivery courier',time:'Yesterday, 1:22 PM',ai:'Zen AI: Packed & handed over in 97 mins',done:true,active:false,upcoming:false},
-  {icon:'⚡',title:'Order Packed',desc:'Items picked and packaged by fulfilment team',time:'May 18, 12:41 PM',ai:'Zen AI: Auto-processed in 2hr 9min',done:true,active:false,upcoming:false},
-  {icon:'✅',title:'Order Confirmed',desc:'Payment verified. Rex AI sent confirmation email.',time:'May 18, 10:32 AM',ai:'Rex AI: Confirmation sent in 1.2s',done:true,active:false,upcoming:false},
-];
-
-function renderTimeline(){
-  const el = document.getElementById('timeline');
-  el.innerHTML = TIMELINE_EVENTS.map(e=>`
-    <div class="tl-item ${e.done?'done':''} ${e.active?'active-tl':''}">
-      <div class="tl-icon">${e.done?'✓':e.icon}</div>
-      <div class="tl-content">
-        <div class="tl-title" style="color:${e.upcoming?'var(--gray2)':e.active?'var(--purple)':'var(--dark)'}">${e.title}</div>
-        <div class="tl-desc">${e.desc}</div>
-        <div class="tl-time">${e.time}</div>
-        ${e.ai?`<div class="tl-ai">🤖 ${e.ai}</div>`:''}
-      </div>
-    </div>`).join('');
+// ===== TOAST =====
+function toast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),2800);
 }
 
-function trackOrder(){
-  const val = document.getElementById('trackInput').value.trim();
-  if(!val){ toast_('⚠️ Please enter an order ID'); return; }
-  toast_('🤖 Zen AI fetching shipment data...');
-  setTimeout(()=>toast_('✅ Order '+val+' found — tracking live'),1400);
+// ===== CART =====
+function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch(e){return[]}}
+function saveCart(c){
+  localStorage.setItem('vs_cart',JSON.stringify(c));
+  const n=c.reduce((s,i)=>s+(i.qty||1),0);
+  const el=document.getElementById('cartCount');if(el)el.textContent=n;
+}
+(function(){
+  const c=getCart();const n=c.reduce((s,i)=>s+(i.qty||1),0);
+  const el=document.getElementById('cartCount');if(el)el.textContent=n;
+})();
+
+function addToCartBA(name,price){
+  const c=getCart();const ex=c.find(i=>i.name===name);
+  if(ex)ex.qty=(ex.qty||1)+1;else c.push({name,price,qty:1,addedAt:Date.now()});
+  saveCart(c);toast('✅ '+name+' added to cart!');
 }
 
-function openCancelModal(){
-  document.getElementById('cancelModal').style.display='flex';
-}
+// ===== CANCEL MODAL =====
+function openCancelModal(){document.getElementById('cancelModal').style.display='flex'}
 function submitCancel(){
   document.getElementById('cancelModal').style.display='none';
-  toast_('🤖 Rex AI processing your request — you\'ll hear back in 60s');
+  toast('🤖 Zen AI is processing your cancellation request...');
 }
 
-// Set ETA date dynamically
-function setEta(){
-  const d = new Date(); d.setDate(d.getDate()+3);
-  const opts={weekday:'long',month:'long',day:'numeric'};
-  document.getElementById('etaDate').textContent = d.toLocaleDateString('en-US',opts);
-}
-
-function toast_(msg){
-  const el=document.getElementById('toast');
-  el.innerHTML=`<div class="ti">${msg}</div>`;
-  setTimeout(()=>el.innerHTML='',2600);
-}
-
-// Animate progress line
-renderTimeline();
-setEta();
+// ===== ANIMATE PROGRESS BAR =====
 setTimeout(()=>{
-  document.getElementById('progressLine').style.width='72%';
-},300);
-</script>
-<script src="rex-chat.js"></script></body>
-</html>
+  const bar=document.getElementById('hProgressBar');
+  if(bar)bar.style.width='75%'; // 4 of 5 steps done
+},400);
 
+// ===== SET ETA DATE =====
+(function(){
+  const d=new Date();d.setDate(d.getDate()+1);
+  const opts={weekday:'long',month:'long',day:'numeric'};
+  const el=document.getElementById('etaDate');
+  if(el)el.textContent=d.toLocaleDateString('en-IN',opts);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Seller Central — TechHub Electronics | VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#111;display:flex;min-height:100vh;}
+
+/* SIDEBAR */
+.sidebar{width:240px;background:#131921;display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;}
+.sidebar-logo{padding:20px 18px;border-bottom:1px solid rgba(255,255,255,0.1);}
+.sidebar-logo .logo-text{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#fff;}
+.sidebar-logo .logo-text span{color:#FF9900;}
+.sidebar-logo .logo-sub{font-size:11px;color:#888;margin-top:3px;}
+.sidebar-seller{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidebar-seller .s-name{color:#fff;font-size:13px;font-weight:600;}
+.sidebar-seller .s-plan{font-size:11px;color:#FF9900;margin-top:2px;}
+.sidebar-nav{flex:1;padding:10px 0;}
+.nav-section-label{font-size:10px;font-weight:700;color:#666;letter-spacing:1px;padding:14px 18px 6px;text-transform:uppercase;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:#aaa;font-size:13.5px;cursor:pointer;border-left:3px solid transparent;transition:all .15s;text-decoration:none;}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+.nav-item.active{background:rgba(255,153,0,0.12);color:#FF9900;border-left-color:#FF9900;}
+.nav-item .icon{width:18px;text-align:center;font-size:15px;}
+.nav-divider{height:1px;background:rgba(255,255,255,0.08);margin:10px 18px;}
+.live-badge{background:#1a7f37;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:auto;}
+
+/* MAIN */
+.main{margin-left:240px;flex:1;display:flex;flex-direction:column;min-height:100vh;}
+
+/* TOP BAR */
+.topbar{background:#fff;border-bottom:1px solid #e8e8e8;padding:0 28px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:50;}
+.topbar-greeting{flex:1;}
+.topbar-greeting h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;}
+.topbar-greeting p{font-size:12px;color:#888;margin-top:1px;}
+.aria-chip{background:#e8f0fe;color:#1a56db;border:1px solid #c3d3fd;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;}
+.aria-chip .dot{width:7px;height:7px;background:#34d399;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.topbar-right{display:flex;align-items:center;gap:14px;}
+.notif-btn{background:none;border:none;font-size:20px;cursor:pointer;position:relative;}
+.notif-dot{position:absolute;top:0;right:0;width:8px;height:8px;background:#FF9900;border-radius:50%;}
+.avatar{width:38px;height:38px;background:linear-gradient(135deg,#FF9900,#FF6600);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;}
+
+/* CONTENT */
+.content{padding:24px 28px;flex:1;}
+
+/* ALERTS */
+.alert{padding:12px 18px;border-radius:8px;margin-bottom:10px;font-size:14px;font-weight:500;display:flex;align-items:center;gap:10px;}
+.alert-orange{background:#fff3cd;border:1px solid #ffc107;color:#856404;}
+.alert-green{background:#d1fae5;border:1px solid #6ee7b7;color:#065f46;}
+.alert-close{margin-left:auto;cursor:pointer;color:inherit;background:none;border:none;font-size:16px;opacity:0.6;}
+
+/* METRIC CARDS */
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:20px 0;}
+.metric-card{background:#fff;border-radius:10px;padding:20px;box-shadow:0 1px 6px rgba(0,0,0,0.07);border:1px solid #f0f0f0;}
+.metric-card .m-label{font-size:12px;color:#888;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.metric-card .m-value{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;color:#131921;line-height:1;}
+.metric-card .m-change{font-size:12px;margin-top:6px;font-weight:500;}
+.metric-card .m-change.up{color:#1a7f37;}
+.metric-card .m-change.down{color:#cc0000;}
+.metric-card .m-change.neutral{color:#888;}
+.metric-card .m-icon{font-size:24px;}
+
+/* CHART SECTION */
+.chart-section{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,0.07);margin-bottom:22px;}
+.chart-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.chart-header h3{font-size:17px;font-weight:700;}
+.chart-controls{display:flex;gap:8px;}
+.chart-btn{padding:6px 14px;border-radius:6px;border:1.5px solid #e0e0e0;font-size:12px;font-weight:600;cursor:pointer;background:#fff;font-family:'Inter',sans-serif;}
+.chart-btn.active{background:#131921;color:#fff;border-color:#131921;}
+.chart-legend{display:flex;gap:18px;margin-bottom:12px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:#666;}
+.legend-dot{width:12px;height:12px;border-radius:50%;}
+
+/* ORDERS TABLE */
+.table-section{background:#fff;border-radius:10px;box-shadow:0 1px 6px rgba(0,0,0,0.07);margin-bottom:22px;overflow:hidden;}
+.table-header{padding:18px 22px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
+.table-header h3{font-size:17px;font-weight:700;}
+.table-header a{color:#007185;font-size:13px;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:#888;background:#fafafa;border-bottom:1px solid #f0f0f0;text-transform:uppercase;letter-spacing:0.5px;}
+tbody td{padding:12px 14px;font-size:13.5px;border-bottom:1px solid #f7f7f7;vertical-align:middle;}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover{background:#fafafa;}
+.order-status{padding:4px 10px;border-radius:12px;font-size:11px;font-weight:700;}
+.status-pending{background:#fff3cd;color:#856404;}
+.status-shipped{background:#d1fae5;color:#065f46;}
+.status-delivered{background:#e3f2fd;color:#1565c0;}
+.status-cancelled{background:#fce4ec;color:#c62828;}
+.action-btn{padding:6px 12px;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;margin-right:4px;}
+.btn-ship{background:#FF9900;color:#fff;}
+.btn-ship:hover{background:#FF6600;}
+.btn-cancel{background:#f5f5f5;color:#555;border:1px solid #ddd;}
+.btn-cancel:hover{background:#ffebee;color:#cc0000;border-color:#cc0000;}
+.btn-view{background:#e3f2fd;color:#1565c0;}
+.btn-view:hover{background:#bbdefb;}
+
+/* INVENTORY ALERTS */
+.inventory-section{margin-bottom:22px;}
+.inventory-section h3{font-size:17px;font-weight:700;margin-bottom:14px;}
+.inventory-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.inventory-card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 1px 6px rgba(0,0,0,0.07);border-left:4px solid #FF9900;}
+.inventory-card.critical{border-left-color:#cc0000;}
+.inventory-card .inv-product{font-size:14px;font-weight:600;margin-bottom:4px;}
+.inventory-card .inv-sku{font-size:11px;color:#888;margin-bottom:10px;}
+.inventory-card .inv-stock{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.inventory-card .stock-num{font-size:22px;font-weight:700;}
+.inventory-card .stock-num.low{color:#FF9900;}
+.inventory-card .stock-num.critical{color:#cc0000;}
+.inventory-card .stock-label{font-size:12px;color:#888;}
+.inventory-card .stock-bar-track{height:6px;background:#f0f0f0;border-radius:3px;margin-bottom:12px;}
+.inventory-card .stock-bar-fill{height:100%;border-radius:3px;}
+.restock-btn{width:100%;padding:8px;background:#131921;color:#fff;border:none;border-radius:5px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;}
+.restock-btn:hover{background:#232f3e;}
+
+/* PERFORMANCE */
+.performance-section{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 6px rgba(0,0,0,0.07);margin-bottom:22px;}
+.performance-section h3{font-size:17px;font-weight:700;margin-bottom:18px;}
+.perf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px;}
+.perf-item{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#f8f9fa;border-radius:8px;}
+.perf-label{font-size:14px;font-weight:500;}
+.perf-value{font-size:16px;font-weight:700;}
+.perf-value.green{color:#1a7f37;}
+.perf-value.yellow{color:#e65c00;}
+.perf-value.red{color:#cc0000;}
+.account-status-badge{display:inline-flex;align-items:center;gap:8px;background:#d1fae5;color:#065f46;padding:10px 18px;border-radius:8px;font-weight:700;font-size:15px;}
+.account-status-badge .check{font-size:20px;}
+
+/* ARIA PANEL */
+.aria-panel{background:linear-gradient(135deg,#0f1e3d 0%,#1a2f5e 100%);border-radius:10px;padding:24px;box-shadow:0 4px 20px rgba(0,0,0,0.15);margin-bottom:22px;border:1px solid rgba(99,139,255,0.3);}
+.aria-panel-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+.aria-avatar{width:42px;height:42px;background:linear-gradient(135deg,#4f6ef7,#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.aria-panel-header h3{color:#fff;font-size:17px;font-weight:700;}
+.aria-panel-header p{color:#8a9bc5;font-size:12px;}
+.aria-insight{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:16px;margin-bottom:10px;}
+.aria-insight p{color:#d4dfff;font-size:14px;line-height:1.5;}
+.aria-insight .aria-tag{display:inline-block;background:#FF9900;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:4px;margin-bottom:8px;}
+.aria-action-row{display:flex;gap:10px;margin-top:10px;}
+.aria-btn{padding:7px 16px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;}
+.aria-btn-primary{background:#FF9900;color:#fff;}
+.aria-btn-secondary{background:rgba(255,255,255,0.1);color:#fff;}
+
+/* TWO-COL LAYOUT */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+
+@media(max-width:1200px){.metrics-grid{grid-template-columns:repeat(2,1fr);}}.
+@media(max-width:900px){
+  .sidebar{transform:translateX(-240px);}
+  .main{margin-left:0;}
+  .two-col{grid-template-columns:1fr;}
+  .inventory-cards{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-text">⚡<span>Seller</span> Central</div>
+    <div class="logo-sub">powered by VibeStore</div>
+  </div>
+  <div class="sidebar-seller">
+    <div class="s-name">🏪 TechHub Electronics</div>
+    <div class="s-plan">Professional Plan · Active</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="seller-central.html" class="nav-item active"><span class="icon">📊</span> Dashboard</a>
+    <a href="admin-orders.html" class="nav-item"><span class="icon">📦</span> Manage Orders</a>
+    <a href="admin-products.html" class="nav-item"><span class="icon">🏷️</span> Manage Listings</a>
+    <a href="#" class="nav-item"><span class="icon">👥</span> Buyer Messages <span style="background:#cc0000;color:#fff;font-size:10px;padding:2px 6px;border-radius:10px;margin-left:auto;">5</span></a>
+
+    <div class="nav-section-label">Growth</div>
+    <a href="admin-reports.html" class="nav-item"><span class="icon">📈</span> Analytics</a>
+    <a href="#" class="nav-item"><span class="icon">💰</span> Payments</a>
+    <a href="admin-discounts.html" class="nav-item"><span class="icon">🎟️</span> Promotions</a>
+    <a href="#" class="nav-item"><span class="icon">📢</span> Advertising</a>
+
+    <div class="nav-section-label">Account</div>
+    <a href="seller-profile.html" class="nav-item"><span class="icon">⭐</span> Feedback</a>
+    <a href="admin-settings.html" class="nav-item"><span class="icon">⚙️</span> Account Settings</a>
+
+    <div class="nav-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a href="index.html" class="nav-item"><span class="icon">🏠</span> Go to VibeStore</a>
+    <a href="become-seller.html" class="nav-item"><span class="icon">❓</span> Seller Help</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-greeting">
+      <h2>Good morning, TechHub Electronics 👋</h2>
+      <p>Friday, 22 May 2026 · Mumbai, India</p>
+    </div>
+    <div class="aria-chip">
+      <div class="dot"></div>
+      Aria AI Active
+    </div>
+    <div class="topbar-right">
+      <button class="notif-btn" title="Notifications">🔔<span class="notif-dot"></span></button>
+      <div class="avatar">🏪</div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- ALERTS -->
+    <div class="alert alert-orange">
+      ⚠️ <strong>3 orders awaiting shipment</strong> — ship within 4 hours to maintain your seller rating. <a href="admin-orders.html" style="color:#856404;text-decoration:underline;margin-left:6px;">View Orders →</a>
+      <button class="alert-close" onclick="this.parentElement.style.display='none'">✕</button>
+    </div>
+    <div class="alert alert-green">
+      ⭐ <strong>Your seller metrics are Excellent this month!</strong> Order Defect Rate: 0.2% · Feedback Score: 98% · Account Status: In Good Standing
+      <button class="alert-close" onclick="this.parentElement.style.display='none'">✕</button>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">💵</span> Today's Sales</div>
+        <div class="m-value">₹12,400</div>
+        <div class="m-change up">↑ 18% vs yesterday</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">📦</span> Orders Today</div>
+        <div class="m-value">23</div>
+        <div class="m-change up">↑ 5 new this hour</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">🏷️</span> Active Listings</div>
+        <div class="m-value">847</div>
+        <div class="m-change neutral">12 pending review</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">⭐</span> Account Health</div>
+        <div class="m-value" style="color:#1a7f37;">★4.7</div>
+        <div class="m-change up">↑ Excellent standing</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">💳</span> Pending Payments</div>
+        <div class="m-value">₹45,200</div>
+        <div class="m-change neutral">Settles in 2 days</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">↩️</span> Returns</div>
+        <div class="m-value" style="color:#e65c00;">2</div>
+        <div class="m-change down">↑ 2 pending approval</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">👁️</span> Page Views Today</div>
+        <div class="m-value">1,247</div>
+        <div class="m-change up">↑ 23% vs yesterday</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label"><span class="m-icon">🎯</span> Conversion Rate</div>
+        <div class="m-value">3.2%</div>
+        <div class="m-change up">↑ 0.4% this week</div>
+      </div>
+    </div>
+
+    <!-- SALES CHART -->
+    <div class="chart-section">
+      <div class="chart-header">
+        <h3>Sales This Month</h3>
+        <div class="chart-controls">
+          <button class="chart-btn active">30 Days</button>
+          <button class="chart-btn">7 Days</button>
+          <button class="chart-btn">90 Days</button>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:#FF9900;"></div> This month</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#aaa;"></div> Last month</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#4f6ef7;border:2px dashed #4f6ef7;border-radius:0;width:20px;height:3px;"></div> AI Forecast</div>
+      </div>
+      <canvas id="salesChart" height="90"></canvas>
+    </div>
+
+    <!-- ORDERS TABLE -->
+    <div class="table-section">
+      <div class="table-header">
+        <h3>Recent Orders</h3>
+        <a href="admin-orders.html">View all orders →</a>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Order #</th>
+            <th>Buyer</th>
+            <th>Product</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>#VS-88421</strong></td>
+            <td>Suresh K.</td>
+            <td>Sony WH-1000XM5 Headphones</td>
+            <td><strong>₹24,990</strong></td>
+            <td>22 May 2026</td>
+            <td><span class="order-status status-pending">Awaiting Ship</span></td>
+            <td><button class="action-btn btn-ship">Ship Now</button><button class="action-btn btn-cancel">Cancel</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88420</strong></td>
+            <td>Ananya R.</td>
+            <td>Lenovo IdeaPad Slim 5</td>
+            <td><strong>₹52,490</strong></td>
+            <td>22 May 2026</td>
+            <td><span class="order-status status-pending">Awaiting Ship</span></td>
+            <td><button class="action-btn btn-ship">Ship Now</button><button class="action-btn btn-cancel">Cancel</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88418</strong></td>
+            <td>Vikram S.</td>
+            <td>OnePlus Nord 4 5G</td>
+            <td><strong>₹27,999</strong></td>
+            <td>21 May 2026</td>
+            <td><span class="order-status status-shipped">Shipped</span></td>
+            <td><button class="action-btn btn-view">Track</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88415</strong></td>
+            <td>Meera T.</td>
+            <td>Apple Watch Series 9</td>
+            <td><strong>₹41,900</strong></td>
+            <td>21 May 2026</td>
+            <td><span class="order-status status-shipped">Shipped</span></td>
+            <td><button class="action-btn btn-view">Track</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88410</strong></td>
+            <td>Rohan P.</td>
+            <td>LG 27" 4K Monitor</td>
+            <td><strong>₹32,999</strong></td>
+            <td>20 May 2026</td>
+            <td><span class="order-status status-delivered">Delivered</span></td>
+            <td><button class="action-btn btn-view">Details</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88409</strong></td>
+            <td>Kavita M.</td>
+            <td>Anker 100W GaN Charger (×3)</td>
+            <td><strong>₹7,497</strong></td>
+            <td>20 May 2026</td>
+            <td><span class="order-status status-delivered">Delivered</span></td>
+            <td><button class="action-btn btn-view">Details</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88404</strong></td>
+            <td>Deepak A.</td>
+            <td>Logitech MX Master 3S</td>
+            <td><strong>₹8,995</strong></td>
+            <td>19 May 2026</td>
+            <td><span class="order-status status-delivered">Delivered</span></td>
+            <td><button class="action-btn btn-view">Details</button></td>
+          </tr>
+          <tr>
+            <td><strong>#VS-88390</strong></td>
+            <td>Priti N.</td>
+            <td>JBL Charge 5 Speaker</td>
+            <td><strong>₹11,999</strong></td>
+            <td>18 May 2026</td>
+            <td><span class="order-status status-cancelled">Cancelled</span></td>
+            <td><button class="action-btn btn-view">Review</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- TWO COL: INVENTORY + PERFORMANCE -->
+    <div class="two-col">
+
+      <!-- INVENTORY -->
+      <div class="inventory-section">
+        <h3>⚠️ Inventory Alerts</h3>
+        <div class="inventory-cards" style="grid-template-columns:1fr;">
+          <div class="inventory-card critical">
+            <div class="inv-product">Sony WH-1000XM5 Headphones</div>
+            <div class="inv-sku">SKU: SNY-WH1000XM5-BLK</div>
+            <div class="inv-stock">
+              <div class="stock-num critical">3</div>
+              <div class="stock-label">units remaining<br/><span style="color:#cc0000;font-size:11px;">Critical: Running out soon</span></div>
+            </div>
+            <div class="stock-bar-track"><div class="stock-bar-fill" style="width:6%;background:#cc0000;"></div></div>
+            <button class="restock-btn">Restock Now →</button>
+          </div>
+          <div class="inventory-card">
+            <div class="inv-product">Anker 100W GaN Charger</div>
+            <div class="inv-sku">SKU: ANK-GAN100W-BLK</div>
+            <div class="inv-stock">
+              <div class="stock-num low">18</div>
+              <div class="stock-label">units remaining<br/><span style="color:#e65c00;font-size:11px;">Low: Restock recommended</span></div>
+            </div>
+            <div class="stock-bar-track"><div class="stock-bar-fill" style="width:18%;background:#FF9900;"></div></div>
+            <button class="restock-btn">Restock Now →</button>
+          </div>
+          <div class="inventory-card">
+            <div class="inv-product">Logitech MX Master 3S Mouse</div>
+            <div class="inv-sku">SKU: LGT-MXMSTR3S-GRY</div>
+            <div class="inv-stock">
+              <div class="stock-num low">24</div>
+              <div class="stock-label">units remaining<br/><span style="color:#e65c00;font-size:11px;">Low: 8–10 days supply</span></div>
+            </div>
+            <div class="stock-bar-track"><div class="stock-bar-fill" style="width:24%;background:#ffc107;"></div></div>
+            <button class="restock-btn">Restock Now →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERFORMANCE -->
+      <div class="performance-section" style="margin-bottom:0;">
+        <h3>📈 Seller Performance Metrics</h3>
+        <div class="perf-grid">
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Order Defect Rate</div>
+              <div style="font-size:11px;color:#888;">Target: &lt;1%</div>
+            </div>
+            <div class="perf-value green">0.2%</div>
+          </div>
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Late Shipment Rate</div>
+              <div style="font-size:11px;color:#888;">Target: &lt;4%</div>
+            </div>
+            <div class="perf-value green">1.1%</div>
+          </div>
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Pre-fulfillment Cancel</div>
+              <div style="font-size:11px;color:#888;">Target: &lt;2.5%</div>
+            </div>
+            <div class="perf-value green">0.5%</div>
+          </div>
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Customer Feedback Score</div>
+              <div style="font-size:11px;color:#888;">Last 12 months</div>
+            </div>
+            <div class="perf-value green">98%</div>
+          </div>
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Valid Tracking Rate</div>
+              <div style="font-size:11px;color:#888;">Target: &gt;95%</div>
+            </div>
+            <div class="perf-value green">99.1%</div>
+          </div>
+          <div class="perf-item">
+            <div>
+              <div class="perf-label">Return Dispute Rate</div>
+              <div style="font-size:11px;color:#888;">Target: &lt;1%</div>
+            </div>
+            <div class="perf-value green">0.3%</div>
+          </div>
+        </div>
+        <div style="margin-top:16px;">
+          <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#555;">Overall Account Status</div>
+          <div class="account-status-badge">
+            <span class="check">✅</span>
+            In Good Standing — No Policy Violations
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end two-col -->
+
+    <!-- ARIA PANEL -->
+    <div class="aria-panel" style="margin-top:22px;">
+      <div class="aria-panel-header">
+        <div class="aria-avatar">🤖</div>
+        <div>
+          <h3>Aria AI Insights</h3>
+          <p>Personalized intelligence for TechHub Electronics</p>
+        </div>
+      </div>
+
+      <div class="aria-insight">
+        <div class="aria-tag">🔥 HOT OPPORTUNITY</div>
+        <p>Aria suggests listing <strong style="color:#FF9900;">5 more products</strong> in the "Phone Accessories" category — a <strong style="color:#FF9900;">3× demand spike</strong> detected in the last 48 hours, likely driven by the OnePlus 14 launch. Your current 12 listings in that category have 340% above-average views today.</p>
+        <div class="aria-action-row">
+          <button class="aria-btn aria-btn-primary">List Products Now</button>
+          <button class="aria-btn aria-btn-secondary">See Trending Keywords</button>
+        </div>
+      </div>
+
+      <div class="aria-insight">
+        <div class="aria-tag">💰 PRICING ALERT</div>
+        <p>Your Sony WH-1000XM5 is priced <strong style="color:#FF9900;">₹800 above</strong> the current Buy Box price. Adjusting to ₹24,190 could recover the Buy Box and increase daily sales by an estimated <strong style="color:#FF9900;">+8 units/day</strong>. Expected revenue impact: +₹58,000/month.</p>
+        <div class="aria-action-row">
+          <button class="aria-btn aria-btn-primary">Auto-Adjust Price</button>
+          <button class="aria-btn aria-btn-secondary">Review Manually</button>
+        </div>
+      </div>
+
+      <div class="aria-insight">
+        <div class="aria-tag">📦 INVENTORY FORECAST</div>
+        <p>Based on current velocity, your Sony WH-1000XM5 stock will be depleted in <strong style="color:#FF9900;">~2 days</strong>. Aria recommends ordering <strong style="color:#FF9900;">50 units</strong> from your preferred supplier to avoid stockout. Last stockout cost you an estimated ₹1.2L in lost sales.</p>
+        <div class="aria-action-row">
+          <button class="aria-btn aria-btn-primary">Place Restock Order</button>
+          <button class="aria-btn aria-btn-secondary">Dismiss</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</main>
+
+<script src="rex-chat.js"></script>
+<script>
+// SALES CHART
+const ctx = document.getElementById('salesChart').getContext('2d');
+
+const labels = [];
+const thisMonth = [];
+const lastMonth = [];
+const forecast = [];
+
+for (let i = 1; i <= 30; i++) {
+  labels.push('May ' + i);
+  lastMonth.push(Math.floor(8000 + Math.random() * 8000));
+  if (i <= 22) {
+    thisMonth.push(Math.floor(10000 + Math.random() * 10000));
+    forecast.push(null);
+  } else {
+    thisMonth.push(null);
+    forecast.push(Math.floor(11000 + Math.random() * 9000));
+  }
+}
+// Bridge the gap at day 22
+forecast[21] = thisMonth[21];
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'This Month',
+        data: thisMonth,
+        borderColor: '#FF9900',
+        backgroundColor: 'rgba(255,153,0,0.08)',
+        borderWidth: 2.5,
+        pointRadius: 3,
+        pointBackgroundColor: '#FF9900',
+        fill: true,
+        tension: 0.4,
+        spanGaps: false
+      },
+      {
+        label: 'Last Month',
+        data: lastMonth,
+        borderColor: '#bbb',
+        backgroundColor: 'transparent',
+        borderWidth: 1.5,
+        borderDash: [6,4],
+        pointRadius: 0,
+        tension: 0.4
+      },
+      {
+        label: 'AI Forecast',
+        data: forecast,
+        borderColor: '#4f6ef7',
+        backgroundColor: 'rgba(79,110,247,0.06)',
+        borderWidth: 2,
+        borderDash: [4,3],
+        pointRadius: 2,
+        pointBackgroundColor: '#4f6ef7',
+        fill: true,
+        tension: 0.4,
+        spanGaps: false
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    interaction: { intersect: false, mode: 'index' },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#131921',
+        padding: 12,
+        callbacks: {
+          label: ctx => ctx.dataset.label + ': ₹' + (ctx.parsed.y || 0).toLocaleString('en-IN')
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { size: 11 }, maxTicksLimit: 10, color: '#888' }
+      },
+      y: {
+        grid: { color: '#f0f0f0' },
+        ticks: {
+          font: { size: 11 },
+          color: '#888',
+          callback: v => '₹' + (v/1000).toFixed(0) + 'K'
+        }
+      }
+    }
+  }
+});
+
+// Chart buttons
+document.querySelectorAll('.chart-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// Action buttons
+document.querySelectorAll('.action-btn.btn-ship').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const row = this.closest('tr');
+    const statusCell = row.querySelector('.order-status');
+    statusCell.className = 'order-status status-shipped';
+    statusCell.textContent = 'Shipped';
+    this.parentElement.innerHTML = '<button class="action-btn btn-view">Track</button>';
+  });
+});
+
+// Aria buttons feedback
+document.querySelectorAll('.aria-btn-secondary').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const insight = this.closest('.aria-insight');
+    insight.style.opacity = '0.5';
+    insight.style.pointerEvents = 'none';
+    const msg = document.createElement('p');
+    msg.style.cssText = 'color:#8a9bc5;font-size:12px;margin-top:6px;';
+    msg.textContent = 'Dismissed.';
+    insight.appendChild(msg);
+  });
+});
+</script>
+</body>
+</html>

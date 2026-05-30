@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages — Seller Central | VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#111;height:100vh;overflow:hidden;}
+a{text-decoration:none;color:inherit;}
+
+.topnav{position:fixed;top:0;left:0;right:0;height:54px;background:#0f1111;display:flex;align-items:center;padding:0 20px;z-index:1000;gap:20px;}
+.topnav .logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#FF9900;}
+.topnav .logo span{color:#fff;}
+.topnav-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+.topnav-right .seller-name{color:#ccc;font-size:.85rem;}
+.avatar-sm{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF9900,#e07000);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.8rem;}
+
+.sidebar{position:fixed;top:54px;left:0;bottom:0;width:220px;background:#232f3e;overflow-y:auto;z-index:999;}
+.sidebar-nav{padding:12px 0;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:#ccc;font-size:.875rem;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{background:rgba(255,153,0,.12);color:#FF9900;border-left:3px solid #FF9900;}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem;}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.1);margin:10px 14px;}
+.live-badge{background:#067D62;color:#fff;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:auto;}
+
+.main{margin-left:220px;padding-top:54px;height:100vh;display:flex;flex-direction:column;}
+.page-content{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:16px 16px 0;}
+
+/* REX BANNER */
+.rex-banner{background:linear-gradient(135deg,#007185 0%,#00a0b4 60%,#007185 100%);border-radius:12px;padding:18px 22px;margin-bottom:14px;color:#fff;flex-shrink:0;}
+.rex-banner .banner-top{display:flex;align-items:center;gap:10px;margin-bottom:3px;}
+.rex-banner .banner-top h2{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:600;}
+.rex-banner .banner-sub{font-size:.85rem;color:#b3e8ef;margin-bottom:14px;}
+.rex-stats{display:flex;gap:28px;flex-wrap:wrap;}
+.rex-stat .val{font-size:1.3rem;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.rex-stat .lbl{font-size:.7rem;color:#7dd4df;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.rex-handles{margin-top:12px;font-size:.76rem;color:#7dd4df;border-top:1px solid rgba(255,255,255,.15);padding-top:10px;}
+.rex-handles span{color:#c8f0f6;}
+
+/* QUICK STATS ROW */
+.quick-stats-row{display:flex;gap:12px;margin-bottom:14px;flex-shrink:0;align-items:stretch;}
+.qs-card{background:#fff;border-radius:8px;padding:12px 16px;box-shadow:0 1px 4px rgba(0,0,0,.08);display:flex;flex-direction:column;gap:3px;min-width:120px;}
+.qs-val{font-size:1.3rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#111;}
+.qs-label{font-size:.7rem;color:#777;text-transform:uppercase;letter-spacing:.4px;}
+
+/* PIE */
+.pie-card{background:#fff;border-radius:8px;padding:14px 16px;box-shadow:0 1px 4px rgba(0,0,0,.08);flex:1;}
+.pie-card h4{font-size:.75rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.pie-wrap{display:flex;align-items:center;gap:16px;}
+.donut-small{width:70px;height:70px;border-radius:50%;background:conic-gradient(#007185 0% 34%, #FF9900 34% 62%, #CC0C39 62% 84%, #888 84% 100%);position:relative;flex-shrink:0;}
+.donut-small::after{content:'';position:absolute;inset:18px;background:#fff;border-radius:50%;}
+.pie-legend{display:flex;flex-direction:column;gap:5px;}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:.72rem;color:#555;}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* MESSAGES LAYOUT */
+.messages-layout{display:flex;flex:1;gap:0;overflow:hidden;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;}
+
+/* LEFT: CONVERSATION LIST */
+.conv-list{width:35%;background:#fff;border-right:1px solid #eee;display:flex;flex-direction:column;overflow:hidden;}
+.conv-search{padding:12px;border-bottom:1px solid #f2f2f2;}
+.conv-search input{width:100%;padding:8px 12px;border:1px solid #e0e0e0;border-radius:6px;font-size:.83rem;font-family:'Inter',sans-serif;outline:none;}
+.conv-search input:focus{border-color:#007185;}
+.conv-tabs{display:flex;padding:6px 8px;gap:4px;border-bottom:1px solid #f2f2f2;overflow-x:auto;flex-shrink:0;}
+.conv-tab{padding:5px 10px;border-radius:5px;font-size:.72rem;font-weight:500;cursor:pointer;color:#666;white-space:nowrap;transition:all .15s;}
+.conv-tab.active{background:#007185;color:#fff;}
+.conv-tab:hover:not(.active){background:#f5f5f5;}
+.conv-tab .cnt{background:#CC0C39;color:#fff;font-size:.6rem;padding:1px 4px;border-radius:10px;margin-left:3px;}
+.conv-items{overflow-y:auto;flex:1;}
+.conv-row{padding:12px 14px;border-bottom:1px solid #f5f5f5;cursor:pointer;transition:background .12s;display:flex;gap:10px;align-items:flex-start;}
+.conv-row:hover{background:#f9fbfc;}
+.conv-row.active-conv{background:#e6f7fa;border-left:3px solid #007185;}
+.conv-row.unread .conv-name{font-weight:700;}
+.conv-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.75rem;font-weight:700;flex-shrink:0;}
+.conv-body{flex:1;min-width:0;}
+.conv-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;}
+.conv-name{font-size:.85rem;color:#111;}
+.conv-time{font-size:.68rem;color:#aaa;flex-shrink:0;}
+.conv-product{font-size:.72rem;color:#007185;margin-bottom:3px;}
+.conv-preview{font-size:.75rem;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.conv-badge{font-size:.65rem;padding:2px 7px;border-radius:10px;font-weight:600;margin-top:4px;display:inline-block;}
+.badge-rex{background:#e6f9f0;color:#067D62;}
+.badge-needs{background:#fff3e0;color:#e07000;}
+.badge-resolved{background:#f2f2f2;color:#888;}
+
+/* RIGHT: THREAD */
+.thread-panel{flex:1;display:flex;flex-direction:column;background:#fafbfc;}
+.thread-header{padding:14px 18px;background:#fff;border-bottom:1px solid #eee;flex-shrink:0;}
+.thread-header-top{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.thread-header-top .t-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.78rem;font-weight:700;}
+.thread-header-top .t-name{font-weight:600;font-size:.95rem;}
+.thread-meta{font-size:.75rem;color:#777;display:flex;gap:16px;}
+.thread-meta a{color:#007185;font-weight:500;}
+.messages-wrap{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
+.msg-row{display:flex;flex-direction:column;max-width:72%;}
+.msg-row.buyer{align-self:flex-start;}
+.msg-row.rex{align-self:flex-end;}
+.msg-row.seller{align-self:flex-end;}
+.msg-sender{font-size:.68rem;color:#888;margin-bottom:3px;}
+.msg-row.rex .msg-sender{text-align:right;color:#007185;}
+.msg-row.seller .msg-sender{text-align:right;color:#e07000;}
+.bubble{padding:10px 14px;border-radius:12px;font-size:.85rem;line-height:1.5;}
+.bubble-buyer{background:#e8e8e8;color:#111;border-bottom-left-radius:4px;}
+.bubble-rex{background:#1a73e8;color:#fff;border-bottom-right-radius:4px;}
+.bubble-seller{background:#FF9900;color:#fff;border-bottom-right-radius:4px;}
+.bubble-flag{background:#fff3e0;border:1px solid #ffcc80;color:#b45309;border-radius:8px;padding:10px 14px;font-size:.82rem;}
+.msg-time{font-size:.65rem;color:#bbb;margin-top:3px;}
+.msg-row.rex .msg-time,.msg-row.seller .msg-time{text-align:right;}
+
+/* NEEDS YOU BAR */
+.needs-you-bar{background:#fff3e0;border-top:1px solid #ffe0b2;padding:14px 18px;flex-shrink:0;}
+.needs-label{font-size:.8rem;font-weight:600;color:#e07000;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.suggested-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.sugg-btn{padding:7px 14px;border:1.5px solid #007185;border-radius:6px;font-size:.8rem;font-weight:500;color:#007185;background:#fff;cursor:pointer;transition:all .15s;}
+.sugg-btn:hover{background:#007185;color:#fff;}
+.custom-reply-row{display:flex;gap:8px;}
+.custom-reply-row textarea{flex:1;padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;font-family:'Inter',sans-serif;resize:none;height:38px;outline:none;}
+.custom-reply-row textarea:focus{border-color:#007185;}
+.send-btn{background:#007185;color:#fff;border:none;border-radius:6px;padding:0 18px;font-size:.83rem;font-weight:600;cursor:pointer;}
+.send-btn:hover{background:#005a6a;}
+.topnav-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; }
+@media(max-width:1024px){.sidebar{width:180px;}.main{margin-left:180px;}}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-220px;top:54px;bottom:0;z-index:999;transition:left 0.3s ease;width:220px;}
+  .sidebar.open{left:0;}
+  .sidebar.open ~ .sidebar-overlay{display:block;}
+  .main{margin-left:0;}
+  .topnav-hamburger{display:flex !important;}
+  .messages-layout{flex-direction:column;}
+  .conv-list{width:100%;border-right:none;border-bottom:1px solid #e5e5e5;}
+  .thread-panel{display:none;}
+  .conv-list.hidden{display:none;}
+  .thread-panel.active{display:flex;flex-direction:column;}
+  .thread-back-btn{display:flex !important;}
+}
+.thread-back-btn{display:none;background:none;border:none;font-size:.85rem;color:#007185;font-weight:600;cursor:pointer;padding:4px 8px;align-items:center;gap:4px;}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <button class="topnav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="logo">⚡ <span>Seller Central</span></div>
+  <div class="topnav-right">
+    <span class="seller-name sidebar-store-name">TechNest Store</span>
+    <div class="avatar-sm" onclick="vsLogout()" title="Sign Out" style="cursor:pointer;">SC</div>
+  </div>
+</nav>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <a href="seller-dashboard.html" class="nav-item"><span class="icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item"><span class="icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item active"><span class="icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item"><span class="icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item"><span class="icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item"><span class="icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item"><span class="icon">⚙️</span> Settings</a>
+    <div class="sidebar-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="icon">🛍️</span> View My Storefront <span class="live-badge">LIVE</span></a>
+    <a href="index.html" class="nav-item"><span class="icon">🏠</span> Go to VibeStore</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-content">
+
+    <!-- REX BANNER -->
+    <div class="rex-banner">
+      <div class="banner-top">
+        <span style="font-size:1.4rem;">💬</span>
+        <h2>Rex is handling your buyer conversations</h2>
+      </div>
+      <p class="banner-sub">Rex replied to 41 messages today — only 3 need your personal touch</p>
+      <div class="rex-stats">
+        <div class="rex-stat"><span class="val">41</span><span class="lbl">Rex handled</span></div>
+        <div class="rex-stat"><span class="val" style="color:#ffe082;">3</span><span class="lbl">Needs you</span></div>
+        <div class="rex-stat"><span class="val">28s</span><span class="lbl">Avg reply time</span></div>
+        <div class="rex-stat"><span class="val">98%</span><span class="lbl">Satisfaction</span></div>
+      </div>
+      <div class="rex-handles">Rex handles: <span>shipping questions</span> · <span>product queries</span> · <span>delivery complaints</span> · <span>return requests</span> · <span>review requests</span></div>
+    </div>
+
+    <!-- QUICK STATS ROW -->
+    <div class="quick-stats-row">
+      <div class="qs-card"><div class="qs-val">41</div><div class="qs-label">Rex handled today</div></div>
+      <div class="qs-card"><div class="qs-val" style="color:#e07000;">3</div><div class="qs-label">Needs your reply</div></div>
+      <div class="qs-card"><div class="qs-val">28s</div><div class="qs-label">Avg response</div></div>
+      <div class="qs-card"><div class="qs-val" style="color:#067D62;">98%</div><div class="qs-label">Satisfaction</div></div>
+      <div class="pie-card">
+        <h4>Common Topics Today</h4>
+        <div class="pie-wrap">
+          <div class="donut-small"></div>
+          <div class="pie-legend">
+            <div class="legend-item"><div class="legend-dot" style="background:#007185;"></div>Shipping 34%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#FF9900;"></div>Product Q&amp;A 28%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#CC0C39;"></div>Returns 22%</div>
+            <div class="legend-item"><div class="legend-dot" style="background:#888;"></div>Other 16%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES LAYOUT -->
+    <div class="messages-layout">
+
+      <!-- LEFT: CONVERSATION LIST -->
+      <div class="conv-list" id="convListPanel">
+        <div class="conv-search">
+          <input type="text" placeholder="🔍  Search conversations...">
+        </div>
+        <div class="conv-tabs">
+          <div class="conv-tab active" onclick="setConvTab(this)">All</div>
+          <div class="conv-tab" onclick="setConvTab(this)">Unread <span class="cnt">3</span></div>
+          <div class="conv-tab" onclick="setConvTab(this)">Rex handled</div>
+          <div class="conv-tab" onclick="setConvTab(this)">Needs You <span class="cnt">3</span></div>
+          <div class="conv-tab" onclick="setConvTab(this)">Archived</div>
+        </div>
+        <div class="conv-items" id="convList"></div>
+      </div>
+
+      <!-- RIGHT: MESSAGE THREAD -->
+      <div class="thread-panel" id="threadPanel">
+        <div class="thread-header">
+          <div class="thread-header-top">
+          <button class="thread-back-btn" onclick="showConvList()">← Back</button>
+            <div class="t-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);" id="threadAvatar">SI</div>
+            <div>
+              <div class="t-name" id="threadName">Sneha Iyer</div>
+            </div>
+          </div>
+          <div class="thread-meta">
+            <span>Product: <strong>Aromatic Candle Gift Set</strong></span>
+            <span>Order: <a href="seller-orders.html">#ORD-00791 View Order →</a></span>
+          </div>
+        </div>
+        <div class="messages-wrap" id="messagesWrap">
+          <div class="msg-row buyer">
+            <div class="msg-sender">Sneha Iyer · 10:12 AM</div>
+            <div class="bubble bubble-buyer">Hi, I need to exchange this for a different size, how do I do that?</div>
+          </div>
+          <div class="msg-row rex">
+            <div class="msg-sender">🤖 Rex · 10:12:28 AM</div>
+            <div class="bubble bubble-rex">Hi! I can help with that. For size exchanges, we offer free pickup within 48 hours. Would you like me to initiate the exchange process?</div>
+          </div>
+          <div class="msg-row buyer">
+            <div class="msg-sender">Sneha Iyer · 10:14 AM</div>
+            <div class="bubble bubble-buyer">Yes please, but I also want to know if the blue color is available?</div>
+          </div>
+          <div class="msg-row rex">
+            <div class="msg-sender">🤖 Rex · 10:14:05 AM</div>
+            <div class="bubble bubble-flag">⚠️ <strong>Rex flagged:</strong> I don't have real-time stock info for this product variant. Seller input needed before I can respond accurately.</div>
+          </div>
+        </div>
+        <div class="needs-you-bar">
+          <div class="needs-label">⚠️ Rex needs your help here — blue variant stock status unknown</div>
+          <div class="suggested-btns">
+            <button class="sugg-btn" onclick="sendReply('Yes, the blue color is in stock! Initiating your exchange now.')">Yes, blue is in stock</button>
+            <button class="sugg-btn" onclick="sendReply('Sorry, only the black variant is currently available for exchange.')">No, only black available</button>
+            <button class="sugg-btn" onclick="sendReply('Let me check our inventory and get back to you within the hour!')">Check & reply later</button>
+          </div>
+          <div class="custom-reply-row">
+            <textarea id="customReply" placeholder="Type a custom reply..."></textarea>
+            <button class="send-btn" onclick="sendCustomReply()">Send</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+function showThread() {
+  document.getElementById('convListPanel').classList.add('hidden');
+  document.getElementById('threadPanel').classList.add('active');
+}
+function showConvList() {
+  document.getElementById('convListPanel').classList.remove('hidden');
+  document.getElementById('threadPanel').classList.remove('active');
+}
+
+const convData = [
+  {id:0,name:'Sneha Iyer',initials:'SI',color:'#8e44ad',product:'Aromatic Candle Set',preview:"Yes please, but I also want to know if the...",time:'10:14 AM',status:'needs',unread:true,selected:true},
+  {id:1,name:'Rohan Das',initials:'RD',color:'#16a085',product:'Dell 27" Monitor',preview:'Thanks for the tracking update!',time:'9:58 AM',status:'rex',unread:false,selected:false},
+  {id:2,name:'Karan Mehta',initials:'KM',color:'#667eea',product:'OnePlus Buds Pro 3',preview:'When will my order be dispatched?',time:'9:44 AM',status:'needs',unread:true,selected:false},
+  {id:3,name:'Priya Gupta',initials:'PG',color:'#c0392b',product:'Lakme Gift Set',preview:'Perfect, thank you so much!',time:'9:30 AM',status:'resolved',unread:false,selected:false},
+  {id:4,name:'Meera Nair',initials:'MN',color:'#11998e',product:'Sony WH-1000XM5',preview:'Is there a warranty on this product?',time:'9:15 AM',status:'rex',unread:false,selected:false},
+  {id:5,name:'Arjun Patel',initials:'AP',color:'#3a7bd5',product:'Study Planner Kit',preview:'Can I get a bulk discount for 10 units?',time:'8:55 AM',status:'rex',unread:false,selected:false},
+  {id:6,name:'Tanya Bose',initials:'TB',color:'#9b59b6',product:'PS5 Controller',preview:'The product arrived damaged, please help',time:'8:40 AM',status:'needs',unread:true,selected:false},
+  {id:7,name:'Vikram Joshi',initials:'VJ',color:'#1abc9c',product:'Cast Iron Pan Set',preview:'Rex has handled this conversation',time:'8:20 AM',status:'rex',unread:false,selected:false},
+  {id:8,name:'Ananya Roy',initials:'AR',color:'#e74c3c',product:'Anarkali Dress Set',preview:'Perfect fit! Loved the packaging',time:'Yesterday',status:'resolved',unread:false,selected:false},
+  {id:9,name:'Dev Kumar',initials:'DK',color:'#f7971e',product:'Resistance Band Set',preview:'How long does delivery take to Pune?',time:'Yesterday',status:'rex',unread:false,selected:false},
+];
+
+function renderConvList(){
+  const cl = document.getElementById('convList');
+  cl.innerHTML = '';
+  convData.forEach(c => {
+    const statusLabel = c.status === 'needs' ? '<span class="conv-badge badge-needs">⚠️ Needs You</span>' :
+                        c.status === 'rex' ? '<span class="conv-badge badge-rex">🤖 Rex replied</span>' :
+                        '<span class="conv-badge badge-resolved">✅ Resolved</span>';
+    cl.innerHTML += `
+    <div class="conv-row ${c.selected?'active-conv':''} ${c.unread?'unread':''}" onclick="selectConv(${c.id})">
+      <div class="conv-avatar" style="background:${c.color};">${c.initials}</div>
+      <div class="conv-body">
+        <div class="conv-top">
+          <div class="conv-name">${c.name}</div>
+          <div class="conv-time">${c.time}</div>
+        </div>
+        <div class="conv-product">${c.product}</div>
+        <div class="conv-preview">${c.preview}</div>
+        ${statusLabel}
+      </div>
+    </div>`;
+  });
+}
+
+function selectConv(id){
+  convData.forEach(c => c.selected = c.id === id);
+  renderConvList();
+  const c = convData[id];
+  document.getElementById('threadAvatar').textContent = c.initials;
+  document.getElementById('threadAvatar').style.background = `linear-gradient(135deg,${c.color},${c.color}bb)`;
+  document.getElementById('threadName').textContent = c.name;
+  // On mobile, show thread panel
+  if (window.innerWidth <= 768) showThread();
+}
+
+function setConvTab(el){
+  document.querySelectorAll('.conv-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function sendReply(text){
+  const wrap = document.getElementById('messagesWrap');
+  wrap.innerHTML += `
+  <div class="msg-row seller">
+    <div class="msg-sender">You · just now</div>
+    <div class="bubble bubble-seller">${text}</div>
+  </div>`;
+  wrap.scrollTop = wrap.scrollHeight;
+  document.querySelector('.needs-you-bar').innerHTML = '<div style="color:#067D62;font-size:.85rem;font-weight:600;">✅ Reply sent! Rex will continue this conversation.</div>';
+}
+
+function sendCustomReply(){
+  const val = document.getElementById('customReply').value.trim();
+  if(!val) return;
+  sendReply(val);
+}
+
+renderConvList();
+</script>
+</body>
+</html>

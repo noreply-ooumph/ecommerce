@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orders — Seller Central | VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#111;}
+a{text-decoration:none;color:inherit;}
+
+/* TOP NAV */
+.topnav{position:fixed;top:0;left:0;right:0;height:54px;background:#0f1111;display:flex;align-items:center;padding:0 20px;z-index:1000;gap:20px;}
+.topnav .logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#FF9900;letter-spacing:-0.5px;}
+.topnav .logo span{color:#fff;}
+.topnav-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+.topnav-right .seller-name{color:#ccc;font-size:.85rem;}
+.avatar-sm{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#FF9900,#e07000);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.8rem;}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:54px;left:0;bottom:0;width:220px;background:#232f3e;overflow-y:auto;z-index:999;}
+.sidebar-nav{padding:12px 0;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 18px;color:#ccc;font-size:.875rem;cursor:pointer;transition:all .15s;border-left:3px solid transparent;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{background:rgba(255,153,0,.12);color:#FF9900;border-left:3px solid #FF9900;}
+.nav-item .icon{width:18px;text-align:center;font-size:1rem;}
+.sidebar-divider{height:1px;background:rgba(255,255,255,.1);margin:10px 14px;}
+.live-badge{background:#067D62;color:#fff;font-size:.65rem;font-weight:700;padding:2px 6px;border-radius:20px;margin-left:auto;}
+
+/* MAIN */
+.main{margin-left:220px;padding-top:54px;min-height:100vh;}
+.page-content{padding:24px;}
+
+/* NOVA BANNER */
+.nova-banner{background:linear-gradient(135deg,#1a3a5c 0%,#1d5fa6 60%,#1a3a5c 100%);border-radius:12px;padding:20px 24px;margin-bottom:24px;color:#fff;}
+.nova-banner .banner-top{display:flex;align-items:center;gap:10px;margin-bottom:4px;}
+.nova-banner .banner-top h2{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:600;}
+.nova-banner .banner-sub{font-size:.875rem;color:#b3d4f5;margin-bottom:16px;}
+.nova-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.nova-stat{display:flex;flex-direction:column;}
+.nova-stat .val{font-size:1.4rem;font-weight:700;font-family:'Space Grotesk',sans-serif;}
+.nova-stat .lbl{font-size:.72rem;color:#8bb8e0;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.nova-handles{margin-top:14px;font-size:.78rem;color:#8bb8e0;border-top:1px solid rgba(255,255,255,.12);padding-top:12px;}
+.nova-handles span{color:#a8d4f7;}
+
+/* METRIC CARDS */
+.metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.metric-card{background:#fff;border-radius:8px;padding:18px 20px;box-shadow:0 1px 4px rgba(0,0,0,.08);}
+.metric-card.alert{border-left:4px solid #CC0C39;}
+.metric-card .m-label{font-size:.75rem;color:#666;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.metric-card .m-val{font-size:1.9rem;font-weight:700;font-family:'Space Grotesk',sans-serif;color:#111;}
+.metric-card.alert .m-val{color:#CC0C39;}
+.metric-card .m-sub{font-size:.72rem;color:#888;margin-top:4px;}
+
+/* ACTION NEEDED */
+.section-title{font-size:1rem;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.action-needed-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.action-card{background:#fff;border-radius:8px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.08);border-top:3px solid #CC0C39;}
+.action-card .ac-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+.action-card .order-num{font-weight:700;font-size:.9rem;color:#007185;cursor:pointer;}
+.action-card .ac-amount{font-weight:700;font-size:1rem;color:#111;}
+.action-card .ac-buyer{font-size:.83rem;color:#444;margin-bottom:4px;}
+.action-card .ac-product{font-size:.83rem;color:#666;margin-bottom:10px;}
+.flag-reason{background:#fff5f5;border:1px solid #ffd5d5;border-radius:6px;padding:8px 12px;font-size:.78rem;color:#CC0C39;margin-bottom:12px;}
+.flag-reason strong{display:block;margin-bottom:3px;}
+.action-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:7px 14px;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s;}
+.btn-orange{background:#FF9900;color:#fff;}
+.btn-orange:hover{background:#e07000;}
+.btn-outline{background:#fff;color:#333;border:1px solid #ccc;}
+.btn-outline:hover{background:#f5f5f5;}
+.btn-red{background:#CC0C39;color:#fff;}
+.btn-red:hover{background:#a8092d;}
+.btn-teal{background:#007185;color:#fff;}
+.btn-teal:hover{background:#005a6a;}
+.btn-sm{padding:5px 10px;font-size:.75rem;}
+
+/* FILTER BAR */
+.filter-bar{background:#fff;border-radius:8px;padding:14px 18px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;}
+.filter-bar input,.filter-bar select{padding:8px 12px;border:1px solid #ddd;border-radius:6px;font-size:.83rem;font-family:'Inter',sans-serif;outline:none;}
+.filter-bar input:focus,.filter-bar select:focus{border-color:#007185;}
+.filter-bar input{flex:1;min-width:200px;}
+.export-btn{margin-left:auto;background:#f5f5f5;border:1px solid #ccc;padding:8px 14px;border-radius:6px;font-size:.8rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;}
+.export-btn:hover{background:#eee;}
+
+/* FILTER TABS */
+.filter-tabs{display:flex;gap:4px;margin-bottom:16px;background:#fff;border-radius:8px;padding:6px;box-shadow:0 1px 4px rgba(0,0,0,.08);width:fit-content;}
+.ftab{padding:6px 14px;border-radius:6px;font-size:.8rem;font-weight:500;cursor:pointer;color:#555;transition:all .15s;}
+.ftab.active{background:#FF9900;color:#fff;font-weight:600;}
+.ftab:hover:not(.active){background:#f5f5f5;}
+.ftab .count{background:#CC0C39;color:#fff;font-size:.65rem;padding:1px 5px;border-radius:10px;margin-left:4px;}
+
+/* TABLE */
+.table-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.08);overflow:hidden;}.table-card .table-scroll{overflow-x:auto;}
+.orders-table{width:100%;border-collapse:collapse;}
+.orders-table th{background:#f7f8fa;padding:11px 14px;text-align:left;font-size:.75rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #eee;}
+.orders-table td{padding:12px 14px;border-bottom:1px solid #f2f2f2;font-size:.83rem;color:#333;vertical-align:middle;}
+.orders-table tr:last-child td{border-bottom:none;}
+.orders-table tr:hover td{background:#fafbfc;}
+.orders-table input[type=checkbox]{cursor:pointer;}
+.order-link{color:#007185;font-weight:600;cursor:pointer;}
+.order-link:hover{text-decoration:underline;}
+.buyer-cell{display:flex;align-items:center;gap:8px;}
+.buyer-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.7rem;font-weight:700;flex-shrink:0;}
+.status-badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;}
+.badge-green{background:#e6f9f0;color:#067D62;}
+.badge-blue{background:#e8f4fd;color:#1a73e8;}
+.badge-orange{background:#fff3e0;color:#e07000;}
+.badge-red{background:#fdecea;color:#CC0C39;}
+.badge-purple{background:#f3e8fd;color:#7b2d9e;}
+.fulfilled-nova{background:#fff3e0;color:#e07000;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;}
+.fulfilled-alert{background:#fdecea;color:#CC0C39;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:600;}
+.table-actions{display:flex;gap:6px;align-items:center;}
+.icon-btn{background:none;border:1px solid #ddd;border-radius:5px;padding:4px 8px;cursor:pointer;font-size:.8rem;color:#555;}
+.icon-btn:hover{background:#f5f5f5;}
+
+/* FULFILLMENT STATS */
+.stats-widget{background:#fff;border-radius:8px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.08);margin-top:24px;}
+.stats-widget h3{font-size:.9rem;font-weight:600;margin-bottom:16px;color:#111;}
+.bar-chart{display:flex;align-items:flex-end;gap:12px;height:100px;padding-bottom:20px;position:relative;}
+.bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.bar{width:100%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#007185,#005a6a);transition:all .3s;position:relative;}
+.bar:hover{background:linear-gradient(180deg,#FF9900,#e07000);}
+.bar-day{font-size:.7rem;color:#888;margin-top:4px;}
+.bar-val{font-size:.68rem;color:#555;font-weight:600;}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.speed-trend{display:flex;flex-direction:column;gap:8px;}
+.speed-item{display:flex;align-items:center;gap:10px;}
+.speed-label{font-size:.78rem;color:#555;width:50px;}
+.speed-bar-bg{flex:1;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;}
+.speed-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,#067D62,#00a86b);}
+
+/* SLIDE PANEL */
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:2000;display:none;}
+.panel-overlay.open{display:block;}
+.slide-panel{position:fixed;top:0;right:-440px;bottom:0;width:420px;background:#fff;z-index:2001;box-shadow:-4px 0 24px rgba(0,0,0,.15);transition:right .3s ease;overflow-y:auto;}
+.slide-panel.open{right:0;}
+.panel-header{padding:20px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;}
+.panel-header h3{font-size:1rem;font-weight:700;}
+.panel-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666;padding:4px;}
+.panel-section{padding:16px 20px;border-bottom:1px solid #f2f2f2;}
+.panel-section h4{font-size:.78rem;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+.buyer-info-row{display:flex;align-items:center;gap:10px;}
+.buyer-info-row .buyer-avatar{width:38px;height:38px;font-size:.85rem;}
+.buyer-info-row .bname{font-weight:600;font-size:.9rem;}
+.buyer-info-row .baddr{font-size:.78rem;color:#666;margin-top:2px;}
+.product-row{display:flex;align-items:center;gap:10px;padding:6px 0;}
+.product-emoji{font-size:1.4rem;}
+.pname{font-size:.85rem;font-weight:500;}
+.pdetail{font-size:.75rem;color:#666;}
+.pprice{font-size:.85rem;font-weight:600;margin-left:auto;}
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:12px;align-items:flex-start;padding:6px 0;}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:#067D62;margin-top:4px;flex-shrink:0;}
+.tl-dot.pending{background:#ddd;}
+.tl-line{position:relative;}
+.tl-text{font-size:.8rem;color:#333;}
+.tl-time{font-size:.72rem;color:#888;margin-top:2px;}
+.tracking-row{display:flex;align-items:center;gap:10px;margin-top:6px;}
+.tracking-num{font-size:.82rem;font-family:monospace;background:#f5f5f5;padding:4px 10px;border-radius:4px;}
+.copy-btn{font-size:.72rem;color:#007185;cursor:pointer;border:1px solid #007185;padding:3px 8px;border-radius:4px;background:none;}
+.nova-log{background:#f0f7ff;border-radius:6px;padding:10px 12px;}
+.nova-log-item{font-size:.78rem;color:#1a3a5c;padding:3px 0;}
+.nova-log-item::before{content:'🤖 ';font-size:.75rem;}
+.panel-actions{padding:16px 20px;display:flex;flex-wrap:wrap;gap:8px;}
+
+/* RESPONSIVE TWEAKS */
+@media(max-width:1100px){.metric-grid{grid-template-columns:repeat(2,1fr);}.action-needed-grid{grid-template-columns:1fr;}}
+.topnav-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+.sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 998; }
+@media(max-width:1024px){.sidebar{width:180px;}.main{margin-left:180px;}}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-220px;top:54px;bottom:0;z-index:999;transition:left 0.3s ease;width:220px;}
+  .sidebar.open{left:0;}
+  .sidebar.open ~ .sidebar-overlay{display:block;}
+  .main{margin-left:0;}
+  .topnav-hamburger{display:flex !important;}
+  .action-needed-grid{grid-template-columns:1fr;}
+  .metric-grid{grid-template-columns:repeat(2,1fr);}
+  .slide-panel{width:100%;right:-100%;}
+  .slide-panel.open{right:0;}
+  .table-card{overflow-x:auto;}
+  .orders-table{min-width:700px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <button class="topnav-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="logo">⚡ <span>Seller Central</span></div>
+  <div class="topnav-right">
+    <span class="seller-name sidebar-store-name">TechNest Store</span>
+    <div class="avatar-sm" onclick="vsLogout()" title="Sign Out" style="cursor:pointer;flex-direction:column;height:auto;padding:4px;">
+      <span>SC</span>
+      <span style="font-size:9px;font-weight:400;">Out</span>
+    </div>
+  </div>
+</nav>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <nav class="sidebar-nav">
+    <a href="seller-dashboard.html" class="nav-item"><span class="icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item active"><span class="icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item"><span class="icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item"><span class="icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item"><span class="icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item"><span class="icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item"><span class="icon">⚙️</span> Settings</a>
+    <div class="sidebar-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="icon">🛍️</span> View My Storefront <span class="live-badge">LIVE</span></a>
+    <a href="index.html" class="nav-item"><span class="icon">🏠</span> Go to VibeStore</a>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="page-content">
+
+    <!-- NOVA BANNER -->
+    <div class="nova-banner">
+      <div class="banner-top">
+        <span style="font-size:1.4rem;">📦</span>
+        <h2>Nova is managing your orders</h2>
+      </div>
+      <p class="banner-sub">Nova auto-fulfilled 21 of today's 23 orders — 2 need your attention</p>
+      <div class="nova-stats">
+        <div class="nova-stat"><span class="val">21</span><span class="lbl">Auto-fulfilled today</span></div>
+        <div class="nova-stat"><span class="val" style="color:#ff7070;">2</span><span class="lbl">Manual needed</span></div>
+        <div class="nova-stat"><span class="val">1.2h</span><span class="lbl">Avg dispatch time</span></div>
+        <div class="nova-stat"><span class="val">99.1%</span><span class="lbl">On-time rate</span></div>
+      </div>
+      <div class="nova-handles">Nova handles: <span>order confirmation</span> · <span>shipping label generation</span> · <span>tracking SMS to buyers</span> · <span>delivery follow-up</span></div>
+    </div>
+
+    <!-- METRIC CARDS -->
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="m-label">Today</div>
+        <div class="m-val">23</div>
+        <div class="m-sub">+4 vs yesterday</div>
+      </div>
+      <div class="metric-card alert">
+        <div class="m-label">Pending Your Action</div>
+        <div class="m-val">2</div>
+        <div class="m-sub">Requires manual handling</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">Shipped</div>
+        <div class="m-val">18</div>
+        <div class="m-sub">In transit today</div>
+      </div>
+      <div class="metric-card">
+        <div class="m-label">Delivered (this month)</div>
+        <div class="m-val">156</div>
+        <div class="m-sub" style="color:#067D62;">↑ 12% vs last month</div>
+      </div>
+    </div>
+
+    <!-- ACTION NEEDED SECTION -->
+    <div class="section-title">
+      <span style="color:#CC0C39;">⚠️</span> Action Needed
+      <span style="background:#CC0C39;color:#fff;font-size:.7rem;padding:2px 8px;border-radius:20px;">2</span>
+    </div>
+    <div class="action-needed-grid">
+      <div class="action-card">
+        <div class="ac-header">
+          <span class="order-num" onclick="openPanel('ORD-00782')">#ORD-00782</span>
+          <span class="ac-amount">₹3,499</span>
+        </div>
+        <div class="ac-buyer">👤 Karan Mehta · Mumbai, MH</div>
+        <div class="ac-product">📱 OnePlus Buds Pro 3 — Qty: 1</div>
+        <div class="flag-reason">
+          <strong>Why Nova flagged this:</strong>
+          Out of stock at warehouse — provide alternate shipping address or partner warehouse
+        </div>
+        <div class="action-btns">
+          <button class="btn btn-orange" onclick="alert('Opening shipment workflow...')">Mark Shipped</button>
+          <button class="btn btn-outline" onclick="alert('Opening buyer chat...')">Contact Buyer</button>
+          <button class="btn btn-red btn-sm" onclick="alert('Confirm cancellation?')">Cancel Order</button>
+        </div>
+      </div>
+      <div class="action-card">
+        <div class="ac-header">
+          <span class="order-num" onclick="openPanel('ORD-00791')">#ORD-00791</span>
+          <span class="ac-amount">₹1,299</span>
+        </div>
+        <div class="ac-buyer">👤 Sneha Iyer · Bengaluru, KA</div>
+        <div class="ac-product">🕯️ Aromatic Candle Gift Set — Qty: 2</div>
+        <div class="flag-reason">
+          <strong>Why Nova flagged this:</strong>
+          Buyer requested custom handwritten note on package — manual packing required
+        </div>
+        <div class="action-btns">
+          <button class="btn btn-orange" onclick="alert('Opening shipment workflow...')">Mark Shipped</button>
+          <button class="btn btn-outline" onclick="alert('Opening buyer chat...')">Contact Buyer</button>
+          <button class="btn btn-red btn-sm" onclick="alert('Confirm cancellation?')">Cancel Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <input type="text" placeholder="🔍  Search by Order# or Buyer name">
+      <select>
+        <option>All Statuses</option>
+        <option>Processing</option>
+        <option>Shipped</option>
+        <option>Delivered</option>
+        <option>Cancelled</option>
+        <option>Return Requested</option>
+      </select>
+      <input type="date" value="2026-05-01" style="min-width:130px;">
+      <input type="date" value="2026-05-29" style="min-width:130px;">
+      <select>
+        <option>All Fulfillment</option>
+        <option>🤖 Nova</option>
+        <option>⚠️ Manual</option>
+      </select>
+      <button class="export-btn">⬇ Export CSV</button>
+    </div>
+
+    <!-- FILTER TABS -->
+    <div class="filter-tabs">
+      <div class="ftab active" onclick="setTab(this)">All</div>
+      <div class="ftab" onclick="setTab(this)">Action Needed <span class="count">2</span></div>
+      <div class="ftab" onclick="setTab(this)">Processing</div>
+      <div class="ftab" onclick="setTab(this)">Shipped</div>
+      <div class="ftab" onclick="setTab(this)">Delivered</div>
+      <div class="ftab" onclick="setTab(this)">Cancelled</div>
+      <div class="ftab" onclick="setTab(this)">Returns</div>
+    </div>
+
+    <!-- ORDERS TABLE -->
+    <div class="table-card">
+      <table class="orders-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" onclick="toggleAll(this)"></th>
+            <th>Order#</th>
+            <th>Buyer</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Amount</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Fulfilled By</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- FULFILLMENT STATS -->
+    <div class="stats-widget">
+      <h3>📊 Order Volume This Week + Nova Fulfillment Speed</h3>
+      <div class="chart-row">
+        <div>
+          <div style="font-size:.75rem;color:#888;margin-bottom:8px;">Orders per day (this week)</div>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+        <div>
+          <div style="font-size:.75rem;color:#888;margin-bottom:12px;">Nova avg fulfillment speed (hours)</div>
+          <div class="speed-trend" id="speedTrend"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SLIDE PANEL OVERLAY -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="slide-panel" id="slidePanel">
+  <div class="panel-header">
+    <h3 id="panelOrderNum">Order Details</h3>
+    <button class="panel-close" onclick="closePanel()">✕</button>
+  </div>
+  <div class="panel-section">
+    <h4>Buyer Information</h4>
+    <div class="buyer-info-row">
+      <div class="buyer-avatar" style="background:linear-gradient(135deg,#667eea,#764ba2);">KM</div>
+      <div>
+        <div class="bname">Karan Mehta</div>
+        <div class="baddr">📍 42, Hill Crest Apt, Bandra West, Mumbai 400050, MH</div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-section">
+    <h4>Product</h4>
+    <div class="product-row">
+      <span class="product-emoji">📱</span>
+      <div>
+        <div class="pname">OnePlus Buds Pro 3</div>
+        <div class="pdetail">Qty: 1 · Black</div>
+      </div>
+      <span class="pprice">₹3,499</span>
+    </div>
+  </div>
+  <div class="panel-section">
+    <h4>Order Timeline</h4>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-text">Order Placed</div><div class="tl-time">Today, 9:00 AM</div></div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-text">Confirmed by Nova</div><div class="tl-time">Today, 9:02 AM</div></div></div>
+      <div class="tl-item"><div class="tl-dot"></div><div><div class="tl-text">Packed</div><div class="tl-time">Today, 9:10 AM</div></div></div>
+      <div class="tl-item"><div class="tl-dot pending"></div><div><div class="tl-text" style="color:#aaa;">Shipped</div><div class="tl-time" style="color:#bbb;">Awaiting</div></div></div>
+      <div class="tl-item"><div class="tl-dot pending"></div><div><div class="tl-text" style="color:#aaa;">Delivered</div><div class="tl-time" style="color:#bbb;">Awaiting</div></div></div>
+    </div>
+  </div>
+  <div class="panel-section">
+    <h4>Shipping</h4>
+    <div style="font-size:.82rem;color:#555;margin-bottom:6px;">Carrier: <strong>Delhivery Express</strong></div>
+    <div class="tracking-row">
+      <span style="font-size:.78rem;color:#666;">Tracking:</span>
+      <span class="tracking-num">DL3892047651IN</span>
+      <button class="copy-btn" onclick="navigator.clipboard.writeText('DL3892047651IN');this.textContent='Copied!'">Copy</button>
+    </div>
+  </div>
+  <div class="panel-section">
+    <h4>Nova's Activity Log</h4>
+    <div class="nova-log">
+      <div class="nova-log-item">Nova confirmed order at 9:02 AM</div>
+      <div class="nova-log-item">Generated shipping label at 9:05 AM</div>
+      <div class="nova-log-item">Sent tracking SMS to buyer at 9:06 AM</div>
+    </div>
+  </div>
+  <div class="panel-actions">
+    <button class="btn btn-outline" onclick="alert('Generating invoice PDF...')">🖨 Print Invoice</button>
+    <button class="btn btn-orange" onclick="alert('Marking as delivered...')">✅ Mark Delivered</button>
+    <button class="btn btn-outline" onclick="alert('Opening return request...')">↩ Request Return</button>
+    <button class="btn btn-teal" onclick="alert('Opening buyer chat...')">💬 Contact Buyer</button>
+  </div>
+</div>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+const orders = [
+  {id:'ORD-00795',buyer:'Riya Sharma',initials:'RS',color:'#e8445a',product:'👟 Nike Air Max 270',qty:1,amount:'₹8,499',date:'29 May, 10:42 AM',status:'Processing',statusClass:'badge-orange',fulfilled:'nova'},
+  {id:'ORD-00794',buyer:'Arjun Patel',initials:'AP',color:'#3a7bd5',product:'📚 Study Planner Kit',qty:3,amount:'₹1,197',date:'29 May, 10:18 AM',status:'Shipped',statusClass:'badge-blue',fulfilled:'nova'},
+  {id:'ORD-00793',buyer:'Meera Nair',initials:'MN',color:'#11998e',product:'🎧 Sony WH-1000XM5',qty:1,amount:'₹24,999',date:'29 May, 9:55 AM',status:'Shipped',statusClass:'badge-blue',fulfilled:'nova'},
+  {id:'ORD-00792',buyer:'Dev Kumar',initials:'DK',color:'#f7971e',product:'🏋️ Resistance Band Set',qty:2,amount:'₹998',date:'29 May, 9:44 AM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00791',buyer:'Sneha Iyer',initials:'SI',color:'#8e44ad',product:'🕯️ Aromatic Candle Set',qty:2,amount:'₹1,299',date:'29 May, 9:30 AM',status:'Processing',statusClass:'badge-orange',fulfilled:'manual'},
+  {id:'ORD-00790',buyer:'Rohan Das',initials:'RD',color:'#16a085',product:'🖥️ Dell 27" Monitor',qty:1,amount:'₹18,500',date:'29 May, 9:12 AM',status:'Shipped',statusClass:'badge-blue',fulfilled:'nova'},
+  {id:'ORD-00789',buyer:'Priya Gupta',initials:'PG',color:'#c0392b',product:'💄 Lakme Gift Set',qty:1,amount:'₹2,250',date:'29 May, 8:58 AM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00788',buyer:'Amit Singh',initials:'AS',color:'#2980b9',product:'⌚ Noise ColorFit Pro 4',qty:1,amount:'₹4,499',date:'28 May, 7:22 PM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00787',buyer:'Kavya Reddy',initials:'KR',color:'#27ae60',product:'📷 GoPro Hero 12',qty:1,amount:'₹32,000',date:'28 May, 6:44 PM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00786',buyer:'Nikhil Rao',initials:'NR',color:'#e67e22',product:'🧴 Skincare Bundle',qty:4,amount:'₹3,196',date:'28 May, 5:30 PM',status:'Return Requested',statusClass:'badge-purple',fulfilled:'nova'},
+  {id:'ORD-00785',buyer:'Tanya Bose',initials:'TB',color:'#9b59b6',product:'🎮 PS5 Controller',qty:1,amount:'₹5,999',date:'28 May, 4:15 PM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00784',buyer:'Vikram Joshi',initials:'VJ',color:'#1abc9c',product:'🍳 Cast Iron Pan Set',qty:1,amount:'₹2,799',date:'28 May, 3:00 PM',status:'Shipped',statusClass:'badge-blue',fulfilled:'nova'},
+  {id:'ORD-00783',buyer:'Ananya Roy',initials:'AR',color:'#e74c3c',product:'👗 Anarkali Dress Set',qty:2,amount:'₹3,598',date:'28 May, 1:22 PM',status:'Delivered',statusClass:'badge-green',fulfilled:'nova'},
+  {id:'ORD-00782',buyer:'Karan Mehta',initials:'KM',color:'#667eea',product:'📱 OnePlus Buds Pro 3',qty:1,amount:'₹3,499',date:'28 May, 11:10 AM',status:'Processing',statusClass:'badge-orange',fulfilled:'manual'},
+  {id:'ORD-00781',buyer:'Simran Kaur',initials:'SK',color:'#f39c12',product:'🛋️ Ergonomic Chair',qty:1,amount:'₹12,499',date:'27 May, 4:30 PM',status:'Cancelled',statusClass:'badge-red',fulfilled:'nova'},
+];
+
+const tbody = document.getElementById('ordersBody');
+orders.forEach(o => {
+  const isManual = o.fulfilled === 'manual';
+  tbody.innerHTML += `
+  <tr>
+    <td><input type="checkbox"></td>
+    <td><span class="order-link" onclick="openPanel('${o.id}')">${o.id}</span></td>
+    <td><div class="buyer-cell"><div class="buyer-avatar" style="background:${o.color};">${o.initials}</div>${o.buyer}</div></td>
+    <td>${o.product}</td>
+    <td>${o.qty}</td>
+    <td><strong>${o.amount}</strong></td>
+    <td style="color:#666;">${o.date}</td>
+    <td><span class="status-badge ${o.statusClass}">${o.status}</span></td>
+    <td>${isManual ? '<span class="fulfilled-alert">⚠️ Needs You</span>' : '<span class="fulfilled-nova">🤖 Nova</span>'}</td>
+    <td><div class="table-actions"><button class="icon-btn" onclick="openPanel('${o.id}')">👁</button>${isManual ? '<button class="btn btn-orange btn-sm" onclick="alert(\'Opening ship workflow...\')">Ship Now</button>':''}</div></td>
+  </tr>`;
+});
+
+function openPanel(orderId){
+  document.getElementById('panelOrderNum').textContent = 'Order ' + orderId;
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('slidePanel').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.getElementById('slidePanel').classList.remove('open');
+}
+function toggleAll(cb){
+  document.querySelectorAll('#ordersBody input[type=checkbox]').forEach(c=>c.checked=cb.checked);
+}
+function setTab(el){
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// BAR CHART
+const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const vals = [14,19,22,18,25,30,23];
+const maxV = Math.max(...vals);
+const bc = document.getElementById('barChart');
+days.forEach((d,i)=>{
+  const h = Math.round((vals[i]/maxV)*80);
+  bc.innerHTML += `<div class="bar-wrap"><div class="bar-val">${vals[i]}</div><div class="bar" style="height:${h}px;"></div><div class="bar-day">${d}</div></div>`;
+});
+
+// SPEED TREND
+const speeds = [{d:'Mon',h:1.8},{d:'Tue',h:1.5},{d:'Wed',h:1.3},{d:'Thu',h:1.1},{d:'Fri',h:1.2},{d:'Sat',h:1.0},{d:'Sun',h:1.2}];
+const st = document.getElementById('speedTrend');
+speeds.forEach(s=>{
+  const pct = Math.round((1 - s.h/2)*100);
+  st.innerHTML += `<div class="speed-item"><div class="speed-label">${s.d}</div><div class="speed-bar-bg"><div class="speed-bar-fill" style="width:${pct+20}%;"></div></div><div style="font-size:.72rem;color:#555;width:30px;text-align:right;">${s.h}h</div></div>`;
+});
+</script>
+</body>
+</html>

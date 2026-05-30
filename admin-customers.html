@@ -3,855 +3,316 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Customers — VibeStore Admin</title>
+<title>Seller Management — VibeStore Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#06060f;--bg2:#0d0d1f;--bg3:#13132a;
-  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
-  --lav:#c4b5fd;--white:#f1f0ff;--gray:#8892a4;--gray2:#4a5568;
-  --green:#4ade80;--yellow:#fbbf24;--red:#f87171;--orange:#fb923c;
-  --gold:#f59e0b;
-  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
-  --sidebar-w:240px;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--white);display:flex;height:100vh;overflow:hidden}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;display:flex;height:100vh;overflow:hidden}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
-input,select{font-family:'Inter',sans-serif}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-
-/* ─── SIDEBAR ─── */
-#sidebar{
-  width:var(--sidebar-w);flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;height:100vh;overflow-y:auto;
-  transition:width 0.3s;z-index:100;
-}
-.sb-logo{
-  padding:20px 20px 16px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;
-  font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;
-  background:linear-gradient(135deg,var(--purple2),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  flex-shrink:0;
-}
-.sb-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0}
-.sb-store{padding:12px 16px;margin:12px 12px 0;background:var(--card);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;cursor:pointer}
-.sb-store-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.sb-store-name{font-size:0.83rem;font-weight:600}
-.sb-store-url{font-size:0.68rem;color:var(--gray)}
-.sb-section{padding:16px 12px 4px;font-size:0.65rem;font-weight:700;color:var(--gray2);letter-spacing:0.08em;text-transform:uppercase}
-.sb-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 16px;margin:2px 8px;border-radius:8px;
-  font-size:0.84rem;color:var(--gray);cursor:pointer;
-  transition:all 0.2s;border:1px solid transparent;
-}
-.sb-item:hover{background:rgba(124,58,237,0.08);color:var(--white)}
-.sb-item.active{background:rgba(124,58,237,0.15);color:var(--white);border-color:rgba(124,58,237,0.2)}
-.sb-item .icon{font-size:1rem;width:20px;text-align:center;flex-shrink:0}
-.sb-badge{margin-left:auto;background:rgba(124,58,237,0.25);color:var(--lav);font-size:0.65rem;padding:2px 7px;border-radius:4px;font-weight:700}
-.sb-bottom{margin-top:auto;padding:16px 12px;border-top:1px solid var(--border)}
-.sb-user{display:flex;align-items:center;gap:10px;padding:10px;border-radius:8px;background:var(--card);cursor:pointer}
-.sb-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0}
-.sb-user-name{font-size:0.82rem;font-weight:600}
-.sb-user-plan{font-size:0.68rem;color:var(--cyan)}
-
-/* ─── MAIN ─── */
-#main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-
-/* ─── TOPBAR ─── */
-#topbar{
-  height:60px;flex-shrink:0;
-  background:var(--bg2);border-bottom:1px solid var(--border);
-  display:flex;align-items:center;padding:0 24px;gap:12px;
-}
-.tb-title{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;flex:1}
-.btn{
-  border:none;border-radius:8px;padding:8px 16px;font-size:0.82rem;font-weight:600;
-  display:flex;align-items:center;gap:6px;transition:all 0.2s;white-space:nowrap;
-}
-.btn-primary{background:var(--purple);color:#fff}
-.btn-primary:hover{background:var(--purple2);box-shadow:0 0 16px rgba(124,58,237,0.4)}
-.btn-ghost{background:var(--card);color:var(--gray);border:1px solid var(--border)}
-.btn-ghost:hover{background:rgba(255,255,255,0.08);color:var(--white)}
-.btn-sm{padding:6px 12px;font-size:0.78rem}
-.btn-danger{background:rgba(248,113,113,0.12);color:var(--red);border:1px solid rgba(248,113,113,0.2)}
-.btn-danger:hover{background:rgba(248,113,113,0.2)}
-
-/* ─── CONTENT AREA ─── */
-#content{flex:1;overflow-y:auto;display:flex;gap:0}
-.content-main{flex:1;padding:24px;overflow-y:auto;min-width:0}
-.content-sidebar{width:300px;flex-shrink:0;border-left:1px solid var(--border);padding:20px;overflow-y:auto;background:var(--bg2)}
-
-/* ─── ATLAS BANNER ─── */
-.atlas-banner{
-  background:linear-gradient(135deg,rgba(124,58,237,0.15),rgba(6,182,212,0.1));
-  border:1px solid rgba(124,58,237,0.3);border-radius:12px;
-  padding:14px 18px;display:flex;align-items:center;gap:12px;
-  margin-bottom:20px;animation:fadeIn 0.4s ease;
-}
-.atlas-icon{font-size:1.4rem;flex-shrink:0}
-.atlas-text{font-size:0.84rem;color:var(--lav);flex:1}
-.atlas-text strong{color:var(--white)}
-.atlas-actions{display:flex;gap:8px;flex-shrink:0}
-
-/* ─── METRICS ─── */
-.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.metric-card{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:16px 18px;display:flex;flex-direction:column;gap:4px;
-  animation:fadeIn 0.4s ease both;
-}
-.metric-card:nth-child(1){animation-delay:0.05s}
-.metric-card:nth-child(2){animation-delay:0.1s}
-.metric-card:nth-child(3){animation-delay:0.15s}
-.metric-card:nth-child(4){animation-delay:0.2s}
-.metric-label{font-size:0.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
-.metric-value{font-family:'Space Grotesk',sans-serif;font-size:1.7rem;font-weight:700;color:var(--white)}
-.metric-sub{font-size:0.72rem;color:var(--green);display:flex;align-items:center;gap:4px}
-.metric-sub.neutral{color:var(--gray)}
-
-/* ─── SEGMENTS TABS ─── */
-.seg-tabs{display:flex;gap:4px;margin-bottom:16px;border-bottom:1px solid var(--border);padding-bottom:0}
-.seg-tab{
-  padding:8px 16px;font-size:0.82rem;font-weight:500;color:var(--gray);
-  cursor:pointer;border-radius:8px 8px 0 0;border:1px solid transparent;
-  border-bottom:none;transition:all 0.2s;position:relative;bottom:-1px;
-}
-.seg-tab:hover{color:var(--white)}
-.seg-tab.active{background:var(--bg3);border-color:var(--border);border-bottom-color:var(--bg3);color:var(--white);font-weight:600}
-.seg-tab .tab-count{font-size:0.68rem;background:rgba(255,255,255,0.08);padding:1px 6px;border-radius:4px;margin-left:5px}
-.seg-tab.active .tab-count{background:rgba(124,58,237,0.25);color:var(--lav)}
-
-/* ─── TOOLBAR ─── */
-.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.search-box{
-  background:var(--card);border:1px solid var(--border);border-radius:8px;
-  padding:8px 14px;display:flex;align-items:center;gap:8px;
-  font-size:0.83rem;color:var(--gray);flex:1;min-width:220px;max-width:340px;
-  transition:border-color 0.2s;
-}
-.search-box:focus-within{border-color:var(--purple)}
-.search-box input{background:none;border:none;outline:none;color:var(--white);width:100%;font-size:0.83rem}
-.filter-select{
-  background:var(--card);border:1px solid var(--border);border-radius:8px;
-  padding:8px 12px;font-size:0.82rem;color:var(--gray);
-  appearance:none;cursor:pointer;transition:border-color 0.2s;
-}
-.filter-select:focus{outline:none;border-color:var(--purple);color:var(--white)}
-.filter-select option{background:#1a1a2e}
-.toolbar-right{display:flex;align-items:center;gap:8px;margin-left:auto}
-.bulk-actions{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:8px;font-size:0.8rem;color:var(--lav)}
-.bulk-count{font-weight:700;color:var(--white)}
-
-/* ─── TABLE ─── */
-.table-wrap{
-  background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  overflow:hidden;animation:fadeIn 0.5s ease 0.2s both;
-}
-table{width:100%;border-collapse:collapse}
-thead tr{background:rgba(255,255,255,0.03);border-bottom:1px solid var(--border)}
-thead th{
-  padding:11px 14px;font-size:0.72rem;font-weight:700;color:var(--gray);
-  text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;text-align:left;
-}
-thead th:first-child{width:40px;padding-left:16px}
-tbody tr{border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s;cursor:pointer}
-tbody tr:last-child{border-bottom:none}
-tbody tr:hover{background:rgba(124,58,237,0.05)}
-tbody tr.selected{background:rgba(124,58,237,0.08)}
-td{padding:12px 14px;font-size:0.83rem;vertical-align:middle}
-td:first-child{padding-left:16px}
-td:last-child{padding-right:16px}
-
-/* ─── CUSTOMER CELL ─── */
-.cust-cell{display:flex;align-items:center;gap:10px}
-.cust-avatar{
-  width:34px;height:34px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:0.75rem;font-weight:700;flex-shrink:0;letter-spacing:0.02em;
-}
-.cust-name{font-weight:600;font-size:0.84rem;color:var(--white)}
-.cust-email{font-size:0.72rem;color:var(--gray)}
-
-/* ─── TAGS ─── */
-.tags{display:flex;flex-wrap:wrap;gap:4px}
-.tag{padding:2px 8px;border-radius:4px;font-size:0.7rem;font-weight:600;white-space:nowrap}
-.tag-vip{background:rgba(245,158,11,0.15);color:var(--gold);border:1px solid rgba(245,158,11,0.25)}
-.tag-vip-gold{background:rgba(245,158,11,0.25);color:#fde68a;border:1px solid rgba(245,158,11,0.4)}
-.tag-loyal{background:rgba(74,222,128,0.12);color:var(--green);border:1px solid rgba(74,222,128,0.2)}
-.tag-new{background:rgba(6,182,212,0.12);color:var(--cyan);border:1px solid rgba(6,182,212,0.2)}
-.tag-risk{background:rgba(251,146,60,0.12);color:var(--orange);border:1px solid rgba(251,146,60,0.2)}
-.tag-inactive{background:rgba(74,85,104,0.2);color:var(--gray);border:1px solid rgba(74,85,104,0.3)}
-.tag-regular{background:rgba(196,181,253,0.1);color:var(--lav);border:1px solid rgba(196,181,253,0.15)}
-
-/* ─── ROW ACTIONS ─── */
-.row-actions{display:flex;gap:6px;opacity:0;transition:opacity 0.2s}
-tbody tr:hover .row-actions{opacity:1}
-.action-btn{
-  padding:5px 10px;border-radius:6px;font-size:0.75rem;font-weight:600;
-  background:var(--card);border:1px solid var(--border);color:var(--gray);
-  transition:all 0.15s;
-}
-.action-btn:hover{border-color:var(--purple);color:var(--lav)}
-.action-btn.view{color:var(--cyan)}
-.action-btn.view:hover{background:rgba(6,182,212,0.1);border-color:var(--cyan)}
-
-/* ─── CHECKBOX ─── */
-input[type="checkbox"]{
-  width:15px;height:15px;accent-color:var(--purple);cursor:pointer;
-}
-
-/* ─── TABLE FOOTER ─── */
-.table-footer{
-  padding:12px 16px;border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;
-  font-size:0.8rem;color:var(--gray);
-}
-.pagination{display:flex;gap:4px}
-.page-btn{
-  width:28px;height:28px;border-radius:6px;font-size:0.78rem;font-weight:600;
-  background:var(--card);border:1px solid var(--border);color:var(--gray);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;
-}
-.page-btn:hover{border-color:var(--purple);color:var(--lav)}
-.page-btn.active{background:var(--purple);border-color:var(--purple);color:#fff}
-
-/* ─── RIGHT SIDEBAR PANELS ─── */
-.panel{
-  background:var(--bg3);border:1px solid var(--border);border-radius:12px;
-  padding:16px;margin-bottom:16px;
-}
-.panel-title{
-  font-family:'Space Grotesk',sans-serif;font-size:0.88rem;font-weight:700;
-  margin-bottom:12px;display:flex;align-items:center;gap:8px;color:var(--white);
-}
-.panel-title .badge{font-size:0.65rem;background:rgba(124,58,237,0.2);color:var(--lav);padding:2px 7px;border-radius:4px;font-weight:700}
-
-/* ─── SEGMENT CARDS ─── */
-.seg-card{
-  padding:10px 12px;border-radius:8px;background:var(--card);border:1px solid var(--border);
-  margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer;
-  transition:all 0.2s;
-}
-.seg-card:hover{border-color:rgba(124,58,237,0.3);background:rgba(124,58,237,0.06)}
-.seg-card:last-child{margin-bottom:0}
-.seg-card-icon{font-size:1.1rem;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.seg-card-info{flex:1;min-width:0}
-.seg-card-name{font-size:0.81rem;font-weight:600;color:var(--white)}
-.seg-card-desc{font-size:0.7rem;color:var(--gray);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.seg-card-count{font-size:0.72rem;font-weight:700;color:var(--lav);flex-shrink:0}
-
-/* ─── CHURN RISK CARD ─── */
-.churn-card{
-  background:linear-gradient(135deg,rgba(248,113,113,0.1),rgba(251,146,60,0.08));
-  border:1px solid rgba(248,113,113,0.25);border-radius:12px;padding:14px;margin-bottom:16px;
-}
-.churn-title{font-size:0.82rem;font-weight:700;color:var(--red);display:flex;align-items:center;gap:6px;margin-bottom:10px}
-.churn-customer{
-  display:flex;align-items:center;gap:9px;padding:7px 0;
-  border-bottom:1px solid rgba(255,255,255,0.05);
-}
-.churn-customer:last-child{border-bottom:none;padding-bottom:0}
-.churn-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.68rem;font-weight:700;flex-shrink:0}
-.churn-info{flex:1;min-width:0}
-.churn-name{font-size:0.8rem;font-weight:600;color:var(--white)}
-.churn-detail{font-size:0.7rem;color:var(--gray)}
-.churn-risk-bar{height:4px;border-radius:2px;background:rgba(255,255,255,0.08);margin-top:4px}
-.churn-risk-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--orange),var(--red))}
-
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.15)}
-
-/* ─── RESPONSIVE ─── */
-@media(max-width:1100px){
-  .content-sidebar{display:none}
-  .metrics-grid{grid-template-columns:repeat(2,1fr)}
-}
+#sidebar{width:240px;flex-shrink:0;background:#131921;display:flex;flex-direction:column;height:100vh;overflow-y:auto;position:fixed;left:0;top:0;z-index:100}
+.topbar-hamburger{display:none;background:none;border:none;color:#333;font-size:1.3rem;cursor:pointer;padding:4px 8px;margin-right:4px;align-items:center;justify-content:center}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:99}
+.sidebar-overlay.show{display:block}
 @media(max-width:768px){
-  #sidebar{width:56px}
-  .sb-item span,.sb-store-name,.sb-store-url,.sb-logo-text,.sb-section,.sb-user-name,.sb-user-plan,.sb-badge{display:none}
-  .sb-logo{justify-content:center;padding:16px}
-  .sb-item{justify-content:center;padding:10px;margin:2px 4px}
-  .sb-item .icon{width:auto}
-  .sb-user{justify-content:center;padding:8px}
-  .content-main{padding:14px}
-  .metrics-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-  .metric-value{font-size:1.3rem}
-  .toolbar{flex-direction:column;align-items:stretch}
-  .toolbar-right{margin-left:0}
-  table{font-size:0.78rem}
-  .cust-email{display:none}
-  thead th:nth-child(3),td:nth-child(3){display:none}
-  thead th:nth-child(7),td:nth-child(7){display:none}
+  #sidebar{left:-240px;transition:left 0.3s ease;z-index:1000}
+  #sidebar.open{left:0}
+  #main{margin-left:0}
+  .topbar-hamburger{display:flex!important}
+  .metrics-grid{grid-template-columns:1fr 1fr!important}
+  .content-wrap{flex-direction:column}
+  .right-sidebar{width:100%;border-left:none;border-top:1px solid #e5e7eb}
+  .card{overflow-x:auto}
+  table{white-space:nowrap}
+  .filter-bar{flex-direction:column;align-items:stretch}
+  .filter-input,.filter-select{width:100%!important}
 }
+.sb-logo{padding:20px 20px 18px;font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:#FF9900;border-bottom:1px solid #232f3e}
+.sb-section{padding:16px 16px 6px;font-size:0.62rem;font-weight:700;color:#8a9bb0;letter-spacing:0.1em;text-transform:uppercase}
+.sb-item{display:flex;align-items:center;gap:10px;padding:10px 16px;font-size:0.84rem;color:#d5dbdb;cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;text-decoration:none}
+.sb-item:hover{background:#232f3e;color:#fff}
+.sb-item.active{background:#232f3e;color:#FF9900;border-left-color:#FF9900}
+.sb-divider{border:none;border-top:1px solid #232f3e;margin:8px 0}
+.live-badge{margin-left:auto;background:#1a7a3a;color:#4ade80;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:10px}
+#main{margin-left:240px;flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+.topbar{background:#fff;padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 1px 4px rgba(0,0,0,0.1);flex-shrink:0}
+.topbar-left{font-size:0.82rem;color:#666}.topbar-left span{color:#131921;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:16px}
+.bell-btn{position:relative;background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px}
+.bell-badge{position:absolute;top:0;right:0;background:#e53e3e;color:#fff;font-size:0.55rem;font-weight:700;width:15px;height:15px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.agent-chip{background:#f0f2f5;border:1px solid #ddd;border-radius:20px;padding:4px 10px;font-size:0.72rem;color:#333;display:flex;align-items:center;gap:5px}
+.agent-chip .dot{width:6px;height:6px;border-radius:50%;background:#22c55e}
+.admin-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#FF9900,#e07b00);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:0.85rem}
+.content-wrap{flex:1;overflow:hidden;display:flex}
+.content{flex:1;overflow-y:auto;padding:24px}
+.page-title{font-size:1.3rem;font-weight:700;color:#131921;margin-bottom:6px;font-family:'Space Grotesk',sans-serif}
+.ai-banner{background:linear-gradient(135deg,#232f3e,#131921);border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:12px;color:#fff}
+.ai-banner .ai-icon{font-size:1.4rem}
+.ai-banner .ai-text{font-size:0.88rem;line-height:1.5}
+.ai-banner .ai-text strong{color:#FF9900}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+.metric-card{background:#fff;border-radius:10px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:4px solid #3b82f6}
+.metric-card.green{border-left-color:#22c55e}.metric-card.orange{border-left-color:#FF9900}.metric-card.red{border-left-color:#ef4444}
+.metric-icon{font-size:1.5rem}.metric-val{font-size:1.3rem;font-weight:700;color:#131921;line-height:1}.metric-label{font-size:0.72rem;color:#666;margin-top:2px}
+.filter-bar{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+.filter-input{border:1px solid #ddd;border-radius:7px;padding:8px 12px;font-size:0.83rem;font-family:'Inter',sans-serif;outline:none;width:220px}
+.filter-input:focus{border-color:#FF9900}
+.filter-select{border:1px solid #ddd;border-radius:7px;padding:8px 12px;font-size:0.83rem;font-family:'Inter',sans-serif;outline:none;background:#fff}
+.btn-orange{background:#FF9900;color:#fff;border:none;border-radius:8px;padding:9px 16px;font-size:0.83rem;font-weight:600;cursor:pointer}
+.btn-outline{background:#fff;color:#333;border:1px solid #ddd;border-radius:8px;padding:9px 14px;font-size:0.83rem;font-weight:600;cursor:pointer}
+.ms-auto{margin-left:auto}
+.card{background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:0.82rem}
+thead th{background:#f8f9fa;color:#555;font-weight:600;padding:10px 12px;text-align:left;font-size:0.78rem}
+tbody tr{border-bottom:1px solid #f0f2f5;transition:background 0.15s}
+tbody tr:hover{background:#fafbfc}
+td{padding:10px 12px;vertical-align:middle}
+.seller-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:0.78rem;font-weight:700;flex-shrink:0}
+.seller-cell{display:flex;align-items:center;gap:10px}
+.seller-name{font-weight:600;color:#131921;font-size:0.83rem}
+.seller-sub{font-size:0.7rem;color:#999;margin-top:1px}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:12px;font-size:0.7rem;font-weight:600}
+.sb-green{background:#dcfce7;color:#166534}
+.sb-yellow{background:#fef9c3;color:#854d0e}
+.sb-red{background:#fee2e2;color:#991b1b}
+.sb-orange{background:#fff7ed;color:#c2410c}
+.pill{display:inline-block;padding:2px 7px;border-radius:10px;font-size:0.62rem;font-weight:700;margin-left:3px}
+.pill-gold{background:#fef9c3;color:#854d0e}
+.pill-green{background:#dcfce7;color:#166534}
+.pill-orange{background:#fff7ed;color:#c2410c}
+.teal-link{color:#007185;font-weight:600}.teal-link:hover{text-decoration:underline}
+.action-btns{display:flex;gap:4px}
+.btn-xs{padding:4px 9px;border-radius:5px;font-size:0.7rem;font-weight:600;border:none;cursor:pointer;white-space:nowrap}
+.btn-view{background:#f0f2f5;color:#333}.btn-view:hover{background:#e5e7eb}
+.btn-suspend{background:#fee2e2;color:#991b1b}.btn-suspend:hover{background:#dc2626;color:#fff}
+.btn-msg{background:#dbeafe;color:#1e40af}.btn-msg:hover{background:#3b82f6;color:#fff}
+.btn-verify{background:#dcfce7;color:#166534}.btn-verify:hover{background:#16a34a;color:#fff}
+.btn-approve{background:#dcfce7;color:#166534;border:none;border-radius:5px;padding:4px 9px;font-size:0.7rem;font-weight:600;cursor:pointer}.btn-approve:hover{background:#16a34a;color:#fff}
+.btn-reject{background:#fee2e2;color:#991b1b;border:none;border-radius:5px;padding:4px 9px;font-size:0.7rem;font-weight:600;cursor:pointer}.btn-reject:hover{background:#dc2626;color:#fff}
+.right-sidebar{width:280px;flex-shrink:0;background:#f8f9fa;border-left:1px solid #e5e7eb;overflow-y:auto;padding:18px}
+.rs-title{font-size:0.88rem;font-weight:700;color:#131921;margin-bottom:12px;font-family:'Space Grotesk',sans-serif}
+.rs-card{background:#fff;border-radius:8px;padding:12px;margin-bottom:8px;box-shadow:0 1px 2px rgba(0,0,0,0.05)}
+.rs-seller-name{font-size:0.82rem;font-weight:600;color:#131921}
+.rs-seller-sub{font-size:0.7rem;color:#666;margin-top:2px;margin-bottom:8px}
+.rs-actions{display:flex;gap:5px}
+.violation-item{background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:10px;margin-bottom:8px}
+.violation-name{font-size:0.82rem;font-weight:600;color:#991b1b}
+.violation-reason{font-size:0.7rem;color:#666;margin-top:2px}
+.rs-divider{border:none;border-top:1px solid #e5e7eb;margin:16px 0}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     SIDEBAR
-════════════════════════════════════════════════════════════ -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
 <nav id="sidebar">
-  <div class="sb-logo">
-    <div class="sb-dot"></div>
-    <span class="sb-logo-text">VibeStore</span>
-  </div>
-
-  <div class="sb-store">
-    <div class="sb-store-icon">🛍️</div>
-    <div>
-      <div class="sb-store-name">My Vibe Shop</div>
-      <div class="sb-store-url">vibestore.myshopify.com</div>
-    </div>
-  </div>
-
-  <div class="sb-section">Main Menu</div>
-
-  <a href="app.html" class="sb-item">
-    <span class="icon">🏠</span><span>Dashboard</span>
-  </a>
-  <a href="admin-orders.html" class="sb-item">
-    <span class="icon">📦</span><span>Orders</span>
-    <span class="sb-badge">14</span>
-  </a>
-  <a href="admin-products.html" class="sb-item">
-    <span class="icon">🏷️</span><span>Products</span>
-  </a>
-  <a href="admin-customers.html" class="sb-item active">
-    <span class="icon">👥</span><span>Customers</span>
-  </a>
-  <a href="admin-discounts.html" class="sb-item">
-    <span class="icon">🎟️</span><span>Discounts</span>
-  </a>
-  <a href="admin-reports.html" class="sb-item">
-    <span class="icon">📊</span><span>Reports</span>
-  </a>
-
-  <div class="sb-section">Store</div>
-  <a href="admin-settings.html" class="sb-item">
-    <span class="icon">⚙️</span><span>Settings</span>
-  </a>
-  <a href="mystore.html" class="sb-item">
-    <span class="icon">🔗</span><span>View Store</span>
-    <span class="sb-badge sb-badge-green">Live</span>
-  </a>
-  <a href="index.html" class="sb-item">
-    <span class="icon">🏠</span><span>Back to Site</span>
-  </a>
-
-  <div class="sb-bottom">
-    <div class="sb-user">
-      <div class="sb-avatar">VS</div>
-      <div>
-        <div class="sb-user-name">VibeStore Admin</div>
-        <div class="sb-user-plan">✦ Pro Plan</div>
-      </div>
-    </div>
-  </div>
+  <div class="sb-logo">⚡VibeStore Admin</div>
+  <div class="sb-section">Main</div>
+  <a class="sb-item" href="app.html">🏠 Dashboard</a>
+  <a class="sb-item" href="admin-orders.html">📦 Orders</a>
+  <a class="sb-item" href="admin-products.html">🏷️ Products</a>
+  <a class="sb-item active" href="admin-customers.html">👥 Sellers</a>
+  <a class="sb-item" href="admin-discounts.html">🎟️ Promotions</a>
+  <a class="sb-item" href="admin-reports.html">📊 Reports</a>
+  <a class="sb-item" href="admin-settings.html">⚙️ Settings</a>
+  <hr class="sb-divider"/>
+  <a class="sb-item" href="index.html">🛍️ View Marketplace <span class="live-badge">Live</span></a>
+  <a class="sb-item" href="seller-central.html">👨‍💼 Seller Central</a>
 </nav>
 
-<!-- ═══════════════════════════════════════════════════════════
-     MAIN
-════════════════════════════════════════════════════════════ -->
 <div id="main">
-
-  <!-- TOP BAR -->
-  <div id="topbar">
-    <div class="tb-title">Customers</div>
-    <button class="btn btn-ghost btn-sm" onclick="alert('Importing customers...')">
-      ⬆️ Import
-    </button>
-    <button class="btn btn-ghost btn-sm" onclick="alert('Exporting customers...')">
-      ⬇️ Export
-    </button>
-    <button class="btn btn-primary btn-sm" onclick="openAddCustomer()">
-      ＋ Add Customer
-    </button>
+  <div class="topbar">
+    <button class="topbar-hamburger" onclick="toggleSidebar()">☰</button>
+    <div class="topbar-left">Admin Panel &rsaquo; <span>Seller Management</span></div>
+    <div class="topbar-right">
+      <button class="bell-btn">🔔<span class="bell-badge">8</span></button>
+      <div class="agent-chip"><span class="dot"></span> Atlas Active</div>
+      <div class="admin-avatar" onclick="vsLogout()" title="Sign out">A</div>
+    </div>
   </div>
 
-  <!-- CONTENT AREA -->
-  <div id="content">
-
-    <!-- MAIN COLUMN -->
-    <div class="content-main">
-
-      <!-- ATLAS AI BANNER -->
-      <div class="atlas-banner">
-        <div class="atlas-icon">🤖</div>
-        <div class="atlas-text">
-          <strong>Atlas AI</strong> identified <strong style="color:var(--orange)">3 high-churn-risk customers</strong> and
-          <strong style="color:var(--cyan)">12 VIP segments</strong> ready for targeted campaigns.
-          Recommended action: Send a re-engagement flow to at-risk users this week.
-        </div>
-        <div class="atlas-actions">
-          <button class="btn btn-ghost btn-sm" onclick="alert('Viewing AI insights...')">View Insights</button>
-          <button class="btn btn-primary btn-sm" onclick="alert('Starting campaign...')">Launch Campaign</button>
-        </div>
+  <div class="content-wrap">
+    <div class="content">
+      <div class="page-title">Seller Management</div>
+      <div class="ai-banner">
+        <div class="ai-icon">🤖</div>
+        <div class="ai-text"><strong>Atlas AI:</strong> Atlas identified <strong>23 top-performing sellers</strong> driving 68% of platform GMV — and flagged <strong>5 policy violations</strong> including 2 counterfeit listings, 2 fake review patterns, 1 undisclosed seller fee. Immediate review recommended.</div>
       </div>
 
-      <!-- METRICS -->
       <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-label">Total Customers</div>
-          <div class="metric-value">1,842</div>
-          <div class="metric-sub">▲ 6.7% vs last month</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">New This Month</div>
-          <div class="metric-value">124</div>
-          <div class="metric-sub">▲ 12 vs last month</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Repeat Buyers</div>
-          <div class="metric-value">68%</div>
-          <div class="metric-sub">▲ 3.2% vs last month</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">Avg. Order Value</div>
-          <div class="metric-value">₹2,340</div>
-          <div class="metric-sub">▲ ₹180 vs last month</div>
-        </div>
+        <div class="metric-card"><div class="metric-icon">🏪</div><div><div class="metric-val">1,284</div><div class="metric-label">Total Sellers</div></div></div>
+        <div class="metric-card orange"><div class="metric-icon">🆕</div><div><div class="metric-val">47</div><div class="metric-label">New This Month</div></div></div>
+        <div class="metric-card green"><div class="metric-icon">🏆</div><div><div class="metric-val">23</div><div class="metric-label">Top Performers</div></div></div>
+        <div class="metric-card red"><div class="metric-icon">⚠️</div><div><div class="metric-val">5</div><div class="metric-label">Policy Violations</div></div></div>
       </div>
 
-      <!-- SEGMENT TABS -->
-      <div class="seg-tabs">
-        <div class="seg-tab active" onclick="switchTab(this,'all')">All <span class="tab-count">1,842</span></div>
-        <div class="seg-tab" onclick="switchTab(this,'vip')">⭐ VIP Gold <span class="tab-count">48</span></div>
-        <div class="seg-tab" onclick="switchTab(this,'risk')">⚠️ At Risk <span class="tab-count">87</span></div>
-        <div class="seg-tab" onclick="switchTab(this,'new')">🆕 New <span class="tab-count">124</span></div>
-        <div class="seg-tab" onclick="switchTab(this,'loyal')">💚 Loyal <span class="tab-count">312</span></div>
-        <div class="seg-tab" onclick="switchTab(this,'inactive')">💤 Inactive <span class="tab-count">203</span></div>
+      <div class="filter-bar">
+        <input class="filter-input" type="text" placeholder="🔍 Search seller name, email, ID..."/>
+        <select class="filter-select">
+          <option>All Tiers</option>
+          <option>Individual</option>
+          <option>Pro Seller</option>
+          <option>Enterprise</option>
+        </select>
+        <select class="filter-select">
+          <option>All Statuses</option>
+          <option>Active</option>
+          <option>Pending Verification</option>
+          <option>Suspended</option>
+          <option>Under Review</option>
+        </select>
+        <button class="btn-outline ms-auto">📤 Export Sellers</button>
       </div>
 
-      <!-- TOOLBAR -->
-      <div class="toolbar">
-        <div class="search-box">
-          <span style="color:var(--gray);font-size:0.9rem">🔍</span>
-          <input type="text" placeholder="Search customers by name, email..." id="searchInput" oninput="filterTable()"/>
-        </div>
-        <select class="filter-select" onchange="filterTable()">
-          <option value="">📍 Location</option>
-          <option>Mumbai</option>
-          <option>Delhi</option>
-          <option>Bengaluru</option>
-          <option>Hyderabad</option>
-          <option>Pune</option>
-          <option>London</option>
-          <option>New York</option>
-          <option>Singapore</option>
-          <option>Seoul</option>
-          <option>Sydney</option>
-          <option>Dubai</option>
-          <option>Toronto</option>
-          <option>Tokyo</option>
-        </select>
-        <select class="filter-select" onchange="filterTable()">
-          <option value="">💰 Amount Spent</option>
-          <option>₹0 – ₹5,000</option>
-          <option>₹5,000 – ₹25,000</option>
-          <option>₹25,000 – ₹75,000</option>
-          <option>₹75,000+</option>
-        </select>
-        <select class="filter-select" onchange="filterTable()">
-          <option value="">🛒 No. of Orders</option>
-          <option>0 orders</option>
-          <option>1–3 orders</option>
-          <option>4–10 orders</option>
-          <option>10+ orders</option>
-        </select>
-        <select class="filter-select" onchange="filterTable()">
-          <option value="">🏷️ Tagged with</option>
-          <option>VIP</option>
-          <option>VIP Gold</option>
-          <option>Loyal</option>
-          <option>New</option>
-          <option>At Risk</option>
-          <option>Inactive</option>
-          <option>Regular</option>
-        </select>
-        <div class="toolbar-right">
-          <div class="bulk-actions" id="bulkActions" style="display:none">
-            <span><span class="bulk-count" id="selectedCount">0</span> selected</span>
-            <button class="btn btn-ghost btn-sm" onclick="bulkAction('email')">📧 Email</button>
-            <button class="btn btn-ghost btn-sm" onclick="bulkAction('tag')">🏷️ Tag</button>
-            <button class="btn btn-ghost btn-sm" onclick="bulkAction('export')">⬇️ Export</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- CUSTOMER TABLE -->
-      <div class="table-wrap">
-        <table id="customersTable">
+      <div class="card">
+        <table>
           <thead>
             <tr>
-              <th><input type="checkbox" id="selectAll" onchange="toggleAll(this)"/></th>
-              <th>Customer</th>
-              <th>Location</th>
+              <th>Seller</th>
+              <th>Plan</th>
+              <th>GMV (Month)</th>
               <th>Orders</th>
-              <th>Spent</th>
-              <th>Last Order</th>
-              <th>Tags</th>
+              <th>Rating</th>
+              <th>Joined</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="tableBody">
-            <!-- Rows injected by JS -->
+          <tbody>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#667eea,#764ba2)">TM</div><div><div class="seller-name">TechMart India <span class="pill pill-gold">Top Seller</span></div><div class="seller-sub">techmart@vibestore.in · ID #S-1001</div></div></div></td>
+              <td><span class="status-badge" style="background:#ede9fe;color:#5b21b6">Pro</span></td>
+              <td>₹4,23,400</td>
+              <td>847</td>
+              <td>⭐ 4.9</td>
+              <td>Jan 2025</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#f093fb,#f5576c)">GZ</div><div><div class="seller-name">GadgetZone <span class="pill pill-green">VF Fulfilled</span></div><div class="seller-sub">hello@gadgetzone.com · ID #S-1042</div></div></div></td>
+              <td><span class="status-badge" style="background:#ede9fe;color:#5b21b6">Pro</span></td>
+              <td>₹3,81,200</td>
+              <td>692</td>
+              <td>⭐ 4.8</td>
+              <td>Mar 2025</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">FK</div><div><div class="seller-name">FashionKart <span class="pill pill-gold">Top Seller</span></div><div class="seller-sub">seller@fashionkart.in · ID #S-1078</div></div></div></td>
+              <td><span class="status-badge" style="background:#ede9fe;color:#5b21b6">Pro</span></td>
+              <td>₹2,94,700</td>
+              <td>521</td>
+              <td>⭐ 4.7</td>
+              <td>Feb 2025</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">HD</div><div><div class="seller-name">HomeDecor Plus <span class="pill pill-orange">Policy Warning</span></div><div class="seller-sub">admin@homedecorplus.com · ID #S-1203</div></div></div></td>
+              <td><span class="status-badge" style="background:#f0f2f5;color:#555">Individual</span></td>
+              <td>₹2,11,300</td>
+              <td>384</td>
+              <td>⭐ 4.3</td>
+              <td>Jun 2025</td>
+              <td><span class="status-badge sb-orange">Under Review</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-suspend">Suspend</button><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#fa709a,#fee140)">BH</div><div><div class="seller-name">BookHub</div><div class="seller-sub">books@bookhub.in · ID #S-1189</div></div></div></td>
+              <td><span class="status-badge" style="background:#f0f2f5;color:#555">Individual</span></td>
+              <td>₹1,72,500</td>
+              <td>312</td>
+              <td>⭐ 4.5</td>
+              <td>Aug 2025</td>
+              <td><span class="status-badge sb-green">Active</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:#9ca3af">WW</div><div><div class="seller-name">WatchWorld <span class="pill pill-orange">Policy Warning</span></div><div class="seller-sub">info@watchworld.in · ID #S-1241</div></div></div></td>
+              <td><span class="status-badge" style="background:#f0f2f5;color:#555">Individual</span></td>
+              <td>₹48,200</td>
+              <td>89</td>
+              <td>⭐ 3.2</td>
+              <td>Apr 2026</td>
+              <td><span class="status-badge sb-red">Suspended</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-msg">Msg</button></td>
+            </tr>
+            <tr>
+              <td><div class="seller-cell"><div class="seller-av" style="background:linear-gradient(135deg,#a18cd1,#fbc2eb)">NS</div><div><div class="seller-name">NatureSports</div><div class="seller-sub">contact@naturesports.com · ID #S-1284</div></div></div></td>
+              <td><span class="status-badge" style="background:#f0f2f5;color:#555">Individual</span></td>
+              <td>—</td>
+              <td>—</td>
+              <td>—</td>
+              <td>22 May 2026</td>
+              <td><span class="status-badge sb-yellow">Pending Verification</span></td>
+              <td class="action-btns"><a class="btn-xs btn-view" href="seller-profile.html">View</a><button class="btn-xs btn-verify">Verify</button><button class="btn-xs btn-reject">Reject</button></td>
+            </tr>
           </tbody>
         </table>
-        <div class="table-footer">
-          <span id="tableInfo">Showing 15 of 1,842 customers</span>
-          <div class="pagination">
-            <div class="page-btn">‹</div>
-            <div class="page-btn active">1</div>
-            <div class="page-btn">2</div>
-            <div class="page-btn">3</div>
-            <div class="page-btn">…</div>
-            <div class="page-btn">123</div>
-            <div class="page-btn">›</div>
+        <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0f2f5;font-size:0.8rem;color:#666">
+          <span>Showing 7 of 1,284 sellers</span>
+          <div style="display:flex;gap:6px">
+            <button class="btn-outline" style="padding:5px 12px;font-size:0.78rem">← Prev</button>
+            <button class="btn-orange" style="padding:5px 12px;font-size:0.78rem">Next →</button>
           </div>
         </div>
       </div>
-
-    </div><!-- /content-main -->
+    </div>
 
     <!-- RIGHT SIDEBAR -->
-    <div class="content-sidebar">
-
-      <!-- CHURN RISK ALERT -->
-      <div class="churn-card">
-        <div class="churn-title">🚨 Churn Risk Alert</div>
-        <div class="churn-customer">
-          <div class="churn-avatar" style="background:linear-gradient(135deg,#f87171,#fb923c)">MR</div>
-          <div class="churn-info">
-            <div class="churn-name">Mike Rodriguez</div>
-            <div class="churn-detail">1 order · Last seen 1 month ago</div>
-            <div class="churn-risk-bar"><div class="churn-risk-fill" style="width:88%"></div></div>
-          </div>
-          <span style="font-size:0.72rem;color:var(--red);font-weight:700">88%</span>
-        </div>
-        <div class="churn-customer">
-          <div class="churn-avatar" style="background:linear-gradient(135deg,#fb923c,#fbbf24)">NV</div>
-          <div class="churn-info">
-            <div class="churn-name">Neha Verma</div>
-            <div class="churn-detail">0 orders · Never purchased</div>
-            <div class="churn-risk-bar"><div class="churn-risk-fill" style="width:95%"></div></div>
-          </div>
-          <span style="font-size:0.72rem;color:var(--red);font-weight:700">95%</span>
-        </div>
-        <div class="churn-customer">
-          <div class="churn-avatar" style="background:linear-gradient(135deg,#f87171,#c084fc)">AC</div>
-          <div class="churn-info">
-            <div class="churn-name">Alex Chen</div>
-            <div class="churn-detail">2 orders · 1 month ago</div>
-            <div class="churn-risk-bar"><div class="churn-risk-fill" style="width:72%"></div></div>
-          </div>
-          <span style="font-size:0.72rem;color:var(--orange);font-weight:700">72%</span>
-        </div>
-        <button class="btn btn-danger btn-sm" style="width:100%;margin-top:12px;justify-content:center" onclick="alert('Sending retention offers...')">
-          💌 Send Retention Offer
-        </button>
+    <div class="right-sidebar">
+      <div class="rs-title">⏳ Pending Verifications</div>
+      <div class="rs-card">
+        <div class="rs-seller-name">NatureSports</div>
+        <div class="rs-seller-sub">Individual · Sports · Applied 2h ago</div>
+        <div class="rs-actions"><button class="btn-approve">✓ Approve</button><button class="btn-reject">✗ Reject</button></div>
       </div>
-
-      <!-- AI SEGMENTS PANEL -->
-      <div class="panel">
-        <div class="panel-title">🤖 AI Segments <span class="badge">4 Active</span></div>
-
-        <div class="seg-card" onclick="alert('Opening High-Value VIPs segment...')">
-          <div class="seg-card-icon" style="background:rgba(245,158,11,0.15)">⭐</div>
-          <div class="seg-card-info">
-            <div class="seg-card-name">High-Value VIPs</div>
-            <div class="seg-card-desc">₹50k+ lifetime value · Upsell ready</div>
-          </div>
-          <div class="seg-card-count">48</div>
-        </div>
-
-        <div class="seg-card" onclick="alert('Opening Window Shoppers segment...')">
-          <div class="seg-card-icon" style="background:rgba(6,182,212,0.12)">👁️</div>
-          <div class="seg-card-info">
-            <div class="seg-card-name">Window Shoppers</div>
-            <div class="seg-card-desc">Browsed 5+ times, never bought</div>
-          </div>
-          <div class="seg-card-count">134</div>
-        </div>
-
-        <div class="seg-card" onclick="alert('Opening Re-engagement Target segment...')">
-          <div class="seg-card-icon" style="background:rgba(248,113,113,0.12)">🔄</div>
-          <div class="seg-card-info">
-            <div class="seg-card-name">Re-engagement Target</div>
-            <div class="seg-card-desc">Inactive 60+ days · High past spend</div>
-          </div>
-          <div class="seg-card-count">87</div>
-        </div>
-
-        <div class="seg-card" onclick="alert('Opening New Loyalists segment...')">
-          <div class="seg-card-icon" style="background:rgba(74,222,128,0.12)">💚</div>
-          <div class="seg-card-info">
-            <div class="seg-card-name">New Loyalists</div>
-            <div class="seg-card-desc">3+ orders within first 60 days</div>
-          </div>
-          <div class="seg-card-count">61</div>
-        </div>
+      <div class="rs-card">
+        <div class="rs-seller-name">OrganicFoods India</div>
+        <div class="rs-seller-sub">Individual · Grocery · Applied 4h ago</div>
+        <div class="rs-actions"><button class="btn-approve">✓ Approve</button><button class="btn-reject">✗ Reject</button></div>
       </div>
-
-      <!-- QUICK STATS -->
-      <div class="panel">
-        <div class="panel-title">📊 Quick Stats</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Top City</span>
-            <span style="font-weight:600">Mumbai (312)</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Highest Spender</span>
-            <span style="font-weight:600;color:var(--gold)">Ananya Mishra</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Most Orders</span>
-            <span style="font-weight:600;color:var(--cyan)">Ananya Mishra (22)</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Email Open Rate</span>
-            <span style="font-weight:600;color:var(--green)">42.3%</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Customer LTV</span>
-            <span style="font-weight:600">₹8,420 avg</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.82rem">
-            <span style="color:var(--gray)">Churn Rate</span>
-            <span style="font-weight:600;color:var(--orange)">4.7%</span>
-          </div>
-        </div>
+      <div class="rs-card">
+        <div class="rs-seller-name">KidsToys Hub</div>
+        <div class="rs-seller-sub">Pro · Toys · Applied 6h ago</div>
+        <div class="rs-actions"><button class="btn-approve">✓ Approve</button><button class="btn-reject">✗ Reject</button></div>
       </div>
+      <div class="rs-card">
+        <div class="rs-seller-name">HealthPlus Store</div>
+        <div class="rs-seller-sub">Individual · Health · Applied 8h ago</div>
+        <div class="rs-actions"><button class="btn-approve">✓ Approve</button><button class="btn-reject">✗ Reject</button></div>
+      </div>
+      <div class="rs-card">
+        <div class="rs-seller-name">AutoParts India</div>
+        <div class="rs-seller-sub">Pro · Automotive · Applied 10h ago</div>
+        <div class="rs-actions"><button class="btn-approve">✓ Approve</button><button class="btn-reject">✗ Reject</button></div>
+      </div>
+      <hr class="rs-divider"/>
+      <div class="rs-title">🚨 Policy Violations</div>
+      <div class="violation-item">
+        <div class="violation-name">WatchWorld</div>
+        <div class="violation-reason">2 counterfeit listings detected by Aria AI — Rolex, Omega replicas</div>
+      </div>
+      <div class="violation-item">
+        <div class="violation-name">HomeDecor Plus</div>
+        <div class="violation-reason">Fake review manipulation — Atlas AI detected coordinated pattern</div>
+      </div>
+      <div class="violation-item">
+        <div class="violation-name">LuxuryFakes</div>
+        <div class="violation-reason">Multiple counterfeit luxury brand listings — account flagged</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-    </div><!-- /content-sidebar -->
-
-  </div><!-- /content -->
-</div><!-- /main -->
-
+<script src="auth.js"></script>
 <script>
-// ─── DATA ───────────────────────────────────────────────────
-const CUSTOMERS = [
-  {
-    id:1,name:'Rahul Sharma',email:'rahul.sharma@gmail.com',
-    initials:'RS',avatar:'linear-gradient(135deg,#7c3aed,#06b6d4)',
-    location:'Mumbai',orders:12,spent:'₹45,230',lastOrder:'2 days ago',
-    tags:['VIP','Loyal'],segment:'all'
-  },
-  {
-    id:2,name:'Priya Kapoor',email:'priya.kapoor@outlook.com',
-    initials:'PK',avatar:'linear-gradient(135deg,#06b6d4,#4ade80)',
-    location:'Delhi',orders:8,spent:'₹28,400',lastOrder:'1 week ago',
-    tags:['Regular'],segment:'all'
-  },
-  {
-    id:3,name:'Sarah Johnson',email:'sarah.j@hotmail.com',
-    initials:'SJ',avatar:'linear-gradient(135deg,#22d3ee,#818cf8)',
-    location:'London',orders:3,spent:'₹8,900',lastOrder:'3 weeks ago',
-    tags:['New'],segment:'new'
-  },
-  {
-    id:4,name:'Mike Rodriguez',email:'mike.rod@gmail.com',
-    initials:'MR',avatar:'linear-gradient(135deg,#f87171,#fb923c)',
-    location:'New York',orders:1,spent:'₹299',lastOrder:'1 month ago',
-    tags:['At Risk'],segment:'risk'
-  },
-  {
-    id:5,name:'Ananya Mishra',email:'ananya.m@vibemail.com',
-    initials:'AM',avatar:'linear-gradient(135deg,#f59e0b,#fde68a)',
-    location:'Bengaluru',orders:22,spent:'₹89,000',lastOrder:'Yesterday',
-    tags:['VIP Gold'],segment:'vip'
-  },
-  {
-    id:6,name:'James Park',email:'jamespark88@naver.com',
-    initials:'JP',avatar:'linear-gradient(135deg,#4ade80,#06b6d4)',
-    location:'Seoul',orders:5,spent:'₹15,600',lastOrder:'5 days ago',
-    tags:['Loyal'],segment:'loyal'
-  },
-  {
-    id:7,name:'Neha Verma',email:'neha.verma@gmail.com',
-    initials:'NV',avatar:'linear-gradient(135deg,#64748b,#94a3b8)',
-    location:'Pune',orders:0,spent:'₹0',lastOrder:'Never',
-    tags:['Inactive'],segment:'inactive'
-  },
-  {
-    id:8,name:'Tom Wilson',email:'tomwilson@yahoo.com.au',
-    initials:'TW',avatar:'linear-gradient(135deg,#818cf8,#c084fc)',
-    location:'Sydney',orders:7,spent:'₹22,100',lastOrder:'2 weeks ago',
-    tags:['Regular'],segment:'all'
-  },
-  {
-    id:9,name:'Kavita Reddy',email:'kavita.reddy@techcorp.in',
-    initials:'KR',avatar:'linear-gradient(135deg,#7c3aed,#f59e0b)',
-    location:'Hyderabad',orders:15,spent:'₹54,300',lastOrder:'3 days ago',
-    tags:['VIP'],segment:'vip'
-  },
-  {
-    id:10,name:'Alex Chen',email:'alexchen@singmail.sg',
-    initials:'AC',avatar:'linear-gradient(135deg,#06b6d4,#7c3aed)',
-    location:'Singapore',orders:2,spent:'₹6,700',lastOrder:'1 month ago',
-    tags:['New'],segment:'new'
-  },
-  {
-    id:11,name:'Fatima Al-Hassan',email:'fatima.h@emirates.ae',
-    initials:'FA',avatar:'linear-gradient(135deg,#fbbf24,#f59e0b)',
-    location:'Dubai',orders:9,spent:'₹31,500',lastOrder:'4 days ago',
-    tags:['Loyal'],segment:'loyal'
-  },
-  {
-    id:12,name:'Lucas Fernandez',email:'lucas.f@gmail.com',
-    initials:'LF',avatar:'linear-gradient(135deg,#4ade80,#22d3ee)',
-    location:'Toronto',orders:4,spent:'₹11,200',lastOrder:'10 days ago',
-    tags:['Regular'],segment:'all'
-  },
-  {
-    id:13,name:'Yuki Tanaka',email:'yuki.tanaka@docomo.ne.jp',
-    initials:'YT',avatar:'linear-gradient(135deg,#f472b6,#c084fc)',
-    location:'Tokyo',orders:11,spent:'₹38,900',lastOrder:'6 days ago',
-    tags:['VIP','Loyal'],segment:'vip'
-  },
-  {
-    id:14,name:'Aditya Nair',email:'aditya.nair@startup.in',
-    initials:'AN',avatar:'linear-gradient(135deg,#fb923c,#fbbf24)',
-    location:'Mumbai',orders:0,spent:'₹0',lastOrder:'Never',
-    tags:['Inactive'],segment:'inactive'
-  },
-  {
-    id:15,name:'Sophie Müller',email:'sophie.mueller@web.de',
-    initials:'SM',avatar:'linear-gradient(135deg,#22d3ee,#4ade80)',
-    location:'Berlin',orders:6,spent:'₹19,800',lastOrder:'2 weeks ago',
-    tags:['Regular'],segment:'all'
-  }
-];
-
-// ─── TAG RENDERER ────────────────────────────────────────────
-function renderTag(tag){
-  const map = {
-    'VIP':'tag-vip','VIP Gold':'tag-vip-gold','Loyal':'tag-loyal',
-    'New':'tag-new','At Risk':'tag-risk','Inactive':'tag-inactive','Regular':'tag-regular'
-  };
-  const cls = map[tag] || 'tag-regular';
-  return `<span class="tag ${cls}">${tag}</span>`;
+const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidebarOverlay').classList.toggle('show');
 }
-
-// ─── RENDER TABLE ────────────────────────────────────────────
-function renderTable(data){
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = data.map(c => `
-    <tr id="row-${c.id}" onclick="selectRow(${c.id}, event)">
-      <td><input type="checkbox" class="row-cb" data-id="${c.id}" onchange="updateBulk()" onclick="event.stopPropagation()"/></td>
-      <td>
-        <div class="cust-cell">
-          <div class="cust-avatar" style="background:${c.avatar}">${c.initials}</div>
-          <div>
-            <div class="cust-name">${c.name}</div>
-            <div class="cust-email">${c.email}</div>
-          </div>
-        </div>
-      </td>
-      <td style="color:var(--gray);font-size:0.81rem">📍 ${c.location}</td>
-      <td style="font-weight:600;color:${c.orders===0?'var(--gray)':'var(--white)'}">${c.orders}</td>
-      <td style="font-weight:600;color:${c.orders===0?'var(--gray)':'var(--cyan)'}">${c.spent}</td>
-      <td style="font-size:0.8rem;color:var(--gray)">${c.lastOrder}</td>
-      <td><div class="tags">${c.tags.map(renderTag).join('')}</div></td>
-      <td>
-        <div class="row-actions">
-          <button class="action-btn view" onclick="viewCustomer(${c.id},event)">View</button>
-          <button class="action-btn" onclick="emailCustomer(${c.id},event)">📧</button>
-          <button class="action-btn" onclick="showMore(${c.id},event)">•••</button>
-        </div>
-      </td>
-    </tr>
-  `).join('');
-  document.getElementById('tableInfo').textContent = `Showing ${data.length} of 1,842 customers`;
-}
-
-// ─── FILTER ──────────────────────────────────────────────────
-function filterTable(){
-  const q = document.getElementById('searchInput').value.toLowerCase();
-  const filtered = CUSTOMERS.filter(c =>
-    !q || c.name.toLowerCase().includes(q) || c.email.toLowerCase().includes(q) || c.location.toLowerCase().includes(q)
-  );
-  renderTable(filtered);
-}
-
-// ─── TABS ────────────────────────────────────────────────────
-function switchTab(el, seg){
-  document.querySelectorAll('.seg-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  const filtered = seg === 'all' ? CUSTOMERS : CUSTOMERS.filter(c => c.segment === seg);
-  renderTable(filtered);
-}
-
-// ─── SELECT / BULK ───────────────────────────────────────────
-function toggleAll(cb){
-  document.querySelectorAll('.row-cb').forEach(c => {
-    c.checked = cb.checked;
-    document.getElementById('row-'+c.dataset.id).classList.toggle('selected', cb.checked);
-  });
-  updateBulk();
-}
-function updateBulk(){
-  const checked = document.querySelectorAll('.row-cb:checked');
-  const bulk = document.getElementById('bulkActions');
-  document.getElementById('selectedCount').textContent = checked.length;
-  bulk.style.display = checked.length > 0 ? 'flex' : 'none';
-  // sync rows
-  document.querySelectorAll('.row-cb').forEach(c => {
-    document.getElementById('row-'+c.dataset.id).classList.toggle('selected', c.checked);
-  });
-}
-function selectRow(id, e){
-  if(e.target.type === 'checkbox') return;
-  const cb = document.querySelector(`.row-cb[data-id="${id}"]`);
-  if(cb){ cb.checked = !cb.checked; updateBulk(); }
-}
-
-// ─── ACTIONS ─────────────────────────────────────────────────
-function viewCustomer(id, e){
-  e.stopPropagation();
-  const c = CUSTOMERS.find(x=>x.id===id);
-  alert(`👤 Opening profile for ${c.name}\n📧 ${c.email}\n📍 ${c.location}\n🛒 ${c.orders} orders · ${c.spent}`);
-}
-function emailCustomer(id, e){
-  e.stopPropagation();
-  const c = CUSTOMERS.find(x=>x.id===id);
-  alert(`📧 Composing email to ${c.name} (${c.email})`);
-}
-function showMore(id, e){
-  e.stopPropagation();
-  const c = CUSTOMERS.find(x=>x.id===id);
-  alert(`Options for ${c.name}:\n• Edit customer\n• Add tag\n• Add note\n• Delete customer`);
-}
-function bulkAction(action){
-  const names = {'email':'📧 Sending email campaign','tag':'🏷️ Adding tag','export':'⬇️ Exporting'};
-  const cnt = document.querySelectorAll('.row-cb:checked').length;
-  alert(`${names[action]} to ${cnt} selected customer(s)...`);
-}
-function openAddCustomer(){
-  alert('➕ Add Customer\n\nThis would open a form to create a new customer profile with:\n• Name & Email\n• Phone & Address\n• Tags & Notes\n• Marketing preferences');
-}
-
-// ─── PAGINATION BUTTONS ───────────────────────────────────────
-document.querySelectorAll('.page-btn').forEach(btn => {
-  btn.addEventListener('click', function(){
-    if(this.textContent==='‹'||this.textContent==='›'||this.textContent==='…') return;
-    document.querySelectorAll('.page-btn').forEach(b=>b.classList.remove('active'));
-    this.classList.add('active');
-  });
-});
-
-// ─── INIT ────────────────────────────────────────────────────
-renderTable(CUSTOMERS);
 </script>
 </body>
 </html>

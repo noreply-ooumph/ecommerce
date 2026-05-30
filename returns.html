@@ -3,486 +3,577 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Returns &amp; Refunds — Zen AI handles it instantly</title>
+<title>Returns Center — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:var(--bg,#f8f8f5);--card:var(--card,#ffffff);--accent:var(--accent,#6d28d9);
-  --text:var(--text,#111111);--muted:var(--muted,#6b7280);--border:var(--border,#e5e5e0);
-  --bg2:#f3f3ef;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;
-  --gray:#6b7280;--gray2:#9ca3af;--green:#16a34a;--red:#dc2626;--yellow:#d97706;
+  --nav:#131921;--orange:#FF9900;--orange2:#FF6600;--bg:#f0f2f5;--white:#fff;
+  --dark:#0f1111;--teal:#007185;--red:#CC0C39;--green:#067D62;--gray:#565959;
+  --gray2:#888c8c;--border:#d5d9d9;
 }
-body{font-family:'Inter',sans-serif;background:#f8f8f5;color:#111;line-height:1.6}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark)}
 a{text-decoration:none;color:inherit}
 button{font-family:'Inter',sans-serif;cursor:pointer}
 
-/* TOP BANNER */
-.top-banner{background:#0f0f1a;color:white;text-align:center;padding:10px;font-size:0.8rem;letter-spacing:0.02em}
-.top-banner span{color:#a78bfa}
-
 /* NAV */
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1300px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:800;color:#0f0f1a;display:flex;align-items:center;gap:8px;cursor:pointer}
-.nav-logo .ai-tag{font-size:0.55rem;background:linear-gradient(135deg,#6d28d9,#0891b2);color:white;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-weight:700;letter-spacing:0.04em}
-.nav-links{display:flex;gap:4px;flex:1;justify-content:center;flex-wrap:wrap}
-.nav-lnk{padding:6px 13px;border-radius:6px;font-size:0.83rem;font-weight:500;color:#6b7280;cursor:pointer;transition:all 0.2s;border:1px solid transparent;white-space:nowrap}
-.nav-lnk:hover,.nav-lnk.active{background:#f3f3ef;color:#0f0f1a;border-color:var(--border)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-search{display:flex;align-items:center;gap:8px;background:#f3f3ef;border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.83rem;color:#6b7280;width:190px;transition:all 0.2s}
-.nav-search:focus-within{border-color:#6d28d9;background:white}
-.nav-search input{background:none;border:none;outline:none;color:#111;width:100%;font-size:0.83rem}
-.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;position:relative;text-decoration:none}
-.nav-icon:hover{border-color:#6d28d9;background:#f3f3ef}
-.cart-count{position:absolute;top:-6px;right:-6px;background:#6d28d9;color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+.site-nav{background:var(--nav);height:60px;display:flex;align-items:center;padding:0 24px;gap:16px;position:sticky;top:0;z-index:200}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;color:white;cursor:pointer;white-space:nowrap}
+.nav-logo span{color:var(--orange)}
+.search-box{flex:1;max-width:620px;display:flex;height:38px}
+.search-input{flex:1;border:none;border-radius:4px 0 0 4px;padding:0 14px;font-size:0.88rem;outline:none;font-family:'Inter',sans-serif;background:white;color:var(--dark)}
+.search-btn{background:var(--orange);border:none;border-radius:0 4px 4px 0;width:48px;font-size:1.1rem;cursor:pointer;transition:background 0.2s}
+.search-btn:hover{background:var(--orange2)}
+.nav-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+.nav-action{display:flex;flex-direction:column;align-items:center;padding:4px 10px;border-radius:4px;cursor:pointer;transition:all 0.2s;min-width:52px;border:1px solid transparent}
+.nav-action:hover{border-color:var(--orange)}
+.nav-action-label{font-size:0.65rem;color:rgba(255,255,255,0.8);white-space:nowrap}
+.nav-action-val{font-size:0.82rem;font-weight:700;color:white;white-space:nowrap}
+.nav-cart{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:all 0.2s}
+.nav-cart:hover{border-color:var(--orange)}
+.nav-cart-emoji{font-size:1.6rem;color:white}
+.nav-cart-info{display:flex;flex-direction:column}
+.nav-cart-label{font-size:0.65rem;color:rgba(255,255,255,0.8)}
+.nav-cart-val{font-size:0.82rem;font-weight:700;color:white}
+
+/* SUB-NAV */
+.sub-nav{background:#232f3e;padding:0 24px;height:38px;display:flex;align-items:center;gap:4px}
+.sub-link{color:rgba(255,255,255,0.8);font-size:0.82rem;padding:0 10px;height:38px;display:flex;align-items:center;white-space:nowrap;cursor:pointer;border:1px solid transparent;border-radius:3px;transition:all 0.18s}
+.sub-link:hover{border-color:white;color:white}
 
 /* HERO */
-.hero{background:linear-gradient(135deg,#1a0533 0%,#0a1a2e 60%,#001a1a 100%);color:white;padding:72px 24px 60px;text-align:center;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(109,40,217,0.3),transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(8,145,178,0.2),transparent 60%)}
-.hero-inner{max-width:760px;margin:0 auto;position:relative;z-index:1}
-.hero-tag{display:inline-flex;align-items:center;gap:6px;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);border-radius:100px;padding:5px 14px;font-size:0.75rem;color:#c4b5fd;margin-bottom:20px}
-.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:#a78bfa;animation:pulse 1.5s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2rem,5vw,3.4rem);font-weight:800;line-height:1.1;margin-bottom:14px;letter-spacing:-0.02em}
-.hero h1 em{font-style:normal;background:linear-gradient(135deg,#c4b5fd,#67e8f9);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero-sub{color:rgba(255,255,255,0.65);font-size:1rem;margin-bottom:24px;max-width:520px;margin-left:auto;margin-right:auto}
-.stat-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:100px;padding:8px 20px;font-size:0.82rem;font-weight:600;backdrop-filter:blur(10px)}
-.stat-badge .dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
+.hero{background:linear-gradient(135deg,var(--nav) 0%,#232f3e 100%);padding:48px 24px 40px;text-align:center}
+.hero-inner{max-width:700px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,0,0.15);border:1px solid rgba(255,153,0,0.3);border-radius:100px;padding:5px 14px;font-size:0.76rem;color:var(--orange);font-weight:600;margin-bottom:16px}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;color:white;margin-bottom:10px}
+.hero-sub{color:rgba(255,255,255,0.65);font-size:0.95rem;margin-bottom:16px}
+.zen-live{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:7px 18px;font-size:0.82rem;color:rgba(255,255,255,0.85);font-weight:500}
+.zen-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.4;transform:scale(1.3)}}
 
-/* STEPS */
-.steps-section{max-width:900px;margin:0 auto;padding:56px 24px 0}
-.steps-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;text-align:center;margin-bottom:8px}
-.steps-sub{text-align:center;color:#6b7280;font-size:0.88rem;margin-bottom:36px}
-.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
-.steps-grid::before{content:'';position:absolute;top:36px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:2px;background:linear-gradient(90deg,#6d28d9,#0891b2);z-index:0}
-.step-card{text-align:center;padding:24px 20px;position:relative;z-index:1}
-.step-num{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#0891b2);color:white;display:flex;align-items:center;justify-content:center;font-size:1.6rem;margin:0 auto 16px;box-shadow:0 0 24px rgba(109,40,217,0.4)}
-.step-label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;margin-bottom:6px}
-.step-desc{font-size:0.8rem;color:#6b7280;line-height:1.5}
+/* STEP BAR */
+.step-bar{background:white;border-bottom:1px solid var(--border);padding:18px 24px}
+.step-inner{max-width:800px;margin:0 auto;display:flex;align-items:center}
+.ret-step{display:flex;align-items:center;gap:10px;flex:1}
+.ret-step-num{width:32px;height:32px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--gray2);flex-shrink:0;transition:all 0.3s}
+.ret-step-info{display:flex;flex-direction:column}
+.ret-step-label{font-size:0.72rem;font-weight:700;color:var(--gray2);text-transform:uppercase;letter-spacing:0.04em}
+.ret-step-val{font-size:0.82rem;font-weight:600;color:var(--gray);margin-top:1px}
+.ret-step.active .ret-step-num{border-color:var(--orange);background:var(--orange);color:white}
+.ret-step.active .ret-step-label{color:var(--orange)}
+.ret-step.active .ret-step-val{color:var(--dark)}
+.ret-step.done .ret-step-num{border-color:var(--green);background:var(--green);color:white}
+.ret-step.done .ret-step-label{color:var(--green)}
+.step-conn{flex:1;height:2px;background:var(--border);margin:0 12px;max-width:80px;transition:background 0.3s}
+.step-conn.done{background:var(--green)}
 
-/* FORM SECTION */
-.form-section{max-width:900px;margin:0 auto;padding:48px 24px}
-.form-card{background:white;border:1px solid var(--border);border-radius:20px;overflow:hidden}
-.form-header{padding:28px 32px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(109,40,217,0.04),rgba(8,145,178,0.02))}
-.form-header h2{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:4px}
-.form-header p{font-size:0.83rem;color:#6b7280}
-.form-body{padding:32px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+/* MAIN CONTENT */
+.main-wrap{max-width:1100px;margin:0 auto;padding:28px 16px}
+
+/* ORDER GRID */
+.orders-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:0}
+@media(min-width:900px){.orders-grid{grid-template-columns:repeat(2,1fr)}}
+.order-card{background:white;border:1px solid var(--border);border-radius:8px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,0.06);transition:all 0.2s}
+.order-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.1)}
+.order-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;flex-wrap:wrap;gap:6px}
+.order-num{font-size:0.8rem;font-weight:700;color:var(--teal)}
+.order-date{font-size:0.75rem;color:var(--gray2)}
+.status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:100px;font-size:0.72rem;font-weight:700}
+.badge-delivered{background:#d4edda;color:#155724}
+.badge-processing{background:#fff3cd;color:#856404}
+.order-product{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.order-prod-emoji{font-size:2.2rem;width:56px;height:56px;background:var(--bg);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.order-prod-name{font-weight:600;font-size:0.88rem;line-height:1.4}
+.order-prod-price{font-size:0.8rem;color:var(--gray);margin-top:3px}
+.btn-return{background:var(--orange);color:white;border:none;border-radius:5px;padding:9px 18px;font-size:0.83rem;font-weight:700;width:100%;transition:all 0.2s}
+.btn-return:hover{background:var(--orange2);transform:translateY(-1px)}
+
+/* PANEL CARDS */
+.panel-card{background:white;border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.07);overflow:hidden;margin-bottom:20px;display:none}
+.panel-card.visible{display:block}
+.panel-hdr{padding:16px 20px;border-bottom:1px solid var(--border);background:#fafafa;display:flex;align-items:center;justify-content:space-between}
+.panel-hdr-title{font-weight:700;font-size:0.95rem;display:flex;align-items:center;gap:8px}
+.panel-body{padding:22px}
+
+/* STEP 2 FORM */
 .form-group{margin-bottom:16px}
-.form-label{font-size:0.82rem;font-weight:600;color:#111;margin-bottom:6px;display:block}
-.form-label span{color:#6b7280;font-weight:400}
-.form-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:border 0.2s;background:white;color:#111}
-.form-input:focus{border-color:#6d28d9;box-shadow:0 0 0 3px rgba(109,40,217,0.08)}
-.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 8L1 3h10z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
-.btn-find{background:#0f0f1a;color:white;border:none;border-radius:8px;padding:10px 24px;font-size:0.88rem;font-weight:600;transition:all 0.2s;margin-top:8px}
-.btn-find:hover{background:#6d28d9}
+.form-label{display:block;font-size:0.8rem;font-weight:600;color:var(--dark);margin-bottom:6px}
+.form-input{width:100%;border:1px solid var(--border);border-radius:4px;padding:9px 12px;font-size:0.87rem;font-family:'Inter',sans-serif;outline:none;transition:border 0.18s;color:var(--dark);background:white}
+.form-input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,153,0,0.12)}
+.form-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23565959' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+textarea.form-input{resize:vertical;min-height:100px;line-height:1.5}
 
-/* MOCK ORDER */
-.mock-order{background:#f8f8f5;border:1px solid var(--border);border-radius:12px;padding:20px;margin-top:16px;display:none}
-.mock-order.visible{display:block;animation:slideIn 0.35s ease}
-@keyframes slideIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.order-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px}
-.order-meta h4{font-weight:700;font-size:0.9rem}
-.order-meta span{font-size:0.78rem;color:#6b7280}
-.order-item{display:flex;align-items:center;gap:12px;padding:12px;background:white;border:1px solid var(--border);border-radius:10px;margin-bottom:8px;cursor:pointer;transition:border 0.2s}
-.order-item.selected{border-color:#6d28d9;background:rgba(109,40,217,0.03)}
-.item-check{width:20px;height:20px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:0.75rem;color:white;background:white;transition:all 0.2s;flex-shrink:0}
-.order-item.selected .item-check{background:#6d28d9;border-color:#6d28d9}
-.item-icon{font-size:2rem;width:48px;height:48px;background:#f3f3ef;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.item-info{flex:1}
-.item-name{font-weight:600;font-size:0.85rem}
-.item-price{font-size:0.78rem;color:#6b7280;margin-top:2px}
+/* Condition radios */
+.cond-radios{display:flex;gap:10px;flex-wrap:wrap}
+.cond-radio{border:2px solid var(--border);border-radius:6px;padding:10px 16px;cursor:pointer;font-size:0.83rem;font-weight:600;transition:all 0.18s}
+.cond-radio:hover{border-color:var(--orange)}
+.cond-radio.selected{border-color:var(--orange);background:#fff9f0;color:var(--orange2)}
 
-/* FILE INPUT */
-.file-input-wrap{border:2px dashed var(--border);border-radius:10px;padding:20px;text-align:center;cursor:pointer;transition:border 0.2s;position:relative}
-.file-input-wrap:hover{border-color:#6d28d9;background:rgba(109,40,217,0.02)}
-.file-input-wrap input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.file-icon{font-size:2rem;margin-bottom:8px}
-.file-text{font-size:0.82rem;color:#6b7280}
-.file-text strong{color:#6d28d9}
+/* Eligibility badge */
+.elig-badge{display:inline-flex;align-items:center;gap:7px;border-radius:6px;padding:10px 16px;font-size:0.83rem;font-weight:600;margin-top:12px}
+.elig-full{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
+.elig-store{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
 
-/* RESOLUTION CARDS */
-.resolution-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.res-card{border:2px solid var(--border);border-radius:12px;padding:16px;cursor:pointer;transition:all 0.2s;text-align:center}
-.res-card:hover{border-color:#6d28d9}
-.res-card.selected{border-color:#6d28d9;background:rgba(109,40,217,0.04)}
-.res-icon{font-size:1.8rem;margin-bottom:8px}
-.res-name{font-weight:700;font-size:0.85rem;margin-bottom:4px}
-.res-desc{font-size:0.72rem;color:#6b7280;line-height:1.4}
-.res-bonus{display:inline-block;font-size:0.65rem;background:#dcfce7;color:#16a34a;border-radius:100px;padding:2px 8px;font-weight:600;margin-top:4px}
+/* STEP 3 — Date picker */
+.date-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.date-chip{border:2px solid var(--border);border-radius:6px;padding:10px 14px;cursor:pointer;text-align:center;transition:all 0.18s;min-width:68px}
+.date-chip:hover{border-color:var(--orange)}
+.date-chip.selected{border-color:var(--orange);background:#fff9f0}
+.date-chip-day{font-size:0.68rem;font-weight:700;color:var(--gray);text-transform:uppercase}
+.date-chip-num{font-size:1.1rem;font-weight:800;margin:2px 0}
+.date-chip-mon{font-size:0.68rem;color:var(--gray)}
 
-.btn-submit{width:100%;background:linear-gradient(135deg,#6d28d9,#0891b2);color:white;border:none;border-radius:12px;padding:14px;font-size:1rem;font-weight:700;transition:all 0.3s;margin-top:8px;box-shadow:0 4px 16px rgba(109,40,217,0.3)}
-.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(109,40,217,0.45)}
+.time-slots{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.time-slot{border:2px solid var(--border);border-radius:6px;padding:10px 18px;cursor:pointer;font-size:0.83rem;font-weight:600;transition:all 0.18s}
+.time-slot:hover{border-color:var(--orange)}
+.time-slot.selected{border-color:var(--orange);background:#fff9f0;color:var(--orange2)}
 
-/* SUCCESS STATE */
-.success-state{display:none;padding:40px 32px;text-align:center}
-.success-state.visible{display:block;animation:slideIn 0.4s ease}
-.success-icon{font-size:3.5rem;margin-bottom:16px;animation:bounce 0.6s ease}
-@keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-.success-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:8px;color:#0f0f1a}
-.success-sub{color:#6b7280;font-size:0.9rem;margin-bottom:28px}
-.progress-steps{display:flex;flex-direction:column;gap:10px;max-width:360px;margin:0 auto 24px;text-align:left}
-.prog-step{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:10px;background:#f8f8f5;border:1px solid var(--border)}
-.prog-step.done{background:#f0fdf4;border-color:#86efac}
-.prog-step.active{background:rgba(109,40,217,0.05);border-color:rgba(109,40,217,0.3)}
-.prog-dot{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0}
-.prog-step.done .prog-dot{background:#16a34a;color:white}
-.prog-step.active .prog-dot{background:#6d28d9;color:white;animation:pulse 1.5s infinite}
-.prog-step.pending .prog-dot{background:#e5e5e0;color:#6b7280}
-.prog-text{font-size:0.83rem;font-weight:600}
-.prog-time{font-size:0.72rem;color:#6b7280;margin-top:1px}
+.addr-confirm{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-size:0.83rem;color:var(--dark);margin-bottom:16px;display:flex;align-items:flex-start;gap:10px}
 
-/* POLICY SECTION */
-.policy-section{max-width:900px;margin:0 auto;padding:0 24px 48px}
-.policy-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.policy-card{background:white;border:1px solid var(--border);border-radius:14px;padding:20px;text-align:center}
-.policy-icon{font-size:2rem;margin-bottom:10px}
-.policy-name{font-weight:700;font-size:0.88rem;margin-bottom:4px}
-.policy-desc{font-size:0.75rem;color:#6b7280;line-height:1.4}
+.btn-confirm{background:var(--orange);color:white;border:none;border-radius:6px;padding:13px 32px;font-size:0.93rem;font-weight:700;transition:all 0.2s}
+.btn-confirm:hover{background:var(--orange2)}
+.btn-secondary{background:white;color:var(--dark);border:1px solid var(--border);border-radius:6px;padding:12px 24px;font-size:0.87rem;font-weight:600;transition:all 0.2s;margin-left:10px}
+.btn-secondary:hover{border-color:var(--dark)}
+
+/* SUCCESS */
+.success-banner{background:white;border:1px solid #9ae6b4;border-radius:8px;padding:32px;text-align:center;box-shadow:0 2px 16px rgba(6,125,98,0.12);display:none}
+.success-banner.visible{display:block;animation:fadeSlide 0.4s ease}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.success-big{font-size:3.5rem;margin-bottom:12px}
+.success-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;color:var(--dark);margin-bottom:6px}
+.success-sub{color:var(--gray);font-size:0.88rem;margin-bottom:20px}
+.success-meta{display:inline-flex;flex-direction:column;gap:6px;text-align:left;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:16px 24px;margin:0 auto 24px;font-size:0.84rem}
+.success-meta-row{display:flex;gap:12px}
+.success-meta-label{color:var(--gray);min-width:120px}
+.success-meta-val{font-weight:600}
+.success-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn-track-return{background:var(--orange);color:white;border:none;border-radius:5px;padding:11px 24px;font-size:0.88rem;font-weight:700;transition:all 0.2s}
+.btn-track-return:hover{background:var(--orange2)}
+
+/* POLICY BOX */
+.policy-box{background:white;border:1px solid var(--border);border-radius:8px;padding:22px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-top:24px}
+.policy-title{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.policy-rows{display:flex;flex-direction:column;gap:10px}
+.policy-row{display:flex;align-items:flex-start;gap:12px;font-size:0.83rem;color:var(--dark);padding:8px 0;border-bottom:1px solid var(--border)}
+.policy-row:last-child{border:none}
+.policy-icon{font-size:1.2rem;flex-shrink:0;margin-top:1px}
+
+/* ZEN BOX */
+.zen-box{background:linear-gradient(135deg,#232f3e,#1a2533);border-radius:8px;padding:18px 20px;color:white;margin-top:20px;display:flex;align-items:flex-start;gap:14px}
+.zen-box-icon{font-size:1.8rem;flex-shrink:0}
+.zen-box-text{font-size:0.83rem;line-height:1.6;color:rgba(255,255,255,0.85)}
+.zen-box-text strong{color:var(--orange)}
 
 /* FOOTER */
-footer{background:#0f0f1a;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem;margin-top:48px}
-footer a{color:#a78bfa;margin:0 8px}
+.site-footer{background:var(--nav);color:rgba(255,255,255,0.65);padding:40px 24px 20px;margin-top:40px}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:28px;margin-bottom:28px}
+.footer-col-title{color:white;font-weight:700;font-size:0.8rem;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.12)}
+.footer-links{display:flex;flex-direction:column;gap:7px}
+.footer-links a{color:rgba(255,255,255,0.6);font-size:0.8rem;transition:color 0.2s}
+.footer-links a:hover{color:white}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:16px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center}
 
-@media(max-width:768px){
-  .form-row{grid-template-columns:1fr}
-  .steps-grid{grid-template-columns:1fr;gap:16px}
-  .steps-grid::before{display:none}
-  .policy-grid{grid-template-columns:repeat(2,1fr)}
-  .resolution-grid{grid-template-columns:1fr}
-  .nav-links{display:none}
-  .nav-search{display:none}
-}
+#toastEl{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
+
+@media(max-width:700px){.orders-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:repeat(2,1fr)}.step-inner{gap:4px}.step-conn{max-width:40px}}
 </style>
 </head>
 <body>
 
-<div class="top-banner">🤖 AI Agents running 24/7 — <span>Free shipping on orders over ₹999</span> · Returns handled instantly by Zen AI</div>
-
-<nav>
-  <div class="nav-inner">
-    <div class="nav-logo" onclick="window.location.href='mystore.html'">
-      VibeStore <div class="ai-tag">AI</div>
-    </div>
-    <div class="nav-links">
-      <a href="collections.html" class="nav-lnk">Shop</a>
-      <a href="sale.html" class="nav-lnk">Sale 🔥</a>
-      <a href="blog.html" class="nav-lnk">Blog</a>
-      <a href="returns.html" class="nav-lnk active">Returns</a>
-      <a href="faq.html" class="nav-lnk">Help</a>
-      <a href="contact.html" class="nav-lnk">Contact</a>
-    </div>
-    <div class="nav-right">
-      <div class="nav-search"><span>🔍</span><input placeholder="Search products..." oninput="void(0)"/></div>
-      <a href="account.html" class="nav-icon" title="Account">👤</a>
-      <a href="track.html" class="nav-icon" title="Orders">📦</a>
-      <a href="wishlist.html" class="nav-icon" title="Wishlist">♡</a>
-      <a href="cart.html" class="nav-icon" title="Cart" style="position:relative">
-        🛒<div class="cart-count" id="cartCount">0</div>
-      </a>
-    </div>
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-logo" onclick="location.href='store.html'">Vibe<span>Store</span></div>
+  <div class="search-box">
+    <input class="search-input" placeholder="Search VibeStore"/>
+    <button class="search-btn">🔍</button>
+  </div>
+  <div class="nav-actions">
+    <a href="account.html" class="nav-action">
+      <div class="nav-action-label">Hello, Sign In</div>
+      <div class="nav-action-val">Account &amp; Lists</div>
+    </a>
+    <a href="returns.html" class="nav-action" style="border-color:var(--orange)">
+      <div class="nav-action-label">Returns</div>
+      <div class="nav-action-val">&amp; Orders</div>
+    </a>
+    <a href="cart.html" class="nav-cart">
+      <div class="nav-cart-emoji">🛒</div>
+      <div class="nav-cart-info">
+        <div class="nav-cart-label" id="cartCountLabel">0 items</div>
+        <div class="nav-cart-val">Cart</div>
+      </div>
+    </a>
   </div>
 </nav>
+<div class="sub-nav">
+  <a href="store.html" class="sub-link">All</a>
+  <a href="collections.html" class="sub-link">Collections</a>
+  <a href="sale.html" class="sub-link">Sale 🔥</a>
+  <a href="track.html" class="sub-link">Track Orders</a>
+  <a href="returns.html" class="sub-link" style="border-color:white;color:white">Returns Center</a>
+  <a href="faq.html" class="sub-link">Help</a>
+  <a href="contact.html" class="sub-link">Contact</a>
+  <a href="become-seller.html" class="sub-link">Become a Seller</a>
+  <a href="seller-central.html" class="sub-link">Seller Central</a>
+</div>
 
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">✨ Zen AI · Returns Engine</div>
-    <h1>Easy <em>Returns</em></h1>
-    <p class="hero-sub">Zen AI processes your return in under 60 seconds — no waiting, no hassle, no questions asked.</p>
-    <div class="stat-badge">
-      <div class="dot"></div>
-      847 returns processed this week
+    <div class="hero-eyebrow">↩️ Returns Center</div>
+    <h1>Returns &amp; Refunds</h1>
+    <p class="hero-sub">Hassle-free returns processed by Zen AI in under 60 seconds. No questions, no waiting.</p>
+    <div class="zen-live">
+      <div class="zen-dot"></div>
+      Zen AI is processing 847 returns today — yours is priority queued
     </div>
   </div>
 </div>
 
-<!-- STEPS -->
-<div class="steps-section">
-  <h2 class="steps-title">How it works</h2>
-  <p class="steps-sub">Three simple steps — Zen AI does the rest</p>
-  <div class="steps-grid">
-    <div class="step-card">
-      <div class="step-num">📋</div>
-      <div class="step-label">Step 1 — Select Items</div>
-      <div class="step-desc">Enter your order number and choose which items you'd like to return from your order.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">💬</div>
-      <div class="step-label">Step 2 — Choose Reason</div>
-      <div class="step-desc">Tell us why you're returning. Pick a reason and your preferred resolution — refund, credit, or exchange.</div>
-    </div>
-    <div class="step-card">
-      <div class="step-num">✅</div>
-      <div class="step-label">Step 3 — Instant Confirmation</div>
-      <div class="step-desc">Zen AI instantly confirms your return, generates a pickup label, and initiates your refund.</div>
-    </div>
-  </div>
-</div>
-
-<!-- FORM -->
-<div class="form-section">
-  <div class="form-card">
-    <div class="form-header">
-      <h2>🤖 Submit Return Request</h2>
-      <p>Zen AI will process your return in under 60 seconds</p>
-    </div>
-
-    <div class="form-body" id="returnForm">
-      <!-- Step 1: Find Order -->
-      <div id="stepFindOrder">
-        <div class="form-row">
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Order Number</label>
-            <input class="form-input" id="orderNum" placeholder="e.g. VS-2024-8472" />
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Email Address</label>
-            <input class="form-input" id="orderEmail" type="email" placeholder="your@email.com" />
-          </div>
-        </div>
-        <button class="btn-find" onclick="findOrder()">🔍 Find My Order</button>
-      </div>
-
-      <!-- Mock Order -->
-      <div class="mock-order" id="mockOrder">
-        <div class="order-meta">
-          <h4>Order #VS-2024-8472 · Nov 12, 2024</h4>
-          <span>3 items · ₹4,297</span>
-        </div>
-        <p style="font-size:0.78rem;color:#6b7280;margin-bottom:12px">Select items to return:</p>
-        <div class="order-item" onclick="toggleItem(this)">
-          <div class="item-check">✓</div>
-          <div class="item-icon">🎧</div>
-          <div class="item-info">
-            <div class="item-name">Sony WH-1000XM5 Headphones</div>
-            <div class="item-price">₹24,999 · Black · Qty 1</div>
-          </div>
-        </div>
-        <div class="order-item" onclick="toggleItem(this)">
-          <div class="item-check">✓</div>
-          <div class="item-icon">⌨️</div>
-          <div class="item-info">
-            <div class="item-name">Mechanical Keyboard RGB TKL</div>
-            <div class="item-price">₹3,499 · Blue · Qty 1</div>
-          </div>
-        </div>
-        <div class="order-item" onclick="toggleItem(this)">
-          <div class="item-check">✓</div>
-          <div class="item-icon">🖱️</div>
-          <div class="item-info">
-            <div class="item-name">Wireless Gaming Mouse Pro</div>
-            <div class="item-price">₹1,799 · White · Qty 1</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 2: Return Details -->
-      <div id="stepDetails" style="display:none;margin-top:24px">
-        <div class="form-row">
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Return Reason</label>
-            <select class="form-input form-select" id="returnReason">
-              <option value="">Select reason...</option>
-              <option>Changed mind</option>
-              <option>Defective / Not working</option>
-              <option>Wrong item received</option>
-              <option>Size / Fit issue</option>
-              <option>Better price found elsewhere</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="form-group" style="margin-bottom:0">
-            <label class="form-label">Item Condition</label>
-            <select class="form-input form-select">
-              <option>Unused with original tags</option>
-              <option>Used once</option>
-              <option>Damaged on arrival</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Preferred Resolution</label>
-          <div class="resolution-grid">
-            <div class="res-card selected" onclick="selectRes(this)">
-              <div class="res-icon">💳</div>
-              <div class="res-name">Refund to Original</div>
-              <div class="res-desc">Back to your original payment method in 5–7 days</div>
-            </div>
-            <div class="res-card" onclick="selectRes(this)">
-              <div class="res-icon">🏪</div>
-              <div class="res-name">Store Credit</div>
-              <div class="res-desc">Get instant store credit to use on your next order</div>
-              <div class="res-bonus">+10% bonus credit</div>
-            </div>
-            <div class="res-card" onclick="selectRes(this)">
-              <div class="res-icon">🔄</div>
-              <div class="res-name">Exchange</div>
-              <div class="res-desc">Swap for a different size, color, or product</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Upload Photo <span>(optional — helps us improve)</span></label>
-          <div class="file-input-wrap">
-            <input type="file" accept="image/*" multiple onchange="handleFiles(this)"/>
-            <div class="file-icon">📸</div>
-            <div class="file-text"><strong>Click to upload</strong> or drag and drop photos here<br>JPG, PNG up to 10MB each</div>
-          </div>
-          <div id="fileNames" style="font-size:0.78rem;color:#6d28d9;margin-top:6px"></div>
-        </div>
-
-        <button class="btn-submit" onclick="submitReturn()">🤖 Submit Return with Zen AI</button>
+<!-- STEP BAR -->
+<div class="step-bar">
+  <div class="step-inner">
+    <div class="ret-step active" id="rs1">
+      <div class="ret-step-num">1</div>
+      <div class="ret-step-info">
+        <div class="ret-step-label">Step 1</div>
+        <div class="ret-step-val">Select Order</div>
       </div>
     </div>
-
-    <!-- SUCCESS STATE -->
-    <div class="success-state" id="successState">
-      <div class="success-icon">🤖</div>
-      <div class="success-title">Zen AI is processing your return</div>
-      <div class="success-sub">Return #RTN-2024-5531 initiated · Pickup scheduled for tomorrow 10am–2pm</div>
-      <div class="progress-steps">
-        <div class="prog-step done">
-          <div class="prog-dot">✓</div>
-          <div>
-            <div class="prog-text">Return request received</div>
-            <div class="prog-time">Just now</div>
-          </div>
-        </div>
-        <div class="prog-step active">
-          <div class="prog-dot">⚡</div>
-          <div>
-            <div class="prog-text">Zen AI verifying eligibility</div>
-            <div class="prog-time">Processing...</div>
-          </div>
-        </div>
-        <div class="prog-step pending">
-          <div class="prog-dot">→</div>
-          <div>
-            <div class="prog-text">Pickup label generated</div>
-            <div class="prog-time">Pending</div>
-          </div>
-        </div>
-        <div class="prog-step pending">
-          <div class="prog-dot">→</div>
-          <div>
-            <div class="prog-text">Refund / credit initiated</div>
-            <div class="prog-time">Pending</div>
-          </div>
-        </div>
+    <div class="step-conn" id="conn1"></div>
+    <div class="ret-step" id="rs2">
+      <div class="ret-step-num">2</div>
+      <div class="ret-step-info">
+        <div class="ret-step-label">Step 2</div>
+        <div class="ret-step-val">Choose Reason</div>
       </div>
-      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn-find" onclick="window.location.href='mystore.html'">🛍️ Continue Shopping</button>
-        <button class="btn-find" onclick="window.location.href='track.html'" style="background:#6d28d9">📦 Track Your Return</button>
+    </div>
+    <div class="step-conn" id="conn2"></div>
+    <div class="ret-step" id="rs3">
+      <div class="ret-step-num">3</div>
+      <div class="ret-step-info">
+        <div class="ret-step-label">Step 3</div>
+        <div class="ret-step-val">Schedule Pickup</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- POLICY CARDS -->
-<div class="policy-section">
-  <div class="policy-grid">
-    <div class="policy-card">
-      <div class="policy-icon">📅</div>
-      <div class="policy-name">30-Day Returns</div>
-      <div class="policy-desc">Return any item within 30 days of delivery. No questions asked.</div>
+<!-- MAIN -->
+<div class="main-wrap">
+
+  <!-- SUCCESS BANNER -->
+  <div class="success-banner" id="successBanner">
+    <div class="success-big">✅</div>
+    <div class="success-title">Return Request Submitted!</div>
+    <div class="success-sub">Zen AI has processed your return. A courier will pick up your item at the scheduled time.</div>
+    <div class="success-meta">
+      <div class="success-meta-row"><span class="success-meta-label">Return ID</span><span class="success-meta-val" id="returnId">#RTN-00000</span></div>
+      <div class="success-meta-row"><span class="success-meta-label">Expected Refund</span><span class="success-meta-val" style="color:var(--green)" id="refundDate">—</span></div>
+      <div class="success-meta-row"><span class="success-meta-label">Pickup Date</span><span class="success-meta-val" id="pickupDate">—</span></div>
     </div>
-    <div class="policy-card">
-      <div class="policy-icon">🚚</div>
-      <div class="policy-name">Free Return Pickup</div>
-      <div class="policy-desc">We send a courier to your door at no cost to you.</div>
-    </div>
-    <div class="policy-card">
-      <div class="policy-icon">⚡</div>
-      <div class="policy-name">Instant Store Credit</div>
-      <div class="policy-desc">Choose store credit and get your balance in under 60 seconds.</div>
-    </div>
-    <div class="policy-card">
-      <div class="policy-icon">🤝</div>
-      <div class="policy-name">No Questions Asked</div>
-      <div class="policy-desc">Didn't like it? Just return it. We trust our customers.</div>
+    <div class="success-btns">
+      <button class="btn-track-return" onclick="location.href='track.html'">📦 Track Return</button>
+      <button class="btn-secondary" onclick="location.href='store.html'">Continue Shopping</button>
     </div>
   </div>
+
+  <!-- STEP 1: ORDER SELECTION -->
+  <div id="stepWrap1">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px">
+      📦 Select an Order to Return
+    </div>
+    <div class="orders-grid" id="ordersGrid">
+
+      <div class="order-card">
+        <div class="order-card-top">
+          <div><div class="order-num">#VS-2026-8472</div><div class="order-date">Delivered May 18, 2026</div></div>
+          <div class="status-badge badge-delivered">✅ Delivered</div>
+        </div>
+        <div class="order-product">
+          <div class="order-prod-emoji">🎧</div>
+          <div><div class="order-prod-name">Sony WH-1000XM5 Headphones</div><div class="order-prod-price">₹24,999 · Black · Qty 1</div><div style="font-size:0.74rem;color:var(--teal);margin-top:2px;">Seller: TechHub Electronics &nbsp;·&nbsp; <span style="color:var(--green);font-weight:600;">✓ VibeStore Fulfilled</span></div></div>
+        </div>
+        <button class="btn-return" onclick="selectOrder(this,'Sony WH-1000XM5 Headphones','₹24,999')">↩️ Return This Item</button>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-top">
+          <div><div class="order-num">#VS-2026-8391</div><div class="order-date">Delivered May 15, 2026</div></div>
+          <div class="status-badge badge-delivered">✅ Delivered</div>
+        </div>
+        <div class="order-product">
+          <div class="order-prod-emoji">⌨️</div>
+          <div><div class="order-prod-name">Mechanical Keyboard RGB TKL</div><div class="order-prod-price">₹3,499 · Blue · Qty 1</div><div style="font-size:0.74rem;color:var(--teal);margin-top:2px;">Seller: PeripheralsPro</div></div>
+        </div>
+        <button class="btn-return" onclick="selectOrder(this,'Mechanical Keyboard RGB TKL','₹3,499')">↩️ Return This Item</button>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-top">
+          <div><div class="order-num">#VS-2026-8201</div><div class="order-date">Delivered May 10, 2026</div></div>
+          <div class="status-badge badge-delivered">✅ Delivered</div>
+        </div>
+        <div class="order-product">
+          <div class="order-prod-emoji">🖱️</div>
+          <div><div class="order-prod-name">Wireless Gaming Mouse Pro</div><div class="order-prod-price">₹1,799 · White · Qty 1</div><div style="font-size:0.74rem;color:var(--teal);margin-top:2px;">Seller: GamingGear Hub &nbsp;·&nbsp; <span style="color:var(--green);font-weight:600;">✓ VibeStore Fulfilled</span></div></div>
+        </div>
+        <button class="btn-return" onclick="selectOrder(this,'Wireless Gaming Mouse Pro','₹1,799')">↩️ Return This Item</button>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-top">
+          <div><div class="order-num">#VS-2026-7954</div><div class="order-date">May 22, 2026</div></div>
+          <div class="status-badge badge-processing">⏳ Processing</div>
+        </div>
+        <div class="order-product">
+          <div class="order-prod-emoji">📱</div>
+          <div><div class="order-prod-name">Phone Stand with MagSafe</div><div class="order-prod-price">₹899 · Silver · Qty 2</div><div style="font-size:0.74rem;color:var(--teal);margin-top:2px;">Seller: AccessoriesHub</div></div>
+        </div>
+        <button class="btn-return" onclick="toast('⏳ Return available after delivery')" style="background:#888c8c;cursor:not-allowed">↩️ Return This Item</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- STEP 2: REASON -->
+  <div class="panel-card" id="stepWrap2">
+    <div class="panel-hdr">
+      <div class="panel-hdr-title">💬 Return Reason — <span id="selectedProductName" style="color:var(--teal)">Product</span></div>
+      <span onclick="goReturnStep(1)" style="font-size:0.78rem;color:var(--teal);cursor:pointer;font-weight:600">← Change Order</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label class="form-label">Reason for Return</label>
+        <select class="form-input form-select" id="returnReason" onchange="updateEligibility()">
+          <option value="">Select a reason...</option>
+          <option value="mind">Changed mind</option>
+          <option value="size">Wrong size / doesn't fit</option>
+          <option value="damaged">Item arrived damaged</option>
+          <option value="wrong">Wrong item received</option>
+          <option value="quality">Quality not as expected</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Item Condition</label>
+        <div class="cond-radios">
+          <div class="cond-radio selected" onclick="selectCond(this)">📦 Unopened / Unused</div>
+          <div class="cond-radio" onclick="selectCond(this)">🔓 Opened / Used once</div>
+          <div class="cond-radio" onclick="selectCond(this)">💥 Damaged / Defective</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Additional Comments <span style="font-weight:400;color:var(--gray2)">(optional)</span></label>
+        <textarea class="form-input" placeholder="Tell us more about the issue — helps us improve quality..."></textarea>
+      </div>
+      <div id="eligBadge">
+        <div class="elig-badge elig-full">✅ Eligible for: Full Refund to Original Payment</div>
+      </div>
+      <button class="btn-confirm" style="margin-top:18px;width:100%" onclick="goReturnStep(3)">Continue to Schedule Pickup →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: PICKUP SCHEDULER -->
+  <div class="panel-card" id="stepWrap3">
+    <div class="panel-hdr">
+      <div class="panel-hdr-title">📅 Schedule Pickup</div>
+      <span onclick="goReturnStep(2)" style="font-size:0.78rem;color:var(--teal);cursor:pointer;font-weight:600">← Back</span>
+    </div>
+    <div class="panel-body">
+      <div class="form-group">
+        <label class="form-label">Select Pickup Date</label>
+        <div class="date-chips" id="dateChips"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Select Time Slot</label>
+        <div class="time-slots">
+          <div class="time-slot" onclick="selectSlot(this)">🌅 Morning<br><span style="font-size:0.72rem;font-weight:400;color:var(--gray)">9 AM – 12 PM</span></div>
+          <div class="time-slot selected" onclick="selectSlot(this)">☀️ Afternoon<br><span style="font-size:0.72rem;font-weight:400;color:var(--gray)">12 PM – 4 PM</span></div>
+          <div class="time-slot" onclick="selectSlot(this)">🌆 Evening<br><span style="font-size:0.72rem;font-weight:400;color:var(--gray)">4 PM – 7 PM</span></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Pickup Address Confirmation</label>
+        <div class="addr-confirm">
+          <span style="font-size:1.2rem">📍</span>
+          <div>42 Tech Park, Hazratganj, Lucknow, UP 226001<br>
+          <span style="color:var(--teal);font-size:0.78rem;cursor:pointer;font-weight:600">Change Address →</span></div>
+        </div>
+      </div>
+      <button class="btn-confirm" onclick="confirmPickup()">✅ Confirm Pickup</button>
+      <button class="btn-secondary" onclick="goReturnStep(2)">← Back</button>
+    </div>
+  </div>
+
+  <!-- ZEN BOX -->
+  <div class="zen-box">
+    <div class="zen-box-icon">🤖</div>
+    <div class="zen-box-text"><strong>Zen AI</strong> is coordinating returns with <strong>847 sellers</strong> today — yours is <strong>priority queued</strong>. Average processing time is under 60 seconds. You'll receive an email and SMS confirmation once your return is approved and pickup is scheduled.<br/><br/><strong style="color:#fbbf24;">VibeStore Fulfilled items:</strong> Free pickup from your doorstep &nbsp;|&nbsp; <strong style="color:#fbbf24;">Seller Fulfilled items:</strong> Drop-off at nearest VibeStore hub</div>
+  </div>
+
+  <!-- POLICY BOX -->
+  <div class="policy-box">
+    <div class="policy-title">📋 Return Policy Highlights</div>
+    <div class="policy-rows">
+      <div class="policy-row"><div class="policy-icon">📅</div><div><strong>30-Day Returns</strong> — return most items within 30 days of delivery, no questions asked.</div></div>
+      <div class="policy-row"><div class="policy-icon">🚚</div><div><strong>Free Door Pickup</strong> — we send a courier to collect the item at no charge to you.</div></div>
+      <div class="policy-row"><div class="policy-icon">⚡</div><div><strong>Instant Store Credit</strong> — choose store credit and get your balance in under 60 seconds.</div></div>
+      <div class="policy-row"><div class="policy-icon">💳</div><div><strong>Original Payment Refund</strong> — card refunds in 5–7 days, UPI in 24–48 hours.</div></div>
+      <div class="policy-row"><div class="policy-icon">🔄</div><div><strong>Easy Exchanges</strong> — swap for a different size, color, or product with priority shipping.</div></div>
+      <div class="policy-row"><div class="policy-icon">🚫</div><div><strong>Non-returnable Items</strong> — innerwear, food, personalized items, and final sale products cannot be returned.</div></div>
+    </div>
+  </div>
+
 </div>
 
-<footer>
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html">Collections</a><a href="sale.html">Sale</a><a href="compare.html">Compare</a><a href="gift-cards.html">Gift Cards</a><a href="blog.html">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html">Returns</a><a href="contact.html">Contact</a><a href="faq.html">FAQ</a><a href="track.html">Track Order</a><a href="notifications.html">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html">My Account</a><a href="loyalty.html">Loyalty</a><a href="wishlist.html">Wishlist</a><a href="referral.html">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html">Home</a><a href="referral.html">Referrals</a><a href="contact.html">Contact</a>
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div>
+      <div class="footer-col-title">Shop</div>
+      <div class="footer-links">
+        <a href="collections.html">Collections</a>
+        <a href="sale.html">Sale</a>
+        <a href="compare.html">Compare</a>
+        <a href="gift-cards.html">Gift Cards</a>
+        <a href="blog.html">Blog</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Support</div>
+      <div class="footer-links">
+        <a href="returns.html">Returns</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="faq.html">FAQ</a>
+        <a href="track.html">Track Order</a>
+        <a href="notifications.html">Notifications</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Account</div>
+      <div class="footer-links">
+        <a href="account.html">My Account</a>
+        <a href="loyalty.html">Loyalty</a>
+        <a href="wishlist.html">Wishlist</a>
+        <a href="referral.html">Referrals</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <div class="footer-links">
+        <a href="index.html">About Us</a>
+        <a href="contact.html">Contact</a>
+        <a href="blog.html">Blog</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Make Money with Us</div>
+      <div class="footer-links">
+        <a href="become-seller.html">Sell on VibeStore</a>
+        <a href="seller-central.html">Seller Central</a>
+        <a href="#">Affiliate Program</a>
+        <a href="#">Advertise</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace · MyOoumph Networks Pvt Ltd · Lucknow, India · All rights reserved</div>
 </footer>
 
-<script src="rex-chat.js"></script>
+<div id="toastEl"></div>
+
 <script>
-// Cart count from localStorage
-function updateCartCount(){
-  try{
-    const cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
-    const count = cart.reduce((s,i)=>s+(i.qty||1),0);
-    const el=document.getElementById('cartCount');
-    if(el) el.textContent=count;
-  }catch(e){}
-}
-updateCartCount();
+let selectedStep = 1;
+let selectedDate = null;
 
-function findOrder(){
-  const num=document.getElementById('orderNum').value.trim();
-  const email=document.getElementById('orderEmail').value.trim();
-  if(!num||!email){alert('Please enter your order number and email.');return;}
-  const order=document.getElementById('mockOrder');
-  const details=document.getElementById('stepDetails');
-  order.classList.add('visible');
-  setTimeout(()=>{details.style.display='block';details.style.animation='slideIn 0.35s ease';},400);
+// Cart count
+try{const c=JSON.parse(localStorage.getItem('vs_cart')||'[]');const n=c.reduce((s,i)=>s+(i.qty||1),0);const el=document.getElementById('cartCountLabel');if(el)el.textContent=n+' item'+(n!==1?'s':'');}catch(e){}
+
+// Build date chips (next 7 days)
+function buildDates(){
+  const wrap = document.getElementById('dateChips');
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  for(let i=1;i<=7;i++){
+    const d = new Date(); d.setDate(d.getDate()+i);
+    const chip = document.createElement('div');
+    chip.className = 'date-chip' + (i===1?' selected':'');
+    chip.innerHTML = `<div class="date-chip-day">${days[d.getDay()]}</div><div class="date-chip-num">${d.getDate()}</div><div class="date-chip-mon">${months[d.getMonth()]}</div>`;
+    chip.onclick = function(){ document.querySelectorAll('.date-chip').forEach(c=>c.classList.remove('selected')); this.classList.add('selected'); selectedDate = d; };
+    wrap.appendChild(chip);
+    if(i===1) selectedDate = d;
+  }
+}
+buildDates();
+
+function selectOrder(btn, name, price){
+  document.getElementById('selectedProductName').textContent = name;
+  goReturnStep(2);
+  toast('📦 Selected: '+name);
 }
 
-function toggleItem(el){
-  el.classList.toggle('selected');
+function goReturnStep(n){
+  selectedStep = n;
+  // Update step bar
+  [1,2,3].forEach(i=>{
+    const el = document.getElementById('rs'+i);
+    el.classList.remove('active','done');
+    if(i < n) el.classList.add('done');
+    else if(i === n) el.classList.add('active');
+    if(i < 3){
+      const conn = document.getElementById('conn'+i);
+      conn.classList.toggle('done', i < n);
+    }
+  });
+  document.getElementById('stepWrap1').style.display = n===1?'block':'none';
+  document.getElementById('stepWrap2').classList.toggle('visible', n===2);
+  document.getElementById('stepWrap3').classList.toggle('visible', n===3);
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function selectRes(el){
-  document.querySelectorAll('.res-card').forEach(c=>c.classList.remove('selected'));
+function updateEligibility(){
+  const reason = document.getElementById('returnReason').value;
+  const badge = document.getElementById('eligBadge');
+  if(reason === 'mind' || reason === ''){
+    badge.innerHTML = '<div class="elig-badge elig-store">⚠️ Eligible for: Store Credit Only (Changed Mind)</div>';
+  } else {
+    badge.innerHTML = '<div class="elig-badge elig-full">✅ Eligible for: Full Refund to Original Payment</div>';
+  }
+}
+
+function selectCond(el){
+  document.querySelectorAll('.cond-radio').forEach(r=>r.classList.remove('selected'));
   el.classList.add('selected');
 }
 
-function handleFiles(input){
-  const names=Array.from(input.files).map(f=>f.name).join(', ');
-  document.getElementById('fileNames').textContent=names?'Selected: '+names:'';
+function selectSlot(el){
+  document.querySelectorAll('.time-slot').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
 }
 
-function submitReturn(){
-  const reason=document.getElementById('returnReason').value;
-  if(!reason){alert('Please select a return reason.');return;}
-  document.getElementById('returnForm').style.display='none';
-  document.getElementById('successState').classList.add('visible');
+function confirmPickup(){
+  const reason = document.getElementById('returnReason').value;
+  if(!reason){ toast('⚠️ Please select a return reason in Step 2 first'); goReturnStep(2); return; }
+  const returnId = '#RTN-' + Math.floor(20000+Math.random()*9999);
+  const refund = new Date(); refund.setDate(refund.getDate()+8);
+  const pickup = selectedDate || new Date(Date.now()+86400000);
+  document.getElementById('returnId').textContent = returnId;
+  document.getElementById('refundDate').textContent = refund.toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('pickupDate').textContent = pickup.toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'});
+  document.getElementById('stepWrap1').style.display = 'none';
+  document.getElementById('stepWrap2').classList.remove('visible');
+  document.getElementById('stepWrap3').classList.remove('visible');
+  [1,2,3].forEach(i=>{ const el=document.getElementById('rs'+i); el.classList.remove('active'); el.classList.add('done'); if(i<3) document.getElementById('conn'+i).classList.add('done'); });
+  const banner = document.getElementById('successBanner');
+  banner.classList.add('visible');
+  banner.scrollIntoView({behavior:'smooth',block:'start'});
+}
 
-  // Animate progress steps
-  setTimeout(()=>{
-    const steps=document.querySelectorAll('.prog-step');
-    if(steps[1]){steps[1].classList.remove('active');steps[1].classList.add('done');steps[1].querySelector('.prog-dot').textContent='✓';}
-    if(steps[2]){steps[2].classList.remove('pending');steps[2].classList.add('active');steps[2].querySelector('.prog-time').textContent='Generating...';}
-  },2000);
-  setTimeout(()=>{
-    const steps=document.querySelectorAll('.prog-step');
-    if(steps[2]){steps[2].classList.remove('active');steps[2].classList.add('done');steps[2].querySelector('.prog-dot').textContent='✓';steps[2].querySelector('.prog-time').textContent='Done';}
-    if(steps[3]){steps[3].classList.remove('pending');steps[3].classList.add('active');steps[3].querySelector('.prog-time').textContent='Initiating...';}
-  },4000);
-  setTimeout(()=>{
-    const steps=document.querySelectorAll('.prog-step');
-    if(steps[3]){steps[3].classList.remove('active');steps[3].classList.add('done');steps[3].querySelector('.prog-dot').textContent='✓';steps[3].querySelector('.prog-time').textContent='Refund in 5–7 days';}
-  },6000);
+function toast(msg){
+  const el=document.getElementById('toastEl');
+  el.innerHTML=`<div style="background:#0f1111;color:white;border-radius:100px;padding:10px 22px;font-size:0.82rem;font-weight:500;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2)">${msg}</div>`;
+  setTimeout(()=>el.innerHTML='',2800);
 }
 </script>
+<script src="rex-chat.js"></script>
 </body>
 </html>

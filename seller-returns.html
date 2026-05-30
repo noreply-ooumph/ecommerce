@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Returns — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  .sidebar { width: 220px; background: #232f3e; position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto; }
+  .sidebar-logo { padding: 20px 18px 16px; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #FF9900; border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: -0.3px; }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 18px; color: #c8cdd4; text-decoration: none; font-size: 13.5px; font-weight: 500; transition: background 0.15s, color 0.15s; border-left: 3px solid transparent; cursor: pointer; }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  .topbar { position: fixed; top: 0; left: 220px; right: 0; height: 60px; background: #0f1111; box-shadow: 0 1px 4px rgba(0,0,0,0.3); display: flex; align-items: center; padding: 0 24px; z-index: 99; gap: 16px; }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #FF9900; }
+  .breadcrumb { font-size: 13px; color: #8d96a0; flex: 1; margin-left: 12px; }
+  .breadcrumb strong { color: #fff; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #CC0C39; color: #fff; font-size: 9px; font-weight: 700; min-width: 15px; height: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF9900, #e68a00); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #fff; font-size: 13px; }
+  .seller-info .store { color: #8d96a0; }
+
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* ZEN BANNER */
+  .zen-banner {
+    background: linear-gradient(135deg, #004d40 0%, #00695c 40%, #007185 70%, #00897b 100%);
+    border-radius: 12px; padding: 20px 24px; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+  }
+  .zen-icon { font-size: 36px; flex-shrink: 0; }
+  .zen-text { flex: 1; }
+  .zen-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .zen-subtitle { font-size: 12.5px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+  .zen-stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .zen-stat { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 10px 16px; text-align: center; min-width: 90px; }
+  .zen-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; }
+  .zen-stat-label { font-size: 10.5px; color: rgba(255,255,255,0.7); margin-top: 2px; font-weight: 500; }
+
+  /* METRIC CARDS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .metric-card { background: #fff; border-radius: 10px; padding: 18px 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-top: 3px solid #ccc; }
+  .metric-card.orange { border-top-color: #FF9900; }
+  .metric-card.blue { border-top-color: #007185; }
+  .metric-card.green { border-top-color: #067D62; }
+  .metric-card.red { border-top-color: #CC0C39; }
+  .metric-label { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: #0f1111; margin-bottom: 4px; line-height: 1; }
+  .metric-sub { font-size: 12px; color: #888; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0; margin-bottom: 20px; background: #fff; border-radius: 8px; padding: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); width: fit-content; }
+  .tab { padding: 8px 18px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; color: #555; transition: all 0.15s; border: none; background: none; }
+  .tab.active { background: #FF9900; color: #fff; font-weight: 600; }
+  .tab:hover:not(.active) { background: #f5f7fa; }
+
+  /* ACTION NEEDED */
+  .action-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .action-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700; color: #CC0C39; }
+  .action-badge { background: #CC0C39; color: #fff; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; }
+  .return-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 14px; border-left: 4px solid #CC0C39; overflow: hidden; }
+  .return-card-header { padding: 14px 18px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .buyer-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #007185, #00b3c9); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .buyer-name { font-size: 14px; font-weight: 700; color: #0f1111; }
+  .order-no { font-size: 12px; color: #888; }
+  .return-card-body { padding: 14px 18px; }
+  .product-row { display: flex; align-items: center; gap: 12px; background: #fafbfc; border-radius: 8px; padding: 10px 12px; margin-bottom: 12px; }
+  .product-emoji { font-size: 28px; }
+  .product-name { font-size: 14px; font-weight: 600; color: #0f1111; }
+  .product-price { font-size: 13px; color: #555; margin-top: 2px; }
+  .return-reason { background: #fff8ee; border: 1px solid #ffe0a0; border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; font-size: 13px; color: #7a4f00; }
+  .zen-rec { background: linear-gradient(90deg, rgba(0,113,133,0.08), rgba(6,125,98,0.06)); border: 1px solid rgba(0,113,133,0.2); border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .zen-rec-text { font-size: 13px; color: #004d40; font-weight: 500; }
+  .photo-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .photo-thumb { width: 60px; height: 60px; border-radius: 6px; background: #f0f2f5; display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid #e5e7eb; cursor: pointer; }
+  .photo-thumb:hover { border-color: #007185; }
+  .action-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 8px 14px; border-radius: 6px; font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all 0.15s; }
+  .btn-green { background: #067D62; color: #fff; }
+  .btn-green:hover { background: #055a46; }
+  .btn-orange { background: #FF9900; color: #fff; }
+  .btn-orange:hover { background: #e68a00; }
+  .btn-red { background: #CC0C39; color: #fff; }
+  .btn-red:hover { background: #a80930; }
+  .btn-teal { background: #fff; border-color: #007185; color: #007185; }
+  .btn-teal:hover { background: #007185; color: #fff; }
+
+  /* TABLE */
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 10px; }
+  .card-header h3 { font-size: 15px; font-weight: 700; color: #0f1111; flex: 1; }
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 11px; text-transform: uppercase; color: #888; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 2px solid #f0f2f5; background: #fafbfc; white-space: nowrap; }
+  .data-table td { padding: 11px 12px; font-size: 13px; color: #333; border-bottom: 1px solid #f5f6f8; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #fafbfc; cursor: pointer; }
+  .status-pill { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 10px; }
+  .pill-green { background: #d1fae5; color: #065f46; }
+  .pill-blue { background: #dbeafe; color: #1e40af; }
+  .pill-orange { background: #fff3cd; color: #92400e; }
+  .pill-red { background: #fee2e2; color: #991b1b; }
+  .processor-pill { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
+  .pill-zen { background: linear-gradient(90deg,rgba(0,113,133,0.12),rgba(6,125,98,0.1)); color: #007185; border: 1px solid rgba(0,113,133,0.2); }
+  .pill-manual { background: #f0f2f5; color: #555; border: 1px solid #e5e7eb; }
+
+  /* POLICY CARD */
+  .policy-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; }
+  .policy-header { padding: 14px 18px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 10px; }
+  .policy-header h3 { font-size: 15px; font-weight: 700; color: #0f1111; flex: 1; }
+  .policy-body { padding: 16px 18px; }
+  .toggle-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #f5f6f8; }
+  .toggle-row:last-of-type { border-bottom: none; }
+  .toggle-label { flex: 1; }
+  .toggle-label strong { font-size: 13.5px; font-weight: 600; color: #0f1111; display: block; }
+  .toggle-label span { font-size: 12px; color: #888; }
+  .toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; border-radius: 22px; transition: .3s; }
+  .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+  input:checked + .toggle-slider { background: #067D62; }
+  input:checked + .toggle-slider:before { transform: translateX(18px); }
+
+  /* ANALYTICS BARS */
+  .cat-bar-row { margin-bottom: 10px; }
+  .cat-bar-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12.5px; }
+  .cat-bar-track { height: 10px; background: #f0f2f5; border-radius: 5px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 5px; }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: #0f1111; color: #fff; padding: 12px 20px; border-radius: 8px; font-size: 13.5px; font-weight: 500; z-index: 999; display: none; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+  .toast.show { display: block; animation: slideIn 0.3s ease; }
+  @keyframes slideIn { from{transform:translateY(20px);opacity:0;} to{transform:translateY(0);opacity:1;} }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .action-cards-grid { grid-template-columns: 1fr !important; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .returns-table, .data-table { min-width: 700px; }
+    .table-scroll-wrap { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a href="seller-dashboard.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item"><span class="nav-icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item"><span class="nav-icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="nav-icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item"><span class="nav-icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item active"><span class="nav-icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="topbar-logo">⚡ Seller Central</div>
+  <div class="breadcrumb">Returns &rsaquo; <strong>Returns & Refunds</strong></div>
+  <div class="topbar-bell">🔔<span class="bell-badge">2</span></div>
+  <div class="seller-info"><div class="sname">Vikram S.</div><div class="store">MyStore Electronics</div></div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;cursor:pointer;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#aaa">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ZEN BANNER -->
+  <div class="zen-banner">
+    <div class="zen-icon">🧘</div>
+    <div class="zen-text">
+      <div class="zen-title">Zen is handling your returns</div>
+      <div class="zen-subtitle">Zen processed 8 returns this month — you only had to handle 1<br>Zen handles: return requests, refund processing, restocking decisions, buyer communication</div>
+    </div>
+    <div class="zen-stats">
+      <div class="zen-stat">
+        <div class="zen-stat-val">10</div>
+        <div class="zen-stat-label">Total Returns</div>
+      </div>
+      <div class="zen-stat">
+        <div class="zen-stat-val">8</div>
+        <div class="zen-stat-label">Zen Handled</div>
+      </div>
+      <div class="zen-stat">
+        <div class="zen-stat-val" style="color:#fde68a;">80%</div>
+        <div class="zen-stat-label">Auto-processed</div>
+      </div>
+      <div class="zen-stat">
+        <div class="zen-stat-val">1.8%</div>
+        <div class="zen-stat-label">Refund Rate</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- METRIC CARDS -->
+  <div class="metrics-grid">
+    <div class="metric-card orange">
+      <div class="metric-label">Open Returns</div>
+      <div class="metric-value">2</div>
+      <div class="metric-sub">Action needed from you</div>
+    </div>
+    <div class="metric-card blue">
+      <div class="metric-label">Zen Processing</div>
+      <div class="metric-value">6</div>
+      <div class="metric-sub">Zen handling automatically</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Refunded This Month</div>
+      <div class="metric-value">₹8,400</div>
+      <div class="metric-sub">Across 8 returns</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">Return Rate</div>
+      <div class="metric-value">1.8%</div>
+      <div class="metric-sub">vs 3.2% category avg</div>
+    </div>
+  </div>
+
+  <!-- FILTER TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab(this)">All (10)</button>
+    <button class="tab" onclick="switchTab(this)">Action Needed (2)</button>
+    <button class="tab" onclick="switchTab(this)">Zen Processing (6)</button>
+    <button class="tab" onclick="switchTab(this)">Approved (8)</button>
+    <button class="tab" onclick="switchTab(this)">Rejected (2)</button>
+  </div>
+
+  <!-- ACTION NEEDED -->
+  <div class="action-header">
+    <span style="font-size:20px;">🚨</span>
+    <div class="action-title">Action Needed</div>
+    <span class="action-badge">2 cases</span>
+    <span style="font-size:12px;color:#888;margin-left:4px;">Zen escalated these — your decision needed</span>
+  </div>
+
+  <!-- RETURN CARD 1 -->
+  <div class="return-card">
+    <div class="return-card-header">
+      <div class="buyer-avatar">A</div>
+      <div style="flex:1;">
+        <div class="buyer-name">Arjun Mehra</div>
+        <div class="order-no">Order #VS-2024-8821 &mdash; Placed 3 days ago</div>
+      </div>
+      <span class="status-pill pill-orange">Pending Decision</span>
+      <span style="font-size:12px;color:#888;">Return #RT-001</span>
+    </div>
+    <div class="return-card-body">
+      <div class="product-row">
+        <div class="product-emoji">🎧</div>
+        <div style="flex:1;">
+          <div class="product-name">Wireless Earbuds Pro X</div>
+          <div class="product-price">₹3,999 &mdash; Qty: 1</div>
+        </div>
+        <div style="text-align:right;"><div style="font-size:16px;font-weight:800;color:#CC0C39;font-family:'Space Grotesk',sans-serif;">₹3,999</div><div style="font-size:11px;color:#888;">refund requested</div></div>
+      </div>
+      <div class="return-reason">
+        <strong>Return Reason:</strong> "Product not as described — the earbuds have poor bass quality compared to the listing description. This is not what was advertised." Buyer uploaded 2 photos showing comparison.
+      </div>
+      <div class="zen-rec">
+        <span style="font-size:18px;">🧘</span>
+        <div class="zen-rec-text"><strong>Zen recommends:</strong> Full refund — buyer evidence is valid. Product listing may need accuracy review. Approving will maintain your seller rating.</div>
+      </div>
+      <div class="photo-row">
+        <div class="photo-thumb" onclick="toast('Opening photo...')">📷</div>
+        <div class="photo-thumb" onclick="toast('Opening photo...')">📷</div>
+        <div style="display:flex;align-items:center;font-size:12px;color:#888;margin-left:4px;">2 photos uploaded by buyer</div>
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-green" onclick="toast('✅ Full refund of ₹3,999 approved')">Approve Full Refund ₹3,999</button>
+        <button class="btn btn-orange" onclick="toast('Partial refund of ₹2,000 approved')">Approve Partial ₹2,000</button>
+        <button class="btn btn-red" onclick="toast('Rejection reason needed — opening dialog...')">Reject with Reason</button>
+        <button class="btn btn-teal" onclick="toast('Opening message thread...')">Contact Buyer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETURN CARD 2 -->
+  <div class="return-card">
+    <div class="return-card-header">
+      <div class="buyer-avatar" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">P</div>
+      <div style="flex:1;">
+        <div class="buyer-name">Priya Sharma</div>
+        <div class="order-no">Order #VS-2024-8654 &mdash; Placed 5 days ago</div>
+      </div>
+      <span class="status-pill pill-orange">Pending Decision</span>
+      <span style="font-size:12px;color:#888;">Return #RT-002</span>
+    </div>
+    <div class="return-card-body">
+      <div class="product-row">
+        <div class="product-emoji">📱</div>
+        <div style="flex:1;">
+          <div class="product-name">USB-C Hub 7-in-1</div>
+          <div class="product-price">₹2,499 &mdash; Qty: 1</div>
+        </div>
+        <div style="text-align:right;"><div style="font-size:16px;font-weight:800;color:#CC0C39;font-family:'Space Grotesk',sans-serif;">₹2,499</div><div style="font-size:11px;color:#888;">refund requested</div></div>
+      </div>
+      <div class="return-reason">
+        <strong>Return Reason:</strong> "Item arrived damaged — the HDMI port is physically broken and the USB ports are loose. The packaging was also damaged on arrival."
+      </div>
+      <div class="zen-rec" style="border-color:rgba(204,12,57,0.2);background:rgba(204,12,57,0.04);">
+        <span style="font-size:18px;">🧘</span>
+        <div class="zen-rec-text" style="color:#7a0021;"><strong>Zen recommends:</strong> Full refund — damage appears transit-related (buyer has 6 orders, trusted). File transit insurance claim. Zen will handle restocking after your approval.</div>
+      </div>
+      <div class="photo-row">
+        <div class="photo-thumb" onclick="toast('Opening photo...')">📷</div>
+        <div style="display:flex;align-items:center;font-size:12px;color:#888;margin-left:4px;">1 photo uploaded by buyer</div>
+      </div>
+      <div class="action-buttons">
+        <button class="btn btn-green" onclick="toast('✅ Full refund of ₹2,499 approved & transit claim filed')">Approve Full Refund ₹2,499</button>
+        <button class="btn btn-orange" onclick="toast('Partial refund approved')">Approve Partial ₹1,500</button>
+        <button class="btn btn-red" onclick="toast('Rejection dialog opening...')">Reject with Reason</button>
+        <button class="btn btn-teal" onclick="toast('Opening message thread...')">Contact Buyer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETURNS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>↩️ All Returns (10)</h3>
+      <span style="font-size:12px;color:#888;">Last 30 days</span>
+      <button class="btn" style="background:#fff;border:1px solid #d0d5dd;color:#555;font-size:12px;padding:5px 12px;margin-left:auto;" onclick="toast('Exporting CSV...')">Export CSV</button>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Return#</th><th>Buyer</th><th>Product</th><th>Amount</th><th>Reason</th><th>Requested</th><th>Status</th><th>Processed By</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-001</td>
+            <td>Arjun Mehra</td><td>🎧 Earbuds Pro X</td><td>₹3,999</td>
+            <td style="max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Not as described</td>
+            <td style="color:#888;">3 days ago</td>
+            <td><span class="status-pill pill-orange">Pending</span></td>
+            <td><span class="processor-pill pill-manual">👤 You</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">Review</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-002</td>
+            <td>Priya Sharma</td><td>📱 USB-C Hub</td><td>₹2,499</td>
+            <td>Damaged in transit</td>
+            <td style="color:#888;">5 days ago</td>
+            <td><span class="status-pill pill-orange">Pending</span></td>
+            <td><span class="processor-pill pill-manual">👤 You</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">Review</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-003</td>
+            <td>Ravi Kumar</td><td>🔌 GaN Charger</td><td>₹1,299</td>
+            <td>Not charging properly</td>
+            <td style="color:#888;">6 days ago</td>
+            <td><span class="status-pill pill-blue">Processing</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-004</td>
+            <td>Meera Pillai</td><td>⌚ Smart Band V2</td><td>₹2,199</td>
+            <td>Changed mind</td>
+            <td style="color:#888;">7 days ago</td>
+            <td><span class="status-pill pill-blue">Processing</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-005</td>
+            <td>Suresh T.</td><td>🖱️ Ergonomic Mouse</td><td>₹1,499</td>
+            <td>Wrong item received</td>
+            <td style="color:#888;">9 days ago</td>
+            <td><span class="status-pill pill-green">Refunded</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-006</td>
+            <td>Kavitha N.</td><td>🎧 Sports Earbuds V1</td><td>₹1,799</td>
+            <td>Damaged in transit</td>
+            <td style="color:#888;">10 days ago</td>
+            <td><span class="status-pill pill-green">Refunded</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-007</td>
+            <td>Deepak R.</td><td>🔌 GaN Charger</td><td>₹1,299</td>
+            <td>Not as described</td>
+            <td style="color:#888;">12 days ago</td>
+            <td><span class="status-pill pill-green">Refunded</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-008</td>
+            <td>Anita V.</td><td>📱 USB-C Hub</td><td>₹2,499</td>
+            <td>Defective product</td>
+            <td style="color:#888;">14 days ago</td>
+            <td><span class="status-pill pill-green">Refunded</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-009</td>
+            <td>Nikhil M.</td><td>🎧 Earbuds Pro X</td><td>₹3,999</td>
+            <td>Suspected fraud</td>
+            <td style="color:#888;">18 days ago</td>
+            <td><span class="status-pill pill-red">Rejected</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+          <tr onclick="toast('Opening return details...')">
+            <td style="font-weight:600;color:#007185;">#RT-010</td>
+            <td>Sona K.</td><td>⌚ Smart Band V2</td><td>₹2,199</td>
+            <td>Changed mind (>15 days)</td>
+            <td style="color:#888;">22 days ago</td>
+            <td><span class="status-pill pill-red">Rejected</span></td>
+            <td><span class="processor-pill pill-zen">🤖 Zen</span></td>
+            <td><button class="btn" style="font-size:11px;padding:4px 8px;border:1px solid #e5e7eb;border-radius:4px;background:#fff;cursor:pointer;" onclick="toast('Opening...')">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ZEN POLICY CARD -->
+  <div class="policy-card">
+    <div class="policy-header">
+      <span style="font-size:20px;">🧘</span>
+      <h3>Zen AI Policy Settings</h3>
+      <span style="font-size:12px;color:#888;flex:1;">Configure Zen's auto-approval rules</span>
+    </div>
+    <div class="policy-body">
+      <div class="toggle-row">
+        <div class="toggle-label">
+          <strong>Auto-approve returns under ₹500</strong>
+          <span>Zen automatically refunds low-value returns without bothering you</span>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Policy updated — Zen will apply new rules')"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">
+          <strong>Auto-approve if reason is "Damaged in transit"</strong>
+          <span>Transit damage is always approved — seller is not liable</span>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Policy updated')"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">
+          <strong>Auto-approve for buyers with &gt;5 orders</strong>
+          <span>Loyal buyers get hassle-free returns to maintain trust</span>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Policy updated')"><span class="toggle-slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div class="toggle-label">
+          <strong>Auto-reject suspected fraudulent returns</strong>
+          <span>Zen detects patterns like serial returners, fake damage claims</span>
+        </div>
+        <label class="toggle-switch"><input type="checkbox" checked onchange="toast('Policy updated')"><span class="toggle-slider"></span></label>
+      </div>
+      <div style="margin-top:16px;padding:10px 14px;background:rgba(0,113,133,0.06);border-radius:8px;font-size:12.5px;color:#007185;margin-bottom:14px;">
+        🧘 Zen uses these rules to decide <strong>80% of returns</strong> without bothering you. Only escalates when evidence is unclear or amounts are large.
+      </div>
+      <button class="btn btn-orange" onclick="toast('✅ Zen policies saved successfully')">Save Rules</button>
+    </div>
+  </div>
+
+  <!-- RETURN ANALYTICS -->
+  <div class="card" style="margin-bottom:30px;">
+    <div class="card-header"><h3>📊 Return Analytics — Top Reasons</h3></div>
+    <div style="padding:16px 18px;">
+      <div class="cat-bar-row">
+        <div class="cat-bar-label"><span>Product Damaged</span><span style="font-weight:700;">35%</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:87%;background:linear-gradient(90deg,#CC0C39,#f44336);"></div></div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label"><span>Wrong Item Sent</span><span style="font-weight:700;">25%</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:63%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label"><span>Not as Described</span><span style="font-weight:700;">20%</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:50%;background:linear-gradient(90deg,#7c3aed,#a855f7);"></div></div>
+      </div>
+      <div class="cat-bar-row">
+        <div class="cat-bar-label"><span>Changed Mind</span><span style="font-weight:700;">12%</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:30%;background:linear-gradient(90deg,#007185,#00b3c9);"></div></div>
+      </div>
+      <div class="cat-bar-row" style="margin-bottom:0;">
+        <div class="cat-bar-label"><span>Other</span><span style="font-weight:700;">8%</span></div>
+        <div class="cat-bar-track"><div class="cat-bar-fill" style="width:20%;background:linear-gradient(90deg,#888,#aaa);"></div></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+function switchTab(el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>

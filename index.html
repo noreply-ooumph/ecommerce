@@ -3,1330 +3,1080 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VibeStore — AI-Powered Commerce</title>
+<title>VibeStore — India's Online Marketplace</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --navy: #06060f;
-    --navy2: #0d0d1f;
-    --purple: #7c3aed;
-    --purple-light: #9d5cf5;
-    --cyan: #06b6d4;
-    --cyan-light: #22d3ee;
-    --lavender: #c4b5fd;
-    --white: #f8f7ff;
-    --gray: #94a3b8;
-    --card-bg: rgba(255,255,255,0.04);
-    --card-border: rgba(255,255,255,0.08);
-    --glow-purple: rgba(124,58,237,0.35);
-    --glow-cyan: rgba(6,182,212,0.35);
-    /* spacing system */
-    --sec-pad: 80px;
-    --sec-pad-sm: 52px;
-    --container: 1240px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #111; overflow-x: hidden; }
 
-  /* shared container */
-  .container { max-width: var(--container); margin: 0 auto; padding: 0 5%; }
+/* ===== NAV ===== */
+.nav-top { background: #131921; padding: 10px 0; position: sticky; top: 0; z-index: 1000; }
+.nav-top-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 12px; }
+.logo { color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; white-space: nowrap; text-decoration: none; letter-spacing: -0.5px; }
+.logo span { color: #FF9900; }
+.delivery-loc { color: #ccc; font-size: 12px; white-space: nowrap; cursor: pointer; border: 1px solid transparent; padding: 6px 8px; border-radius: 4px; }
+.delivery-loc:hover { border-color: #fff; }
+.delivery-loc .dloc-label { font-size: 11px; color: #aaa; }
+.delivery-loc .dloc-city { color: #fff; font-weight: 600; font-size: 13px; }
+.search-bar { flex: 1; display: flex; border-radius: 4px; overflow: hidden; max-width: 800px; }
+.search-cat { background: #f3f3f3; border: none; padding: 0 8px; font-size: 12px; color: #333; cursor: pointer; border-right: 1px solid #cdcdcd; min-width: 100px; }
+.search-input { flex: 1; border: none; padding: 10px 14px; font-size: 15px; outline: none; }
+.search-btn { background: #FF9900; border: none; padding: 0 16px; cursor: pointer; font-size: 20px; transition: background .2s; }
+.search-btn:hover { background: #e68a00; }
+.nav-right { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.nav-link { color: #fff; text-decoration: none; font-size: 13px; padding: 6px 10px; border: 1px solid transparent; border-radius: 4px; white-space: nowrap; cursor: pointer; }
+.nav-link:hover { border-color: #fff; }
+.nav-link .nl-label { font-size: 11px; color: #ccc; display: block; }
+.nav-link .nl-main { font-weight: 600; font-size: 13px; }
+.cart-link { position: relative; }
+.cart-badge { position: absolute; top: -6px; right: 6px; background: #FF9900; color: #111; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* Secondary Nav */
+.nav-secondary { background: #232f3e; padding: 0; overflow-x: auto; }
+.nav-secondary-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 0; white-space: nowrap; }
+.nav-sec-link { color: #fff; text-decoration: none; font-size: 13px; padding: 10px 12px; display: block; border: 1px solid transparent; border-radius: 2px; }
+.nav-sec-link:hover { border-color: #fff; }
+.nav-sec-link.bold { font-weight: 600; }
 
-  html { scroll-behavior: smooth; }
+/* ===== MAIN WRAPPER ===== */
+.main { max-width: 1400px; margin: 0 auto; padding: 0 16px; }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--navy);
-    color: var(--white);
-    overflow-x: hidden;
-    line-height: 1.6;
-  }
+/* ===== CAROUSEL ===== */
+.carousel-wrap { position: relative; overflow: hidden; border-radius: 0 0 8px 8px; background: #131921; margin-bottom: 0; }
+.carousel-track { display: flex; transition: transform .5s ease; }
+.slide { min-width: 100%; height: 420px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.slide-1 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); }
+.slide-2 { background: linear-gradient(135deg, #7f0000 0%, #b71c1c 50%, #ff1744 100%); }
+.slide-3 { background: linear-gradient(135deg, #0d1117 0%, #0a192f 50%, #112240 100%); }
+.slide-content { text-align: center; z-index: 2; position: relative; padding: 40px; }
+.slide-content h1 { font-family: 'Space Grotesk', sans-serif; font-size: 42px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+.slide-content h1 span { color: #FF9900; }
+.slide-content p { color: #ccc; font-size: 18px; margin-bottom: 28px; }
+.slide-emoji-row { font-size: 36px; margin-bottom: 20px; letter-spacing: 8px; }
+.slide-grid { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px; }
+.slide-grid-item { background: rgba(255,255,255,0.15); backdrop-filter: blur(8px); border-radius: 8px; padding: 10px 18px; color: #fff; font-size: 14px; font-weight: 500; }
+.slide-grid-item span { display: block; font-size: 20px; }
+.btn-shop { background: #FF9900; color: #111; font-weight: 700; font-size: 16px; padding: 14px 36px; border: none; border-radius: 6px; cursor: pointer; transition: background .2s, transform .1s; text-decoration: none; display: inline-block; }
+.btn-shop:hover { background: #e68a00; transform: translateY(-1px); }
+.carousel-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.4); color: #fff; border: none; font-size: 28px; width: 44px; height: 80px; cursor: pointer; z-index: 10; border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: background .2s; }
+.carousel-arrow:hover { background: rgba(0,0,0,0.7); }
+.carousel-arrow.prev { left: 0; }
+.carousel-arrow.next { right: 0; }
+.carousel-dots { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; z-index: 10; }
+.dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; transition: background .2s; }
+.dot.active { background: #FF9900; }
+.slide-badge { display: inline-block; background: #FF9900; color: #111; font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 4px; margin-bottom: 12px; letter-spacing: 1px; }
+.ai-agents-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin: 16px 0; }
+.ai-agent-chip { background: rgba(0,255,200,0.12); border: 1px solid rgba(0,255,200,0.3); color: #00ffc8; border-radius: 20px; padding: 6px 14px; font-size: 13px; }
 
-  /* ===== CANVAS BG ===== */
-  #particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+/* ===== SECTION HEADERS ===== */
+.section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.section-title { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #111; }
+.see-all { color: #007185; text-decoration: none; font-size: 14px; }
+.see-all:hover { text-decoration: underline; color: #c45500; }
 
-  /* ===== NAV ===== */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5%;
-    height: 70px;
-    background: rgba(6,6,15,0.8);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--card-border);
-    transition: all 0.3s;
-  }
-  .nav-logo {
-    display: flex; align-items: center; gap: 10px;
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: 1.4rem; font-weight: 700;
-    background: linear-gradient(135deg, var(--purple-light), var(--cyan));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    text-decoration: none;
-  }
-  .nav-logo .dot {
-    width: 10px; height: 10px; border-radius: 50%;
-    background: var(--cyan);
-    box-shadow: 0 0 12px var(--cyan);
-    animation: pulse 2s infinite;
-  }
-  .nav-links { display: flex; align-items: center; gap: 32px; }
-  .nav-links a {
-    color: var(--gray); text-decoration: none; font-size: 0.9rem; font-weight: 500;
-    transition: color 0.2s;
-  }
-  .nav-links a:hover { color: var(--white); }
-  .nav-cta {
-    background: linear-gradient(135deg, var(--purple), var(--cyan));
-    color: var(--white) !important; padding: 8px 20px;
-    border-radius: 8px; font-weight: 600 !important;
-    transition: opacity 0.2s, transform 0.2s !important;
-  }
-  .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
-  .hamburger span { width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all 0.3s; }
-  .mobile-menu {
-    display: none; position: fixed; top: 70px; left: 0; right: 0;
-    background: var(--navy2); padding: 24px 5%;
-    border-bottom: 1px solid var(--card-border); z-index: 999;
-    flex-direction: column; gap: 20px;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { color: var(--gray); text-decoration: none; font-size: 1rem; }
+/* ===== DEAL CATEGORIES GRID ===== */
+.deal-grid-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.deal-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.deal-cat-card { background: #f8f9fa; border-radius: 8px; padding: 20px 16px; text-align: center; cursor: pointer; transition: box-shadow .2s, transform .1s; border: 1px solid #e8e8e8; }
+.deal-cat-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.deal-cat-emoji { font-size: 40px; margin-bottom: 10px; }
+.deal-cat-name { font-weight: 700; font-size: 15px; color: #111; margin-bottom: 6px; }
+.deal-cat-link { color: #007185; font-size: 13px; text-decoration: none; }
+.deal-cat-link:hover { text-decoration: underline; color: #c45500; }
 
-  /* ===== SECTIONS ===== */
-  section { position: relative; z-index: 1; }
+/* ===== DEALS OF THE DAY ===== */
+.deals-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.deals-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+.deals-scroll::-webkit-scrollbar { height: 4px; }
+.deals-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+.deals-scroll::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 2px; }
+.deal-card { min-width: 180px; border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px 12px; text-align: center; flex-shrink: 0; background: #fff; }
+.deal-card-emoji { font-size: 80px; margin-bottom: 10px; display: block; }
+.deal-name { font-size: 13px; font-weight: 600; color: #111; margin-bottom: 6px; line-height: 1.3; min-height: 32px; }
+.deal-price { color: #B12704; font-weight: 700; font-size: 18px; }
+.deal-orig { color: #888; text-decoration: line-through; font-size: 13px; margin-left: 4px; }
+.deal-discount { color: #388E3C; font-size: 13px; font-weight: 600; }
+.claimed-bar-wrap { background: #f3f3f3; border-radius: 4px; height: 6px; margin: 8px 0; overflow: hidden; }
+.claimed-bar { background: linear-gradient(90deg, #FF9900, #e68a00); height: 100%; border-radius: 4px; }
+.claimed-text { font-size: 11px; color: #e65c00; font-weight: 600; margin-bottom: 8px; }
+.btn-cart { background: #FF9900; color: #111; font-weight: 700; font-size: 13px; padding: 8px 16px; border: none; border-radius: 20px; cursor: pointer; width: 100%; margin-bottom: 6px; transition: background .2s; }
+.btn-cart:hover { background: #e68a00; }
+.countdown { font-size: 12px; color: #555; font-family: monospace; font-weight: 600; }
+.countdown span { background: #111; color: #FF9900; border-radius: 3px; padding: 1px 4px; }
 
-  /* ===== HERO ===== */
-  #hero {
-    min-height: 100vh; display: flex; align-items: center;
-    padding: 110px 5% 72px;
-    overflow: hidden;
-  }
-  .hero-inner { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; max-width: var(--container); margin: 0 auto; width: 100%; }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(124,58,237,0.15); border: 1px solid rgba(124,58,237,0.3);
-    border-radius: 100px; padding: 6px 16px; font-size: 0.8rem;
-    color: var(--lavender); margin-bottom: 24px;
-  }
-  .hero-badge span { width: 7px; height: 7px; background: var(--purple-light); border-radius: 50%; animation: pulse 1.5s infinite; }
-  h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(2.4rem, 5vw, 4rem);
-    font-weight: 800; line-height: 1.1;
-    margin-bottom: 24px;
-    letter-spacing: -0.02em;
-  }
-  h1 .grad { background: linear-gradient(135deg, #c4b5fd 0%, #06b6d4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero-sub { font-size: 1rem; color: var(--gray); max-width: 480px; margin-bottom: 30px; line-height: 1.75; }
-  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--purple), #5b21b6);
-    color: white; padding: 14px 28px; border-radius: 10px;
-    font-weight: 600; font-size: 0.95rem; border: none; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.3s; box-shadow: 0 0 30px rgba(124,58,237,0.4);
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(124,58,237,0.6); }
-  .btn-secondary {
-    background: transparent; color: var(--white);
-    padding: 14px 28px; border-radius: 10px;
-    font-weight: 600; font-size: 0.95rem;
-    border: 1px solid var(--card-border); cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.3s; backdrop-filter: blur(10px);
-  }
-  .btn-secondary:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
-  .btn-oneclick {
-    background: linear-gradient(135deg, #059669, #0d9488);
-    color: white; padding: 14px 28px; border-radius: 10px;
-    font-weight: 700; font-size: 0.95rem; border: none; cursor: pointer;
-    text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
-    transition: all 0.3s; box-shadow: 0 0 30px rgba(5,150,105,0.45);
-    position: relative; overflow: hidden;
-  }
-  .btn-oneclick::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
-    transform: translateX(-100%); animation: shimmer 2.2s infinite;
-  }
-  @keyframes shimmer { to { transform: translateX(100%); } }
-  .btn-oneclick:hover { transform: translateY(-2px); box-shadow: 0 0 50px rgba(5,150,105,0.65); }
-  .oneclick-wrap {
-    margin-top: 12px;
-    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-  }
-  .oneclick-badge {
-    background: rgba(5,150,105,0.12); border: 1px solid rgba(5,150,105,0.3);
-    border-radius: 8px; padding: 5px 11px; font-size: 0.71rem; font-weight: 600;
-    color: #34d399; display: flex; align-items: center; gap: 6px;
-  }
-  .oneclick-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: rp 1.5s infinite; }
-  @keyframes rp { 0%,100%{opacity:1}50%{opacity:0.3} }
-  .oneclick-note { font-size: 0.71rem; color: rgba(255,255,255,0.35); }
+/* ===== LIGHTNING DEALS ===== */
+.lightning-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.lightning-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.lightning-card { border: 1px solid #e8e8e8; border-radius: 8px; padding: 16px; text-align: center; position: relative; overflow: hidden; }
+.lightning-badge { background: #B71C1C; color: #fff; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 3px 3px 0 0; margin-bottom: 8px; display: inline-block; letter-spacing: 1px; }
+.lightning-emoji { font-size: 72px; margin: 8px 0; display: block; }
+.lightning-name { font-size: 14px; font-weight: 600; color: #111; margin-bottom: 4px; }
+.lightning-price { color: #B12704; font-weight: 700; font-size: 20px; margin-bottom: 4px; }
+.lightning-orig { color: #888; text-decoration: line-through; font-size: 13px; }
+.lightning-off { color: #388E3C; font-weight: 700; font-size: 13px; margin-bottom: 8px; }
 
-  /* ===== STORE PREVIEW SECTION ===== */
-  #store-preview {
-    padding: 0 5% 72px;
-    position: relative; z-index: 1;
-  }
-  .store-preview-inner {
-    max-width: var(--container); margin: 0 auto;
-  }
-  .store-preview-hdr {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 16px;
-  }
-  .store-preview-hdr-left { display: flex; align-items: center; gap: 12px; }
-  .store-preview-hdr-left span {
-    font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.5);
-    text-transform: uppercase; letter-spacing: 0.08em;
-  }
-  .sph-tag {
-    background: rgba(6,182,212,0.12); border: 1px solid rgba(6,182,212,0.25);
-    color: var(--cyan); font-size: 0.7rem; font-weight: 700;
-    padding: 3px 10px; border-radius: 100px; letter-spacing: 0.05em;
-  }
-  .store-preview-hdr a {
-    font-size: 0.78rem; color: var(--cyan); text-decoration: none; font-weight: 600;
-    display: inline-flex; align-items: center; gap: 5px;
-    border: 1px solid rgba(6,182,212,0.2); border-radius: 8px;
-    padding: 6px 14px; transition: all 0.2s;
-    background: rgba(6,182,212,0.06);
-  }
-  .store-preview-hdr a:hover { background: rgba(6,182,212,0.12); border-color: var(--cyan); }
-  .browser-frame {
-    border-radius: 16px; overflow: hidden;
-    border: 1px solid var(--card-border);
-    box-shadow: 0 12px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
-    background: #0d0d1f;
-    position: relative;
-  }
-  .browser-bar {
-    background: rgba(255,255,255,0.05);
-    padding: 9px 16px;
-    display: flex; align-items: center; gap: 12px;
-    border-bottom: 1px solid var(--card-border);
-  }
-  .browser-dots { display: flex; gap: 6px; }
-  .browser-dots span { width: 10px; height: 10px; border-radius: 50%; }
-  .browser-dots span:nth-child(1) { background: #ff5f57; }
-  .browser-dots span:nth-child(2) { background: #febc2e; }
-  .browser-dots span:nth-child(3) { background: #28c840; }
-  .browser-url {
-    flex: 1; background: rgba(255,255,255,0.06); border-radius: 6px;
-    padding: 5px 12px; font-size: 0.7rem; color: rgba(255,255,255,0.4);
-    font-family: monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .browser-frame iframe {
-    width: 100%; height: 440px; border: none; display: block;
-    pointer-events: none;
-  }
-  .preview-overlay {
-    position: absolute; inset: 0; top: 39px;
-    display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-    padding-bottom: 24px;
-    background: linear-gradient(to bottom, transparent 50%, rgba(6,6,15,0.93) 100%);
-    pointer-events: none;
-  }
-  .preview-open-btn {
-    pointer-events: all;
-    background: linear-gradient(135deg, #7c3aed, #06b6d4);
-    color: #fff; font-weight: 700; font-size: 0.85rem;
-    padding: 12px 26px; border-radius: 10px; text-decoration: none;
-    display: inline-flex; align-items: center; gap: 8px;
-    box-shadow: 0 4px 24px rgba(124,58,237,0.5);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .preview-open-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.65); }
-  @media(max-width:768px){ .browser-frame iframe { height: 300px; } }
-  @media(max-width:480px){ .browser-frame iframe { height: 220px; } }
+/* ===== CONTINUE SHOPPING ===== */
+.continue-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.continue-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.continue-card { background: #f8f9fa; border-radius: 8px; padding: 16px; cursor: pointer; transition: box-shadow .15s; }
+.continue-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.continue-card h4 { font-size: 15px; font-weight: 700; color: #111; margin-bottom: 10px; }
+.continue-thumb { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 10px; }
+.continue-thumb span { font-size: 28px; background: #fff; border-radius: 4px; padding: 8px; display: block; text-align: center; }
+.continue-see { color: #007185; font-size: 13px; text-decoration: none; }
 
-  /* Hero visual */
-  .hero-visual { position: relative; display: flex; justify-content: center; align-items: flex-start; padding-top: 8px; }
-  .hero-card-main {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    backdrop-filter: blur(20px); border-radius: 20px;
-    padding: 22px; width: 100%; max-width: 420px;
-    box-shadow: 0 0 60px rgba(124,58,237,0.2), 0 24px 48px rgba(0,0,0,0.3);
-  }
-  .hero-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .hero-card-title { font-size: 0.85rem; color: var(--gray); font-weight: 500; }
-  .live-badge {
-    background: rgba(6,182,212,0.15); border: 1px solid rgba(6,182,212,0.3);
-    color: var(--cyan); font-size: 0.7rem; padding: 3px 10px; border-radius: 100px;
-    display: flex; align-items: center; gap: 5px;
-  }
-  .live-badge::before { content: ''; width: 6px; height: 6px; background: var(--cyan); border-radius: 50%; animation: pulse 1s infinite; }
-  .agent-feed { display: flex; flex-direction: column; gap: 10px; }
-  .feed-item {
-    display: flex; align-items: flex-start; gap: 10px;
-    background: rgba(255,255,255,0.03); border-radius: 10px;
-    padding: 10px 12px; border: 1px solid rgba(255,255,255,0.05);
-    animation: slideIn 0.4s ease;
-  }
-  .feed-icon { font-size: 1.1rem; }
-  .feed-text { flex: 1; }
-  .feed-agent { font-size: 0.75rem; color: var(--lavender); font-weight: 600; }
-  .feed-action { font-size: 0.78rem; color: var(--gray); }
-  .feed-time { font-size: 0.68rem; color: rgba(255,255,255,0.3); white-space: nowrap; }
-  .floating-stat {
-    position: absolute; background: var(--card-bg);
-    border: 1px solid var(--card-border); backdrop-filter: blur(16px);
-    border-radius: 12px; padding: 12px 16px;
-    animation: float 3s ease-in-out infinite;
-  }
-  .stat-num { font-family: 'Space Grotesk', sans-serif; font-size: 1.4rem; font-weight: 700; }
-  .stat-label { font-size: 0.7rem; color: var(--gray); }
+/* ===== SELLER SPOTLIGHT ===== */
+.seller-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.seller-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.seller-card { border: 1px solid #e8e8e8; border-radius: 8px; padding: 20px 16px; text-align: center; transition: box-shadow .2s; }
+.seller-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.seller-logo { font-size: 52px; margin-bottom: 12px; display: block; }
+.seller-name { font-weight: 700; font-size: 16px; color: #111; margin-bottom: 4px; }
+.seller-cat { color: #666; font-size: 13px; margin-bottom: 8px; }
+.stars { color: #FF9900; font-size: 14px; margin-bottom: 4px; }
+.seller-count { color: #007185; font-size: 13px; margin-bottom: 12px; }
+.btn-visit { background: #fff; border: 1px solid #FF9900; color: #c45500; font-weight: 600; font-size: 13px; padding: 8px 16px; border-radius: 20px; cursor: pointer; text-decoration: none; display: inline-block; transition: background .2s; }
+.btn-visit:hover { background: #FF9900; color: #111; }
 
-  /* ===== MARQUEE ===== */
-  .marquee-section { padding: 26px 0; border-top: 1px solid var(--card-border); border-bottom: 1px solid var(--card-border); overflow: hidden; }
-  .marquee-track { display: flex; gap: 60px; animation: marquee 25s linear infinite; width: max-content; }
-  .marquee-item { display: flex; align-items: center; gap: 10px; color: var(--gray); font-size: 0.85rem; white-space: nowrap; font-weight: 500; }
+/* ===== BEST SELLERS ===== */
+.bestseller-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.bestseller-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+.bestseller-scroll::-webkit-scrollbar { height: 4px; }
+.bestseller-scroll::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 2px; }
+.product-card { min-width: 180px; border: 1px solid #e8e8e8; border-radius: 8px; padding: 14px 12px; text-align: center; flex-shrink: 0; background: #fff; position: relative; }
+.product-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.rank-badge { position: absolute; top: 8px; left: 8px; background: #FFD700; color: #111; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; }
+.product-emoji { font-size: 72px; margin: 8px 0; display: block; }
+.product-name { font-size: 13px; font-weight: 600; color: #111; margin-bottom: 6px; min-height: 32px; line-height: 1.3; }
+.product-stars { color: #FF9900; font-size: 13px; margin-bottom: 4px; }
+.product-reviews { color: #007185; font-size: 12px; margin-bottom: 6px; }
+.product-price { color: #B12704; font-weight: 700; font-size: 18px; margin-bottom: 10px; }
 
-  /* ===== STATS ===== */
-  #stats { }
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: var(--container); margin: 0 auto; width: 100%; }
-  .stat-card {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 16px; padding: 28px 20px; text-align: center;
-    backdrop-filter: blur(10px); transition: all 0.3s;
-    position: relative; overflow: hidden;
-  }
-  .stat-card::before {
-    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-    width: 80%; height: 1px;
-    background: linear-gradient(90deg, transparent, var(--purple), transparent);
-  }
-  .stat-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
-  .stat-big { font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 800; margin-bottom: 6px; }
-  .stat-desc { font-size: 0.9rem; color: var(--gray); }
-  .purple-text { color: var(--purple-light); }
-  .cyan-text { color: var(--cyan); }
+/* ===== CATEGORY BROWSE ===== */
+.cat-browse-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.cat-browse-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.cat-tile { background: #f8f9fa; border-radius: 8px; padding: 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; text-decoration: none; transition: box-shadow .15s, background .15s; border: 1px solid #e8e8e8; }
+.cat-tile:hover { background: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.1); }
+.cat-tile-emoji { font-size: 32px; }
+.cat-tile-info h4 { font-size: 14px; font-weight: 700; color: #111; margin-bottom: 2px; }
+.cat-tile-info span { color: #007185; font-size: 12px; }
 
-  /* ===== AGENTS ===== */
-  #agents { padding: var(--sec-pad) 5%; }
-  .section-header { text-align: center; margin-bottom: 52px; }
-  .section-tag {
-    display: inline-block; background: rgba(6,182,212,0.1);
-    border: 1px solid rgba(6,182,212,0.25); color: var(--cyan);
-    border-radius: 100px; padding: 5px 16px; font-size: 0.78rem;
-    font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-  h2 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700;
-    line-height: 1.2; letter-spacing: -0.02em; margin-bottom: 16px;
-  }
-  .section-sub { color: var(--gray); font-size: 1rem; max-width: 600px; margin: 0 auto; }
-  .agents-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; max-width: var(--container); margin: 0 auto; }
-  .agent-card {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 18px; padding: 24px 18px;
-    backdrop-filter: blur(10px); transition: all 0.3s; cursor: pointer;
-    position: relative; overflow: hidden;
-  }
-  .agent-card::after {
-    content: ''; position: absolute; inset: 0; border-radius: 20px;
-    background: linear-gradient(135deg, var(--glow-purple), transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .agent-card:hover { transform: translateY(-6px); border-color: rgba(124,58,237,0.4); }
-  .agent-card:hover::after { opacity: 1; }
-  .agent-emoji { font-size: 2.2rem; margin-bottom: 14px; display: block; }
-  .agent-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
-  .agent-role { font-size: 0.75rem; color: var(--cyan); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
-  .agent-desc { font-size: 0.82rem; color: var(--gray); line-height: 1.5; }
-  .agent-status {
-    display: flex; align-items: center; gap: 6px;
-    margin-top: 14px; font-size: 0.72rem; color: #4ade80;
-  }
-  .agent-status::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; animation: pulse 1.5s infinite; }
+/* ===== SELL BANNER ===== */
+.sell-banner { background: linear-gradient(135deg, #131921 0%, #232f3e 100%); border-radius: 8px; padding: 40px; margin-top: 16px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+.sell-banner h2 { font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; color: #fff; margin-bottom: 8px; }
+.sell-banner h2 span { color: #FF9900; }
+.sell-banner p { color: #aaa; font-size: 16px; margin-bottom: 24px; }
+.sell-banner-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+.btn-primary-sell { background: #FF9900; color: #111; font-weight: 700; font-size: 15px; padding: 12px 28px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; transition: background .2s; }
+.btn-primary-sell:hover { background: #e68a00; }
+.btn-secondary-sell { background: transparent; color: #fff; font-weight: 600; font-size: 15px; padding: 12px 28px; border: 2px solid #fff; border-radius: 6px; cursor: pointer; text-decoration: none; transition: background .2s; }
+.btn-secondary-sell:hover { background: rgba(255,255,255,0.1); }
+.sell-stats { display: flex; gap: 32px; justify-content: center; flex-wrap: wrap; }
+.sell-stat { color: #fff; text-align: center; }
+.sell-stat .stat-num { font-size: 24px; font-weight: 700; color: #FF9900; display: block; }
+.sell-stat .stat-label { font-size: 13px; color: #aaa; }
 
-  /* ===== DASHBOARD ===== */
-  #demo { padding: var(--sec-pad) 5%; }
-  .demo-wrapper { max-width: var(--container); margin: 0 auto; }
-  .dashboard {
-    background: #0d0d1f; border: 1px solid var(--card-border);
-    border-radius: 20px; overflow: hidden;
-    box-shadow: 0 0 80px rgba(124,58,237,0.15);
-  }
-  .dash-titlebar {
-    background: rgba(255,255,255,0.03); padding: 14px 20px;
-    display: flex; align-items: center; gap: 8px;
-    border-bottom: 1px solid var(--card-border);
-  }
-  .dot-red { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
-  .dot-yellow { width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; }
-  .dot-green { width: 12px; height: 12px; border-radius: 50%; background: #28c840; }
-  .dash-url { margin-left: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; padding: 4px 16px; font-size: 0.78rem; color: var(--gray); }
-  .dash-body { display: grid; grid-template-columns: 220px 1fr 260px; height: 520px; }
-  .dash-sidebar {
-    background: rgba(255,255,255,0.02); border-right: 1px solid var(--card-border);
-    padding: 20px 0;
-  }
-  .dash-brand { padding: 0 20px 20px; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1rem; border-bottom: 1px solid var(--card-border); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .dash-brand .brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulse 2s infinite; }
-  .dash-nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 20px; font-size: 0.83rem; color: var(--gray);
-    cursor: pointer; transition: all 0.2s; border-left: 2px solid transparent;
-  }
-  .dash-nav-item:hover, .dash-nav-item.active {
-    background: rgba(124,58,237,0.1); color: var(--white);
-    border-left-color: var(--purple-light);
-  }
-  .dash-nav-item .icon { font-size: 1rem; }
-  .dash-main { overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
-  .dash-main::-webkit-scrollbar { width: 4px; }
-  .dash-main::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
-  .metrics-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .metric-card {
-    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
-    border-radius: 12px; padding: 16px;
-  }
-  .metric-label { font-size: 0.72rem; color: var(--gray); margin-bottom: 6px; }
-  .metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; }
-  .metric-change { font-size: 0.7rem; color: #4ade80; margin-top: 4px; }
-  .chart-card {
-    background: rgba(255,255,255,0.04); border: 1px solid var(--card-border);
-    border-radius: 12px; padding: 16px; flex: 1;
-  }
-  .chart-title { font-size: 0.78rem; font-weight: 600; color: var(--gray); margin-bottom: 12px; }
-  .dash-ai-feed {
-    border-left: 1px solid var(--card-border); padding: 20px;
-    overflow-y: auto; display: flex; flex-direction: column; gap: 0;
-  }
-  .dash-ai-feed::-webkit-scrollbar { width: 4px; }
-  .dash-ai-feed::-webkit-scrollbar-thumb { background: var(--card-border); border-radius: 4px; }
-  .feed-header { font-size: 0.8rem; font-weight: 700; color: var(--lavender); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-  .feed-entry {
-    display: flex; flex-direction: column; gap: 3px;
-    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-  .fe-agent { font-size: 0.72rem; color: var(--purple-light); font-weight: 600; }
-  .fe-action { font-size: 0.75rem; color: var(--gray); }
-  .fe-time { font-size: 0.65rem; color: rgba(255,255,255,0.25); }
-  .orders-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-  .orders-table th { text-align: left; padding: 8px 10px; color: var(--gray); font-weight: 500; border-bottom: 1px solid var(--card-border); }
-  .orders-table td { padding: 10px; border-bottom: 1px solid rgba(255,255,255,0.04); }
-  .badge { display: inline-block; padding: 2px 10px; border-radius: 100px; font-size: 0.68rem; font-weight: 600; }
-  .badge-green { background: rgba(74,222,128,0.15); color: #4ade80; }
-  .badge-yellow { background: rgba(251,191,36,0.15); color: #fbbf24; }
-  .badge-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+/* ===== VIBEPASS BANNER ===== */
+.vibepass-banner { background: linear-gradient(135deg, #FF9900 0%, #e65c00 40%, #131921 100%); border-radius: 8px; padding: 36px 40px; margin-top: 16px; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
+.vibepass-left h2 { font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.vibepass-left p { color: rgba(255,255,255,0.85); font-size: 15px; margin-bottom: 4px; }
+.vibepass-price { font-size: 28px; font-weight: 800; color: #fff; font-family: 'Space Grotesk', sans-serif; }
+.vibepass-price span { font-size: 16px; font-weight: 400; }
+.vibepass-features { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+.vibepass-feature { color: rgba(255,255,255,0.9); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.btn-vibepass { background: #fff; color: #e65c00; font-weight: 800; font-size: 15px; padding: 14px 32px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-block; white-space: nowrap; transition: transform .1s; }
+.btn-vibepass:hover { transform: scale(1.03); }
 
-  /* ===== COMPARISON ===== */
-  #compare { padding: var(--sec-pad) 5%; }
-  .compare-table-wrap { max-width: 900px; margin: 0 auto; }
-  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; }
-  .compare-table th {
-    padding: 20px 24px; font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 700;
-    border-bottom: 2px solid var(--card-border);
-  }
-  .compare-table th:nth-child(2) { color: var(--gray); }
-  .compare-table th:nth-child(3) { background: rgba(124,58,237,0.1); color: var(--lavender); border-radius: 12px 12px 0 0; border-left: 1px solid rgba(124,58,237,0.2); border-right: 1px solid rgba(124,58,237,0.2); border-top: 1px solid rgba(124,58,237,0.2); }
-  .compare-table td { padding: 16px 24px; border-bottom: 1px solid var(--card-border); font-size: 0.88rem; }
-  .compare-table td:nth-child(3) { background: rgba(124,58,237,0.05); border-left: 1px solid rgba(124,58,237,0.15); border-right: 1px solid rgba(124,58,237,0.15); }
-  .compare-table tr:last-child td:nth-child(3) { border-radius: 0 0 12px 12px; border-bottom: 1px solid rgba(124,58,237,0.2); }
-  .check { color: #4ade80; font-size: 1.1rem; }
-  .cross { color: #f87171; font-size: 1.1rem; }
-  .compare-label { color: var(--gray); }
+/* ===== RECENTLY VIEWED ===== */
+.recent-section { background: #fff; border-radius: 8px; padding: 20px; margin-top: 16px; box-shadow: 0 2px 5px rgba(0,0,0,0.08); }
+.recent-scroll { display: flex; gap: 16px; overflow-x: auto; padding-bottom: 8px; scrollbar-width: thin; }
+.recent-scroll::-webkit-scrollbar { height: 4px; }
+.recent-scroll::-webkit-scrollbar-thumb { background: #cdcdcd; border-radius: 2px; }
 
-  /* ===== PRICING ===== */
-  #pricing { padding: var(--sec-pad) 5%; }
-  .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 960px; margin: 0 auto; }
-  .pricing-card {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 20px; padding: 36px 28px; transition: all 0.3s;
-    position: relative; overflow: hidden;
-  }
-  .pricing-card:hover { transform: translateY(-6px); }
-  .pricing-card.popular {
-    background: linear-gradient(145deg, rgba(124,58,237,0.12), rgba(6,182,212,0.08));
-    border-color: rgba(124,58,237,0.4);
-    box-shadow: 0 0 60px rgba(124,58,237,0.2);
-  }
-  .popular-badge {
-    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
-    background: linear-gradient(135deg, var(--purple), var(--cyan));
-    color: white; font-size: 0.72rem; font-weight: 700;
-    padding: 4px 20px; border-radius: 0 0 10px 10px; white-space: nowrap;
-  }
-  .plan-name { font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 1.1rem; margin-bottom: 8px; }
-  .plan-price { font-family: 'Space Grotesk', sans-serif; font-size: 2.8rem; font-weight: 800; margin: 16px 0 4px; }
-  .plan-price sup { font-size: 1.2rem; vertical-align: super; }
-  .plan-period { font-size: 0.8rem; color: var(--gray); margin-bottom: 28px; }
-  .plan-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
-  .plan-features li { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; color: var(--gray); }
-  .plan-features li::before { content: '✓'; color: var(--cyan); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
-  .plan-btn {
-    width: 100%; padding: 13px; border-radius: 10px; font-size: 0.9rem; font-weight: 600;
-    cursor: pointer; border: none; transition: all 0.3s;
-  }
-  .plan-btn-outline {
-    background: transparent; color: var(--white); border: 1px solid var(--card-border);
-  }
-  .plan-btn-outline:hover { border-color: var(--purple-light); color: var(--purple-light); }
-  .plan-btn-filled {
-    background: linear-gradient(135deg, var(--purple), var(--cyan));
-    color: white; box-shadow: 0 0 30px rgba(124,58,237,0.4);
-  }
-  .plan-btn-filled:hover { box-shadow: 0 0 50px rgba(124,58,237,0.6); transform: translateY(-1px); }
+/* ===== FOOTER ===== */
+.footer-top { background: #37475A; padding: 12px; text-align: center; margin-top: 24px; }
+.footer-top a { color: #fff; font-size: 13px; font-weight: 500; text-decoration: none; }
+.footer-top a:hover { text-decoration: underline; }
+.footer-main { background: #232f3e; padding: 36px 0 24px; }
+.footer-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; }
+.footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul li a { color: #ddd; font-size: 13px; text-decoration: none; }
+.footer-col ul li a:hover { text-decoration: underline; color: #fff; }
+.footer-bottom { background: #131921; padding: 20px; text-align: center; }
+.footer-logo { color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 12px; }
+.footer-logo span { color: #FF9900; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.footer-links a { color: #aaa; font-size: 12px; text-decoration: none; }
+.footer-links a:hover { color: #fff; }
+.footer-copy { color: #777; font-size: 12px; }
 
-  /* ===== TESTIMONIALS ===== */
-  #testimonials { padding: var(--sec-pad) 5%; }
-  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: var(--container); margin: 0 auto; }
-  .testi-card {
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    border-radius: 18px; padding: 28px; transition: all 0.3s; backdrop-filter: blur(10px);
-  }
-  .testi-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.3); }
-  .stars { color: #fbbf24; font-size: 0.9rem; margin-bottom: 14px; }
-  .testi-text { font-size: 0.9rem; color: var(--gray); line-height: 1.7; margin-bottom: 20px; }
-  .testi-author { display: flex; align-items: center; gap: 12px; }
-  .testi-avatar {
-    width: 42px; height: 42px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--purple), var(--cyan));
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
-  }
-  .testi-name { font-weight: 600; font-size: 0.88rem; }
-  .testi-role { font-size: 0.75rem; color: var(--gray); }
+/* ===== TOAST ===== */
+.toast { position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(80px); background: #232f3e; color: #fff; padding: 14px 28px; border-radius: 8px; font-size: 15px; font-weight: 600; z-index: 9999; transition: transform .3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.3); border-left: 4px solid #FF9900; }
+.toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ===== CTA ===== */
-  #cta {
-    padding: var(--sec-pad) 5%; text-align: center;
-  }
-  .cta-box {
-    max-width: 680px; margin: 0 auto;
-    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(6,182,212,0.1));
-    border: 1px solid rgba(124,58,237,0.25); border-radius: 28px; padding: 64px 48px;
-    position: relative; overflow: hidden;
-  }
-  .cta-box::before {
-    content: ''; position: absolute; top: -50%; left: -50%;
-    width: 200%; height: 200%;
-    background: radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 60%);
-    animation: rotateBg 15s linear infinite;
-  }
-  .cta-box h2 { position: relative; z-index: 1; }
-  .cta-box p { position: relative; z-index: 1; color: var(--gray); margin: 16px 0 36px; font-size: 1.05rem; }
-  .cta-btns { position: relative; z-index: 1; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+/* ===== HAMBURGER ===== */
+.nav-hamburger { display: none; background: none; border: 1px solid transparent; color: #fff; font-size: 22px; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+.nav-hamburger:hover { border-color: #fff; }
+.mobile-drawer { display: none; position: fixed; top: 0; left: 0; width: 80%; max-width: 300px; height: 100%; background: #131921; z-index: 9999; flex-direction: column; padding: 20px 0; transform: translateX(-100%); transition: transform .3s; }
+.mobile-drawer.open { transform: translateX(0); }
+.mobile-drawer-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9998; }
+.mobile-drawer-overlay.open { display: block; }
+.drawer-close { background: none; border: none; color: #fff; font-size: 1.3rem; padding: 0 20px 16px; cursor: pointer; text-align: left; width: 100%; }
+.drawer-link { display: block; color: #fff; padding: 12px 20px; font-size: 0.9rem; border-bottom: 1px solid rgba(255,255,255,0.08); text-decoration: none; }
+.drawer-link:hover { background: rgba(255,255,255,0.05); }
+.nav-item-label { }
 
-  /* ===== FOOTER ===== */
-  footer {
-    border-top: 1px solid var(--card-border);
-    padding: 56px 5% 28px;
-    position: relative; z-index: 1;
-  }
-  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 44px; max-width: var(--container); margin-left: auto; margin-right: auto; }
-  .footer-brand p { color: var(--gray); font-size: 0.85rem; margin: 16px 0 24px; max-width: 280px; line-height: 1.7; }
-  .newsletter { display: flex; gap: 8px; }
-  .newsletter input {
-    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--card-border);
-    border-radius: 8px; padding: 10px 14px; color: var(--white); font-size: 0.85rem;
-    outline: none; transition: border-color 0.2s;
-  }
-  .newsletter input:focus { border-color: var(--purple-light); }
-  .newsletter input::placeholder { color: var(--gray); }
-  .newsletter button {
-    background: linear-gradient(135deg, var(--purple), var(--cyan)); color: white;
-    border: none; border-radius: 8px; padding: 10px 18px; font-size: 0.85rem;
-    font-weight: 600; cursor: pointer; white-space: nowrap;
-  }
-  .footer-col h4 { font-size: 0.85rem; font-weight: 700; margin-bottom: 18px; color: var(--white); }
-  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-col ul li a { color: var(--gray); text-decoration: none; font-size: 0.83rem; transition: color 0.2s; }
-  .footer-col ul li a:hover { color: var(--white); }
-  .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding-top: 24px; border-top: 1px solid var(--card-border); max-width: var(--container); margin: 0 auto; }
-  .footer-bottom p { font-size: 0.8rem; color: var(--gray); }
-  .social-links { display: flex; gap: 12px; }
-  .social-link {
-    width: 36px; height: 36px; border-radius: 8px;
-    background: var(--card-bg); border: 1px solid var(--card-border);
-    display: flex; align-items: center; justify-content: center;
-    text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
-  }
-  .social-link:hover { border-color: var(--purple-light); transform: translateY(-2px); }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.85); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-  }
-  @keyframes marquee {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes rotateBg {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes countUp { from { opacity: 0; } to { opacity: 1; } }
-
-  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.6s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ===== RESPONSIVE ===== */
-  @media (max-width: 1100px) {
-    .agents-grid { grid-template-columns: repeat(2, 1fr); }
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .testi-grid { grid-template-columns: repeat(2, 1fr); }
-    .footer-top { grid-template-columns: 1fr 1fr; gap: 36px; }
-    .dash-body { grid-template-columns: 180px 1fr; }
-    .dash-ai-feed { display: none; }
-  }
-  @media (max-width: 768px) {
-    :root { --sec-pad: 56px; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .hero-inner { grid-template-columns: 1fr; gap: 32px; }
-    .hero-visual { display: none; }
-    .agents-grid { grid-template-columns: 1fr 1fr; }
-    .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
-    .testi-grid { grid-template-columns: 1fr; }
-    .dash-body { grid-template-columns: 1fr; height: auto; }
-    .dash-sidebar { display: none; }
-    .metrics-row { grid-template-columns: 1fr 1fr; }
-    .footer-top { grid-template-columns: 1fr; gap: 28px; }
-    .compare-table-wrap { overflow-x: auto; }
-    .cta-box { padding: 48px 28px; }
-    #store-preview { padding-bottom: 52px; }
-  }
-  @media (max-width: 480px) {
-    :root { --sec-pad: 44px; }
-    .agents-grid { grid-template-columns: 1fr; }
-    .stats-grid { grid-template-columns: 1fr 1fr; }
-    .metrics-row { grid-template-columns: 1fr; }
-    .hero-btns { flex-direction: column; align-items: flex-start; }
-    h1 { font-size: 2.1rem; }
-    .cta-box { padding: 40px 20px; }
-    .oneclick-wrap { gap: 8px; }
-  }
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .deal-grid { grid-template-columns: repeat(2, 1fr); }
+  .lightning-grid { grid-template-columns: repeat(2, 1fr); }
+  .seller-grid { grid-template-columns: repeat(2, 1fr); }
+  .continue-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .search-bar { display: none; }
+  .nav-hamburger { display: block; }
+  .mobile-drawer { display: flex; }
+  .nl-label { display: none; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .deal-grid { grid-template-columns: repeat(2, 1fr); }
+  .lightning-grid { grid-template-columns: repeat(2, 1fr); }
+  .seller-grid { grid-template-columns: repeat(2, 1fr); }
+  .continue-grid { grid-template-columns: repeat(2, 1fr); }
+  .cat-browse-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: repeat(2, 1fr); }
+  .slide-content h1 { font-size: 28px; }
+  .slide { height: 300px; }
+  .vibepass-banner { flex-direction: column; text-align: center; }
+  .sell-stats { gap: 16px; }
+}
+@media (max-width: 480px) {
+  .deal-grid { grid-template-columns: repeat(2, 1fr); }
+  .seller-grid { grid-template-columns: 1fr; }
+  .cat-browse-grid { grid-template-columns: 1fr 1fr; }
+  .footer-inner { grid-template-columns: 1fr; }
+  .sell-stats { flex-direction: column; gap: 12px; }
+  .products-grid { grid-template-columns: 1fr 1fr; }
+  .sellers-grid { grid-template-columns: repeat(2, 1fr); }
+}
 </style>
 </head>
 <body>
 
-<canvas id="particles"></canvas>
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕ Close</button>
+  <a href="index.html" class="drawer-link">🏠 Home</a>
+  <a href="account.html" class="drawer-link" id="drawerAccountLink">👤 Hello, Sign in / Account</a>
+  <a href="orders.html" class="drawer-link">📦 Your Orders</a>
+  <a href="track.html" class="drawer-link">🚚 Track Package</a>
+  <a href="returns.html" class="drawer-link">↩️ Returns</a>
+  <a href="sale.html" class="drawer-link">⚡ Today's Deals</a>
+  <a href="collections.html" class="drawer-link">🛍️ Shop All</a>
+  <a href="cart.html" class="drawer-link">🛒 Cart</a>
+  <a href="seller-login.html" class="drawer-link">🏪 Sell on VibeStore</a>
+  <a href="#" class="drawer-link vs-logout-btn" style="display:none;color:#ff6b6b">🚪 Sign Out</a>
+</div>
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#hero" class="nav-logo">
-    <div class="dot"></div>
-    VibeStore
-  </a>
-  <div class="nav-links">
-    <a href="#agents">AI Agents</a>
-    <a href="#demo">Platform</a>
-    <a href="#compare">Compare</a>
-    <a href="#pricing">Pricing</a>
-    <a href="#testimonials">Reviews</a>
-    <a href="#pricing" class="nav-cta">Get Started Free</a>
-  </div>
-  <div class="hamburger" onclick="toggleMenu()" id="hamburger">
-    <span></span><span></span><span></span>
+<!-- TOP NAV -->
+<nav class="nav-top">
+  <div class="nav-top-inner">
+    <a href="index.html" class="logo">⚡Vibe<span>Store</span></a>
+    <button class="nav-hamburger" onclick="openDrawer()" aria-label="Menu">☰</button>
+
+    <div class="delivery-loc">
+      <div class="dloc-label">📍 Deliver to</div>
+      <div class="dloc-city">Delhi 110001</div>
+    </div>
+
+    <div class="search-bar">
+      <select class="search-cat">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Fashion</option>
+        <option>Home & Kitchen</option>
+        <option>Books</option>
+        <option>Sports</option>
+        <option>Beauty</option>
+        <option>Toys</option>
+        <option>Grocery</option>
+      </select>
+      <input class="search-input" type="text" placeholder="Search products, brands and more..." id="searchInput" />
+      <button class="search-btn" onclick="doSearch()">🔍</button>
+    </div>
+
+    <div class="nav-right">
+      <a href="account.html" class="nav-link" id="navAccountLink">
+        <span class="nl-label vs-nav-greeting">Hello, Sign in</span>
+        <span class="nl-main">Account &amp; Lists ▾</span>
+      </a>
+      <a href="orders.html" class="nav-link">
+        <span class="nl-label">Returns</span>
+        <span class="nl-main">&amp; Orders</span>
+      </a>
+      <a href="cart.html" class="nav-link cart-link">
+        <span style="font-size:26px; line-height:1;">🛒</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+        <span class="nl-main">Cart</span>
+      </a>
+    </div>
   </div>
 </nav>
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#agents" onclick="toggleMenu()">AI Agents</a>
-  <a href="#demo" onclick="toggleMenu()">Platform</a>
-  <a href="#compare" onclick="toggleMenu()">Compare</a>
-  <a href="#pricing" onclick="toggleMenu()">Pricing</a>
-  <a href="#testimonials" onclick="toggleMenu()">Reviews</a>
-  <a href="#pricing" class="nav-cta" onclick="toggleMenu()">Get Started Free</a>
-</div>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-inner">
-    <div class="hero-left">
-      <div class="hero-badge"><span></span> 8 AI Agents. Zero Human Intervention.</div>
-      <h1>The Future of<br/><span class="grad">Commerce is</span><br/>Autonomous.</h1>
-      <p class="hero-sub">VibeStore replaces every manual task with intelligent AI agents. From inventory to marketing — your store runs itself, 24/7, at 10× the speed.</p>
-      <div class="hero-btns">
-        <a href="instant-launch.html" class="btn-oneclick">
-          <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          One-Click Launch — AI Sets Up Everything
-        </a>
-      </div>
-      <div class="oneclick-wrap">
-        <div class="oneclick-badge"><div class="oneclick-badge-dot"></div>No forms. No credit card. No setup.</div>
-        <span class="oneclick-note">or</span>
-        <a href="setup.html" class="btn-secondary" style="padding:10px 20px;font-size:0.83rem;">
-          Customise my store instead →
-        </a>
-        <a href="store.html" class="btn-secondary" style="padding:10px 20px;font-size:0.83rem;">
-          See example store
-        </a>
-      </div>
+<!-- SECONDARY NAV -->
+<nav class="nav-secondary">
+  <div class="nav-secondary-inner">
+    <a href="#" class="nav-sec-link bold">☰ All</a>
+    <a href="sale.html" class="nav-sec-link">Today's Deals</a>
+    <a href="help.html" class="nav-sec-link">Customer Service</a>
+    <a href="become-seller.html" class="nav-sec-link">Sell on VibeStore</a>
+    <a href="seller-login.html" class="nav-sec-link">Seller Central</a>
+    <a href="vibepass.html" class="nav-sec-link bold" style="color:#FF9900;">⚡ VibePass</a>
+    <a href="new-arrivals.html" class="nav-sec-link">New Arrivals</a>
+    <a href="best-sellers.html" class="nav-sec-link">Best Sellers</a>
+    <a href="collections.html?cat=electronics" class="nav-sec-link">Electronics</a>
+    <a href="collections.html?cat=fashion" class="nav-sec-link">Fashion</a>
+    <a href="collections.html?cat=home" class="nav-sec-link">Home</a>
+    <a href="collections.html?cat=books" class="nav-sec-link">Books</a>
+  </div>
+</nav>
 
+<!-- HERO CAROUSEL -->
+<div class="carousel-wrap">
+  <div class="carousel-track" id="carouselTrack">
+
+    <!-- Slide 1 -->
+    <div class="slide slide-1">
+      <div class="slide-content">
+        <div class="slide-badge">LIMITED TIME OFFER</div>
+        <div class="slide-emoji-row">📱 💻 🎮 👗 🏠 📚</div>
+        <h1>🛍️ Great Indian <span>Shopping Festival</span></h1>
+        <p>Millions of deals across every category — up to 70% off</p>
+        <a href="deals.html" class="btn-shop">Shop Now →</a>
+      </div>
     </div>
-    <div class="hero-visual">
-      <div class="hero-card-main">
-        <div class="hero-card-header">
-          <span class="hero-card-title">AI Agent Activity Feed</span>
-          <span class="live-badge">LIVE</span>
+
+    <!-- Slide 2 -->
+    <div class="slide slide-2">
+      <div class="slide-content">
+        <div class="slide-badge">TODAY ONLY</div>
+        <h1>⚡ Lightning Deals</h1>
+        <p style="color:#ffcdd2; font-size:20px; font-weight:700; margin-bottom:16px;">Up to 80% Off — Hurry Before They're Gone!</p>
+        <div class="slide-grid">
+          <div class="slide-grid-item"><span>📱</span>Mobiles</div>
+          <div class="slide-grid-item"><span>💻</span>Laptops</div>
+          <div class="slide-grid-item"><span>🎧</span>Audio</div>
+          <div class="slide-grid-item"><span>📷</span>Cameras</div>
+          <div class="slide-grid-item"><span>🏠</span>Home</div>
+          <div class="slide-grid-item"><span>👗</span>Fashion</div>
         </div>
-        <div class="agent-feed" id="heroFeed"></div>
+        <a href="deals.html" class="btn-shop" style="background:#fff; color:#B71C1C;">See All Lightning Deals →</a>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- STORE PREVIEW -->
-<section id="store-preview">
-  <div class="store-preview-inner">
-    <div class="store-preview-hdr">
-      <div class="store-preview-hdr-left">
-        <span>🛍️ Example Store Preview</span>
-        <div class="sph-tag">LIVE DEMO</div>
-      </div>
-      <a href="store.html">
-        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-        Open full store
-      </a>
-    </div>
-    <div class="browser-frame">
-      <div class="browser-bar">
-        <div class="browser-dots"><span></span><span></span><span></span></div>
-        <div class="browser-url">vibestore.app / store — AI-Powered Demo Store</div>
-      </div>
-      <iframe src="store.html" scrolling="no" tabindex="-1" title="VibeStore example store preview"></iframe>
-      <div class="preview-overlay">
-        <a href="store.html" class="preview-open-btn">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
-          Explore the full store
-        </a>
+    <!-- Slide 3 -->
+    <div class="slide slide-3">
+      <div class="slide-content">
+        <div class="slide-badge" style="background:#00ffc8; color:#111;">AI-POWERED</div>
+        <h1 style="color:#00ffc8;">🤖 AI-Powered <span style="color:#fff;">Recommendations</span></h1>
+        <p>8 AI agents working 24/7 to find you the best deals</p>
+        <div class="ai-agents-row">
+          <div class="ai-agent-chip">🔍 Price Scout</div>
+          <div class="ai-agent-chip">🎯 Deal Hunter</div>
+          <div class="ai-agent-chip">📊 Trend Analyzer</div>
+          <div class="ai-agent-chip">💡 Style Advisor</div>
+          <div class="ai-agent-chip">🛡️ Fraud Guard</div>
+          <div class="ai-agent-chip">⚡ Speed Buyer</div>
+          <div class="ai-agent-chip">📦 Stock Tracker</div>
+          <div class="ai-agent-chip">🌟 Review Bot</div>
+        </div>
+        <a href="#" class="btn-shop" style="margin-top:8px;">Explore AI Picks →</a>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- MARQUEE -->
-<div class="marquee-section">
-  <div class="marquee-track" id="marquee">
-    <div class="marquee-item">🤖 Fully Autonomous Commerce</div>
-    <div class="marquee-item">⚡ 10× Faster Operations</div>
-    <div class="marquee-item">💰 80% Cost Reduction</div>
-    <div class="marquee-item">🔄 24/7 AI Agents Active</div>
-    <div class="marquee-item">📈 Smart Pricing Engine</div>
-    <div class="marquee-item">🎯 AI-Driven Marketing</div>
-    <div class="marquee-item">📦 Autonomous Inventory</div>
-    <div class="marquee-item">💬 Instant AI Support</div>
-    <div class="marquee-item">🔍 Auto SEO Optimization</div>
-    <div class="marquee-item">📊 Predictive Analytics</div>
-    <!-- duplicate for infinite -->
-    <div class="marquee-item">🤖 Fully Autonomous Commerce</div>
-    <div class="marquee-item">⚡ 10× Faster Operations</div>
-    <div class="marquee-item">💰 80% Cost Reduction</div>
-    <div class="marquee-item">🔄 24/7 AI Agents Active</div>
-    <div class="marquee-item">📈 Smart Pricing Engine</div>
-    <div class="marquee-item">🎯 AI-Driven Marketing</div>
-    <div class="marquee-item">📦 Autonomous Inventory</div>
-    <div class="marquee-item">💬 Instant AI Support</div>
-    <div class="marquee-item">🔍 Auto SEO Optimization</div>
-    <div class="marquee-item">📊 Predictive Analytics</div>
+  </div>
+
+  <button class="carousel-arrow prev" onclick="moveSlide(-1)">‹</button>
+  <button class="carousel-arrow next" onclick="moveSlide(1)">›</button>
+  <div class="carousel-dots" id="carouselDots">
+    <div class="dot active" onclick="goToSlide(0)"></div>
+    <div class="dot" onclick="goToSlide(1)"></div>
+    <div class="dot" onclick="goToSlide(2)"></div>
   </div>
 </div>
 
-<!-- STATS -->
-<section id="stats" style="padding:var(--sec-pad) 5%">
-  <div class="stats-grid">
-    <div class="stat-card reveal">
-      <div class="stat-big purple-text" data-target="10" data-suffix="×">0</div>
-      <div class="stat-desc">Faster than traditional stores</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-big cyan-text" data-target="80" data-suffix="%">0</div>
-      <div class="stat-desc">Reduction in operational costs</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-big purple-text" data-target="24" data-suffix="/7">0</div>
-      <div class="stat-desc">Autonomous AI operation</div>
-    </div>
-    <div class="stat-card reveal">
-      <div class="stat-big cyan-text" data-target="99.9" data-suffix="%">0</div>
-      <div class="stat-desc">Platform uptime guarantee</div>
-    </div>
-  </div>
-</section>
+<!-- MAIN CONTENT -->
+<div class="main" style="padding-top: 16px; padding-bottom: 32px;">
 
-<!-- AGENTS -->
-<section id="agents">
-  <div class="section-header reveal">
-    <div class="section-tag">Meet Your Team</div>
-    <h2>8 AI Agents. <span class="grad">Every Role Covered.</span></h2>
-    <p class="section-sub">Each agent is purpose-built, always learning, and never calls in sick. Your autonomous workforce starts day one.</p>
-  </div>
-  <div class="agents-grid">
-    <div class="agent-card reveal">
-      <span class="agent-emoji">📦</span>
-      <div class="agent-name">Aria</div>
-      <div class="agent-role">Inventory Agent</div>
-      <div class="agent-desc">Monitors stock levels in real-time, predicts demand using ML forecasts, and auto-triggers restock orders before you run out.</div>
-      <div class="agent-status">Active — monitoring 1,247 SKUs</div>
+  <!-- DEAL CATEGORIES GRID -->
+  <div class="deal-grid-section">
+    <div class="section-header">
+      <div class="section-title">🔥 Shop by Category</div>
+      <a href="collections.html" class="see-all">See all deals →</a>
     </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">📣</span>
-      <div class="agent-name">Nova</div>
-      <div class="agent-role">Marketing Agent</div>
-      <div class="agent-desc">Writes compelling ad copy, designs campaigns, A/B tests creatives, and optimizes ad spend across Google, Meta, and TikTok automatically.</div>
-      <div class="agent-status">Active — running 12 campaigns</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">💬</span>
-      <div class="agent-name">Rex</div>
-      <div class="agent-role">Support Agent</div>
-      <div class="agent-desc">Resolves customer queries instantly with full context awareness. Handles returns, complaints, and upsells — 24/7, zero wait time.</div>
-      <div class="agent-status">Active — 34 chats open</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">💲</span>
-      <div class="agent-name">Luna</div>
-      <div class="agent-role">Pricing Agent</div>
-      <div class="agent-desc">Dynamically adjusts prices based on competitor data, demand signals, and margin targets. Always optimized for maximum revenue.</div>
-      <div class="agent-status">Active — optimizing 380 prices</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">📊</span>
-      <div class="agent-name">Atlas</div>
-      <div class="agent-role">Analytics Agent</div>
-      <div class="agent-desc">Surfaces actionable insights, forecasts revenue, identifies churn risks, and delivers weekly intelligence reports without you asking.</div>
-      <div class="agent-status">Active — 3 new insights ready</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">🔍</span>
-      <div class="agent-name">Sage</div>
-      <div class="agent-role">SEO Agent</div>
-      <div class="agent-desc">Auto-generates product descriptions, meta tags, and blog posts. Continuously updates listings based on keyword trends and ranking data.</div>
-      <div class="agent-status">Active — 89 listings optimized</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">📱</span>
-      <div class="agent-name">Echo</div>
-      <div class="agent-role">Social Agent</div>
-      <div class="agent-desc">Schedules posts, writes captions, replies to comments, and grows your social presence across Instagram, X, and LinkedIn autonomously.</div>
-      <div class="agent-status">Active — 6 posts scheduled</div>
-    </div>
-    <div class="agent-card reveal">
-      <span class="agent-emoji">🚚</span>
-      <div class="agent-name">Zen</div>
-      <div class="agent-role">Operations Agent</div>
-      <div class="agent-desc">Manages vendor communications, shipment tracking, returns logistics, and fulfilment workflows end-to-end — no human needed.</div>
-      <div class="agent-status">Active — 17 shipments tracked</div>
-    </div>
-  </div>
-</section>
-
-<!-- DEMO DASHBOARD -->
-<section id="demo">
-  <div class="demo-wrapper">
-    <div class="section-header reveal" style="margin-bottom:36px">
-      <div class="section-tag">Live Platform</div>
-      <h2>Your Store. <span class="grad">Running Itself.</span></h2>
-      <p class="section-sub">A unified dashboard where every metric moves autonomously. No manual intervention. Just results.</p>
-    </div>
-    <div class="dashboard reveal">
-      <div class="dash-titlebar">
-        <div class="dot-red"></div><div class="dot-yellow"></div><div class="dot-green"></div>
-        <div class="dash-url">app.vibestore.ai/dashboard</div>
+    <div class="deal-grid">
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=electronics'">
+        <div class="deal-cat-emoji">📱</div>
+        <div class="deal-cat-name">Electronics</div>
+        <a href="collections.html?cat=electronics" class="deal-cat-link">See all deals →</a>
       </div>
-      <div class="dash-body">
-        <div class="dash-sidebar">
-          <div class="dash-brand"><div class="brand-dot"></div>VibeStore</div>
-          <div class="dash-nav-item active"><span class="icon">🏠</span> Dashboard</div>
-          <div class="dash-nav-item"><span class="icon">📦</span> Orders <span style="margin-left:auto;background:rgba(124,58,237,0.2);color:var(--lavender);font-size:0.65rem;padding:2px 6px;border-radius:4px">47</span></div>
-          <div class="dash-nav-item"><span class="icon">🏷️</span> Products</div>
-          <div class="dash-nav-item"><span class="icon">👥</span> Customers</div>
-          <div class="dash-nav-item"><span class="icon">📊</span> Analytics</div>
-          <div class="dash-nav-item"><span class="icon">📣</span> Marketing</div>
-          <div class="dash-nav-item"><span class="icon">🤖</span> AI Agents</div>
-          <div class="dash-nav-item"><span class="icon">⚙️</span> Settings</div>
-        </div>
-        <div class="dash-main">
-          <div class="metrics-row">
-            <div class="metric-card">
-              <div class="metric-label">Today's Revenue</div>
-              <div class="metric-value cyan-text" id="revenue">$12,849</div>
-              <div class="metric-change">↑ 23.4% vs yesterday</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Orders Processed</div>
-              <div class="metric-value purple-text" id="orders">347</div>
-              <div class="metric-change">↑ 18.2% vs yesterday</div>
-            </div>
-            <div class="metric-card">
-              <div class="metric-label">Conversion Rate</div>
-              <div class="metric-value" style="color:#4ade80">4.8%</div>
-              <div class="metric-change">↑ 0.6% vs yesterday</div>
-            </div>
-          </div>
-          <div class="chart-card">
-            <div class="chart-title">Revenue — Last 7 Days (AI Optimized)</div>
-            <canvas id="revenueChart" height="110"></canvas>
-          </div>
-          <div style="font-size:0.78rem;font-weight:600;color:var(--gray);margin-bottom:8px;">Recent Orders</div>
-          <table class="orders-table">
-            <thead>
-              <tr>
-                <th>Order</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr><td>#4821</td><td>Sarah K.</td><td>Wireless Earbuds Pro</td><td>$89</td><td><span class="badge badge-green">Shipped</span></td></tr>
-              <tr><td>#4820</td><td>Mike R.</td><td>Smart Watch Ultra</td><td>$249</td><td><span class="badge badge-yellow">Processing</span></td></tr>
-              <tr><td>#4819</td><td>Priya S.</td><td>Laptop Stand Bundle</td><td>$67</td><td><span class="badge badge-green">Delivered</span></td></tr>
-              <tr><td>#4818</td><td>James L.</td><td>Mechanical Keyboard</td><td>$139</td><td><span class="badge badge-purple">AI Review</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="dash-ai-feed">
-          <div class="feed-header">
-            <span style="width:7px;height:7px;background:#4ade80;border-radius:50%;animation:pulse 1.5s infinite;display:inline-block"></span>
-            Agent Activity
-          </div>
-          <div id="dashFeed"></div>
-        </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=fashion'">
+        <div class="deal-cat-emoji">👗</div>
+        <div class="deal-cat-name">Fashion</div>
+        <a href="collections.html?cat=fashion" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=home'">
+        <div class="deal-cat-emoji">🏠</div>
+        <div class="deal-cat-name">Home &amp; Kitchen</div>
+        <a href="collections.html?cat=home" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=books'">
+        <div class="deal-cat-emoji">📚</div>
+        <div class="deal-cat-name">Books</div>
+        <a href="collections.html?cat=books" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=sports'">
+        <div class="deal-cat-emoji">🏋️</div>
+        <div class="deal-cat-name">Sports</div>
+        <a href="collections.html?cat=sports" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=beauty'">
+        <div class="deal-cat-emoji">💄</div>
+        <div class="deal-cat-name">Beauty</div>
+        <a href="collections.html?cat=beauty" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=toys'">
+        <div class="deal-cat-emoji">🧸</div>
+        <div class="deal-cat-name">Toys</div>
+        <a href="collections.html?cat=toys" class="deal-cat-link">See all deals →</a>
+      </div>
+      <div class="deal-cat-card" onclick="location.href='collections.html?cat=grocery'">
+        <div class="deal-cat-emoji">🛒</div>
+        <div class="deal-cat-name">Grocery</div>
+        <a href="collections.html?cat=grocery" class="deal-cat-link">See all deals →</a>
       </div>
     </div>
   </div>
-</section>
 
-<!-- COMPARE -->
-<section id="compare">
-  <div class="section-header reveal">
-    <div class="section-tag">Comparison</div>
-    <h2>VibeStore vs <span class="grad">Traditional Shopify</span></h2>
-    <p class="section-sub">Everything Shopify does — plus an autonomous AI layer that handles the work for you.</p>
-  </div>
-  <div class="compare-table-wrap reveal">
-    <table class="compare-table">
-      <thead>
-        <tr>
-          <th style="width:40%">Feature</th>
-          <th style="width:30%;text-align:center">Shopify</th>
-          <th style="width:30%;text-align:center">VibeStore ✦</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td class="compare-label">Product management</td><td style="text-align:center"><span class="check">✓</span> Manual</td><td style="text-align:center"><span class="check">✓</span> AI Automated</td></tr>
-        <tr><td class="compare-label">Inventory tracking</td><td style="text-align:center"><span class="check">✓</span> Manual alerts</td><td style="text-align:center"><span class="check">✓</span> Auto-restocked by Aria</td></tr>
-        <tr><td class="compare-label">Customer support</td><td style="text-align:center"><span class="check">✓</span> Human agents</td><td style="text-align:center"><span class="check">✓</span> Rex responds instantly</td></tr>
-        <tr><td class="compare-label">Dynamic pricing</td><td style="text-align:center"><span class="cross">✗</span> Static only</td><td style="text-align:center"><span class="check">✓</span> Luna optimizes live</td></tr>
-        <tr><td class="compare-label">Marketing campaigns</td><td style="text-align:center"><span class="check">✓</span> Manual setup</td><td style="text-align:center"><span class="check">✓</span> Nova creates & runs</td></tr>
-        <tr><td class="compare-label">SEO optimization</td><td style="text-align:center"><span class="check">✓</span> Manual edits</td><td style="text-align:center"><span class="check">✓</span> Sage auto-optimizes</td></tr>
-        <tr><td class="compare-label">Social media posting</td><td style="text-align:center"><span class="cross">✗</span> 3rd party app</td><td style="text-align:center"><span class="check">✓</span> Echo posts & engages</td></tr>
-        <tr><td class="compare-label">Vendor management</td><td style="text-align:center"><span class="check">✓</span> Manual emails</td><td style="text-align:center"><span class="check">✓</span> Zen handles end-to-end</td></tr>
-        <tr><td class="compare-label">Analytics & insights</td><td style="text-align:center"><span class="check">✓</span> View only</td><td style="text-align:center"><span class="check">✓</span> Atlas acts on insights</td></tr>
-        <tr><td class="compare-label">Revenue per employee</td><td style="text-align:center"><span class="compare-label">$180K avg</span></td><td style="text-align:center" style="color:var(--cyan)"><strong>Unlimited — no staff needed</strong></td></tr>
-        <tr><td class="compare-label">24/7 autonomous operation</td><td style="text-align:center"><span class="cross">✗</span></td><td style="text-align:center"><span class="check">✓</span></td></tr>
-        <tr><td class="compare-label">Operational cost</td><td style="text-align:center"><span class="compare-label">High (human salaries)</span></td><td style="text-align:center"><strong style="color:#4ade80">80% lower</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+  <!-- DEALS OF THE DAY -->
+  <div class="deals-section">
+    <div class="section-header">
+      <div class="section-title">🏷️ Deals of the Day</div>
+      <a href="deals.html" class="see-all">See all deals →</a>
+    </div>
+    <div class="deals-scroll" id="dealsScroll">
 
-<!-- PRICING -->
-<section id="pricing">
-  <div class="section-header reveal">
-    <div class="section-tag">Pricing</div>
-    <h2>Simple. <span class="grad">Transparent. Autonomous.</span></h2>
-    <p class="section-sub">Start free. Scale with your store. Every plan includes all 8 AI agents.</p>
-  </div>
-  <div class="pricing-grid">
-    <div class="pricing-card reveal">
-      <div class="plan-name">Starter</div>
-      <div class="plan-price"><sup>$</sup>0</div>
-      <div class="plan-period">per month · forever free</div>
-      <ul class="plan-features">
-        <li>Up to 50 products</li>
-        <li>All 8 AI agents (limited)</li>
-        <li>Basic analytics dashboard</li>
-        <li>2% transaction fee</li>
-        <li>Community support</li>
-      </ul>
-      <button class="plan-btn plan-btn-outline">Get Started Free</button>
-    </div>
-    <div class="pricing-card popular reveal">
-      <div class="popular-badge">MOST POPULAR</div>
-      <div class="plan-name" style="color:var(--lavender)">Growth</div>
-      <div class="plan-price"><sup>$</sup>49</div>
-      <div class="plan-period">per month · billed monthly</div>
-      <ul class="plan-features">
-        <li>Unlimited products</li>
-        <li>All 8 AI agents (full power)</li>
-        <li>Advanced analytics + forecasting</li>
-        <li>0.5% transaction fee</li>
-        <li>Priority AI support</li>
-        <li>Custom storefront design</li>
-        <li>Multi-channel selling</li>
-      </ul>
-      <button class="plan-btn plan-btn-filled">Start 14-Day Trial</button>
-    </div>
-    <div class="pricing-card reveal">
-      <div class="plan-name">Enterprise</div>
-      <div class="plan-price"><sup>$</sup>199</div>
-      <div class="plan-period">per month · billed monthly</div>
-      <ul class="plan-features">
-        <li>Everything in Growth</li>
-        <li>Custom AI agent training</li>
-        <li>Dedicated success manager</li>
-        <li>0% transaction fee</li>
-        <li>SLA guarantee + uptime</li>
-        <li>White-label option</li>
-        <li>API + webhook access</li>
-      </ul>
-      <button class="plan-btn plan-btn-outline">Contact Sales</button>
+      <div class="deal-card">
+        <span class="deal-card-emoji">🎧</span>
+        <div class="deal-name">Sony WH-1000XM5 Headphones</div>
+        <div><span class="deal-price">₹24,990</span> <span class="deal-orig">₹38,000</span></div>
+        <div class="deal-discount">34% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:72%"></div></div>
+        <div class="claimed-text">72% claimed</div>
+        <button class="btn-cart" onclick="addToCart('Sony WH-1000XM5', 24990)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd1">05:42:17</span></div>
+      </div>
+
+      <div class="deal-card">
+        <span class="deal-card-emoji">📱</span>
+        <div class="deal-name">Samsung Galaxy S24 5G</div>
+        <div><span class="deal-price">₹49,999</span> <span class="deal-orig">₹79,999</span></div>
+        <div class="deal-discount">37% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:85%"></div></div>
+        <div class="claimed-text">85% claimed</div>
+        <button class="btn-cart" onclick="addToCart('Samsung Galaxy S24', 49999)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd2">05:42:17</span></div>
+      </div>
+
+      <div class="deal-card">
+        <span class="deal-card-emoji">💻</span>
+        <div class="deal-name">Lenovo IdeaPad 5 Pro</div>
+        <div><span class="deal-price">₹54,990</span> <span class="deal-orig">₹85,000</span></div>
+        <div class="deal-discount">35% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:61%"></div></div>
+        <div class="claimed-text">61% claimed</div>
+        <button class="btn-cart" onclick="addToCart('Lenovo IdeaPad 5 Pro', 54990)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd3">05:42:17</span></div>
+      </div>
+
+      <div class="deal-card">
+        <span class="deal-card-emoji">⌚</span>
+        <div class="deal-name">Apple Watch Series 9</div>
+        <div><span class="deal-price">₹38,900</span> <span class="deal-orig">₹55,900</span></div>
+        <div class="deal-discount">30% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:90%"></div></div>
+        <div class="claimed-text">90% claimed</div>
+        <button class="btn-cart" onclick="addToCart('Apple Watch Series 9', 38900)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd4">05:42:17</span></div>
+      </div>
+
+      <div class="deal-card">
+        <span class="deal-card-emoji">📷</span>
+        <div class="deal-name">Canon EOS R50 Camera</div>
+        <div><span class="deal-price">₹62,990</span> <span class="deal-orig">₹89,000</span></div>
+        <div class="deal-discount">29% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:45%"></div></div>
+        <div class="claimed-text">45% claimed</div>
+        <button class="btn-cart" onclick="addToCart('Canon EOS R50', 62990)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd5">05:42:17</span></div>
+      </div>
+
+      <div class="deal-card">
+        <span class="deal-card-emoji">🖨️</span>
+        <div class="deal-name">HP LaserJet Printer Pro</div>
+        <div><span class="deal-price">₹12,499</span> <span class="deal-orig">₹19,999</span></div>
+        <div class="deal-discount">37% off</div>
+        <div class="claimed-bar-wrap"><div class="claimed-bar" style="width:58%"></div></div>
+        <div class="claimed-text">58% claimed</div>
+        <button class="btn-cart" onclick="addToCart('HP LaserJet Pro', 12499)">Add to Cart</button>
+        <div class="countdown">Ends in: <span id="cd6">05:42:17</span></div>
+      </div>
+
     </div>
   </div>
-</section>
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="section-header reveal">
-    <div class="section-tag">Reviews</div>
-    <h2>Founders <span class="grad">Love VibeStore</span></h2>
-    <p class="section-sub">From solo entrepreneurs to VC-backed startups — VibeStore is the operating system for modern commerce.</p>
+  <!-- LIGHTNING DEALS -->
+  <div class="lightning-section">
+    <div class="section-header">
+      <div class="section-title">⚡ Lightning Deals</div>
+      <a href="deals.html?type=lightning" class="see-all">See all deals →</a>
+    </div>
+    <div class="lightning-grid">
+
+      <div class="lightning-card">
+        <div><span class="lightning-badge">⚡ LIGHTNING DEAL</span></div>
+        <span class="lightning-emoji">🎮</span>
+        <div class="lightning-name">PlayStation 5 Slim Console</div>
+        <div class="lightning-price">₹44,990</div>
+        <div><span class="lightning-orig">₹54,990</span> <span class="lightning-off">18% off</span></div>
+        <div class="claimed-bar-wrap" style="margin:10px 0;"><div class="claimed-bar" style="width:88%"></div></div>
+        <div class="claimed-text">88% claimed — limited stock!</div>
+        <button class="btn-cart" onclick="addToCart('PlayStation 5 Slim', 44990)">Add to Cart</button>
+      </div>
+
+      <div class="lightning-card">
+        <div><span class="lightning-badge">⚡ LIGHTNING DEAL</span></div>
+        <span class="lightning-emoji">🌀</span>
+        <div class="lightning-name">Dyson V15 Vacuum Cleaner</div>
+        <div class="lightning-price">₹39,900</div>
+        <div><span class="lightning-orig">₹62,900</span> <span class="lightning-off">36% off</span></div>
+        <div class="claimed-bar-wrap" style="margin:10px 0;"><div class="claimed-bar" style="width:75%"></div></div>
+        <div class="claimed-text">75% claimed — limited stock!</div>
+        <button class="btn-cart" onclick="addToCart('Dyson V15', 39900)">Add to Cart</button>
+      </div>
+
+      <div class="lightning-card">
+        <div><span class="lightning-badge">⚡ LIGHTNING DEAL</span></div>
+        <span class="lightning-emoji">🎵</span>
+        <div class="lightning-name">Bose QuietComfort 45</div>
+        <div class="lightning-price">₹21,990</div>
+        <div><span class="lightning-orig">₹35,000</span> <span class="lightning-off">37% off</span></div>
+        <div class="claimed-bar-wrap" style="margin:10px 0;"><div class="claimed-bar" style="width:93%"></div></div>
+        <div class="claimed-text">93% claimed — almost gone!</div>
+        <button class="btn-cart" onclick="addToCart('Bose QuietComfort 45', 21990)">Add to Cart</button>
+      </div>
+
+      <div class="lightning-card">
+        <div><span class="lightning-badge">⚡ LIGHTNING DEAL</span></div>
+        <span class="lightning-emoji">📺</span>
+        <div class="lightning-name">Samsung 65" 4K QLED TV</div>
+        <div class="lightning-price">₹79,990</div>
+        <div><span class="lightning-orig">₹1,29,990</span> <span class="lightning-off">38% off</span></div>
+        <div class="claimed-bar-wrap" style="margin:10px 0;"><div class="claimed-bar" style="width:67%"></div></div>
+        <div class="claimed-text">67% claimed — limited stock!</div>
+        <button class="btn-cart" onclick="addToCart('Samsung 65 QLED TV', 79990)">Add to Cart</button>
+      </div>
+
+    </div>
   </div>
-  <div class="testi-grid">
-    <div class="testi-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testi-text">"We replaced our 3-person ops team on day one. Nova runs our entire ad budget, Rex handles every ticket, and Zen manages all our vendors. We saved $18K/month and revenue went up 40%."</div>
-      <div class="testi-author">
-        <div class="testi-avatar">AK</div>
-        <div>
-          <div class="testi-name">Aryan Kapoor</div>
-          <div class="testi-role">Founder, ThreadCo — Raised $2M seed</div>
+
+  <!-- CONTINUE SHOPPING / BASED ON YOUR VISITS -->
+  <div class="continue-section">
+    <div class="section-header">
+      <div class="section-title">🔁 Based on Your Recent Visits</div>
+    </div>
+    <div class="continue-grid">
+      <div class="continue-card">
+        <h4>Electronics for you</h4>
+        <div class="continue-thumb">
+          <span>📱</span><span>💻</span>
+          <span>⌚</span><span>🎧</span>
         </div>
+        <a href="collections.html?cat=electronics" class="continue-see">See more →</a>
+      </div>
+      <div class="continue-card">
+        <h4>Fashion picks</h4>
+        <div class="continue-thumb">
+          <span>👗</span><span>👟</span>
+          <span>👜</span><span>🧢</span>
+        </div>
+        <a href="collections.html?cat=fashion" class="continue-see">See more →</a>
+      </div>
+      <div class="continue-card">
+        <h4>Home &amp; Kitchen</h4>
+        <div class="continue-thumb">
+          <span>🛋️</span><span>🍳</span>
+          <span>🪴</span><span>💡</span>
+        </div>
+        <a href="collections.html?cat=home" class="continue-see">See more →</a>
+      </div>
+      <div class="continue-card">
+        <h4>Books &amp; Media</h4>
+        <div class="continue-thumb">
+          <span>📚</span><span>🎬</span>
+          <span>🎮</span><span>🎵</span>
+        </div>
+        <a href="collections.html?cat=books" class="continue-see">See more →</a>
       </div>
     </div>
-    <div class="testi-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testi-text">"I showed VibeStore to our Series A investors and they were floored. The autonomous pricing alone increased our margins by 22%. This is the future — and we're early."</div>
-      <div class="testi-author">
-        <div class="testi-avatar">SM</div>
-        <div>
-          <div class="testi-name">Sofia Martinez</div>
-          <div class="testi-role">CEO, LumeBeauty — $5M ARR</div>
-        </div>
-      </div>
-    </div>
-    <div class="testi-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testi-text">"The AI agents are legitimately smarter than our previous team at repetitive tasks. Sage rewrote 800 product listings overnight and our organic traffic tripled in 60 days."</div>
-      <div class="testi-author">
-        <div class="testi-avatar">JP</div>
-        <div>
-          <div class="testi-name">James Park</div>
-          <div class="testi-role">Co-founder, GearNest — Shopify $1M store</div>
-        </div>
-      </div>
-    </div>
   </div>
-</section>
 
-<!-- CTA -->
-<section id="cta">
-  <div class="cta-box reveal">
-    <h2>Ready to run your store on autopilot?</h2>
-    <p>Join 1,200+ founders already using VibeStore. Free to start, powerful from day one.</p>
-    <div class="cta-btns">
-      <a href="instant-launch.html" class="btn-oneclick">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-        One-Click Launch — AI Does Everything
-      </a>
-      <a href="setup.html" class="btn-secondary">Customise my store →</a>
+  <!-- SELLER SPOTLIGHT -->
+  <div class="seller-section">
+    <div class="section-header">
+      <div class="section-title">🏪 Featured Sellers on VibeStore</div>
+      <a href="sellers.html" class="see-all">View all sellers →</a>
+    </div>
+    <div class="seller-grid">
+
+      <div class="seller-card">
+        <span class="seller-logo">🏭</span>
+        <div class="seller-name">TechVault India</div>
+        <div class="seller-cat">Electronics &amp; Gadgets</div>
+        <div class="stars">★★★★★</div>
+        <div class="seller-count">2,847 products</div>
+        <a href="seller-profile.html?id=1" class="btn-visit">Visit Store →</a>
+      </div>
+
+      <div class="seller-card">
+        <span class="seller-logo">🧵</span>
+        <div class="seller-name">FabricLane</div>
+        <div class="seller-cat">Ethnic Fashion &amp; Textiles</div>
+        <div class="stars">★★★★½</div>
+        <div class="seller-count">1,203 products</div>
+        <a href="seller-profile.html?id=2" class="btn-visit">Visit Store →</a>
+      </div>
+
+      <div class="seller-card">
+        <span class="seller-logo">🍳</span>
+        <div class="seller-name">KitchenKing</div>
+        <div class="seller-cat">Cookware &amp; Appliances</div>
+        <div class="stars">★★★★★</div>
+        <div class="seller-count">984 products</div>
+        <a href="seller-profile.html?id=3" class="btn-visit">Visit Store →</a>
+      </div>
+
+      <div class="seller-card">
+        <span class="seller-logo">📖</span>
+        <div class="seller-name">BookBazaar</div>
+        <div class="seller-cat">Books, Stationery &amp; More</div>
+        <div class="stars">★★★★★</div>
+        <div class="seller-count">5,621 products</div>
+        <a href="seller-profile.html?id=4" class="btn-visit">Visit Store →</a>
+      </div>
+
     </div>
   </div>
-</section>
+
+  <!-- BEST SELLERS -->
+  <div class="bestseller-section">
+    <div class="section-header">
+      <div class="section-title">#1 Best Sellers</div>
+      <a href="best-sellers.html" class="see-all">See all best sellers →</a>
+    </div>
+    <div class="bestseller-scroll">
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Electronics</div>
+        <span class="product-emoji">📱</span>
+        <div class="product-name">iPhone 15 Pro Max 256GB</div>
+        <div class="product-stars">★★★★★</div>
+        <div class="product-reviews">18,420 ratings</div>
+        <div class="product-price">₹1,34,900</div>
+        <button class="btn-cart" onclick="addToCart('iPhone 15 Pro Max', 134900)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Books</div>
+        <span class="product-emoji">📗</span>
+        <div class="product-name">Atomic Habits by James Clear</div>
+        <div class="product-stars">★★★★★</div>
+        <div class="product-reviews">52,100 ratings</div>
+        <div class="product-price">₹399</div>
+        <button class="btn-cart" onclick="addToCart('Atomic Habits', 399)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Fashion</div>
+        <span class="product-emoji">👟</span>
+        <div class="product-name">Nike Air Max 270 Sneakers</div>
+        <div class="product-stars">★★★★½</div>
+        <div class="product-reviews">9,834 ratings</div>
+        <div class="product-price">₹8,995</div>
+        <button class="btn-cart" onclick="addToCart('Nike Air Max 270', 8995)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Home</div>
+        <span class="product-emoji">☕</span>
+        <div class="product-name">Nespresso Vertuo Coffee Maker</div>
+        <div class="product-stars">★★★★★</div>
+        <div class="product-reviews">7,219 ratings</div>
+        <div class="product-price">₹14,900</div>
+        <button class="btn-cart" onclick="addToCart('Nespresso Vertuo', 14900)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Sports</div>
+        <span class="product-emoji">🏋️</span>
+        <div class="product-name">Fitbit Charge 6 Fitness Tracker</div>
+        <div class="product-stars">★★★★★</div>
+        <div class="product-reviews">11,045 ratings</div>
+        <div class="product-price">₹13,999</div>
+        <button class="btn-cart" onclick="addToCart('Fitbit Charge 6', 13999)">Add to Cart</button>
+      </div>
+
+      <div class="product-card">
+        <div class="rank-badge">#1 in Beauty</div>
+        <span class="product-emoji">✨</span>
+        <div class="product-name">Minimalist 10% Niacinamide Serum</div>
+        <div class="product-stars">★★★★★</div>
+        <div class="product-reviews">34,882 ratings</div>
+        <div class="product-price">₹499</div>
+        <button class="btn-cart" onclick="addToCart('Minimalist Serum', 499)">Add to Cart</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CATEGORY BROWSE -->
+  <div class="cat-browse-section">
+    <div class="section-header">
+      <div class="section-title">🗂️ Browse All Categories</div>
+      <a href="collections.html" class="see-all">See all →</a>
+    </div>
+    <div class="cat-browse-grid">
+      <a href="collections.html?cat=mobiles" class="cat-tile"><span class="cat-tile-emoji">📱</span><div class="cat-tile-info"><h4>Mobiles</h4><span>1.2L+ items</span></div></a>
+      <a href="collections.html?cat=laptops" class="cat-tile"><span class="cat-tile-emoji">💻</span><div class="cat-tile-info"><h4>Laptops &amp; Computers</h4><span>48,000+ items</span></div></a>
+      <a href="collections.html?cat=tv" class="cat-tile"><span class="cat-tile-emoji">📺</span><div class="cat-tile-info"><h4>TV &amp; Appliances</h4><span>62,000+ items</span></div></a>
+      <a href="collections.html?cat=audio" class="cat-tile"><span class="cat-tile-emoji">🎧</span><div class="cat-tile-info"><h4>Audio &amp; Accessories</h4><span>34,000+ items</span></div></a>
+      <a href="collections.html?cat=mens" class="cat-tile"><span class="cat-tile-emoji">👔</span><div class="cat-tile-info"><h4>Men's Fashion</h4><span>2.4L+ items</span></div></a>
+      <a href="collections.html?cat=womens" class="cat-tile"><span class="cat-tile-emoji">👗</span><div class="cat-tile-info"><h4>Women's Fashion</h4><span>3.1L+ items</span></div></a>
+      <a href="collections.html?cat=kitchen" class="cat-tile"><span class="cat-tile-emoji">🍳</span><div class="cat-tile-info"><h4>Kitchen &amp; Dining</h4><span>87,000+ items</span></div></a>
+      <a href="collections.html?cat=furniture" class="cat-tile"><span class="cat-tile-emoji">🛋️</span><div class="cat-tile-info"><h4>Furniture</h4><span>29,000+ items</span></div></a>
+      <a href="collections.html?cat=books" class="cat-tile"><span class="cat-tile-emoji">📚</span><div class="cat-tile-info"><h4>Books</h4><span>5.6L+ items</span></div></a>
+      <a href="collections.html?cat=toys" class="cat-tile"><span class="cat-tile-emoji">🧸</span><div class="cat-tile-info"><h4>Toys &amp; Games</h4><span>74,000+ items</span></div></a>
+      <a href="collections.html?cat=health" class="cat-tile"><span class="cat-tile-emoji">💊</span><div class="cat-tile-info"><h4>Health &amp; Wellness</h4><span>1.1L+ items</span></div></a>
+      <a href="collections.html?cat=grocery" class="cat-tile"><span class="cat-tile-emoji">🥦</span><div class="cat-tile-info"><h4>Grocery &amp; Food</h4><span>18,000+ items</span></div></a>
+    </div>
+  </div>
+
+  <!-- SELL ON VIBESTORE -->
+  <div class="sell-banner">
+    <h2>Start selling today — reach <span>millions of buyers</span></h2>
+    <p>Join India's fastest-growing marketplace. List your products in minutes.</p>
+    <div class="sell-banner-btns">
+      <a href="become-seller.html" class="btn-primary-sell">🏪 Become a Seller</a>
+      <a href="seller-central.html" class="btn-secondary-sell">Learn More</a>
+    </div>
+    <p style="color:#aaa; font-size:14px; margin-top:-12px; margin-bottom:16px;">Already a seller? <a href="seller-login.html" style="color:#FF9900; font-weight:600;">Sign in →</a></p>
+    <div class="sell-stats">
+      <div class="sell-stat"><span class="stat-num">50,000+</span><span class="stat-label">Active Sellers</span></div>
+      <div class="sell-stat"><span class="stat-num">₹100Cr+</span><span class="stat-label">GMV Generated</span></div>
+      <div class="sell-stat"><span class="stat-num">0%</span><span class="stat-label">Commission — First 3 Months</span></div>
+      <div class="sell-stat"><span class="stat-num">2Cr+</span><span class="stat-label">Happy Buyers</span></div>
+    </div>
+  </div>
+
+  <!-- VIBEPASS BANNER -->
+  <div class="vibepass-banner">
+    <div class="vibepass-left">
+      <h2>⚡ VibePass Membership</h2>
+      <p>Everything you need for an extraordinary shopping experience</p>
+      <div class="vibepass-price">₹299<span>/year</span></div>
+      <div class="vibepass-features">
+        <div class="vibepass-feature">✅ Free delivery on all orders</div>
+        <div class="vibepass-feature">✅ Exclusive member-only deals</div>
+        <div class="vibepass-feature">✅ Priority customer support</div>
+        <div class="vibepass-feature">✅ Early access to lightning deals</div>
+        <div class="vibepass-feature">✅ Free returns &amp; easy refunds</div>
+      </div>
+    </div>
+    <div>
+      <a href="vibepass.html" class="btn-vibepass">Try Free for 30 Days →</a>
+      <p style="color:rgba(255,255,255,0.7); font-size:12px; margin-top:10px; text-align:center;">No credit card required</p>
+    </div>
+  </div>
+
+  <!-- RECENTLY VIEWED -->
+  <div class="recent-section" id="recentSection">
+    <div class="section-header">
+      <div class="section-title">👁️ Your Recently Viewed Items</div>
+    </div>
+    <div class="recent-scroll" id="recentScroll"></div>
+  </div>
+
+</div><!-- /main -->
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-top">
-    <div class="footer-brand">
-      <div class="nav-logo" style="display:inline-flex;text-decoration:none">
-        <div class="dot"></div>
-        VibeStore
-      </div>
-      <p>The only e-commerce platform where AI agents handle everything — so you can focus on building your brand.</p>
-      <div class="newsletter">
-        <input type="email" placeholder="Enter your email" />
-        <button>Subscribe</button>
-      </div>
-    </div>
+<div class="footer-top">
+  <a href="#">Back to top ↑</a>
+</div>
+
+<div class="footer-main">
+  <div class="footer-inner">
     <div class="footer-col">
-      <h4>Platform</h4>
+      <h4>Get to Know Us</h4>
       <ul>
-        <li><a href="#">AI Agents</a></li>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Storefront</a></li>
-        <li><a href="#">Analytics</a></li>
-        <li><a href="#">Integrations</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Company</h4>
-      <ul>
-        <li><a href="#">About Us</a></li>
+        <li><a href="#">About VibeStore</a></li>
         <li><a href="#">Careers</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Press Kit</a></li>
-        <li><a href="#">Investors</a></li>
+        <li><a href="#">Press Releases</a></li>
+        <li><a href="#">VibeStore Science</a></li>
+        <li><a href="#">Investor Relations</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h4>Support</h4>
+      <h4>Make Money with Us</h4>
       <ul>
-        <li><a href="#">Documentation</a></li>
-        <li><a href="#">API Reference</a></li>
-        <li><a href="#">Status Page</a></li>
-        <li><a href="#">Contact Us</a></li>
-        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="become-seller.html">Sell on VibeStore</a></li>
+        <li><a href="seller-login.html">Seller Sign In</a></li>
+        <li><a href="seller-dashboard.html">Seller Dashboard</a></li>
+        <li><a href="#">Become an Affiliate</a></li>
+        <li><a href="#">Advertise Products</a></li>
+        <li><a href="#">VibeStore Business</a></li>
+        <li><a href="#">Sell Your Services</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Payment Products</h4>
+      <ul>
+        <li><a href="#">VibePay Wallet</a></li>
+        <li><a href="#">Shop with EMI</a></li>
+        <li><a href="#">VibeStore Pay Later</a></li>
+        <li><a href="#">Reload Your Balance</a></li>
+        <li><a href="#">Gift Cards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Let Us Help You</h4>
+      <ul>
+        <li><a href="#">Your Account</a></li>
+        <li><a href="#">Returns Centre</a></li>
+        <li><a href="#">Track Your Order</a></li>
+        <li><a href="vibepass.html">VibePass</a></li>
+        <li><a href="#">Help Centre</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>AI Agents</h4>
+      <ul>
+        <li><a href="#">🔍 Price Scout</a></li>
+        <li><a href="#">🎯 Deal Hunter</a></li>
+        <li><a href="#">💡 Style Advisor</a></li>
+        <li><a href="#">🛡️ Fraud Guard</a></li>
+        <li><a href="#">📦 Stock Tracker</a></li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p>© 2025 VibeStore · Powered by AI Agents · MyOoumph Networks Pvt Ltd</p>
-    <div class="social-links">
-      <a class="social-link" href="#">𝕏</a>
-      <a class="social-link" href="#">in</a>
-      <a class="social-link" href="#">▶</a>
-      <a class="social-link" href="#">📘</a>
-    </div>
+</div>
+
+<div class="footer-bottom">
+  <div class="footer-logo">⚡Vibe<span>Store</span></div>
+  <div class="footer-links">
+    <a href="#">Conditions of Use</a>
+    <a href="#">Privacy Notice</a>
+    <a href="#">Accessibility</a>
+    <a href="#">Cookie Preferences</a>
+    <a href="#">Interest-Based Ads Notice</a>
   </div>
-</footer>
+  <div class="footer-copy">© 2026 MyOoumph Networks Pvt Ltd. All rights reserved. VibeStore is India's marketplace for millions of products.</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-// ===== PARTICLES =====
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-let particles = [];
+// ===== CAROUSEL =====
+let currentSlide = 0;
+const totalSlides = 3;
+let autoPlay;
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-class Particle {
-  constructor() { this.reset(); }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.3;
-    this.vy = (Math.random() - 0.5) * 0.3;
-    this.r = Math.random() * 1.5 + 0.5;
-    this.alpha = Math.random() * 0.5 + 0.1;
-    this.color = Math.random() > 0.5 ? '124,58,237' : '6,182,212';
-  }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
-  }
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
-    ctx.fill();
-  }
+function updateCarousel() {
+  document.getElementById('carouselTrack').style.transform = `translateX(-${currentSlide * 100}%)`;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === currentSlide));
 }
 
-for (let i = 0; i < 80; i++) particles.push(new Particle());
+function moveSlide(dir) {
+  currentSlide = (currentSlide + dir + totalSlides) % totalSlides;
+  updateCarousel();
+  resetAutoPlay();
+}
 
-function animateParticles() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => { p.update(); p.draw(); });
-  // draw connections
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      if (dist < 100) {
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(124,58,237,${0.08 * (1 - dist/100)})`;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
+function goToSlide(n) {
+  currentSlide = n;
+  updateCarousel();
+  resetAutoPlay();
+}
+
+function resetAutoPlay() {
+  clearInterval(autoPlay);
+  autoPlay = setInterval(() => moveSlide(1), 4000);
+}
+
+resetAutoPlay();
+
+// ===== CART =====
+function getCart() {
+  try { return JSON.parse(localStorage.getItem('vs_cart')) || []; }
+  catch { return []; }
+}
+
+function saveCart(cart) {
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+}
+
+function updateCartBadge() {
+  const cart = getCart();
+  const count = cart.reduce((s, i) => s + (i.qty || 1), 0);
+  const badge = document.getElementById('cartBadge');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+}
+
+function addToCart(name, price) {
+  const cart = getCart();
+  const existing = cart.find(i => i.name === name);
+  if (existing) {
+    existing.qty = (existing.qty || 1) + 1;
+  } else {
+    cart.push({ name, price, qty: 1, image: '📦' });
+  }
+  saveCart(cart);
+  updateCartBadge();
+  showToast(`Added to cart ✅ — ${name}`);
+
+  // Add to recently viewed
+  addToRecentlyViewed({ name, price, emoji: '📦' });
+}
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ===== RECENTLY VIEWED =====
+const staticRecent = [
+  { name: 'Sony WH-1000XM5', price: '₹24,990', emoji: '🎧' },
+  { name: 'iPhone 15 Pro Max', price: '₹1,34,900', emoji: '📱' },
+  { name: 'Nike Air Max 270', price: '₹8,995', emoji: '👟' },
+  { name: 'Atomic Habits', price: '₹399', emoji: '📗' },
+  { name: 'Samsung 65" TV', price: '₹79,990', emoji: '📺' },
+  { name: 'Nespresso Vertuo', price: '₹14,900', emoji: '☕' }
+];
+
+function addToRecentlyViewed(item) {
+  try {
+    let rv = JSON.parse(localStorage.getItem('vs_recent')) || [];
+    rv = rv.filter(i => i.name !== item.name);
+    rv.unshift(item);
+    rv = rv.slice(0, 6);
+    localStorage.setItem('vs_recent', JSON.stringify(rv));
+  } catch {}
+}
+
+function renderRecentlyViewed() {
+  let items;
+  try { items = JSON.parse(localStorage.getItem('vs_recent')) || []; } catch { items = []; }
+  if (!items.length) items = staticRecent;
+
+  const scroll = document.getElementById('recentScroll');
+  scroll.innerHTML = items.map(item => `
+    <div class="product-card" style="min-width:160px;">
+      <span class="product-emoji" style="font-size:60px;">${item.emoji || '📦'}</span>
+      <div class="product-name">${item.name}</div>
+      <div class="product-price">${typeof item.price === 'number' ? '₹' + item.price.toLocaleString('en-IN') : item.price}</div>
+      <button class="btn-cart" onclick="addToCart('${item.name.replace(/'/g,"\\'")}', ${typeof item.price === 'number' ? item.price : 0})">Add to Cart</button>
+    </div>
+  `).join('');
+}
+
+// ===== COUNTDOWN TIMERS =====
+function startCountdowns() {
+  // All deal cards use the same end time (5h 42m 17s from now)
+  const endTime = Date.now() + (5 * 3600 + 42 * 60 + 17) * 1000;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const remaining = Math.max(0, endTime - Date.now());
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    const formatted = `${pad(h)}:${pad(m)}:${pad(s)}`;
+    for (let i = 1; i <= 6; i++) {
+      const el = document.getElementById('cd' + i);
+      if (el) el.textContent = formatted;
     }
   }
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
 
-// ===== MOBILE MENU =====
-function toggleMenu() {
-  document.getElementById('mobileMenu').classList.toggle('open');
+  tick();
+  setInterval(tick, 1000);
 }
 
-// ===== NAV SCROLL =====
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  nav.style.background = window.scrollY > 50 ? 'rgba(6,6,15,0.95)' : 'rgba(6,6,15,0.8)';
+// ===== SEARCH =====
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim();
+  if (q) {
+    window.location.href = `search.html?q=${encodeURIComponent(q)}`;
+  }
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
 });
 
-// ===== REVEAL ON SCROLL =====
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-    }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// ===== INIT =====
+updateCartBadge();
+renderRecentlyViewed();
+startCountdowns();
 
-// ===== ANIMATED COUNTERS =====
-const counterObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const el = entry.target;
-      const target = parseFloat(el.dataset.target);
-      const suffix = el.dataset.suffix || '';
-      let current = 0;
-      const step = target / 60;
-      const timer = setInterval(() => {
-        current = Math.min(current + step, target);
-        el.textContent = (Number.isInteger(target) ? Math.round(current) : current.toFixed(1)) + suffix;
-        if (current >= target) clearInterval(timer);
-      }, 25);
-      counterObserver.unobserve(el);
-    }
-  });
-}, { threshold: 0.5 });
-document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
-
-// ===== HERO AGENT FEED =====
-const heroEvents = [
-  { emoji: '📦', agent: 'Aria', action: 'Restock triggered: "USB-C Hub Pro" — 200 units ordered from supplier', time: 'just now' },
-  { emoji: '💲', agent: 'Luna', action: 'Price updated: "Wireless Earbuds" $89→$94 (+5.6% margin gain)', time: '12s ago' },
-  { emoji: '📣', agent: 'Nova', action: 'New campaign launched: "Summer Sale" targeting 25K users on Meta', time: '31s ago' },
-  { emoji: '💬', agent: 'Rex', action: 'Resolved ticket #5821: Refund processed in 4.2s', time: '45s ago' },
-  { emoji: '🔍', agent: 'Sage', action: 'SEO updated 14 listings — avg keyword rank improved by 8 positions', time: '1m ago' },
-  { emoji: '📱', agent: 'Echo', action: 'Instagram post scheduled: 9AM product drop — 12K estimated reach', time: '1m ago' },
-  { emoji: '📊', agent: 'Atlas', action: 'Revenue forecast: $18,200 today (+42% above target)', time: '2m ago' },
-  { emoji: '🚚', agent: 'Zen', action: 'Vendor invoice auto-approved: ₹1,24,000 — Sunrise Logistics', time: '2m ago' },
-];
-
-let feedIndex = 0;
-function renderHeroFeed() {
-  const feed = document.getElementById('heroFeed');
-  feed.innerHTML = '';
-  const visible = [heroEvents[feedIndex % heroEvents.length], heroEvents[(feedIndex+1) % heroEvents.length], heroEvents[(feedIndex+2) % heroEvents.length]];
-  visible.forEach(ev => {
-    const div = document.createElement('div');
-    div.className = 'feed-item';
-    div.innerHTML = `<span class="feed-icon">${ev.emoji}</span><div class="feed-text"><div class="feed-agent">${ev.agent}</div><div class="feed-action">${ev.action}</div></div><div class="feed-time">${ev.time}</div>`;
-    feed.appendChild(div);
-  });
-  feedIndex++;
+// ===== DRAWER =====
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
 }
-renderHeroFeed();
-setInterval(renderHeroFeed, 2800);
-
-// ===== DASHBOARD FEED =====
-const dashEvents = [
-  { agent: 'Aria', action: 'Stock alert: "Laptop Stand" — 8 units left. Reorder initiated.', time: 'now' },
-  { agent: 'Nova', action: 'Ad spend optimised: Meta budget shifted to top 3 performing creatives.', time: '15s' },
-  { agent: 'Rex', action: 'Chat #1284 resolved — customer upgraded to premium plan.', time: '32s' },
-  { agent: 'Luna', action: '"Smart Watch" price drop detected on Amazon — adjusting -3%.', time: '47s' },
-  { agent: 'Atlas', action: 'Churn risk detected for 3 customers — retention flow triggered.', time: '1m' },
-  { agent: 'Sage', action: '"Wireless Mouse" product page rewritten — CTR +12% projected.', time: '1m' },
-  { agent: 'Echo', action: 'Reply sent to 14 Instagram comments on today\'s product post.', time: '2m' },
-  { agent: 'Zen', action: 'DHL shipment #98421 delayed — customer notified automatically.', time: '2m' },
-];
-
-let dFeedIndex = 0;
-function renderDashFeed() {
-  const feed = document.getElementById('dashFeed');
-  if (!feed) return;
-  const ev = dashEvents[dFeedIndex % dashEvents.length];
-  const div = document.createElement('div');
-  div.className = 'feed-entry';
-  div.style.animation = 'slideIn 0.3s ease';
-  div.innerHTML = `<div class="fe-agent">🤖 ${ev.agent}</div><div class="fe-action">${ev.action}</div><div class="fe-time">${ev.time} ago</div>`;
-  feed.insertBefore(div, feed.firstChild);
-  if (feed.children.length > 6) feed.removeChild(feed.lastChild);
-  dFeedIndex++;
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
 }
-renderDashFeed();
-setInterval(renderDashFeed, 2200);
-
-// ===== LIVE DASHBOARD NUMBERS =====
-function jitter(base, pct) {
-  return Math.round(base * (1 + (Math.random() - 0.5) * pct));
-}
-setInterval(() => {
-  const r = document.getElementById('revenue');
-  const o = document.getElementById('orders');
-  if (r) { const v = jitter(12849, 0.02); r.textContent = '$' + v.toLocaleString(); }
-  if (o) { const v = jitter(347, 0.02); o.textContent = v; }
-}, 3000);
-
-// ===== REVENUE CHART =====
-const chartEl = document.getElementById('revenueChart');
-if (chartEl) {
-  new Chart(chartEl, {
-    type: 'line',
-    data: {
-      labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      datasets: [{
-        label: 'Revenue',
-        data: [8200, 9800, 7600, 11200, 10400, 13900, 12849],
-        borderColor: '#7c3aed',
-        backgroundColor: 'rgba(124,58,237,0.1)',
-        borderWidth: 2,
-        pointBackgroundColor: '#7c3aed',
-        pointRadius: 4,
-        fill: true,
-        tension: 0.4,
-      }, {
-        label: 'AI Forecast',
-        data: [8000, 10200, 7800, 11500, 10800, 14200, 14800],
-        borderColor: '#06b6d4',
-        backgroundColor: 'transparent',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        pointBackgroundColor: '#06b6d4',
-        pointRadius: 3,
-        fill: false,
-        tension: 0.4,
-      }]
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: { labels: { color: '#94a3b8', font: { size: 11 }, boxWidth: 20 } }
-      },
-      scales: {
-        x: { ticks: { color: '#94a3b8', font: { size: 10 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-        y: { ticks: { color: '#94a3b8', font: { size: 10 }, callback: v => '$' + (v/1000).toFixed(0) + 'k' }, grid: { color: 'rgba(255,255,255,0.04)' } }
-      }
-    }
-  });
-}
-
-// ===== SMOOTH CLOSE MOBILE MENU ON LINK CLICK =====
-document.querySelectorAll('.mobile-menu a').forEach(a => a.addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.remove('open');
-}));
+</script>
+<script src="auth.js"></script>
+<script>
+// ===== AUTH NAV =====
+(function(){
+  const auth = vsGetAuth();
+  if (auth) {
+    vsUpdateNav(auth);
+    const link = document.getElementById('navAccountLink');
+    if (link) link.href = 'account.html';
+    const dlink = document.getElementById('drawerAccountLink');
+    if (dlink) { dlink.href = 'account.html'; dlink.textContent = '👤 Hello, ' + auth.name.split(' ')[0]; }
+  } else {
+    const link = document.getElementById('navAccountLink');
+    if (link) link.href = 'login.html';
+  }
+})();
 </script>
 </body>
 </html>

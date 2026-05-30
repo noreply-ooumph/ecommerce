@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: #232f3e; position: fixed; top: 0; left: 0;
+    height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: #FF9900;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    letter-spacing: -0.3px;
+  }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    color: #c8cdd4; text-decoration: none;
+    font-size: 13.5px; font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge {
+    margin-left: auto;
+    background: #067D62; color: #fff;
+    font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    position: fixed; top: 0; left: 220px; right: 0; height: 60px;
+    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    display: flex; align-items: center; padding: 0 24px;
+    z-index: 99; gap: 16px;
+  }
+  .breadcrumb { font-size: 13px; color: #555; flex: 1; }
+  .breadcrumb strong { color: #0f1111; font-weight: 600; }
+  .agent-chips { display: flex; gap: 8px; flex-wrap: nowrap; }
+  .agent-chip {
+    display: flex; align-items: center; gap: 5px;
+    background: #f5f7fa; border: 1px solid #e8eaed; border-radius: 20px;
+    padding: 4px 10px; font-size: 11.5px; font-weight: 500; color: #333;
+    white-space: nowrap;
+  }
+  .chip-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #067D62;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  .chip-dot.idle { background: #ccc; animation: none; }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+  .topbar-bell {
+    position: relative; font-size: 20px; cursor: pointer; padding: 4px;
+  }
+  .bell-badge {
+    position: absolute; top: 0; right: 0;
+    background: #CC0C39; color: #fff;
+    font-size: 9px; font-weight: 700; min-width: 15px; height: 15px;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px;
+  }
+  .topbar-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9900, #e68a00);
+    color: #fff; font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #0f1111; font-size: 13px; }
+  .seller-info .store { color: #666; }
+
+  /* MAIN */
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* AI AGENTS BAR */
+  .agents-bar {
+    background: linear-gradient(135deg, #0f1111 0%, #1a2332 60%, #232f3e 100%);
+    border-radius: 10px; padding: 16px 20px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .agents-bar-label { color: #8d96a0; font-size: 12px; font-weight: 500; margin-right: 4px; white-space: nowrap; }
+  .agents-bar-msg { margin-left: auto; font-size: 12px; color: #667; white-space: nowrap; background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: 20px; color: #aab; }
+  .big-chip {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 6px 12px; font-size: 12px; font-weight: 600; color: #e0e4e8; white-space: nowrap;
+  }
+  .big-chip .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: #4CAF50; animation: pulse 1.5s infinite; }
+  .dot-gray { background: #666; }
+  .dot-yellow { background: #FFC107; animation: pulse 2s infinite; }
+  .dot-blue { background: #2196F3; animation: pulse 1.8s infinite; }
+
+  /* ALERT BANNERS */
+  .alert-banner {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; font-size: 13.5px;
+    position: relative;
+  }
+  .alert-banner .close-btn {
+    margin-left: auto; background: none; border: none; font-size: 16px;
+    cursor: pointer; opacity: 0.5; color: inherit; padding: 0 4px;
+  }
+  .alert-banner .close-btn:hover { opacity: 1; }
+  .alert-orange { background: #fff8ee; border: 1px solid #ffe0a0; color: #7a4f00; }
+  .alert-blue { background: #e8f4ff; border: 1px solid #b3d9ff; color: #0052a3; }
+
+  /* METRIC CARDS */
+  .metrics-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px;
+  }
+  .metric-card {
+    background: #fff; border-radius: 10px; padding: 18px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-left: 4px solid #ccc;
+    position: relative; overflow: hidden;
+  }
+  .metric-card.green { border-left-color: #067D62; }
+  .metric-card.blue { border-left-color: #1565C0; }
+  .metric-card.orange { border-left-color: #FF9900; }
+  .metric-card.teal { border-left-color: #007185; }
+  .metric-card.red { border-left-color: #CC0C39; }
+  .metric-label { font-size: 11.5px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .metric-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px; font-weight: 700; color: #0f1111; margin-bottom: 4px; line-height: 1;
+  }
+  .metric-trend { font-size: 12px; display: flex; align-items: center; gap: 4px; }
+  .trend-up { color: #067D62; }
+  .trend-neutral { color: #888; }
+  .sparkline {
+    position: absolute; bottom: 0; right: 0;
+    width: 80px; height: 30px; opacity: 0.15;
+  }
+
+  /* TWO COLUMN LAYOUT */
+  .two-col { display: grid; grid-template-columns: 60% 40%; gap: 16px; margin-bottom: 20px; }
+
+  /* AI FEED */
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .card-header {
+    padding: 16px 20px; border-bottom: 1px solid #f0f2f5;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-header h3 { font-size: 15px; font-weight: 700; color: #0f1111; flex: 1; }
+  .live-indicator {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 11px; font-weight: 600; color: #067D62;
+  }
+  .live-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #067D62;
+    animation: pulse 1s infinite;
+  }
+  .feed-list { padding: 8px 0; max-height: 340px; overflow-y: auto; }
+  .feed-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 20px; transition: background 0.15s;
+  }
+  .feed-item:hover { background: #fafbfc; }
+  .feed-avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0; margin-top: 1px;
+  }
+  .feed-content { flex: 1; }
+  .feed-agent { font-size: 12px; font-weight: 700; margin-bottom: 2px; }
+  .feed-action { font-size: 13px; color: #333; line-height: 1.4; }
+  .feed-meta { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  .feed-time { font-size: 11px; color: #aaa; }
+  .feed-link { font-size: 11.5px; color: #007185; text-decoration: none; font-weight: 500; }
+  .feed-link:hover { text-decoration: underline; }
+
+  /* QUICK ACTIONS / TODO */
+  .todo-list { padding: 8px 0; }
+  .todo-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 20px; border-bottom: 1px solid #f5f6f8;
+    font-size: 13px;
+  }
+  .todo-item:last-of-type { border-bottom: none; }
+  .todo-hand { font-size: 16px; }
+  .todo-text { flex: 1; color: #333; line-height: 1.4; }
+  .todo-text span { display: block; font-size: 11px; color: #999; margin-top: 2px; }
+  .btn-sm-orange {
+    background: #FF9900; color: #0f1111; border: none; border-radius: 6px;
+    padding: 6px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+    white-space: nowrap; transition: background 0.2s;
+  }
+  .btn-sm-orange:hover { background: #e68a00; }
+  .ai-stat-bar {
+    padding: 14px 20px; background: #f5fff8;
+    border-top: 1px solid #d4f0e0; border-radius: 0 0 10px 10px;
+    font-size: 13px; color: #067D62; font-weight: 600; text-align: center;
+  }
+
+  /* SALES CHART */
+  .chart-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; }
+  .chart-body { padding: 0 20px 20px; }
+  canvas { max-height: 220px; }
+
+  /* ORDERS TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 11px 14px; background: #f7f8fa; font-size: 11.5px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; border-bottom: 1px solid #eee; white-space: nowrap; }
+  td { padding: 12px 14px; border-bottom: 1px solid #f5f6f8; color: #333; vertical-align: middle; }
+  tr:hover td { background: #fafbfd; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap;
+  }
+  .status-green { background: #e6f9f2; color: #067D62; }
+  .status-blue { background: #e8f4ff; color: #1565C0; }
+  .status-orange { background: #fff3e0; color: #e65c00; }
+  .status-red { background: #fce8ec; color: #CC0C39; }
+  .buyer-avatar {
+    width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff; font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  }
+  .none-needed { font-size: 12px; color: #aaa; }
+  .ai-tag { font-size: 11px; color: #007185; font-weight: 500; }
+
+  /* TOP PRODUCTS */
+  .product-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 20px; border-bottom: 1px solid #f5f6f8;
+    font-size: 13px;
+  }
+  .product-row:last-child { border-bottom: none; }
+  .product-emoji {
+    width: 36px; height: 36px; background: #f5f7fa; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;
+  }
+  .product-name { flex: 1; font-weight: 500; }
+  .product-name small { color: #999; font-weight: 400; display: block; font-size: 11.5px; }
+  .product-revenue { font-weight: 700; color: #067D62; font-size: 13px; margin-right: 10px; }
+  .stock-bar { width: 60px; height: 5px; background: #eee; border-radius: 3px; overflow: hidden; }
+  .stock-fill { height: 100%; border-radius: 3px; }
+  .aria-tag {
+    font-size: 10px; font-weight: 700; background: rgba(255,153,0,0.12); color: #c07000;
+    padding: 2px 7px; border-radius: 10px; white-space: nowrap;
+  }
+  .rank-num { font-size: 12px; font-weight: 700; color: #ccc; width: 18px; text-align: center; }
+
+  /* SECTION ROW */
+  .section-row { display: grid; grid-template-columns: 55% 45%; gap: 16px; margin-bottom: 20px; }
+
+  @media (max-width: 1100px) {
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .section-row { grid-template-columns: 1fr; }
+    .agent-chips { display: none; }
+  }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #333; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      left: -220px;
+      top: 0; bottom: 0;
+      z-index: 1000;
+      transition: left 0.3s ease;
+      width: 220px;
+    }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .section-row { grid-template-columns: 1fr; }
+    .chart-card { width: 100%; }
+    .agents-bar { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a class="nav-item active" href="seller-dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="seller-listings.html"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a class="nav-item" href="seller-orders.html"><span class="nav-icon">📦</span> Orders</a>
+    <a class="nav-item" href="seller-messages.html"><span class="nav-icon">💬</span> Messages</a>
+    <a class="nav-item" href="seller-payouts.html"><span class="nav-icon">💰</span> Payouts</a>
+    <a class="nav-item" href="seller-analytics.html"><span class="nav-icon">📈</span> Analytics</a>
+    <a class="nav-item" href="seller-promotions.html"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a class="nav-item" href="seller-returns.html"><span class="nav-icon">↩️</span> Returns</a>
+    <a class="nav-item" href="seller-settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a class="nav-item" href="seller-profile.html"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="breadcrumb">Seller Central &rsaquo; <strong>Dashboard</strong></div>
+  <div class="agent-chips">
+    <div class="agent-chip"><span class="chip-dot"></span>🤖 Aria • 23 tasks</div>
+    <div class="agent-chip"><span class="chip-dot"></span>📦 Nova • 12 tasks</div>
+    <div class="agent-chip"><span class="chip-dot"></span>💬 Rex • 8 chats</div>
+    <div class="agent-chip"><span class="chip-dot dot-yellow"></span>📊 Atlas • 47 prices</div>
+    <div class="agent-chip"><span class="chip-dot"></span>📧 Luna • 3 emails</div>
+    <div class="agent-chip"><span class="chip-dot idle"></span>🔍 Sage • idle</div>
+  </div>
+  <div class="topbar-bell">🔔<span class="bell-badge">5</span></div>
+  <div class="seller-info">
+    <div class="sname">Rahul Sharma</div>
+    <div class="store">MyStore Electronics</div>
+  </div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#999">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- AI AGENTS STATUS BAR -->
+  <div class="agents-bar">
+    <span class="agents-bar-label">🤖 Your AI Team:</span>
+    <div class="big-chip"><span class="dot dot-green"></span>🤖 Aria • 23 tasks</div>
+    <div class="big-chip"><span class="dot dot-green"></span>📦 Nova • 12 tasks</div>
+    <div class="big-chip"><span class="dot dot-yellow"></span>💬 Rex • 8 chats</div>
+    <div class="big-chip"><span class="dot dot-blue"></span>📊 Atlas • 47 prices</div>
+    <div class="big-chip"><span class="dot dot-green"></span>📧 Luna • active</div>
+    <div class="big-chip"><span class="dot dot-gray"></span>🔍 Sage • idle</div>
+    <div class="big-chip"><span class="dot dot-green"></span>🌐 Echo • running</div>
+    <div class="big-chip"><span class="dot dot-green"></span>🧘 Zen • 3 resolved</div>
+    <div class="agents-bar-msg">✨ Your AI team is handling everything. You're free to focus on growth.</div>
+  </div>
+
+  <!-- ALERT BANNERS -->
+  <div class="alert-banner alert-orange" id="alert1">
+    ⚠️ &nbsp;<strong>2 listings need your approval</strong> before going live — Aria has everything ready.
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+  <div class="alert-banner alert-blue" id="alert2" style="margin-bottom:16px;">
+    💡 &nbsp;<strong>Atlas detected a pricing opportunity</strong> — potential <strong>+₹12,400</strong> extra revenue this week if you reprice 34 products.
+    <button class="close-btn" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+
+  <!-- METRIC CARDS ROW 1 -->
+  <div class="metrics-grid">
+    <div class="metric-card green">
+      <div class="metric-label">Today's Revenue</div>
+      <div class="metric-value">₹12,400</div>
+      <div class="metric-trend trend-up">↑ 23% vs yesterday</div>
+    </div>
+    <div class="metric-card blue">
+      <div class="metric-label">Orders Today</div>
+      <div class="metric-value">23</div>
+      <div class="metric-trend trend-up">↑ 8% vs yesterday</div>
+    </div>
+    <div class="metric-card orange">
+      <div class="metric-label">Active Listings</div>
+      <div class="metric-value">847</div>
+      <div class="metric-trend trend-up">↑ 12 new this week</div>
+    </div>
+    <div class="metric-card teal">
+      <div class="metric-label">Account Health</div>
+      <div class="metric-value">98%</div>
+      <div class="metric-trend trend-up">↑ Excellent</div>
+    </div>
+  </div>
+
+  <!-- METRIC CARDS ROW 2 -->
+  <div class="metrics-grid" style="margin-bottom:20px;">
+    <div class="metric-card green">
+      <div class="metric-label">Pending Payouts</div>
+      <div class="metric-value">₹45,200</div>
+      <div class="metric-trend trend-neutral">Next payout: Tuesday</div>
+    </div>
+    <div class="metric-card teal">
+      <div class="metric-label">Unread Messages</div>
+      <div class="metric-value">3</div>
+      <div class="metric-trend trend-up" style="color:#007185;">Rex handled 41 today</div>
+    </div>
+    <div class="metric-card orange">
+      <div class="metric-label">Open Returns</div>
+      <div class="metric-value">2</div>
+      <div class="metric-trend trend-up" style="color:#067D62;">AI processed 8</div>
+    </div>
+    <div class="metric-card blue">
+      <div class="metric-label">Conversion Rate</div>
+      <div class="metric-value">3.2%</div>
+      <div class="metric-trend trend-up">↑ 0.4% this week</div>
+    </div>
+  </div>
+
+  <!-- AI FEED + TODO -->
+  <div class="two-col">
+    <!-- AI ACTIVITY FEED -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🤖 Live AI Activity</h3>
+        <div class="live-indicator"><span class="live-dot"></span>Live</div>
+      </div>
+      <div class="feed-list" id="feed-list">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <!-- TODO / QUICK ACTIONS -->
+    <div class="card" style="display:flex;flex-direction:column;">
+      <div class="card-header">
+        <h3>📋 Your To-Do List</h3>
+        <span style="font-size:11.5px;background:#fff3e0;color:#c07000;padding:3px 8px;border-radius:10px;font-weight:600;">4 items</span>
+      </div>
+      <div class="todo-list">
+        <div class="todo-item">
+          <span class="todo-hand">✋</span>
+          <div class="todo-text">
+            Approve 2 new listings Aria prepared
+            <span>Aria built titles, images, pricing — just needs your OK</span>
+          </div>
+          <a href="seller-listings.html"><button class="btn-sm-orange">Review</button></a>
+        </div>
+        <div class="todo-item">
+          <span class="todo-hand">✋</span>
+          <div class="todo-text">
+            Confirm payout bank details
+            <span>New bank account verification pending</span>
+          </div>
+          <a href="seller-settings.html"><button class="btn-sm-orange">Update</button></a>
+        </div>
+        <div class="todo-item">
+          <span class="todo-hand">✋</span>
+          <div class="todo-text">
+            Review 1 escalated return
+            <span>Buyer Ananya claims wrong item — needs seller input</span>
+          </div>
+          <a href="seller-returns.html"><button class="btn-sm-orange">Handle</button></a>
+        </div>
+        <div class="todo-item">
+          <span class="todo-hand">✋</span>
+          <div class="todo-text">
+            Add product photos for 5 listings
+            <span>Aria flagged low-quality images hurting conversions</span>
+          </div>
+          <button class="btn-sm-orange">Upload</button>
+        </div>
+      </div>
+      <div class="ai-stat-bar">
+        🤖 AI handled <strong>94%</strong> of tasks automatically today
+      </div>
+    </div>
+  </div>
+
+  <!-- SALES CHART -->
+  <div class="chart-card" style="margin-bottom:20px;">
+    <div class="card-header">
+      <h3>📈 Sales This Month</h3>
+      <div style="display:flex;gap:16px;font-size:12px;align-items:center;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#FF9900;display:inline-block;border-radius:2px;"></span> This month</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#ccc;display:inline-block;border-radius:2px;border-top:2px dashed #ccc;background:none;"></span> Last month</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:20px;height:2px;background:#2196F3;display:inline-block;border-radius:2px;"></span> AI forecast</span>
+      </div>
+    </div>
+    <div class="chart-body" style="padding-top:16px;">
+      <canvas id="salesChart"></canvas>
+    </div>
+  </div>
+
+  <!-- ORDERS TABLE + TOP PRODUCTS -->
+  <div class="section-row">
+    <!-- RECENT ORDERS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>📦 Recent Orders</h3>
+        <a href="seller-orders.html" style="font-size:12px;color:#007185;text-decoration:none;font-weight:500;">View all →</a>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Buyer</th>
+              <th>Product</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>AI Action</th>
+              <th>Your Action</th>
+            </tr>
+          </thead>
+          <tbody id="orders-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TOP PRODUCTS -->
+    <div class="card">
+      <div class="card-header">
+        <h3>🏆 Top Products Today</h3>
+        <a href="seller-listings.html" style="font-size:12px;color:#007185;text-decoration:none;font-weight:500;">All listings →</a>
+      </div>
+      <div id="top-products"></div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+// Update UI with seller info
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+  const greetingEl = document.querySelector('.seller-greeting');
+  if (greetingEl) greetingEl.textContent = 'Good morning, ' + auth.name.split(' ')[0] + ' 👋';
+});
+
+// Sidebar toggle
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+// ---- AI FEED DATA ----
+const feedItems = [
+  { agent: 'Aria', emoji: '🤖', color: '#FF9900', bg: '#fff3e0', action: 'Listed 3 new products from your uploaded catalog — SEO optimized', time: '2 min ago' },
+  { agent: 'Rex', emoji: '💬', color: '#1565C0', bg: '#e8f4ff', action: 'Replied to buyer Priya\'s question about shipping timeline', time: '5 min ago' },
+  { agent: 'Nova', emoji: '📦', color: '#067D62', bg: '#e6f9f2', action: 'Marked Order #VS-5234 as shipped and sent tracking SMS to buyer', time: '8 min ago' },
+  { agent: 'Atlas', emoji: '📊', color: '#7B1FA2', bg: '#f3e5f5', action: 'Repriced 47 products — avg +4.2% margin improvement', time: '12 min ago' },
+  { agent: 'Luna', emoji: '📧', color: '#E65100', bg: '#fff3e0', action: 'Sent personalized deal emails to 234 past buyers', time: '15 min ago' },
+  { agent: 'Sage', emoji: '🔍', color: '#CC0C39', bg: '#fce8ec', action: 'Flagged 1 return request for your review — buyer claims wrong item', time: '18 min ago' },
+  { agent: 'Echo', emoji: '🌐', color: '#00796B', bg: '#e0f2f1', action: 'Updated your store SEO meta tags — 12 keywords improved', time: '22 min ago' },
+  { agent: 'Zen', emoji: '🧘', color: '#5D4037', bg: '#efebe9', action: 'Resolved 3 customer complaints automatically — full refund issued', time: '25 min ago' },
+  { agent: 'Aria', emoji: '🤖', color: '#FF9900', bg: '#fff3e0', action: 'Bulk-updated product descriptions for 23 electronics listings', time: '31 min ago' },
+  { agent: 'Nova', emoji: '📦', color: '#067D62', bg: '#e6f9f2', action: 'Generated shipping labels for 7 orders and notified warehouse', time: '38 min ago' },
+];
+
+const feedList = document.getElementById('feed-list');
+feedItems.forEach(item => {
+  feedList.innerHTML += `
+    <div class="feed-item">
+      <div class="feed-avatar" style="background:${item.bg};font-size:15px;">${item.emoji}</div>
+      <div class="feed-content">
+        <div class="feed-agent" style="color:${item.color};">${item.agent}</div>
+        <div class="feed-action">${item.action}</div>
+        <div class="feed-meta">
+          <span class="feed-time">${item.time}</span>
+          <a class="feed-link" href="#">View →</a>
+        </div>
+      </div>
+    </div>`;
+});
+
+// Auto-scroll animation
+let scrollDir = 1;
+setInterval(() => {
+  if (feedList.scrollTop >= feedList.scrollHeight - feedList.clientHeight) scrollDir = -1;
+  if (feedList.scrollTop <= 0) scrollDir = 1;
+  feedList.scrollTop += scrollDir * 0.5;
+}, 30);
+
+// ---- ORDERS TABLE ----
+const orders = [
+  { id: '#VS-5241', buyer: 'PR', name: 'Priya R.', product: '🎧 Sony Headphones', amount: '₹2,499', status: 'Fulfilled', statusClass: 'status-green', ai: 'Nova shipped ✓', action: null },
+  { id: '#VS-5240', buyer: 'AM', name: 'Amit M.', product: '⌨️ Mech Keyboard', amount: '₹4,199', status: 'Shipped', statusClass: 'status-blue', ai: 'Nova shipped ✓', action: null },
+  { id: '#VS-5239', buyer: 'SK', name: 'Sneha K.', product: '💡 Smart Bulbs (4)', amount: '₹899', status: 'Pending', statusClass: 'status-orange', ai: 'Awaiting stock', action: 'Restock' },
+  { id: '#VS-5238', buyer: 'RV', name: 'Raj V.', product: '🖱️ Wireless Mouse', amount: '₹1,299', status: 'Fulfilled', statusClass: 'status-green', ai: 'Nova shipped ✓', action: null },
+  { id: '#VS-5237', buyer: 'AN', name: 'Ananya N.', product: '📱 Phone Stand', amount: '₹349', status: 'Issue', statusClass: 'status-red', ai: 'Escalated to you', action: 'Resolve' },
+  { id: '#VS-5236', buyer: 'KP', name: 'Karan P.', product: '🔋 Power Bank', amount: '₹2,799', status: 'Shipped', statusClass: 'status-blue', ai: 'Nova shipped ✓', action: null },
+];
+
+const tbody = document.getElementById('orders-tbody');
+orders.forEach(o => {
+  tbody.innerHTML += `<tr>
+    <td style="font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:#007185;">${o.id}</td>
+    <td><span class="buyer-avatar">${o.buyer}</span></td>
+    <td style="font-weight:500;">${o.product}</td>
+    <td style="font-weight:700;color:#0f1111;">${o.amount}</td>
+    <td><span class="status-badge ${o.statusClass}">${o.status}</span></td>
+    <td class="ai-tag">${o.ai}</td>
+    <td>${o.action ? `<button class="btn-sm-orange" style="font-size:11px;padding:4px 10px;">${o.action}</button>` : '<span class="none-needed">None needed ✓</span>'}</td>
+  </tr>`;
+});
+
+// ---- TOP PRODUCTS ----
+const products = [
+  { emoji: '🎧', name: 'Sony WH-1000XM5 Headphones', units: 8, revenue: '₹19,992', stock: 23, stockColor: '#067D62' },
+  { emoji: '⌨️', name: 'Mechanical Keyboard RGB', units: 5, revenue: '₹20,995', stock: 7, stockColor: '#FF9900' },
+  { emoji: '🖱️', name: 'Logitech MX Master 3', units: 7, revenue: '₹9,093', stock: 34, stockColor: '#067D62' },
+  { emoji: '💡', name: 'Philips Hue Smart Bulb Set', units: 12, revenue: '₹10,788', stock: 4, stockColor: '#CC0C39' },
+  { emoji: '🔋', name: 'Anker 26800mAh Power Bank', units: 4, revenue: '₹11,196', stock: 15, stockColor: '#067D62' },
+];
+
+const tpDiv = document.getElementById('top-products');
+products.forEach((p, i) => {
+  const pct = Math.min(100, (p.stock / 40) * 100);
+  tpDiv.innerHTML += `<div class="product-row">
+    <span class="rank-num">${i+1}</span>
+    <div class="product-emoji">${p.emoji}</div>
+    <div class="product-name">${p.name}<small>${p.units} sold today</small></div>
+    <div class="product-revenue">${p.revenue}</div>
+    <div>
+      <div class="stock-bar"><div class="stock-fill" style="width:${pct}%;background:${p.stockColor};"></div></div>
+      <div style="font-size:10px;color:#999;margin-top:2px;text-align:center;">${p.stock} left</div>
+    </div>
+    <span class="aria-tag">🤖 Aria</span>
+  </div>`;
+});
+
+// ---- SALES CHART ----
+const labels = Array.from({length: 29}, (_, i) => `${i+1}`);
+const today = 29; // May 29
+const lastMonth = [8200,9100,7800,11200,13400,10100,9800,12300,14200,11000,9500,10800,13100,15200,12400,11800,14500,16800,13200,12700,15400,17100,14800,13500,16200,18400,15100,14200,16800];
+const thisMonth = [9400,10200,8900,12100,14600,11300,10700,13500,15800,12200,10800,12100,14800,16900,13800,13100,16200,18700,14600,14100,17200,19300,16500,15100,18000,20500,16900,null,null];
+const forecast = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,17800,19500];
+
+new Chart(document.getElementById('salesChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [
+      {
+        label: 'This Month',
+        data: thisMonth,
+        borderColor: '#FF9900', backgroundColor: 'rgba(255,153,0,0.08)',
+        borderWidth: 2.5, tension: 0.4, fill: true,
+        pointRadius: 3, pointBackgroundColor: '#FF9900', spanGaps: false
+      },
+      {
+        label: 'Last Month',
+        data: lastMonth,
+        borderColor: '#ccc', borderDash: [5, 4],
+        borderWidth: 1.5, tension: 0.4, fill: false,
+        pointRadius: 0
+      },
+      {
+        label: 'AI Forecast',
+        data: forecast,
+        borderColor: '#2196F3', borderDash: [3, 3],
+        borderWidth: 1.5, tension: 0.4, fill: false,
+        pointRadius: 3, pointBackgroundColor: '#2196F3', spanGaps: false
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { size: 11 } } },
+      y: {
+        grid: { color: 'rgba(0,0,0,0.04)' },
+        ticks: { font: { size: 11 }, callback: v => '₹' + (v/1000).toFixed(0) + 'K' }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

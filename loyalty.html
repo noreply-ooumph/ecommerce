@@ -3,439 +3,528 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Loyalty Rewards — VibeStore</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<title>VibeStore Rewards — Loyalty Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#f8f8f5;--card:#fff;--accent:#6d28d9;--accent2:#0891b2;
-  --text:#111;--muted:#6b7280;--border:#e5e7eb;
-  --navy:#0f0f1a;--purple:#7c3aed;--cyan:#06b6d4;
-  --green:#16a34a;--gold:#d97706;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#0f1111;line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none}
 
-/* NAV */
-.nav{background:var(--navy);padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
-.nav-logo span{background:linear-gradient(135deg,#9d5cf5,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
-.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:white;}
-.nav-user{display:flex;align-items:center;gap:8px;color:white;font-size:0.82rem;}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;cursor:pointer;}
-.nav-hamburger{display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 10px;color:white;cursor:pointer;font-size:1rem;}
+/* ── AMAZON NAV ── */
+.primary-nav{background:#131921;position:sticky;top:0;z-index:400;border-bottom:2px solid #FF9900}
+.nav-inner{max-width:1500px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:800;color:white;white-space:nowrap;flex-shrink:0;border:1px solid transparent;padding:4px 8px;border-radius:4px;transition:border-color .15s}
+.nav-logo:hover{border-color:rgba(255,255,255,.4)}
+.nav-logo span{color:#FF9900}
+.search-form{flex:1;display:flex;height:40px;border-radius:4px;overflow:hidden;max-width:860px}
+.search-cat{background:#f3f3f3;border:none;border-right:1px solid #cdcdcd;padding:0 10px;font-size:.75rem;color:#333;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.search-cat:focus{outline:none}
+.search-input{flex:1;border:none;padding:0 14px;font-size:.9rem;color:#0f1111;font-family:'Inter',sans-serif}
+.search-input:focus{outline:none}
+.search-btn{background:#FF9900;border:none;width:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0;transition:background .15s}
+.search-btn:hover{background:#e68900}
+.nav-right{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0}
+.nav-item{color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.3;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s;white-space:nowrap}
+.nav-item:hover{border-color:rgba(255,255,255,.4)}
+.nav-item strong{color:white;font-size:.82rem;display:block}
+.nav-cart{display:flex;align-items:center;gap:6px;color:white;font-size:.82rem;font-weight:700;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s}
+.nav-cart:hover{border-color:rgba(255,255,255,.4)}
+.nav-cart-icon{font-size:1.6rem;line-height:1}
+.cart-qty{color:#FF9900;font-size:1.1rem;font-weight:800}
+.secondary-nav{background:#232f3e;overflow-x:auto}
+.secondary-nav::-webkit-scrollbar{display:none}
+.sec-inner{max-width:1500px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:38px;gap:0}
+.sec-link{color:rgba(255,255,255,.9);font-size:.82rem;font-weight:500;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;border:1px solid transparent;border-radius:2px;transition:border-color .15s}
+.sec-link:hover{border-color:rgba(255,255,255,.5)}
+.sec-link.active{font-weight:700;color:#FF9900}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#1a0533 0%,#0c1a3a 60%,#0d2a1a 100%);padding:40px 24px 36px;text-align:center;}
-.tier-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.35);border-radius:100px;padding:5px 14px;font-size:0.8rem;color:#fbbf24;font-weight:600;margin-bottom:14px;}
-.points-display{font-family:'Space Grotesk',sans-serif;font-size:3.5rem;font-weight:700;color:white;margin-bottom:4px;line-height:1;}
-.points-display span{font-size:1.2rem;font-weight:500;color:rgba(255,255,255,0.5);margin-left:4px;}
-.hero-sub{color:rgba(255,255,255,0.6);font-size:0.9rem;margin-bottom:24px;}
+/* ── HERO POINTS CARD ── */
+.points-hero{background:linear-gradient(135deg,#131921 0%,#1a2332 50%,#0d2210 100%);padding:44px 16px;position:relative;overflow:hidden}
+.points-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 50%,rgba(255,153,0,.12),transparent 60%),radial-gradient(ellipse at 20% 50%,rgba(0,113,133,.15),transparent 60%);pointer-events:none}
+.points-hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1;text-align:center}
+.hero-tier-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,215,0,.15);border:1px solid rgba(255,215,0,.4);border-radius:100px;padding:6px 18px;font-size:.82rem;font-weight:700;color:#fbbf24;margin-bottom:20px}
+.points-hero h1{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:rgba(255,255,255,.8);margin-bottom:12px}
+.points-big{font-family:'Space Grotesk',sans-serif;font-size:clamp(3rem,8vw,5rem);font-weight:800;color:#fbbf24;line-height:1;text-shadow:0 0 40px rgba(251,191,36,.4);margin-bottom:6px}
+.points-unit{font-size:1.4rem;font-weight:500;color:rgba(255,255,255,.5);margin-left:8px}
+.points-expiry{font-size:.82rem;color:rgba(255,255,255,.5);margin-bottom:32px}
+.points-expiry strong{color:#ff9900}
 
-.progress-section{max-width:500px;margin:0 auto;}
-.progress-labels{display:flex;justify-content:space-between;font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:8px;}
-.progress-labels span:last-child{color:#fbbf24;}
-.progress-bar-outer{height:12px;border-radius:100px;background:rgba(255,255,255,0.1);}
-.progress-bar-inner{height:100%;border-radius:100px;background:linear-gradient(90deg,#fbbf24,#f59e0b);width:49%;transition:width 1s ease;}
-.progress-note{margin-top:8px;font-size:0.76rem;color:rgba(255,255,255,0.5);}
-.progress-note strong{color:#fbbf24;}
+/* Progress bar */
+.tier-progress-wrap{max-width:600px;margin:0 auto}
+.tier-steps{display:flex;justify-content:space-between;margin-bottom:8px}
+.tier-step{text-align:center;flex:1}
+.tier-step-name{font-size:.7rem;font-weight:700;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.04em}
+.tier-step-pts{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:2px}
+.tier-step.current .tier-step-name{color:#fbbf24}
+.tier-step.current .tier-step-pts{color:#fbbf24}
+.progress-track{height:10px;background:rgba(255,255,255,.1);border-radius:100px;margin-bottom:8px;position:relative}
+.progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#d97706,#fbbf24,#fde68a);width:0;transition:width 1.2s ease;position:relative}
+.progress-fill::after{content:'';position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:18px;height:18px;background:#fbbf24;border-radius:50%;border:3px solid #131921;box-shadow:0 0 10px rgba(251,191,36,.6)}
+.progress-note-text{font-size:.75rem;color:rgba(255,255,255,.4);text-align:center}
+.progress-note-text strong{color:#fbbf24}
 
-/* PAGE */
-.page{max-width:1100px;margin:0 auto;padding:28px 16px 60px;}
+/* ── PAGE ── */
+.page{max-width:1200px;margin:0 auto;padding:24px 16px 60px}
 
-/* TIER CARDS */
-.tier-section{margin-bottom:32px;}
-.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:16px;}
-.tier-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-.tier-card{background:var(--card);border:2px solid var(--border);border-radius:14px;padding:18px 16px;transition:all 0.2s;}
-.tier-card.active{border-color:#fbbf24;box-shadow:0 0 0 3px rgba(251,191,36,0.15);}
-.tier-icon{font-size:1.8rem;margin-bottom:8px;}
-.tier-name{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;margin-bottom:2px;}
-.tier-range{font-size:0.72rem;color:var(--muted);margin-bottom:10px;}
-.tier-benefits{list-style:none;}
-.tier-benefits li{font-size:0.76rem;color:var(--muted);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
-.tier-benefits li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;}
-.tier-active-badge{display:inline-block;background:#fef3c7;color:#d97706;font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:100px;margin-top:8px;}
+/* ── EARN SECTION ── */
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:#0f1111;margin-bottom:16px}
+.earn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:32px}
+.earn-card{background:#fff;border:1px solid #e7e7e7;border-radius:8px;padding:20px 16px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:box-shadow .2s,transform .2s}
+.earn-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.12);transform:translateY(-2px)}
+.earn-icon{font-size:2.4rem;margin-bottom:10px}
+.earn-pts{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:#CC0C39;margin-bottom:4px}
+.earn-title{font-size:.88rem;font-weight:700;color:#0f1111;margin-bottom:4px}
+.earn-desc{font-size:.76rem;color:#666}
 
-/* EARN SECTION */
-.earn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:32px;}
-.earn-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 16px;text-align:center;transition:all 0.25s;}
-.earn-card:hover{border-color:var(--accent);transform:translateY(-2px);}
-.earn-icon{font-size:2rem;margin-bottom:8px;}
-.earn-pts{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent);margin-bottom:3px;}
-.earn-desc{font-size:0.76rem;color:var(--muted);}
+/* ── REDEEM SECTION ── */
+.redeem-hero-card{background:#fff;border:1px solid #e7e7e7;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:24px;margin-bottom:24px}
+.redeem-hero-card h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:16px}
+.pts-calc-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.pts-input{border:2px solid #e7e7e7;border-radius:4px;padding:10px 14px;font-size:.9rem;width:160px;font-family:'Inter',sans-serif;transition:border-color .2s}
+.pts-input:focus{outline:none;border-color:#FF9900}
+.pts-eq{font-size:.85rem;color:#555;font-weight:600}
+.pts-discount{font-size:1.2rem;font-weight:800;color:#007600}
+.btn-apply-pts{background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:10px 24px;font-size:.88rem;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-apply-pts:hover{background:#e68900}
 
-/* TABS */
-.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:24px;}
-.tab{padding:10px 20px;font-size:0.88rem;font-weight:600;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s;background:none;border-left:none;border-right:none;border-top:none;font-family:'Inter',sans-serif;}
-.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.tab-content{display:none;}
-.tab-content.active{display:block;}
+/* Voucher cards */
+.voucher-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px}
+.voucher-card{background:#fff;border:1px solid #e7e7e7;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;transition:box-shadow .2s}
+.voucher-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.voucher-top{background:linear-gradient(135deg,#131921,#232f3e);padding:20px 18px;text-align:center;position:relative}
+.voucher-top::after{content:'VibeStore';position:absolute;bottom:8px;right:12px;font-size:.68rem;font-weight:700;color:rgba(255,255,255,.3);letter-spacing:.05em}
+.voucher-amount{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:800;color:#FF9900}
+.voucher-label{font-size:.76rem;color:rgba(255,255,255,.6);margin-top:4px}
+.voucher-bottom{padding:16px 18px}
+.voucher-pts-needed{font-size:.85rem;font-weight:700;color:#CC0C39;margin-bottom:8px}
+.voucher-desc{font-size:.76rem;color:#666;margin-bottom:12px}
+.btn-redeem-voucher{width:100%;background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:10px;font-size:.85rem;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-redeem-voucher:hover{background:#e68900}
+.btn-redeem-voucher:disabled{background:#e7e7e7;color:#aaa;cursor:not-allowed}
 
-/* REDEEM GRID */
-.redeem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-.redeem-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:8px;transition:all 0.2s;}
-.redeem-card:hover{border-color:var(--accent);}
-.redeem-icon{font-size:2rem;}
-.redeem-title{font-weight:700;font-size:0.92rem;}
-.redeem-pts{font-size:0.8rem;color:var(--accent);font-weight:600;}
-.redeem-desc{font-size:0.75rem;color:var(--muted);}
-.btn-redeem{margin-top:auto;background:var(--accent);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
-.btn-redeem:hover{background:#5b21b6;}
-.btn-redeem:disabled{background:var(--border);color:var(--muted);cursor:not-allowed;}
+/* ── TRANSACTION HISTORY ── */
+.history-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #e7e7e7;margin-bottom:32px}
+.history-table th{padding:12px 16px;text-align:left;font-size:.75rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #e7e7e7;background:#fafafa}
+.history-table td{padding:12px 16px;font-size:.84rem;border-bottom:1px solid #f0f0f0}
+.history-table tr:last-child td{border-bottom:none}
+.history-table tr:hover td{background:#fffbf2}
+.pts-earn{color:#007600;font-weight:700}
+.pts-spend{color:#CC0C39;font-weight:700}
+.badge{display:inline-block;font-size:.66rem;font-weight:700;padding:2px 8px;border-radius:100px}
+.badge-purchase{background:#fff3cd;color:#856404}
+.badge-review{background:#d1ecf1;color:#0c5460}
+.badge-referral{background:#d4edda;color:#155724}
+.badge-redeem{background:#f8d7da;color:#721c24}
+.badge-bonus{background:#e8d5f5;color:#6f42c1}
 
-/* HISTORY TABLE */
-.history-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--border);}
-.history-table th{padding:12px 16px;text-align:left;font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);background:#fafafa;}
-.history-table td{padding:13px 16px;font-size:0.84rem;border-bottom:1px solid var(--border);}
-.history-table tr:last-child td{border-bottom:none;}
-.pts-earn{color:var(--green);font-weight:700;}
-.pts-spend{color:#ef4444;font-weight:700;}
-.hist-badge{display:inline-block;font-size:0.67rem;font-weight:700;padding:2px 8px;border-radius:100px;}
-.hb-purchase{background:#ede9fe;color:var(--accent);}
-.hb-review{background:#e0f2fe;color:var(--accent2);}
-.hb-referral{background:#dcfce7;color:var(--green);}
-.hb-redeem{background:#fee2e2;color:#ef4444;}
-.hb-bonus{background:#fef3c7;color:#d97706;}
+/* ── LUNA AI TIP ── */
+.luna-tip{background:#fff;border:2px solid #FF9900;border-radius:8px;padding:18px 20px;margin-bottom:28px;display:flex;align-items:flex-start;gap:14px}
+.luna-avatar{width:44px;height:44px;background:#FF9900;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
+.luna-text{font-size:.85rem;color:#333;line-height:1.6}
+.luna-text strong{color:#CC0C39}
+.luna-label{font-size:.68rem;font-weight:700;color:#FF9900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
 
-/* LUNA BOX */
-.luna-box{background:linear-gradient(135deg,rgba(109,40,217,0.08),rgba(8,145,178,0.08));border:1px solid rgba(109,40,217,0.2);border-radius:16px;padding:20px 22px;margin-bottom:28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-.luna-icon{font-size:1.8rem;flex-shrink:0;}
-.luna-text p{font-size:0.85rem;color:var(--text);line-height:1.6;}
-.luna-text strong{color:var(--accent);}
-.luna-live{display:inline-flex;align-items:center;gap:5px;font-size:0.72rem;color:#16a34a;font-weight:600;margin-right:10px;}
-.luna-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;}
+/* ── TIER BENEFITS TABLE ── */
+.benefits-table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06);border:1px solid #e7e7e7}
+.benefits-table th{padding:14px 16px;text-align:center;font-size:.82rem;font-weight:700;border-bottom:2px solid #e7e7e7}
+.benefits-table th:first-child{text-align:left;background:#fafafa}
+.benefits-table th.bronze{background:#f5f0eb;color:#6d4c41}
+.benefits-table th.silver{background:#f0f0f0;color:#555}
+.benefits-table th.gold{background:#fff8e1;color:#f57f17}
+.benefits-table th.platinum{background:#e8eaf6;color:#3949ab}
+.benefits-table td{padding:11px 16px;font-size:.82rem;border-bottom:1px solid #f0f0f0;text-align:center}
+.benefits-table td:first-child{text-align:left;font-weight:600;color:#333;background:#fafafa}
+.benefits-table tr:last-child td{border-bottom:none}
+.benefits-table tr:hover td{background:#fffbf2}
+.yes-b{color:#007600;font-weight:700;font-size:1rem}
+.no-b{color:#ccc}
 
-@media(max-width:900px){
-  .tier-grid{grid-template-columns:repeat(2,1fr);}
+/* ── TABS ── */
+.tabs{display:flex;border-bottom:3px solid #e7e7e7;margin-bottom:24px;gap:0}
+.tab-btn{padding:12px 24px;font-size:.9rem;font-weight:600;color:#666;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-3px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.tab-btn.active{color:#0f1111;border-bottom-color:#FF9900}
+.tab-btn:hover:not(.active){color:#0f1111}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+
+/* ── FOOTER ── */
+footer{background:#131921;color:rgba(255,255,255,.6);font-size:.78rem;margin-top:40px}
+.footer-links{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;max-width:1300px;margin:0 auto;padding:32px 16px}
+.footer-col h4{color:white;font-size:.85rem;font-weight:700;margin-bottom:12px}
+.footer-col a{display:block;color:rgba(255,255,255,.6);font-size:.78rem;margin-bottom:8px;transition:color .15s}
+.footer-col a:hover{color:#FF9900}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.12);text-align:center;padding:16px;color:rgba(255,255,255,.4);font-size:.73rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#0f1111;color:white;border-radius:8px;padding:12px 24px;font-size:.85rem;font-weight:600;z-index:9999;opacity:0;transition:all .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(max-width:960px){
+  .earn-grid{grid-template-columns:repeat(2,1fr)}
+  .voucher-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-links{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
-  .nav-links{display:none;}
-  .nav-hamburger{display:block;}
-  .tier-grid{grid-template-columns:1fr 1fr;}
-  .points-display{font-size:2.5rem;}
-  .history-table{font-size:0.78rem;}
-  .history-table th,.history-table td{padding:10px 10px;}
+  .nav-right .nav-item:not(.nav-cart){display:none}
+  .search-cat{display:none}
+  .earn-grid{grid-template-columns:repeat(2,1fr)}
+  .voucher-grid{grid-template-columns:1fr}
+  .history-table{font-size:.76rem}
+  .history-table th,.history-table td{padding:9px 10px}
+  .footer-links{grid-template-columns:1fr 1fr}
+  .points-big{font-size:3rem}
 }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <a href="mystore.html" class="nav-logo">
-    <div class="nav-dot"></div>
-    <span>Vibe</span>Store
-  </a>
-  <div class="nav-links">
-    <a href="collections.html">Shop</a>
-    <a href="sale.html">Sale</a>
-    <a href="blog.html">Blog</a>
-    <a href="account.html">Account</a>
-    <a href="track.html">Orders</a>
-    <a href="wishlist.html">Wishlist</a>
-    <a href="loyalty.html" class="active">Rewards</a>
-    <div class="nav-user">
-      <div class="nav-avatar">PK</div>
-      <span>Priya K.</span>
+<!-- PRIMARY NAV -->
+<nav class="primary-nav">
+  <div class="nav-inner">
+    <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
+    <form class="search-form" onsubmit="return false">
+      <select class="search-cat">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Clothing</option>
+        <option>Home</option>
+      </select>
+      <input class="search-input" type="text" placeholder="Search products..."/>
+      <button class="search-btn" type="submit">🔍</button>
+    </form>
+    <div class="nav-right">
+      <a href="account.html" class="nav-item">Hello, Priya<strong>Account &amp; Lists</strong></a>
+      <a href="track.html" class="nav-item">Returns<strong>&amp; Orders</strong></a>
+      <a href="cart.html" class="nav-cart"><span class="nav-cart-icon">🛒</span>Cart<span class="cart-qty" id="cartQty">0</span></a>
     </div>
   </div>
-  <button class="nav-hamburger">☰</button>
+</nav>
+<nav class="secondary-nav">
+  <div class="sec-inner">
+    <a href="mystore.html" class="sec-link">🏠 Home</a>
+    <a href="collections.html" class="sec-link">Shop All</a>
+    <a href="sale.html" class="sec-link">Today's Deals</a>
+    <a href="gift-cards.html" class="sec-link">Gift Cards</a>
+    <a href="loyalty.html" class="sec-link active">⭐ VibePass Rewards</a>
+    <a href="referral.html" class="sec-link">Refer &amp; Earn</a>
+    <a href="faq.html" class="sec-link">Help</a>
+    <a href="become-seller.html" class="sec-link">Become a Seller</a>
+    <a href="seller-central.html" class="sec-link">Seller Central</a>
+  </div>
 </nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="tier-badge">🏅 Gold Member</div>
-  <div class="points-display">2,450 <span>pts</span></div>
-  <p class="hero-sub">Your VibeStore loyalty points balance</p>
-  <div class="progress-section">
-    <div class="progress-labels">
-      <span>Gold (2,500 pts)</span>
-      <span>🔷 Platinum at 5,000 pts</span>
+<!-- HERO POINTS CARD -->
+<div class="points-hero">
+  <div class="points-hero-inner">
+    <div class="hero-tier-badge">🥇 GOLD MEMBER · Member since Jan 2025</div>
+    <h1>⭐ Your VibePass Rewards</h1>
+    <div><span class="points-big">2,450</span><span class="points-unit">pts</span></div>
+    <p class="points-expiry">Points expire on <strong>31 Dec 2026</strong> · Earn more to reset expiry</p>
+
+    <div class="tier-progress-wrap">
+      <div class="tier-steps">
+        <div class="tier-step"><div class="tier-step-name">🥉 Bronze</div><div class="tier-step-pts">0 pts</div></div>
+        <div class="tier-step"><div class="tier-step-name">🥈 Silver</div><div class="tier-step-pts">1,000 pts</div></div>
+        <div class="tier-step current"><div class="tier-step-name">🥇 Gold ← You</div><div class="tier-step-pts">2,500 pts</div></div>
+        <div class="tier-step"><div class="tier-step-name">💎 Platinum</div><div class="tier-step-pts">5,000 pts</div></div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <p class="progress-note-text">Earn <strong>2,550 more points</strong> to reach 💎 Platinum tier</p>
     </div>
-    <div class="progress-bar-outer">
-      <div class="progress-bar-inner" id="progressBar"></div>
-    </div>
-    <p class="progress-note">Earn <strong>2,550 more points</strong> to reach Platinum tier</p>
   </div>
 </div>
 
 <div class="page">
 
-  <!-- Luna AI Box -->
-  <div class="luna-box">
-    <div class="luna-icon">🤖</div>
-    <div class="luna-text">
-      <p><span class="luna-live"><span class="luna-dot"></span>Luna AI</span>
-      Luna AI found you could <strong>save ₹450 this week</strong> by redeeming your points on the flash sale happening in Electronics. You have enough for the "10% off" reward — act before the sale ends in 18 hrs!</p>
+  <!-- VIBEPASS MEMBERSHIP CARD LINK -->
+  <div style="background:#fff;border:2px solid #fbbf24;border-radius:8px;padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <span style="font-size:1.8rem;">💎</span>
+      <div>
+        <div style="font-size:0.72rem;font-weight:700;color:#d97706;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:2px;">VibePass Membership</div>
+        <div style="font-size:0.9rem;font-weight:700;color:#0f1111;">Upgrade to VibePass for exclusive perks across the entire VibeStore Marketplace</div>
+      </div>
     </div>
+    <a href="vibepass.html" style="background:#fbbf24;color:#0f1111;border-radius:20px;padding:10px 22px;font-size:0.85rem;font-weight:700;white-space:nowrap;">Explore VibePass →</a>
   </div>
 
-  <!-- TIER CARDS -->
-  <div class="tier-section">
-    <div class="section-title">Membership Tiers</div>
-    <div class="tier-grid">
-      <div class="tier-card">
-        <div class="tier-icon">🥉</div>
-        <div class="tier-name">Bronze</div>
-        <div class="tier-range">0 – 999 pts</div>
-        <ul class="tier-benefits">
-          <li>5 pts per ₹100</li>
-          <li>Birthday bonus</li>
-          <li>Early sale access</li>
-        </ul>
-      </div>
-      <div class="tier-card">
-        <div class="tier-icon">🥈</div>
-        <div class="tier-name">Silver</div>
-        <div class="tier-range">1,000 – 2,499 pts</div>
-        <ul class="tier-benefits">
-          <li>8 pts per ₹100</li>
-          <li>Free standard shipping</li>
-          <li>Priority support</li>
-          <li>Exclusive offers</li>
-        </ul>
-      </div>
-      <div class="tier-card active">
-        <div class="tier-icon">🥇</div>
-        <div class="tier-name">Gold</div>
-        <div class="tier-range">2,500 – 4,999 pts</div>
-        <ul class="tier-benefits">
-          <li>10 pts per ₹100</li>
-          <li>Free express shipping</li>
-          <li>Dedicated support</li>
-          <li>Early product drops</li>
-          <li>Bonus flash deals</li>
-        </ul>
-        <div class="tier-active-badge">Your Tier ✓</div>
-      </div>
-      <div class="tier-card">
-        <div class="tier-icon">💎</div>
-        <div class="tier-name">Platinum</div>
-        <div class="tier-range">5,000+ pts</div>
-        <ul class="tier-benefits">
-          <li>15 pts per ₹100</li>
-          <li>Free same-day delivery</li>
-          <li>Personal shopper</li>
-          <li>VIP event invites</li>
-          <li>Double point weekends</li>
-          <li>Annual gift voucher</li>
-        </ul>
-      </div>
+  <!-- LUNA AI TIP -->
+  <div class="luna-tip">
+    <div class="luna-avatar">🤖</div>
+    <div>
+      <div class="luna-label">Luna AI · Live Tip</div>
+      <div class="luna-text">Luna suggests redeeming <strong>1,000 points this week</strong> — your points expire in 60 days and you have enough for the ₹250 gift voucher. The Electronics sale ends in 18 hrs — use your points now to maximize savings!</div>
     </div>
   </div>
 
   <!-- HOW TO EARN -->
-  <div class="section-title">How to Earn Points</div>
-  <div class="earn-grid" style="margin-bottom:32px;">
+  <div class="section-title">Earn Points</div>
+  <div class="earn-grid">
     <div class="earn-card">
-      <div class="earn-icon">🛒</div>
-      <div class="earn-pts">10 pts / ₹100</div>
-      <div class="earn-desc">Make a purchase on any product</div>
+      <div class="earn-icon">🛍️</div>
+      <div class="earn-pts">1 pt per ₹10</div>
+      <div class="earn-title">Shopping</div>
+      <div class="earn-desc">Earn on every purchase across all categories</div>
     </div>
     <div class="earn-card">
       <div class="earn-icon">⭐</div>
-      <div class="earn-pts">+50 pts</div>
-      <div class="earn-desc">Write a verified product review</div>
+      <div class="earn-pts">+50 pts each</div>
+      <div class="earn-title">Write a Review</div>
+      <div class="earn-desc">Share your honest feedback on verified purchases</div>
     </div>
     <div class="earn-card">
-      <div class="earn-icon">👥</div>
-      <div class="earn-pts">+200 pts</div>
-      <div class="earn-desc">Refer a friend who makes a purchase</div>
+      <div class="earn-icon">🎁</div>
+      <div class="earn-pts">+200 pts each</div>
+      <div class="earn-title">Refer Friends</div>
+      <div class="earn-desc">Earn when your referral makes their first purchase</div>
     </div>
     <div class="earn-card">
-      <div class="earn-icon">🎂</div>
+      <div class="earn-icon">📱</div>
+      <div class="earn-pts">+10 pts/day</div>
+      <div class="earn-title">Daily Login</div>
+      <div class="earn-desc">Log in every day to collect your daily bonus</div>
+    </div>
+    <div class="earn-card" style="border-color:#007185;">
+      <div class="earn-icon">🏪</div>
       <div class="earn-pts">+500 pts</div>
-      <div class="earn-desc">Birthday bonus — every year</div>
-    </div>
-    <div class="earn-card">
-      <div class="earn-icon">🎉</div>
-      <div class="earn-pts">+100 pts</div>
-      <div class="earn-desc">First purchase bonus (one-time)</div>
+      <div class="earn-title">Seller Bonus</div>
+      <div class="earn-desc">Earn 500 points when you refer a seller who makes their first sale on VibeStore Marketplace</div>
     </div>
   </div>
 
-  <!-- QUICK ACTIONS -->
-  <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:32px;">
-    <button onclick="window.location.href='collections.html'" style="background:#6d28d9;color:white;border:none;border-radius:10px;padding:10px 22px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">🛍️ Shop Now</button>
-    <button onclick="window.location.href='referral.html'" style="background:#0891b2;color:white;border:none;border-radius:10px;padding:10px 22px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">👥 Refer a Friend</button>
-    <button onclick="window.location.href='sale.html'" style="background:#dc2626;color:white;border:none;border-radius:10px;padding:10px 22px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;">🔥 View All Deals</button>
-  </div>
-
-  <!-- TABS -->
+  <!-- REDEEM TABS -->
+  <div class="section-title">Redeem Points</div>
   <div class="tabs">
-    <button class="tab active" onclick="switchTab('redeem',this)">Redeem Points</button>
-    <button class="tab" onclick="switchTab('history',this)">Points History</button>
+    <button class="tab-btn active" onclick="switchTab('apply',this)">Apply to Order</button>
+    <button class="tab-btn" onclick="switchTab('vouchers',this)">Gift Vouchers</button>
+    <button class="tab-btn" onclick="switchTab('history',this)">Transaction History</button>
+    <button class="tab-btn" onclick="switchTab('benefits',this)">Tier Benefits</button>
   </div>
 
-  <!-- REDEEM TAB -->
-  <div class="tab-content active" id="tab-redeem">
-    <div class="redeem-grid">
-      <div class="redeem-card">
-        <div class="redeem-icon">💰</div>
-        <div class="redeem-title">₹50 Off Your Order</div>
-        <div class="redeem-pts">500 pts required</div>
-        <div class="redeem-desc">Instant discount on any cart above ₹499</div>
-        <button class="btn-redeem" onclick="redeemPts(this,500)">Redeem 500 pts</button>
+  <!-- TAB: APPLY TO ORDER -->
+  <div class="tab-panel active" id="tab-apply">
+    <div class="redeem-hero-card">
+      <h3>Use points on your next order</h3>
+      <div class="pts-calc-row">
+        <input type="number" class="pts-input" id="ptsToUse" placeholder="Enter points" min="100" max="2450" oninput="calcDiscount(this.value)"/>
+        <span class="pts-eq">=</span>
+        <span class="pts-discount" id="discountDisplay">₹0 off</span>
+        <button class="btn-apply-pts" onclick="applyToCart()">Apply to Cart</button>
       </div>
-      <div class="redeem-card">
-        <div class="redeem-icon">🚚</div>
-        <div class="redeem-title">Free Shipping</div>
-        <div class="redeem-pts">200 pts required</div>
-        <div class="redeem-desc">Valid on your next order, any value</div>
-        <button class="btn-redeem" onclick="redeemPts(this,200)">Redeem 200 pts</button>
+      <p style="font-size:.78rem;color:#888">100 points = ₹10 discount · You have <strong style="color:#CC0C39">2,450 pts</strong> available · Minimum 100 pts</p>
+    </div>
+  </div>
+
+  <!-- TAB: VOUCHERS -->
+  <div class="tab-panel" id="tab-vouchers">
+    <div class="voucher-grid">
+      <div class="voucher-card">
+        <div class="voucher-top">
+          <div class="voucher-amount">₹100</div>
+          <div class="voucher-label">VibeStore Gift Voucher</div>
+        </div>
+        <div class="voucher-bottom">
+          <div class="voucher-pts-needed">500 pts required</div>
+          <div class="voucher-desc">Instant voucher code sent to your email. Valid 12 months.</div>
+          <button class="voucher-btn btn-redeem-voucher" data-cost="500" onclick="redeemVoucher(this,500,'₹100')">Redeem — 500 pts</button>
+        </div>
       </div>
-      <div class="redeem-card">
-        <div class="redeem-icon">🏷️</div>
-        <div class="redeem-title">10% Off Coupon</div>
-        <div class="redeem-pts">800 pts required</div>
-        <div class="redeem-desc">Works on full-price and sale items</div>
-        <button class="btn-redeem" onclick="redeemPts(this,800)">Redeem 800 pts</button>
+      <div class="voucher-card">
+        <div class="voucher-top" style="background:linear-gradient(135deg,#1a3a1a,#2d4a2d)">
+          <div class="voucher-amount">₹250</div>
+          <div class="voucher-label">VibeStore Gift Voucher</div>
+        </div>
+        <div class="voucher-bottom">
+          <div class="voucher-pts-needed">1,000 pts required</div>
+          <div class="voucher-desc">Best value! Instant voucher code, valid on all products.</div>
+          <button class="voucher-btn btn-redeem-voucher" data-cost="1000" onclick="redeemVoucher(this,1000,'₹250')">Redeem — 1,000 pts</button>
+        </div>
       </div>
-      <div class="redeem-card">
-        <div class="redeem-icon">🎁</div>
-        <div class="redeem-title">Premium Gift Wrap</div>
-        <div class="redeem-pts">100 pts required</div>
-        <div class="redeem-desc">Luxury box, ribbon & handwritten card</div>
-        <button class="btn-redeem" onclick="redeemPts(this,100)">Redeem 100 pts</button>
+      <div class="voucher-card">
+        <div class="voucher-top" style="background:linear-gradient(135deg,#3a1a00,#5c2d00)">
+          <div class="voucher-amount">₹500</div>
+          <div class="voucher-label">VibeStore Gift Voucher</div>
+        </div>
+        <div class="voucher-bottom">
+          <div class="voucher-pts-needed">2,000 pts required</div>
+          <div class="voucher-desc">Premium voucher, valid on everything including sale items.</div>
+          <button class="voucher-btn btn-redeem-voucher" data-cost="2000" onclick="redeemVoucher(this,2000,'₹500')">Redeem — 2,000 pts</button>
+        </div>
       </div>
     </div>
-    <p style="margin-top:14px;font-size:0.78rem;color:var(--muted);text-align:center;">You have <strong id="pts-display">2,450 pts</strong> available · Points are valid for 12 months</p>
   </div>
 
-  <!-- HISTORY TAB -->
-  <div class="tab-content" id="tab-history">
+  <!-- TAB: HISTORY -->
+  <div class="tab-panel" id="tab-history">
     <table class="history-table">
       <thead>
         <tr>
           <th>Date</th>
-          <th>Description</th>
+          <th>Activity</th>
           <th>Type</th>
-          <th style="text-align:right;">Points</th>
-          <th style="text-align:right;">Balance</th>
+          <th style="text-align:right">Points</th>
+          <th style="text-align:right">Balance</th>
         </tr>
       </thead>
       <tbody>
+        <tr><td>18 May 2026</td><td>Purchase #4821 — Sony WH-1000XM5</td><td><span class="badge badge-purchase">Purchase</span></td><td class="pts-earn" style="text-align:right">+340</td><td style="text-align:right">2,450</td></tr>
+        <tr><td>15 May 2026</td><td>Daily Login Streak (7 days)</td><td><span class="badge badge-bonus">Bonus</span></td><td class="pts-earn" style="text-align:right">+70</td><td style="text-align:right">2,110</td></tr>
+        <tr><td>15 May 2026</td><td>Review — Realme Buds Air 5</td><td><span class="badge badge-review">Review</span></td><td class="pts-earn" style="text-align:right">+50</td><td style="text-align:right">2,040</td></tr>
+        <tr><td>12 May 2026</td><td>Referral — Priya Kapoor joined</td><td><span class="badge badge-referral">Referral</span></td><td class="pts-earn" style="text-align:right">+200</td><td style="text-align:right">1,990</td></tr>
+        <tr><td>10 May 2026</td><td>Redeemed — ₹50 Off coupon</td><td><span class="badge badge-redeem">Redeemed</span></td><td class="pts-spend" style="text-align:right">−500</td><td style="text-align:right">1,790</td></tr>
+        <tr><td>05 May 2026</td><td>Purchase #4790 — Mi Robot Vacuum</td><td><span class="badge badge-purchase">Purchase</span></td><td class="pts-earn" style="text-align:right">+280</td><td style="text-align:right">2,290</td></tr>
+        <tr><td>28 Apr 2026</td><td>Birthday Bonus 🎂</td><td><span class="badge badge-bonus">Bonus</span></td><td class="pts-earn" style="text-align:right">+500</td><td style="text-align:right">2,010</td></tr>
+        <tr><td>20 Apr 2026</td><td>Purchase #4710 — boAt Rockerz 550</td><td><span class="badge badge-purchase">Purchase</span></td><td class="pts-earn" style="text-align:right">+180</td><td style="text-align:right">1,510</td></tr>
+        <tr><td>14 Apr 2026</td><td>Redeemed — Free Shipping Pass</td><td><span class="badge badge-redeem">Redeemed</span></td><td class="pts-spend" style="text-align:right">−200</td><td style="text-align:right">1,330</td></tr>
+        <tr><td>01 Apr 2026</td><td>Review — JBL Flip 6</td><td><span class="badge badge-review">Review</span></td><td class="pts-earn" style="text-align:right">+50</td><td style="text-align:right">1,530</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TAB: TIER BENEFITS -->
+  <div class="tab-panel" id="tab-benefits">
+    <table class="benefits-table">
+      <thead>
         <tr>
-          <td>18 May 2026</td>
-          <td>Purchase #4821 — Sony WH-1000XM5</td>
-          <td><span class="hist-badge hb-purchase">Purchase</span></td>
-          <td style="text-align:right;" class="pts-earn">+340</td>
-          <td style="text-align:right;">2,450</td>
+          <th style="text-align:left;background:#fafafa;font-size:.75rem;color:#888;text-transform:uppercase;letter-spacing:.05em">Benefit</th>
+          <th class="bronze">🥉 Bronze<br><small style="font-weight:400;font-size:.7rem">0–999 pts</small></th>
+          <th class="silver">🥈 Silver<br><small style="font-weight:400;font-size:.7rem">1,000–2,499</small></th>
+          <th class="gold">🥇 Gold ← You<br><small style="font-weight:400;font-size:.7rem">2,500–4,999</small></th>
+          <th class="platinum">💎 Platinum<br><small style="font-weight:400;font-size:.7rem">5,000+ pts</small></th>
         </tr>
-        <tr>
-          <td>15 May 2026</td>
-          <td>Wrote review for Realme Buds Air 5</td>
-          <td><span class="hist-badge hb-review">Review</span></td>
-          <td style="text-align:right;" class="pts-earn">+50</td>
-          <td style="text-align:right;">2,110</td>
-        </tr>
-        <tr>
-          <td>12 May 2026</td>
-          <td>Referred Priya Kapoor — successful signup</td>
-          <td><span class="hist-badge hb-referral">Referral</span></td>
-          <td style="text-align:right;" class="pts-earn">+200</td>
-          <td style="text-align:right;">2,060</td>
-        </tr>
-        <tr>
-          <td>10 May 2026</td>
-          <td>Redeemed — ₹50 Off coupon</td>
-          <td><span class="hist-badge hb-redeem">Redeemed</span></td>
-          <td style="text-align:right;" class="pts-spend">−500</td>
-          <td style="text-align:right;">1,860</td>
-        </tr>
-        <tr>
-          <td>05 May 2026</td>
-          <td>Purchase #4790 — Mi Robot Vacuum</td>
-          <td><span class="hist-badge hb-purchase">Purchase</span></td>
-          <td style="text-align:right;" class="pts-earn">+280</td>
-          <td style="text-align:right;">2,360</td>
-        </tr>
-        <tr>
-          <td>28 Apr 2026</td>
-          <td>Birthday Bonus 🎂</td>
-          <td><span class="hist-badge hb-bonus">Bonus</span></td>
-          <td style="text-align:right;" class="pts-earn">+500</td>
-          <td style="text-align:right;">2,080</td>
-        </tr>
-        <tr>
-          <td>20 Apr 2026</td>
-          <td>Purchase #4710 — Boat Rockerz 550</td>
-          <td><span class="hist-badge hb-purchase">Purchase</span></td>
-          <td style="text-align:right;" class="pts-earn">+180</td>
-          <td style="text-align:right;">1,580</td>
-        </tr>
-        <tr>
-          <td>14 Apr 2026</td>
-          <td>Redeemed — Free Shipping</td>
-          <td><span class="hist-badge hb-redeem">Redeemed</span></td>
-          <td style="text-align:right;" class="pts-spend">−200</td>
-          <td style="text-align:right;">1,400</td>
-        </tr>
-        <tr>
-          <td>01 Apr 2026</td>
-          <td>Wrote review for JBL Flip 6</td>
-          <td><span class="hist-badge hb-review">Review</span></td>
-          <td style="text-align:right;" class="pts-earn">+50</td>
-          <td style="text-align:right;">1,600</td>
-        </tr>
-        <tr>
-          <td>20 Mar 2026</td>
-          <td>First Purchase Bonus 🎉</td>
-          <td><span class="hist-badge hb-bonus">Bonus</span></td>
-          <td style="text-align:right;" class="pts-earn">+100</td>
-          <td style="text-align:right;">1,550</td>
-        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Earn Rate</td><td>1 pt/₹10</td><td>1.5 pt/₹10</td><td class="gold-row" style="background:#fff8e1;font-weight:700">2 pt/₹10</td><td>3 pt/₹10</td></tr>
+        <tr><td>Free Standard Shipping</td><td class="no-b">—</td><td><span class="yes-b">✓</span></td><td class="gold-row" style="background:#fff8e1"><span class="yes-b">✓</span></td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>Free Express Shipping</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1"><span class="yes-b">✓</span></td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>Priority Support</td><td class="no-b">—</td><td><span class="yes-b">✓</span></td><td class="gold-row" style="background:#fff8e1"><span class="yes-b">✓</span></td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>Early Product Drops</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1"><span class="yes-b">✓</span></td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>Birthday Bonus</td><td>+100 pts</td><td>+200 pts</td><td class="gold-row" style="background:#fff8e1;font-weight:700">+500 pts</td><td>+1,000 pts</td></tr>
+        <tr><td>Personal Shopper</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1" class="no-b">—</td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>VIP Event Invites</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1" class="no-b">—</td><td><span class="yes-b">✓</span></td></tr>
+        <tr><td>Annual Gift Voucher</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1" class="no-b">—</td><td>₹1,000</td></tr>
+        <tr><td>Double Point Weekends</td><td class="no-b">—</td><td class="no-b">—</td><td class="gold-row" style="background:#fff8e1" class="no-b">—</td><td><span class="yes-b">✓</span></td></tr>
       </tbody>
     </table>
   </div>
 
 </div>
 
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem;margin-top:0;">
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html" style="color:#a78bfa;margin:0 8px">Collections</a><a href="sale.html" style="color:#a78bfa;margin:0 8px">Sale</a><a href="compare.html" style="color:#a78bfa;margin:0 8px">Compare</a><a href="gift-cards.html" style="color:#a78bfa;margin:0 8px">Gift Cards</a><a href="blog.html" style="color:#a78bfa;margin:0 8px">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html" style="color:#a78bfa;margin:0 8px">Returns</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a><a href="faq.html" style="color:#a78bfa;margin:0 8px">FAQ</a><a href="track.html" style="color:#a78bfa;margin:0 8px">Track Order</a><a href="notifications.html" style="color:#a78bfa;margin:0 8px">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html" style="color:#a78bfa;margin:0 8px">My Account</a><a href="loyalty.html" style="color:#a78bfa;margin:0 8px">Loyalty</a><a href="wishlist.html" style="color:#a78bfa;margin:0 8px">Wishlist</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html" style="color:#a78bfa;margin:0 8px">Home</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referrals</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Get to Know Us</h4>
+      <a href="index.html">About VibeStore Marketplace</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Careers</a>
+      <a href="contact.html">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shop With Us</h4>
+      <a href="collections.html">All Products</a>
+      <a href="sale.html">Today's Deals</a>
+      <a href="gift-cards.html">Gift Cards</a>
+      <a href="compare.html">Compare Products</a>
+    </div>
+    <div class="footer-col">
+      <h4>Your Account</h4>
+      <a href="account.html">Account Dashboard</a>
+      <a href="loyalty.html">VibePass Rewards</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="referral.html">Refer a Friend</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help &amp; Support</h4>
+      <a href="track.html">Track Order</a>
+      <a href="returns.html">Returns &amp; Refunds</a>
+      <a href="faq.html">FAQ / Help Center</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a href="become-seller.html">Sell on VibeStore</a>
+      <a href="seller-central.html">Seller Central</a>
+      <a href="#">Affiliate Program</a>
+      <a href="#">Advertise</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
 </footer>
+
+<div class="toast" id="toast" style="color:#fbbf24"></div>
 
 <script src="rex-chat.js"></script>
 <script>
 let balance = 2450;
 
-function switchTab(id, el){
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+// Cart count
+function updateCartQty(){
+  try{
+    const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const count=cart.reduce((s,i)=>s+(i.qty||1),0);
+    const el=document.getElementById('cartQty');
+    if(el) el.textContent=count;
+  }catch(e){}
+}
+updateCartQty();
+
+// Progress bar animate
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(()=>{
+    // Gold is at 2450 out of 5000 = 49%
+    document.getElementById('progressFill').style.width='49%';
+  },400);
+});
+
+// Tab switching
+function switchTab(id,el){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('tab-'+id).classList.add('active');
 }
 
-function redeemPts(btn, cost){
-  if(balance < cost){ alert('Insufficient points!'); return; }
-  balance -= cost;
-  document.getElementById('pts-display').textContent = balance.toLocaleString() + ' pts';
-  btn.textContent = '✓ Redeemed!';
-  btn.disabled = true;
-  btn.style.background = '#16a34a';
+// Points calculator
+function calcDiscount(pts){
+  const n=parseInt(pts)||0;
+  const disc=Math.floor(n/100)*10;
+  document.getElementById('discountDisplay').textContent='₹'+disc.toLocaleString('en-IN')+' off';
 }
 
-// Animate progress bar on load
-document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(() => {
-    document.getElementById('progressBar').style.width = '49%';
-  }, 300);
-});
+function applyToCart(){
+  const pts=parseInt(document.getElementById('ptsToUse').value)||0;
+  if(pts<100){showToast('Minimum 100 points required');return;}
+  if(pts>balance){showToast('Insufficient points balance');return;}
+  balance-=pts;
+  const disc=Math.floor(pts/100)*10;
+  try{
+    localStorage.setItem('vs_reward_discount',disc);
+    localStorage.setItem('vs_reward_pts_used',pts);
+  }catch(e){}
+  showToast('✓ '+pts+' points applied — ₹'+disc+' off your next order!');
+}
+
+// Redeem voucher
+function redeemVoucher(btn,cost,label){
+  if(balance<cost){showToast('Insufficient points! You need '+cost+' pts');return;}
+  balance-=cost;
+  btn.textContent='✓ Voucher Sent!';
+  btn.disabled=true;
+  btn.style.background='#007600';
+  showToast('✓ '+label+' voucher sent to your email! −'+cost+' pts');
+}
+
+// Toast
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
 </script>
 </body>
 </html>

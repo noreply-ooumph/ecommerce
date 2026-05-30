@@ -4,423 +4,582 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Compare Products — VibeStore</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#f8f8f5;--card:#fff;--accent:#6d28d9;--accent2:#0891b2;
-  --text:#111;--muted:#6b7280;--border:#e5e7eb;
-  --navy:#0f0f1a;--purple:#7c3aed;--cyan:#06b6d4;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#0f1111;line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none}
+
+/* ── AMAZON NAV ── */
+.primary-nav{background:#131921;position:sticky;top:0;z-index:400;border-bottom:2px solid #FF9900}
+.nav-inner{max-width:1500px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:800;color:white;white-space:nowrap;flex-shrink:0;border:1px solid transparent;padding:4px 8px;border-radius:4px;transition:border-color .15s}
+.nav-logo:hover{border-color:rgba(255,255,255,.4)}
+.nav-logo span{color:#FF9900}
+.search-form{flex:1;display:flex;height:40px;border-radius:4px;overflow:hidden;max-width:860px}
+.search-cat{background:#f3f3f3;border:none;border-right:1px solid #cdcdcd;padding:0 10px;font-size:.75rem;color:#333;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.search-cat:focus{outline:none}
+.search-input{flex:1;border:none;padding:0 14px;font-size:.9rem;color:#0f1111;font-family:'Inter',sans-serif}
+.search-input:focus{outline:none}
+.search-btn{background:#FF9900;border:none;width:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0;transition:background .15s}
+.search-btn:hover{background:#e68900}
+.nav-right{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0}
+.nav-item{color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.3;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s;white-space:nowrap}
+.nav-item:hover{border-color:rgba(255,255,255,.4)}
+.nav-item strong{color:white;font-size:.82rem;display:block}
+.nav-cart{display:flex;align-items:center;gap:6px;color:white;font-size:.82rem;font-weight:700;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s}
+.nav-cart:hover{border-color:rgba(255,255,255,.4)}
+.nav-cart-icon{font-size:1.6rem;line-height:1}
+.cart-qty{color:#FF9900;font-size:1.1rem;font-weight:800}
+.secondary-nav{background:#232f3e;overflow-x:auto}
+.secondary-nav::-webkit-scrollbar{display:none}
+.sec-inner{max-width:1500px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:38px;gap:0}
+.sec-link{color:rgba(255,255,255,.9);font-size:.82rem;font-weight:500;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;border:1px solid transparent;border-radius:2px;transition:border-color .15s}
+.sec-link:hover{border-color:rgba(255,255,255,.5)}
+.sec-link.active{font-weight:700;color:white}
+
+/* ── PAGE HEADER ── */
+.page-header{background:#fff;border-bottom:1px solid #ddd;padding:14px 16px}
+.page-header-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.page-header h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:#0f1111}
+.btn-add-product{background:#FF9900;color:#0f1111;border:none;border-radius:8px;padding:10px 20px;font-size:.85rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s}
+.btn-add-product:hover{background:#e68900}
+
+/* ── LAYOUT ── */
+.page{max-width:1300px;margin:0 auto;padding:20px 16px 60px}
+
+/* ── COMPARE TABLE ── */
+.compare-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.compare-table{width:100%;min-width:860px;border-collapse:separate;border-spacing:0;background:#fff}
+
+/* sticky header */
+.compare-table thead tr.header-row th{position:sticky;top:100px;z-index:200;background:#fff;border-bottom:2px solid #FF9900}
+.col-feature{width:160px;min-width:140px;padding:16px 14px;font-size:.72rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.05em;border-right:1px solid #e7e7e7;background:#fafafa}
+
+/* Product header cells */
+.prod-th{padding:16px 14px;text-align:center;border-right:1px solid #e7e7e7;vertical-align:top;position:relative;min-width:220px}
+.prod-th:last-child{border-right:none}
+.prod-best-badge{display:inline-block;background:#FF9900;color:#0f1111;font-size:.68rem;font-weight:700;padding:3px 10px;border-radius:100px;margin-bottom:10px}
+.prod-badge-quality{background:#007185;color:white}
+.prod-badge-alt{background:#CC0C39;color:white}
+.prod-emoji{font-size:3.2rem;margin:8px 0 6px}
+.prod-name{font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:700;margin-bottom:4px}
+.prod-rating{font-size:.82rem;color:#007185;margin-bottom:6px}
+.prod-rating .stars{color:#FF9900}
+.prod-price{font-size:1.3rem;font-weight:800;color:#0f1111;margin-bottom:12px}
+.prod-price .orig{font-size:.82rem;font-weight:400;color:#888;text-decoration:line-through;margin-left:4px}
+.btn-cart-orange{background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:8px 18px;font-size:.82rem;font-weight:700;cursor:pointer;width:100%;transition:background .15s;margin-bottom:6px}
+.btn-cart-orange:hover{background:#e68900}
+.btn-remove-prod{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;background:#f3f3f3;border:1px solid #ddd;cursor:pointer;font-size:.75rem;color:#888;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.btn-remove-prod:hover{background:#fee;color:#CC0C39;border-color:#CC0C39}
+
+/* Table body rows */
+.compare-table tbody tr td{padding:13px 14px;font-size:.85rem;border-bottom:1px solid #e7e7e7;border-right:1px solid #e7e7e7;vertical-align:middle}
+.compare-table tbody tr td:last-child{border-right:none}
+.compare-table tbody tr:last-child td{border-bottom:none}
+.compare-table tbody tr:nth-child(even) td{background:#fafbfc}
+.compare-table tbody tr:nth-child(odd) td{background:#fff}
+.compare-table tbody tr:hover td{background:#fff8e8}
+.td-feature{font-size:.78rem;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em;background:#fafafa !important;border-right:1px solid #e7e7e7}
+.td-center{text-align:center}
+
+/* BEST highlight */
+.best-cell{background:#f0fff4 !important;font-weight:700;color:#007600}
+.best-tag{display:inline-block;background:#e8f5e9;color:#007600;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:100px;margin-left:4px;vertical-align:middle}
+
+/* Check / cross */
+.yes{color:#007600;font-size:1.1rem;font-weight:700}
+.no{color:#CC0C39;font-size:1.1rem;font-weight:700}
+
+/* Rating bar dots */
+.dot-row{display:flex;align-items:center;gap:4px;justify-content:center}
+.dot{width:16px;height:16px;border-radius:50%;background:#e7e7e7}
+.dot.filled{background:#FF9900}
+.dot-label{font-size:.7rem;color:#888;margin-left:4px}
+
+/* Add product col */
+.add-prod-cell{text-align:center;padding:20px 14px;border-right:none;cursor:pointer;min-width:180px}
+.add-prod-cell:hover .add-circle{border-color:#FF9900;color:#FF9900}
+.add-circle{width:56px;height:56px;border-radius:50%;border:2px dashed #ccc;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:#ccc;margin:0 auto 10px;transition:all .2s}
+.add-prod-cell p{font-size:.8rem;color:#888}
+.add-prod-cell span{font-size:.75rem;color:#007185;font-weight:600}
+
+/* ── VISUAL RATINGS SECTION ── */
+.visual-ratings{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:24px;margin-top:20px}
+.vr-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:20px;color:#0f1111}
+.vr-grid{display:grid;grid-template-columns:160px repeat(3,1fr);gap:0}
+.vr-header{text-align:center;font-size:.8rem;font-weight:700;color:#555;padding:8px 12px;border-bottom:2px solid #FF9900;margin-bottom:12px}
+.vr-header:first-child{text-align:left;color:#888;text-transform:uppercase;font-size:.72rem;letter-spacing:.05em}
+.vr-row{display:contents}
+.vr-label{font-size:.82rem;font-weight:600;color:#0f1111;padding:10px 0;display:flex;align-items:center}
+.vr-dots{display:flex;gap:5px;justify-content:center;align-items:center;padding:10px 12px}
+.vr-dot{width:18px;height:18px;border-radius:50%;background:#e7e7e7;transition:background .3s}
+.vr-dot.on{background:#FF9900}
+.vr-best-dot .vr-dot.on{background:#007600}
+
+/* ── ATLAS AI BOX ── */
+.atlas-box{background:#fff;border:2px solid #FF9900;border-radius:8px;padding:24px;margin-top:20px;display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+.atlas-icon-wrap{width:56px;height:56px;background:#FF9900;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0}
+.atlas-content{flex:1;min-width:220px}
+.atlas-content h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:#0f1111;margin-bottom:6px}
+.atlas-content .rec-name{color:#CC0C39;font-weight:700}
+.atlas-bullets{list-style:none;margin-top:10px}
+.atlas-bullets li{font-size:.83rem;color:#333;padding:4px 0;display:flex;align-items:flex-start;gap:8px}
+.atlas-bullets li::before{content:'✓';color:#007600;font-weight:700;flex-shrink:0;margin-top:1px}
+.atlas-cta-btn{background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:12px 28px;font-size:.9rem;font-weight:700;cursor:pointer;flex-shrink:0;align-self:center;transition:background .15s}
+.atlas-cta-btn:hover{background:#e68900}
+
+/* ── ALSO VIEWED ── */
+.also-viewed{margin-top:28px}
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:#0f1111}
+.section-see-all{font-size:.82rem;color:#007185;font-weight:600}
+.scroll-strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.scroll-strip::-webkit-scrollbar{height:4px}
+.scroll-strip::-webkit-scrollbar-thumb{background:#FF9900;border-radius:2px}
+.also-card{background:#fff;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);padding:16px;min-width:200px;max-width:200px;flex-shrink:0;cursor:pointer;transition:box-shadow .2s;border:1px solid #e7e7e7}
+.also-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.14)}
+.also-emoji{font-size:2.5rem;text-align:center;margin-bottom:10px}
+.also-name{font-size:.82rem;font-weight:600;color:#0f1111;margin-bottom:4px;line-height:1.4}
+.also-price{font-size:.9rem;font-weight:700;color:#0f1111;margin-bottom:4px}
+.also-rating{font-size:.72rem;color:#FF9900}
+.also-btn{width:100%;background:#FF9900;color:#0f1111;border:none;border-radius:4px;padding:7px;font-size:.78rem;font-weight:700;cursor:pointer;margin-top:8px;transition:background .15s}
+.also-btn:hover{background:#e68900}
+
+/* ── FOOTER ── */
+footer{background:#131921;color:rgba(255,255,255,.6);font-size:.78rem;margin-top:40px}
+.footer-links{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;max-width:1300px;margin:0 auto;padding:32px 16px}
+.footer-col h4{color:white;font-size:.85rem;font-weight:700;margin-bottom:12px}
+.footer-col a{display:block;color:rgba(255,255,255,.6);font-size:.78rem;margin-bottom:8px;transition:color .15s}
+.footer-col a:hover{color:#FF9900}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.12);text-align:center;padding:16px;color:rgba(255,255,255,.4);font-size:.73rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#0f1111;color:white;border-radius:8px;padding:12px 24px;font-size:.85rem;font-weight:600;z-index:9999;opacity:0;transition:all .3s;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast span{color:#FF9900}
+
+@media(max-width:900px){
+  .footer-links{grid-template-columns:repeat(2,1fr)}
+  .vr-grid{grid-template-columns:120px repeat(3,1fr)}
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
-
-/* NAV */
-.nav{background:var(--navy);padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
-.nav-logo span{background:linear-gradient(135deg,#9d5cf5,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
-.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:white;}
-.nav-cart{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 14px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;position:relative;}
-.cc{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.nav-hamburger{display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 10px;color:white;cursor:pointer;font-size:1rem;}
-
-/* HERO */
-.hero{background:linear-gradient(135deg,#1a0533,#0c1a3a);padding:36px 32px 28px;text-align:center;}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;color:white;margin-bottom:8px;}
-.atlas-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(6,182,212,0.15);border:1px solid rgba(6,182,212,0.3);border-radius:100px;padding:6px 14px;font-size:0.8rem;color:#22d3ee;margin-top:8px;}
-.atlas-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;}
-
-/* PAGE WRAPPER */
-.page{max-width:1200px;margin:0 auto;padding:24px 16px 60px;}
-
-/* COMPARE TABLE */
-.compare-wrapper{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-.compare-table{width:100%;min-width:700px;border-collapse:collapse;}
-
-/* sticky header row */
-.compare-table thead tr{position:sticky;top:64px;z-index:100;background:var(--bg);}
-
-.col-label{width:160px;padding:14px 12px;vertical-align:top;}
-.col-label span{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;}
-
-.product-col{padding:16px 12px;vertical-align:top;background:var(--card);border:1px solid var(--border);border-radius:16px;}
-.product-header{padding:16px 12px;background:var(--card);border:1px solid var(--border);border-radius:16px 16px 0 0;text-align:center;position:relative;}
-
-/* AI badge top of column */
-.ai-badge{display:inline-block;font-size:0.68rem;font-weight:700;padding:4px 10px;border-radius:100px;margin-bottom:10px;}
-.badge-value{background:#dcfce7;color:#16a34a;}
-.badge-quality{background:#ede9fe;color:#7c3aed;}
-.badge-bass{background:#fef3c7;color:#d97706;}
-
-.prod-emoji{font-size:3.5rem;margin:8px 0;}
-.prod-name{font-family:'Space Grotesk',sans-serif;font-size:0.95rem;font-weight:700;color:var(--text);margin-bottom:4px;}
-.prod-price{font-size:1.2rem;font-weight:800;color:var(--accent);margin-bottom:12px;}
-.btn-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
-.btn-cart{background:var(--navy);color:white;border:none;border-radius:8px;padding:8px 14px;font-size:0.78rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:background 0.2s;}
-.btn-cart:hover{background:var(--purple);}
-.btn-wish{background:white;border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:0.85rem;cursor:pointer;transition:all 0.2s;}
-.btn-wish:hover{border-color:var(--accent);color:var(--accent);}
-.btn-remove{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,0.06);border:none;cursor:pointer;font-size:0.75rem;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all 0.2s;}
-.btn-remove:hover{background:#fee2e2;color:#ef4444;}
-
-/* table body rows */
-.compare-row td{padding:14px 12px;border-bottom:1px solid var(--border);vertical-align:middle;font-size:0.85rem;}
-.compare-row td:first-child{color:var(--muted);font-weight:600;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.03em;}
-.compare-row.alt td{background:#fafafa;}
-.compare-row td + td{text-align:center;}
-
-/* stars */
-.stars{color:#f59e0b;font-size:0.9rem;letter-spacing:1px;}
-.rating-num{font-size:0.75rem;color:var(--muted);margin-left:3px;}
-
-/* feature check list */
-.feat-list{list-style:none;text-align:left;display:inline-block;}
-.feat-list li{font-size:0.78rem;color:var(--text);margin-bottom:3px;display:flex;align-items:center;gap:5px;}
-.feat-list li::before{content:'✓';color:#16a34a;font-weight:700;flex-shrink:0;}
-.feat-list li.no::before{content:'✗';color:#ef4444;}
-
-/* availability badge */
-.avail{display:inline-block;font-size:0.72rem;font-weight:600;padding:3px 9px;border-radius:100px;}
-.in-stock{background:#dcfce7;color:#16a34a;}
-.limited{background:#fef3c7;color:#d97706;}
-
-/* shipping */
-.ship{font-size:0.78rem;color:var(--accent2);font-weight:600;}
-
-/* AI Rec badge inside cell */
-.rec-badge{display:inline-flex;align-items:center;gap:5px;background:linear-gradient(135deg,rgba(109,40,217,0.1),rgba(8,145,178,0.1));border:1px solid rgba(109,40,217,0.2);border-radius:8px;padding:4px 10px;font-size:0.72rem;font-weight:600;color:var(--accent);}
-.no-rec{color:var(--muted);font-size:0.78rem;}
-
-/* ATLAS BOX */
-.atlas-box{background:linear-gradient(135deg,#1a0533,#0c2240);border-radius:18px;padding:28px 32px;margin-top:32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.atlas-icon{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--purple),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;}
-.atlas-text h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:white;margin-bottom:5px;}
-.atlas-text p{font-size:0.85rem;color:rgba(255,255,255,0.65);line-height:1.6;}
-.atlas-text strong{color:#22d3ee;}
-.atlas-cta{margin-left:auto;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;color:white;border-radius:10px;padding:10px 20px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
-
-/* Add product placeholder */
-.add-col-header{padding:16px 12px;background:white;border:2px dashed var(--border);border-radius:16px;text-align:center;cursor:pointer;transition:border-color 0.2s;min-width:200px;}
-.add-col-header:hover{border-color:var(--purple);}
-.add-col-header .plus-icon{width:48px;height:48px;border-radius:50%;background:var(--bg);border:2px dashed var(--border);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--muted);margin:0 auto 10px;}
-.add-col-header p{font-size:0.8rem;color:var(--muted);}
-.add-col-header span{font-size:0.75rem;color:var(--accent);font-weight:600;}
-
-@media(max-width:768px){
-  .nav-links{display:none;}
-  .nav-hamburger{display:block;}
-  .hero h1{font-size:1.5rem;}
-  .atlas-box{flex-direction:column;}
-  .atlas-cta{width:100%;}
+@media(max-width:600px){
+  .nav-right .nav-item:not(.nav-cart){display:none}
+  .search-cat{display:none}
+  .footer-links{grid-template-columns:1fr 1fr}
+  .page-header h1{font-size:1.1rem}
 }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <a href="mystore.html" class="nav-logo">
-    <div class="nav-dot"></div>
-    <span>Vibe</span>Store
-  </a>
-  <div class="nav-links">
-    <a href="collections.html">Shop</a>
-    <a href="sale.html">Sale</a>
-    <a href="blog.html">Blog</a>
-    <a href="compare.html" class="active">Compare</a>
-    <a href="account.html">Account</a>
-    <a href="track.html">Orders</a>
-    <a href="wishlist.html">Wishlist</a>
-    <a href="cart.html" class="nav-cart">🛒 Cart <span class="cc" id="cartCount">0</span></a>
+<!-- PRIMARY NAV -->
+<nav class="primary-nav">
+  <div class="nav-inner">
+    <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
+    <form class="search-form" onsubmit="return false">
+      <select class="search-cat">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Audio</option>
+        <option>Mobiles</option>
+      </select>
+      <input class="search-input" type="text" placeholder="Search products..."/>
+      <button class="search-btn" type="submit">🔍</button>
+    </form>
+    <div class="nav-right">
+      <a href="account.html" class="nav-item">Hello, Sign in<strong>Account</strong></a>
+      <a href="track.html" class="nav-item">Returns<strong>&amp; Orders</strong></a>
+      <a href="loyalty.html" class="nav-item">⭐ 2,450<strong>Points</strong></a>
+      <a href="cart.html" class="nav-cart"><span class="nav-cart-icon">🛒</span>Cart<span class="cart-qty" id="cartQty">0</span></a>
+    </div>
   </div>
-  <button class="nav-hamburger">☰</button>
+</nav>
+<nav class="secondary-nav">
+  <div class="sec-inner">
+    <a href="mystore.html" class="sec-link">🏠 Home</a>
+    <a href="collections.html" class="sec-link">Shop All</a>
+    <a href="sale.html" class="sec-link">Today's Deals</a>
+    <a href="compare.html" class="sec-link active">⚖️ Compare</a>
+    <a href="gift-cards.html" class="sec-link">Gift Cards</a>
+    <a href="loyalty.html" class="sec-link">Rewards</a>
+    <a href="blog.html" class="sec-link">Blog</a>
+    <a href="faq.html" class="sec-link">Help</a>
+  </div>
 </nav>
 
-<div class="hero">
-  <h1>Compare Products</h1>
-  <div class="atlas-badge"><div class="atlas-dot"></div>🤖 Atlas AI found the best match for your needs</div>
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <h1>⚖️ Compare Products</h1>
+    <button class="btn-add-product" onclick="showToast('Browse the store to add a product to compare')">
+      + Add Product to Compare
+    </button>
+  </div>
 </div>
 
 <div class="page">
+
+  <!-- COMPARISON TABLE -->
   <div class="compare-wrapper">
-    <table class="compare-table">
+    <table class="compare-table" id="compareTable">
       <thead>
-        <tr>
-          <td class="col-label"></td>
+        <tr class="header-row">
+          <th class="col-feature">Feature</th>
 
-          <!-- Product 1 header -->
-          <td style="padding:8px;">
-            <div class="product-header">
-              <button class="btn-remove" title="Remove">✕</button>
-              <div class="ai-badge badge-value">🏆 Best Value</div>
-              <div class="prod-emoji">🎧</div>
-              <div class="prod-name">Sony WH-1000XM5</div>
-              <div class="prod-price">₹29,990</div>
-              <div class="btn-row">
-                <button class="btn-cart" onclick="addToCartLS(this,'Sony WH-1000XM5',29990)">Add to Cart</button>
-                <a href="product.html" class="btn-wish" title="View Product" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">🔍</a>
-                <button class="btn-wish" onclick="addToWishlist(this,'Sony WH-1000XM5')">♡</button>
-              </div>
-            </div>
-          </td>
+          <!-- Sony -->
+          <th class="prod-th" id="col-sony">
+            <button class="btn-remove-prod" onclick="removeCol('col-sony')" title="Remove">✕</button>
+            <div class="prod-best-badge">🏆 Best Overall</div>
+            <div class="prod-emoji">🎧</div>
+            <div class="prod-name">Sony WH-1000XM5</div>
+            <div class="prod-rating"><span class="stars">★★★★★</span> 4.8 (2,341 reviews)</div>
+            <div class="prod-price">₹29,990 <span class="orig">₹35,000</span></div>
+            <button class="btn-cart-orange" onclick="addToCart('Sony WH-1000XM5',29990,this)">Add to Cart</button>
+          </th>
 
-          <!-- Product 2 header -->
-          <td style="padding:8px;">
-            <div class="product-header">
-              <button class="btn-remove" title="Remove">✕</button>
-              <div class="ai-badge badge-quality">⭐ Best Quality</div>
-              <div class="prod-emoji">🍎</div>
-              <div class="prod-name">Apple AirPods Pro</div>
-              <div class="prod-price">₹24,900</div>
-              <div class="btn-row">
-                <button class="btn-cart" onclick="addToCartLS(this,'Apple AirPods Pro',24900)">Add to Cart</button>
-                <a href="product.html" class="btn-wish" title="View Product" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">🔍</a>
-                <button class="btn-wish" onclick="addToWishlist(this,'Apple AirPods Pro')">♡</button>
-              </div>
-            </div>
-          </td>
+          <!-- Apple -->
+          <th class="prod-th" id="col-apple">
+            <button class="btn-remove-prod" onclick="removeCol('col-apple')" title="Remove">✕</button>
+            <div class="prod-best-badge prod-badge-quality">⭐ Editor's Pick</div>
+            <div class="prod-emoji">🍎</div>
+            <div class="prod-name">Apple AirPods Pro 2</div>
+            <div class="prod-rating"><span class="stars">★★★★★</span> 4.7 (5,120 reviews)</div>
+            <div class="prod-price">₹24,900 <span class="orig">₹26,900</span></div>
+            <button class="btn-cart-orange" onclick="addToCart('Apple AirPods Pro 2',24900,this)">Add to Cart</button>
+          </th>
 
-          <!-- Product 3 header -->
-          <td style="padding:8px;">
-            <div class="product-header">
-              <button class="btn-remove" title="Remove">✕</button>
-              <div class="ai-badge badge-bass">🔊 Best for Bass</div>
-              <div class="prod-emoji">🎵</div>
-              <div class="prod-name">Bose QuietComfort 45</div>
-              <div class="prod-price">₹26,000</div>
-              <div class="btn-row">
-                <button class="btn-cart" onclick="addToCartLS(this,'Bose QuietComfort 45',26000)">Add to Cart</button>
-                <a href="product.html" class="btn-wish" title="View Product" style="display:flex;align-items:center;justify-content:center;text-decoration:none;">🔍</a>
-                <button class="btn-wish" onclick="addToWishlist(this,'Bose QuietComfort 45')">♡</button>
-              </div>
-            </div>
-          </td>
+          <!-- Bose -->
+          <th class="prod-th" id="col-bose">
+            <button class="btn-remove-prod" onclick="removeCol('col-bose')" title="Remove">✕</button>
+            <div class="prod-best-badge prod-badge-alt">🔊 Best Bass</div>
+            <div class="prod-emoji">🎵</div>
+            <div class="prod-name">Bose QC45</div>
+            <div class="prod-rating"><span class="stars">★★★★☆</span> 4.5 (1,890 reviews)</div>
+            <div class="prod-price">₹26,000 <span class="orig">₹29,000</span></div>
+            <button class="btn-cart-orange" onclick="addToCart('Bose QC45',26000,this)">Add to Cart</button>
+          </th>
 
-          <!-- Add product -->
-          <td style="padding:8px;">
-            <div class="add-col-header">
-              <div class="plus-icon">+</div>
-              <p>Add a product</p>
-              <span>Browse store →</span>
-            </div>
-          </td>
+          <!-- Add -->
+          <th class="prod-th add-prod-cell" onclick="showToast('Browse the store to add a product')">
+            <div class="add-circle">+</div>
+            <p>Add a product</p>
+            <span>Browse store →</span>
+          </th>
         </tr>
       </thead>
-
       <tbody>
-        <!-- Rating -->
-        <tr class="compare-row">
-          <td>Rating</td>
-          <td><span class="stars">★★★★★</span><span class="rating-num">4.8 (2,341)</span></td>
-          <td><span class="stars">★★★★★</span><span class="rating-num">4.7 (5,120)</span></td>
-          <td><span class="stars">★★★★☆</span><span class="rating-num">4.5 (1,890)</span></td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Brand</td>
+          <td class="td-center best-cell">Sony <span class="best-tag">BEST</span></td>
+          <td class="td-center">Apple</td>
+          <td class="td-center">Bose</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Brand -->
-        <tr class="compare-row alt">
-          <td>Brand</td>
-          <td><strong>Sony</strong></td>
-          <td><strong>Apple</strong></td>
-          <td><strong>Bose</strong></td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Category</td>
+          <td class="td-center">Over-Ear / ANC</td>
+          <td class="td-center">In-Ear / ANC</td>
+          <td class="td-center">Over-Ear / ANC</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Category -->
-        <tr class="compare-row">
-          <td>Category</td>
-          <td>Over-Ear / ANC</td>
-          <td>In-Ear / ANC</td>
-          <td>Over-Ear / ANC</td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Price</td>
+          <td class="td-center">₹29,990</td>
+          <td class="td-center best-cell">₹24,900 <span class="best-tag">LOWEST</span></td>
+          <td class="td-center">₹26,000</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Key Features -->
-        <tr class="compare-row alt">
-          <td>Key Features</td>
-          <td>
-            <ul class="feat-list">
-              <li>Industry-best ANC</li>
-              <li>30hr battery life</li>
-              <li>LDAC Hi-Res audio</li>
-              <li>Multipoint connect</li>
-              <li>Speak-to-chat</li>
-            </ul>
-          </td>
-          <td>
-            <ul class="feat-list">
-              <li>Adaptive Transparency</li>
-              <li>6hr battery (30 case)</li>
-              <li>Spatial Audio</li>
-              <li>H2 chip</li>
-              <li class="no">No LDAC</li>
-            </ul>
-          </td>
-          <td>
-            <ul class="feat-list">
-              <li>Deep bass profile</li>
-              <li>24hr battery life</li>
-              <li>USB-C charging</li>
-              <li class="no">No LDAC</li>
-              <li class="no">No multipoint</li>
-            </ul>
-          </td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Rating</td>
+          <td class="td-center best-cell">4.8 ★ <span class="best-tag">BEST</span></td>
+          <td class="td-center">4.7 ★</td>
+          <td class="td-center">4.5 ★</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Availability -->
-        <tr class="compare-row">
-          <td>Availability</td>
-          <td><span class="avail in-stock">In Stock</span></td>
-          <td><span class="avail in-stock">In Stock</span></td>
-          <td><span class="avail limited">Limited Stock</span></td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Battery Life</td>
+          <td class="td-center best-cell">30 hrs <span class="best-tag">BEST</span></td>
+          <td class="td-center">6 hrs (30 case)</td>
+          <td class="td-center">24 hrs</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Shipping -->
-        <tr class="compare-row alt">
-          <td>Shipping</td>
-          <td><span class="ship">Free · 2-3 days</span></td>
-          <td><span class="ship">Free · 1-2 days</span></td>
-          <td><span class="ship">Free · 3-4 days</span></td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Connectivity</td>
+          <td class="td-center">Bluetooth 5.2</td>
+          <td class="td-center best-cell">Bluetooth 5.3 <span class="best-tag">BEST</span></td>
+          <td class="td-center">Bluetooth 5.1</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- AI Recommendation -->
-        <tr class="compare-row">
-          <td>Atlas AI Pick</td>
-          <td><span class="rec-badge">🤖 Recommended</span></td>
-          <td><span class="rec-badge">✨ Apple Fans</span></td>
-          <td><span class="no-rec">Good alternative</span></td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Weight</td>
+          <td class="td-center">250 g</td>
+          <td class="td-center best-cell">56 g (earbuds) <span class="best-tag">LIGHTEST</span></td>
+          <td class="td-center">238 g</td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Warranty -->
-        <tr class="compare-row alt">
-          <td>Warranty</td>
-          <td>1 Year</td>
-          <td>1 Year</td>
-          <td>1 Year</td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Noise Cancellation</td>
+          <td class="td-center"><span class="yes">✅</span></td>
+          <td class="td-center"><span class="yes">✅</span></td>
+          <td class="td-center"><span class="yes">✅</span></td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Connectivity -->
-        <tr class="compare-row">
-          <td>Connectivity</td>
-          <td>Bluetooth 5.2</td>
-          <td>Bluetooth 5.3</td>
-          <td>Bluetooth 5.1</td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">Water Resistant</td>
+          <td class="td-center"><span class="no">❌</span></td>
+          <td class="td-center best-cell"><span class="yes">✅ IPX4</span> <span class="best-tag">ONLY ONE</span></td>
+          <td class="td-center"><span class="no">❌</span></td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Weight -->
-        <tr class="compare-row alt">
-          <td>Weight</td>
-          <td>250g</td>
-          <td>56g (case)</td>
-          <td>238g</td>
-          <td>—</td>
+        <tr>
+          <td class="td-feature">LDAC Hi-Res</td>
+          <td class="td-center best-cell"><span class="yes">✅</span> <span class="best-tag">ONLY ONE</span></td>
+          <td class="td-center"><span class="no">❌</span></td>
+          <td class="td-center"><span class="no">❌</span></td>
+          <td class="td-center" style="color:#ccc">—</td>
         </tr>
-
-        <!-- Add to Cart row (footer) -->
-        <tr class="compare-row">
+        <tr>
+          <td class="td-feature">Warranty</td>
+          <td class="td-center">1 Year</td>
+          <td class="td-center">1 Year</td>
+          <td class="td-center best-cell">2 Years <span class="best-tag">BEST</span></td>
+          <td class="td-center" style="color:#ccc">—</td>
+        </tr>
+        <tr>
           <td></td>
-          <td style="text-align:center;padding-top:20px;">
-            <button class="btn-cart" style="width:100%;padding:10px;" onclick="addToCartLS(this,'Sony WH-1000XM5',29990)">Add to Cart — ₹29,990</button>
+          <td class="td-center" style="padding:16px 14px">
+            <button class="btn-cart-orange" onclick="addToCart('Sony WH-1000XM5',29990,this)">Add to Cart — ₹29,990</button>
           </td>
-          <td style="text-align:center;padding-top:20px;">
-            <button class="btn-cart" style="width:100%;padding:10px;" onclick="addToCartLS(this,'Apple AirPods Pro',24900)">Add to Cart — ₹24,900</button>
+          <td class="td-center" style="padding:16px 14px">
+            <button class="btn-cart-orange" onclick="addToCart('Apple AirPods Pro 2',24900,this)">Add to Cart — ₹24,900</button>
           </td>
-          <td style="text-align:center;padding-top:20px;">
-            <button class="btn-cart" style="width:100%;padding:10px;" onclick="addToCartLS(this,'Bose QuietComfort 45',26000)">Add to Cart — ₹26,000</button>
+          <td class="td-center" style="padding:16px 14px">
+            <button class="btn-cart-orange" onclick="addToCart('Bose QC45',26000,this)">Add to Cart — ₹26,000</button>
           </td>
-          <td>—</td>
+          <td></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- Atlas AI Recommendation Box -->
-  <div class="atlas-box">
-    <div class="atlas-icon">🤖</div>
-    <div class="atlas-text">
-      <h3>Atlas AI Recommendation</h3>
-      <p>Based on <strong>4,200 reviews</strong> and your browsing preferences, Atlas AI recommends the <strong>Sony WH-1000XM5</strong>. It offers industry-leading ANC, superior battery life, and LDAC Hi-Res audio — the best overall package in this comparison for audiophiles and frequent travellers.</p>
+  <!-- VISUAL RATINGS -->
+  <div class="visual-ratings">
+    <div class="vr-title">Visual Ratings Comparison</div>
+    <div class="vr-grid">
+      <div class="vr-header">Criteria</div>
+      <div class="vr-header">Sony WH-1000XM5</div>
+      <div class="vr-header">Apple AirPods Pro 2</div>
+      <div class="vr-header">Bose QC45</div>
+
+      <!-- Sound Quality 5/5 vs 4/5 vs 4/5 -->
+      <div class="vr-label">🔊 Sound Quality</div>
+      <div class="vr-dots"><?php for($i=1;$i<=5;$i++) echo '<div class="vr-dot on"></div>'; ?><span class="dot-label">5/5</span></div>
+      <div class="vr-dots" id="aq-apple"></div>
+      <div class="vr-dots" id="sq-bose"></div>
+
+      <div class="vr-label">😌 Comfort</div>
+      <div class="vr-dots" id="cf-sony"></div>
+      <div class="vr-dots" id="cf-apple"></div>
+      <div class="vr-dots" id="cf-bose"></div>
+
+      <div class="vr-label">💰 Value for Money</div>
+      <div class="vr-dots" id="vm-sony"></div>
+      <div class="vr-dots" id="vm-apple"></div>
+      <div class="vr-dots" id="vm-bose"></div>
+
+      <div class="vr-label">🔩 Build Quality</div>
+      <div class="vr-dots" id="bq-sony"></div>
+      <div class="vr-dots" id="bq-apple"></div>
+      <div class="vr-dots" id="bq-bose"></div>
     </div>
-    <button class="atlas-cta" onclick="addToCartLS(this,'Sony WH-1000XM5',29990)">Buy Sony WH-1000XM5 →</button>
   </div>
+
+  <!-- ATLAS AI RECOMMENDATION -->
+  <div class="atlas-box">
+    <div class="atlas-icon-wrap">🤖</div>
+    <div class="atlas-content">
+      <h3>Atlas AI Recommends: <span class="rec-name">Sony WH-1000XM5</span> for Best Overall Value</h3>
+      <p style="font-size:.83rem;color:#555;margin-top:4px">Based on 4,200+ verified reviews and your browsing profile:</p>
+      <ul class="atlas-bullets">
+        <li>Industry-leading Active Noise Cancellation — best in class for travel and focus</li>
+        <li>30-hour battery life outperforms all competitors in this comparison</li>
+        <li>LDAC Hi-Res Audio support — only headphone here with lossless wireless</li>
+        <li>Multipoint connection lets you switch between 2 devices seamlessly</li>
+        <li>Best rating (4.8★) across 2,341 verified customer reviews</li>
+      </ul>
+    </div>
+    <button class="atlas-cta-btn" onclick="addToCart('Sony WH-1000XM5',29990,this)">Buy Sony — ₹29,990 →</button>
+  </div>
+
+  <!-- CUSTOMERS ALSO VIEWED -->
+  <div class="also-viewed">
+    <div class="section-hdr">
+      <div class="section-title">Customers who compared also viewed</div>
+      <a href="collections.html" class="section-see-all">See all →</a>
+    </div>
+    <div class="scroll-strip">
+      <div class="also-card">
+        <div class="also-emoji">🎧</div>
+        <div class="also-name">Sennheiser Momentum 4</div>
+        <div class="also-price">₹26,990</div>
+        <div class="also-rating">★★★★★ 4.6</div>
+        <button class="also-btn" onclick="addToCart('Sennheiser Momentum 4',26990,this)">Add to Cart</button>
+      </div>
+      <div class="also-card">
+        <div class="also-emoji">🎵</div>
+        <div class="also-name">JBL Quantum 910</div>
+        <div class="also-price">₹18,999</div>
+        <div class="also-rating">★★★★☆ 4.4</div>
+        <button class="also-btn" onclick="addToCart('JBL Quantum 910',18999,this)">Add to Cart</button>
+      </div>
+      <div class="also-card">
+        <div class="also-emoji">🔊</div>
+        <div class="also-name">boAt Rockerz 600</div>
+        <div class="also-price">₹3,499</div>
+        <div class="also-rating">★★★★☆ 4.2</div>
+        <button class="also-btn" onclick="addToCart('boAt Rockerz 600',3499,this)">Add to Cart</button>
+      </div>
+      <div class="also-card">
+        <div class="also-emoji">🎶</div>
+        <div class="also-name">Realme Buds Air 5 Pro</div>
+        <div class="also-price">₹5,999</div>
+        <div class="also-rating">★★★★☆ 4.3</div>
+        <button class="also-btn" onclick="addToCart('Realme Buds Air 5 Pro',5999,this)">Add to Cart</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem;margin-top:32px;">
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html" style="color:#a78bfa;margin:0 8px">Collections</a><a href="sale.html" style="color:#a78bfa;margin:0 8px">Sale</a><a href="compare.html" style="color:#a78bfa;margin:0 8px">Compare</a><a href="gift-cards.html" style="color:#a78bfa;margin:0 8px">Gift Cards</a><a href="blog.html" style="color:#a78bfa;margin:0 8px">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html" style="color:#a78bfa;margin:0 8px">Returns</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a><a href="faq.html" style="color:#a78bfa;margin:0 8px">FAQ</a><a href="track.html" style="color:#a78bfa;margin:0 8px">Track Order</a><a href="notifications.html" style="color:#a78bfa;margin:0 8px">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html" style="color:#a78bfa;margin:0 8px">My Account</a><a href="loyalty.html" style="color:#a78bfa;margin:0 8px">Loyalty</a><a href="wishlist.html" style="color:#a78bfa;margin:0 8px">Wishlist</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html" style="color:#a78bfa;margin:0 8px">Home</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referrals</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a>
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Get to Know Us</h4>
+      <a href="index.html">About VibeStore</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Careers</a>
+      <a href="contact.html">Press Releases</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shop With Us</h4>
+      <a href="collections.html">All Products</a>
+      <a href="sale.html">Today's Deals</a>
+      <a href="gift-cards.html">Gift Cards</a>
+      <a href="compare.html">Compare Products</a>
+    </div>
+    <div class="footer-col">
+      <h4>Your Account</h4>
+      <a href="account.html">Account Dashboard</a>
+      <a href="loyalty.html">Rewards Points</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="referral.html">Refer a Friend</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help &amp; Support</h4>
+      <a href="track.html">Track Order</a>
+      <a href="returns.html">Returns</a>
+      <a href="faq.html">FAQ / Help Center</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Cookie Policy</a>
+      <a href="#">Sitemap</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
 </footer>
+
+<div class="toast" id="toast">✓ <span id="toastMsg"></span></div>
 
 <script src="rex-chat.js"></script>
 <script>
-// ---- CART (vs_cart localStorage) ----
-function getCart(){ try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch(e){return[]} }
-function saveCart(cart){ localStorage.setItem('vs_cart',JSON.stringify(cart)); updateCartCount(); }
-function updateCartCount(){
+// ── CART (vs_cart localStorage) ──
+function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch(e){return[]}}
+function saveCart(c){localStorage.setItem('vs_cart',JSON.stringify(c));updateCartQty()}
+function updateCartQty(){
   const cart=getCart();
   const count=cart.reduce((s,i)=>s+(i.qty||1),0);
-  const el=document.getElementById('cartCount');
+  const el=document.getElementById('cartQty');
   if(el) el.textContent=count;
 }
-updateCartCount();
+updateCartQty();
 
-function addToCartLS(btn, name, price){
+function addToCart(name,price,btn){
   const cart=getCart();
-  const existing=cart.find(i=>i.name===name);
-  if(existing) existing.qty=(existing.qty||1)+1;
+  const ex=cart.find(i=>i.name===name);
+  if(ex) ex.qty=(ex.qty||1)+1;
   else cart.push({name,price,qty:1,addedAt:Date.now()});
   saveCart(cart);
   const orig=btn.textContent;
   btn.textContent='✓ Added!';
-  btn.style.background='#16a34a';
-  setTimeout(()=>{ btn.textContent=orig; btn.style.background=''; },1500);
+  btn.style.background='#007600';
+  setTimeout(()=>{btn.textContent=orig;btn.style.background='';},1600);
+  showToast(name+' added to cart');
 }
 
-// ---- WISHLIST ----
-function addToWishlist(btn, name){
-  try{
-    const wl=JSON.parse(localStorage.getItem('vs_wishlist')||'[]');
-    if(!wl.find(i=>i.name===name)) wl.push({name,addedAt:Date.now()});
-    localStorage.setItem('vs_wishlist',JSON.stringify(wl));
-  }catch(e){}
-  btn.textContent='♥';
-  btn.style.color='#ef4444';
-  btn.style.borderColor='#ef4444';
-}
-
-// Remove button functionality
-document.querySelectorAll('.btn-remove').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const cell = btn.closest('td');
-    const idx = Array.from(cell.parentElement.children).indexOf(cell);
-    document.querySelectorAll('.compare-table tr').forEach(row => {
-      if (row.children[idx]) row.children[idx].style.opacity = '0.2';
-    });
-    setTimeout(() => {
-      document.querySelectorAll('.compare-table tr').forEach(row => {
-        if (row.children[idx]) row.children[idx].style.display = 'none';
-      });
-    }, 300);
+// ── REMOVE COLUMN ──
+function removeCol(id){
+  const col=document.getElementById(id);
+  if(!col) return;
+  const idx=Array.from(col.parentElement.children).indexOf(col);
+  document.querySelectorAll('#compareTable tr').forEach(row=>{
+    const cell=row.children[idx];
+    if(cell){cell.style.opacity='0';cell.style.transition='opacity .3s';}
   });
+  setTimeout(()=>{
+    document.querySelectorAll('#compareTable tr').forEach(row=>{
+      const cell=row.children[idx];
+      if(cell) cell.style.display='none';
+    });
+  },320);
+  showToast('Product removed from comparison');
+}
+
+// ── TOAST ──
+function showToast(msg){
+  const t=document.getElementById('toast');
+  document.getElementById('toastMsg').textContent=msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+// ── VISUAL RATING DOTS ──
+const ratings={
+  'aq-apple':[1,1,1,1,0], 'sq-bose':[1,1,1,1,0],
+  'cf-sony':[1,1,1,1,0],  'cf-apple':[1,1,1,1,1], 'cf-bose':[1,1,1,1,0],
+  'vm-sony':[1,1,1,1,0],  'vm-apple':[1,1,1,0,0], 'vm-bose':[1,1,1,1,0],
+  'bq-sony':[1,1,1,1,1],  'bq-apple':[1,1,1,1,1], 'bq-bose':[1,1,1,1,0]
+};
+// Sound quality row first dots (already in PHP fallback — use JS)
+const vrFirst=document.querySelectorAll('.vr-dots');
+// Build all dot containers from ratings map
+Object.entries(ratings).forEach(([id,arr])=>{
+  const el=document.getElementById(id);
+  if(!el) return;
+  const filled=arr.filter(Boolean).length;
+  arr.forEach(on=>{
+    const d=document.createElement('div');
+    d.className='vr-dot'+(on?' on':'');
+    el.appendChild(d);
+  });
+  const lbl=document.createElement('span');
+  lbl.style.cssText='font-size:.7rem;color:#888;margin-left:4px';
+  lbl.textContent=filled+'/5';
+  el.appendChild(lbl);
 });
+
+// Sony sound quality dots (first vr-dots row, col 1)
+const firstDots=document.querySelectorAll('.vr-dots')[0];
+if(firstDots&&firstDots.children.length===0){
+  [1,1,1,1,1].forEach(on=>{const d=document.createElement('div');d.className='vr-dot'+(on?' on':'');firstDots.appendChild(d);});
+  const lbl=document.createElement('span');lbl.style.cssText='font-size:.7rem;color:#888;margin-left:4px';lbl.textContent='5/5';firstDots.appendChild(lbl);
+}
 </script>
 </body>
 </html>

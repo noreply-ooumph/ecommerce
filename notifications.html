@@ -7,354 +7,420 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--purple:#7c3aed;--cyan:#06b6d4;--navy:#0f0f1a;--bg:#f8f8f5;--border:#e5e5e0;--text:#0f0f1a;--muted:#6b7280;}
+:root{--orange:#FF9900;--orange-dark:#e88a00;--teal:#007185;--red:#CC0C39;--navy:#131921;--nav2:#232f3e;--bg:#f0f2f5;--white:#fff;--border:#ddd;--text:#0F1111;--muted:#565959;--green:#007600;--blue:#0066c0;}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
-.nav{background:var(--navy);padding:14px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;}
-.nav-logo span{background:linear-gradient(135deg,#7c3aed,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
-.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;}
-.nav-links a:hover{color:white;}
-.nav-badge{position:relative;display:inline-block;}
-.nbadge{position:absolute;top:-6px;right:-6px;background:#ef4444;color:white;width:16px;height:16px;border-radius:50%;font-size:0.58rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
 
-/* HEADER */
-.page-hdr{background:white;border-bottom:1px solid var(--border);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-.page-hdr-left h1{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:10px;}
-.unread-pill{background:var(--purple);color:white;font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:100px;}
-.page-hdr-left p{font-size:0.82rem;color:var(--muted);margin-top:3px;}
-.hdr-actions{display:flex;gap:8px;}
-.hdr-btn{background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.2s;font-family:'Inter',sans-serif;}
-.hdr-btn:hover{border-color:var(--purple);color:var(--purple);}
-.hdr-btn.primary{background:var(--navy);color:white;border-color:var(--navy);}
-.hdr-btn.primary:hover{background:var(--purple);border-color:var(--purple);}
+/* NAV */
+.nav{background:var(--navy);padding:0 16px;display:flex;align-items:center;gap:8px;height:60px;position:sticky;top:0;z-index:600;}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;color:white;text-decoration:none;white-space:nowrap;border:2px solid transparent;padding:4px 8px;border-radius:3px;}
+.nav-logo:hover{border-color:white;}
+.nav-logo span{color:var(--orange);}
+.nav-search{flex:1;display:flex;max-width:780px;height:40px;}
+.nav-search-cat{background:#f3f3f3;border:none;border-radius:4px 0 0 4px;padding:0 10px;font-size:0.75rem;color:#555;cursor:pointer;border-right:1px solid #cdba96;min-width:60px;}
+.nav-search-input{flex:1;border:none;outline:none;padding:0 12px;font-size:0.9rem;font-family:'Inter',sans-serif;}
+.nav-search-btn{background:var(--orange);border:none;border-radius:0 4px 4px 0;padding:0 16px;cursor:pointer;font-size:1rem;color:var(--navy);}
+.nav-search-btn:hover{background:var(--orange-dark);}
+.nav-right{display:flex;align-items:center;gap:4px;margin-left:auto;}
+.nav-link{color:white;text-decoration:none;font-size:0.78rem;padding:4px 8px;border:2px solid transparent;border-radius:3px;white-space:nowrap;line-height:1.3;}
+.nav-link:hover{border-color:white;}
+.nav-link small{display:block;font-size:0.68rem;color:rgba(255,255,255,0.7);}
+.nav-link strong{font-size:0.85rem;}
+.nav-cart-btn{color:white;text-decoration:none;font-size:0.78rem;padding:4px 8px;border:2px solid transparent;border-radius:3px;display:flex;align-items:center;gap:4px;}
+.nav-cart-btn:hover{border-color:white;}
+.cart-count{color:var(--orange);font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;}
+.nav2{background:var(--nav2);padding:0 16px;display:flex;align-items:center;gap:4px;height:38px;overflow-x:auto;}
+.nav2 a{color:white;text-decoration:none;font-size:0.82rem;padding:6px 10px;border-radius:3px;white-space:nowrap;border:2px solid transparent;}
+.nav2 a:hover{border-color:white;}
+.nav2-bold{font-weight:700;}
 
-/* LAYOUT */
-.layout{display:grid;grid-template-columns:260px 1fr 280px;gap:0;min-height:calc(100vh - 120px);}
+/* PAGE HEADER */
+.page-hdr{background:white;border-bottom:1px solid var(--border);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+.page-hdr-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.page-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text);}
+.unread-badge{background:var(--red);color:white;font-size:0.72rem;font-weight:700;padding:3px 9px;border-radius:100px;}
+.hdr-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.btn-outline{background:white;color:var(--text);border:1px solid var(--border);border-radius:8px;padding:7px 14px;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:5px;}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal);}
+.btn-gear{background:white;border:1px solid var(--border);border-radius:8px;padding:7px 12px;font-size:1rem;cursor:pointer;}
+.btn-gear:hover{border-color:var(--orange);}
 
-/* LEFT SIDEBAR — FILTERS */
-.lsb{background:white;border-right:1px solid var(--border);padding:20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
-.lsb-section{margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border);}
-.lsb-section:last-child{border-bottom:none;margin-bottom:0;}
-.lsb-title{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);margin-bottom:10px;}
-.filter-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background 0.2s;font-size:0.84rem;}
-.filter-item:hover{background:var(--bg);}
-.filter-item.active{background:rgba(124,58,237,0.08);color:var(--purple);font-weight:600;}
-.filter-item .fi-left{display:flex;align-items:center;gap:8px;}
-.fi-count{font-size:0.7rem;background:var(--bg);border-radius:100px;padding:1px 7px;color:var(--muted);}
-.filter-item.active .fi-count{background:rgba(124,58,237,0.15);color:var(--purple);}
+/* FILTER TABS */
+.filter-tabs{background:white;border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:0;overflow-x:auto;}
+.tab{padding:12px 18px;font-size:0.84rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;display:flex;align-items:center;gap:6px;transition:color 0.15s;}
+.tab:hover{color:var(--text);}
+.tab.active{color:var(--text);border-bottom-color:var(--orange);}
+.tab-count{background:#f0f2f5;border-radius:100px;padding:2px 7px;font-size:0.7rem;font-weight:700;}
+.tab.active .tab-count{background:var(--orange);color:var(--navy);}
 
-/* AGENT FILTER */
-.agent-filter{display:flex;flex-direction:column;gap:6px;}
-.agent-chip{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:0.82rem;transition:all 0.2s;}
-.agent-chip:hover{background:var(--bg);}
-.agent-chip.active{background:rgba(124,58,237,0.08);}
-.agent-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* MAIN LAYOUT */
+.layout{display:flex;gap:0;min-height:calc(100vh - 158px);max-width:1400px;margin:0 auto;}
+.notif-col{flex:0 0 65%;border-right:1px solid var(--border);background:white;}
+.settings-col{flex:0 0 35%;background:white;padding:24px;}
 
-/* MAIN — NOTIFICATIONS LIST */
-.main{padding:0;}
-.notif-date-group{padding:0;}
-.date-label{padding:10px 20px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border);border-top:1px solid var(--border);position:sticky;top:0;z-index:10;}
-.notif{display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:white;transition:background 0.2s;cursor:pointer;position:relative;}
-.notif:hover{background:#fdfcff;}
-.notif.unread{background:#faf7ff;}
-.notif.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--purple);border-radius:0 2px 2px 0;}
-.notif-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
-.notif-icon.order{background:rgba(6,182,212,0.12);}
-.notif-icon.price{background:rgba(16,163,74,0.12);}
-.notif-icon.promo{background:rgba(245,158,11,0.12);}
-.notif-icon.ship{background:rgba(59,130,246,0.12);}
-.notif-icon.review{background:rgba(139,92,246,0.12);}
-.notif-icon.system{background:rgba(107,114,128,0.12);}
-.notif-icon.ref{background:rgba(236,72,153,0.12);}
+/* NOTIFICATIONS */
+.notif-list{}
+.notif-row{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-bottom:1px solid var(--border);background:white;transition:background 0.15s;position:relative;}
+.notif-row:hover{background:#fafafa;}
+.notif-row.unread{background:#fef9f0;}
+.notif-row.unread::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--blue);border-radius:0 2px 2px 0;}
+.notif-icon-wrap{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.icon-order{background:#e8f4fd;}
+.icon-deal{background:#fff8ec;}
+.icon-account{background:#f0f0f0;}
+.icon-reward{background:#e5f5e0;}
+.icon-ship{background:#e8f4fd;}
 .notif-body{flex:1;min-width:0;}
-.notif-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:4px;}
-.notif-agent{font-size:0.7rem;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:0.04em;}
-.notif-time{font-size:0.7rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
-.notif-title{font-size:0.87rem;font-weight:600;color:var(--text);margin-bottom:3px;line-height:1.4;}
-.notif.unread .notif-title{color:var(--navy);}
-.notif-desc{font-size:0.8rem;color:var(--muted);line-height:1.5;}
-.notif-actions{display:flex;gap:7px;margin-top:8px;}
-.na-btn{font-size:0.75rem;font-weight:600;padding:4px 10px;border-radius:6px;border:1px solid var(--border);background:white;cursor:pointer;color:var(--text);transition:all 0.2s;}
-.na-btn:hover{border-color:var(--purple);color:var(--purple);}
-.na-btn.primary{background:var(--purple);color:white;border-color:var(--purple);}
-.na-btn.primary:hover{background:#6d28d9;}
-.unread-dot{width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;margin-top:6px;}
+.notif-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:3px;}
+.notif-title{font-size:0.88rem;font-weight:700;color:var(--text);line-height:1.4;}
+.notif-row:not(.unread) .notif-title{font-weight:600;}
+.notif-time{font-size:0.72rem;color:var(--muted);white-space:nowrap;flex-shrink:0;}
+.notif-desc{font-size:0.81rem;color:var(--muted);line-height:1.55;margin-bottom:8px;}
+.notif-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.btn-action{font-size:0.77rem;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:'Inter',sans-serif;text-decoration:none;display:inline-block;}
+.btn-action-primary{background:var(--orange);color:var(--navy);border:1px solid var(--orange-dark);}
+.btn-action-primary:hover{background:var(--orange-dark);}
+.btn-action-secondary{background:white;color:var(--teal);border:1px solid var(--teal);}
+.btn-action-secondary:hover{background:#f0f9fa;}
+.notif-dismiss{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--muted);font-size:0.9rem;cursor:pointer;opacity:0;transition:opacity 0.15s;padding:4px;border-radius:4px;}
+.notif-row:hover .notif-dismiss{opacity:1;}
+.notif-dismiss:hover{background:#f0f2f5;color:var(--text);}
+.unread-dot{width:9px;height:9px;border-radius:50%;background:var(--blue);flex-shrink:0;margin-top:8px;}
 
-/* RIGHT SIDEBAR — AI AGENTS LIVE */
-.rsb{background:white;border-left:1px solid var(--border);padding:20px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto;}
-.rsb-title{font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
-.agent-card{border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;transition:all 0.2s;}
-.agent-card:hover{border-color:rgba(124,58,237,0.3);box-shadow:0 4px 12px rgba(0,0,0,0.06);}
-.agent-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.agent-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
-.agent-info h4{font-size:0.85rem;font-weight:700;color:var(--text);}
-.agent-status{font-size:0.7rem;display:flex;align-items:center;gap:4px;}
-.status-dot{width:5px;height:5px;border-radius:50%;animation:pulse 1.5s infinite;}
+/* SETTINGS SIDEBAR */
+.settings-col h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:var(--text);margin-bottom:18px;display:flex;align-items:center;gap:8px;}
+.toggle-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
+.toggle-row:last-of-type{border-bottom:none;}
+.toggle-info{flex:1;}
+.toggle-label-row{display:flex;align-items:center;gap:7px;margin-bottom:3px;}
+.toggle-icon{font-size:1rem;}
+.toggle-label{font-size:0.85rem;font-weight:600;color:var(--text);}
+.toggle-desc{font-size:0.75rem;color:var(--muted);line-height:1.4;}
+.toggle{width:42px;height:24px;background:#d1d5db;border-radius:100px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;margin-top:2px;border:none;}
+.toggle.on{background:var(--orange);}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:white;transition:left 0.2s;box-shadow:0 1px 3px rgba(0,0,0,0.2);}
+.toggle.on::after{left:21px;}
+.btn-save-prefs{width:100%;background:var(--orange);color:var(--navy);border:1px solid var(--orange-dark);border-radius:8px;padding:11px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:20px;}
+.btn-save-prefs:hover{background:var(--orange-dark);}
+
+/* ZEN AI BANNER */
+.zen-banner{background:linear-gradient(135deg,#131921,#232f3e);padding:14px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);}
+.zen-dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 1.5s infinite;flex-shrink:0;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.dot-green{background:#4ade80;}
-.dot-amber{background:#f59e0b;}
-.agent-activity{font-size:0.78rem;color:var(--muted);line-height:1.5;}
-.agent-stat{display:flex;justify-content:space-between;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
-.as-item{text-align:center;}
-.as-n{font-size:0.82rem;font-weight:700;color:var(--text);}
-.as-l{font-size:0.66rem;color:var(--muted);}
+.zen-text{font-size:0.82rem;color:rgba(255,255,255,0.8);}
+.zen-text strong{color:var(--orange);}
+.zen-divider{background:#f0f2f5;padding:8px 20px;font-size:0.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid var(--border);}
 
-/* NOTIF SETTINGS */
-.notif-settings{background:linear-gradient(135deg,rgba(124,58,237,0.06),rgba(6,182,212,0.06));border:1px solid rgba(124,58,237,0.15);border-radius:12px;padding:14px;margin-top:12px;}
-.ns-title{font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;}
-.ns-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;}
-.ns-row span{font-size:0.78rem;color:var(--text);}
-.toggle{width:32px;height:18px;background:#d1d5db;border-radius:100px;cursor:pointer;position:relative;transition:background 0.2s;flex-shrink:0;}
-.toggle.on{background:var(--purple);}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:white;transition:left 0.2s;}
-.toggle.on::after{left:16px;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:#333;color:white;padding:10px 22px;border-radius:8px;font-size:0.85rem;font-weight:600;z-index:999;transition:transform 0.3s;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);}
 
-/* LOAD MORE */
-.load-more{padding:20px;text-align:center;}
-.load-btn{background:white;border:1px solid var(--border);border-radius:9px;padding:10px 28px;font-size:0.84rem;font-weight:600;cursor:pointer;color:var(--text);transition:all 0.2s;font-family:'Inter',sans-serif;}
-.load-btn:hover{border-color:var(--purple);color:var(--purple);}
+/* FOOTER */
+.footer{background:var(--navy);color:rgba(255,255,255,0.7);}
+.footer-top{background:#232f3e;padding:14px 24px;text-align:center;font-size:0.8rem;color:rgba(255,255,255,0.7);cursor:pointer;}
+.footer-top:hover{color:white;}
+.footer-cols{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr);gap:32px;padding:32px 24px;}
+.footer-col h4{color:white;font-size:0.88rem;font-weight:700;margin-bottom:12px;}
+.footer-col a{display:block;color:rgba(255,255,255,0.6);text-decoration:none;font-size:0.8rem;margin-bottom:8px;}
+.footer-col a:hover{color:white;}
+.footer-bottom{border-top:1px solid rgba(255,255,255,0.1);padding:16px 24px;text-align:center;font-size:0.75rem;color:rgba(255,255,255,0.4);}
 
-@media(max-width:1024px){.layout{grid-template-columns:220px 1fr;}.rsb{display:none;}}
-@media(max-width:768px){.layout{grid-template-columns:1fr;}.lsb{display:none;}}
+@media(max-width:960px){.layout{flex-direction:column;}.notif-col{flex:none;border-right:none;border-bottom:1px solid var(--border);}.settings-col{flex:none;}.footer-cols{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.page-hdr{padding:12px 16px;}.filter-tabs{padding:0 8px;}.notif-row{padding:12px 16px;}}
 </style>
 </head>
 <body>
 
+<!-- AMAZON DARK NAV -->
 <nav class="nav">
-  <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
-  <div class="nav-links">
-    <a href="mystore.html">Store</a>
-    <a href="collections.html">Collections</a>
-    <a href="sale.html">Sale</a>
-    <a href="blog.html">Blog</a>
-    <a href="account.html">👤 Account</a>
-    <a href="track.html">📦 Orders</a>
-    <a href="wishlist.html">♡ Wishlist</a>
+  <a href="index.html" class="nav-logo">Vibe<span>Store</span></a>
+  <form class="nav-search" onsubmit="return false">
+    <select class="nav-search-cat">
+      <option>All</option>
+      <option>Electronics</option>
+      <option>Audio</option>
+      <option>Mobiles</option>
+      <option>Computers</option>
+      <option>Fashion</option>
+    </select>
+    <input class="nav-search-input" type="text" placeholder="Search VibeStore..."/>
+    <button class="nav-search-btn" onclick="window.location.href='search.html'">🔍</button>
+  </form>
+  <div class="nav-right">
+    <a href="account.html" class="nav-link"><small>Hello, Aryan</small><strong>Account &amp; Lists</strong></a>
+    <a href="track.html" class="nav-link"><small>Returns</small><strong>&amp; Orders</strong></a>
+    <a href="wishlist.html" class="nav-link"><small>Your</small><strong>❤️ Wishlist</strong></a>
+    <a href="checkout.html" class="nav-cart-btn">🛒 <span class="cart-count" id="cartCount">0</span> Cart</a>
   </div>
 </nav>
+<nav class="nav2">
+  <a href="store.html" class="nav2-bold">☰ All</a>
+  <a href="store.html">Today's Deals</a>
+  <a href="sale.html">Sale</a>
+  <a href="collections.html">Electronics</a>
+  <a href="collections.html">Audio</a>
+  <a href="collections.html">Mobiles</a>
+  <a href="gift-cards.html">Gift Cards</a>
+  <a href="loyalty.html">VibeCash</a>
+  <a href="blog.html">Blog</a>
+  <a href="become-seller.html">Become a Seller</a>
+  <a href="seller-central.html">Seller Central</a>
+</nav>
 
+<!-- PAGE HEADER -->
 <div class="page-hdr">
   <div class="page-hdr-left">
-    <h1>🔔 Notifications <span class="unread-pill" id="unreadCount">12 unread</span></h1>
-    <p>All 8 AI agents report here in real-time — orders, prices, deals, and more.</p>
+    <h1 class="page-title">🔔 Notifications</h1>
+    <span class="unread-badge" id="unreadBadge">7 unread</span>
   </div>
   <div class="hdr-actions">
-    <button class="hdr-btn" onclick="markAllRead()">✓ Mark all read</button>
-    <button class="hdr-btn" onclick="clearRead()">🗑 Clear read</button>
-    <button class="hdr-btn primary" onclick="window.location.href='store.html'">🛍️ Shop Now</button>
+    <button class="btn-outline" onclick="markAllRead()">✓ Mark All Read</button>
+    <button class="btn-gear" title="Notification Settings" onclick="document.querySelector('.settings-col').scrollIntoView({behavior:'smooth'})">⚙️</button>
   </div>
 </div>
 
+<!-- FILTER TABS -->
+<div class="filter-tabs">
+  <div class="tab active" onclick="setTab(this,'all')">All <span class="tab-count">23</span></div>
+  <div class="tab" onclick="setTab(this,'unread')">Unread <span class="tab-count">7</span></div>
+  <div class="tab" onclick="setTab(this,'orders')">Orders <span class="tab-count">10</span></div>
+  <div class="tab" onclick="setTab(this,'deals')">Deals <span class="tab-count">6</span></div>
+  <div class="tab" onclick="setTab(this,'account')">Account <span class="tab-count">7</span></div>
+</div>
+
+<!-- LAYOUT -->
 <div class="layout">
-  <!-- LEFT SIDEBAR -->
-  <aside class="lsb">
-    <div class="lsb-section">
-      <div class="lsb-title">Filter by Type</div>
-      <div class="filter-item active" onclick="setFilter(this,'all')"><div class="fi-left">📋 All</div><span class="fi-count">28</span></div>
-      <div class="filter-item" onclick="setFilter(this,'unread')"><div class="fi-left">🔵 Unread</div><span class="fi-count">12</span></div>
-      <div class="filter-item" onclick="setFilter(this,'order')"><div class="fi-left">📦 Orders</div><span class="fi-count">6</span></div>
-      <div class="filter-item" onclick="setFilter(this,'price')"><div class="fi-left">📉 Price Drops</div><span class="fi-count">4</span></div>
-      <div class="filter-item" onclick="setFilter(this,'promo')"><div class="fi-left">🎟️ Promotions</div><span class="fi-count">5</span></div>
-      <div class="filter-item" onclick="setFilter(this,'ship')"><div class="fi-left">🚚 Shipping</div><span class="fi-count">3</span></div>
-      <div class="filter-item" onclick="setFilter(this,'ref')"><div class="fi-left">🎁 Referrals</div><span class="fi-count">2</span></div>
-      <div class="filter-item" onclick="setFilter(this,'system')"><div class="fi-left">⚙️ System</div><span class="fi-count">8</span></div>
-    </div>
-    <div class="lsb-section">
-      <div class="lsb-title">Filter by Agent</div>
-      <div class="agent-filter">
-        <div class="agent-chip active" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#7c3aed"></div>All Agents</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#06b6d4"></div>Zen AI (Ops)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#f59e0b"></div>Luna AI (Price)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#ec4899"></div>Aria AI (Sales)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#10b981"></div>Atlas AI (Search)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#8b5cf6"></div>Rex AI (Support)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#ef4444"></div>Nova AI (Merch)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#3b82f6"></div>Sage AI (Content)</div>
-        <div class="agent-chip" onclick="this.classList.toggle('active')"><div class="agent-dot" style="background:#f97316"></div>Echo AI (Social)</div>
-      </div>
-    </div>
-  </aside>
 
-  <!-- MAIN NOTIFICATIONS -->
-  <main class="main" id="notifMain">
-    <div class="date-label">Today — May 19, 2025</div>
+  <!-- LEFT: NOTIFICATIONS LIST -->
+  <div class="notif-col" id="notifCol">
+    <!-- Zen AI Banner -->
+    <div class="zen-banner">
+      <div class="zen-dot"></div>
+      <div class="zen-text"><strong>Zen AI</strong> is managing <strong>234 notifications</strong> across all VibeStore customers today — keeping your inbox clean and relevant.</div>
+    </div>
+
+    <!-- Today -->
+    <div class="zen-divider">Today — May 22, 2026</div>
     <div id="notifList"></div>
-    <div class="date-label">Yesterday — May 18, 2025</div>
+
+    <!-- Yesterday -->
+    <div class="zen-divider">Yesterday — May 21, 2026</div>
     <div id="notifListOld"></div>
-    <div class="load-more"><button class="load-btn" onclick="loadMore()">Load older notifications</button></div>
-  </main>
+  </div>
 
-  <!-- RIGHT SIDEBAR — AI AGENTS LIVE -->
-  <aside class="rsb">
-    <div class="rsb-title">🤖 AI Agents — Live</div>
+  <!-- RIGHT: SETTINGS SIDEBAR -->
+  <div class="settings-col">
+    <h3>⚙️ Notification Settings</h3>
 
-    <div class="agent-card">
-      <div class="agent-hdr">
-        <div class="agent-avatar" style="background:rgba(6,182,212,0.12)">🚀</div>
-        <div class="agent-info"><h4>Zen AI</h4><div class="agent-status"><div class="status-dot dot-green"></div><span style="color:#16a34a">Processing orders</span></div></div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">📦</span><span class="toggle-label">Order Updates</span></div>
+        <div class="toggle-desc">Confirmation, dispatch, out for delivery, and delivered alerts</div>
       </div>
-      <div class="agent-activity" id="zenActivity">Dispatching order #VS-48302 · Verifying payment for #VS-48310</div>
-      <div class="agent-stat">
-        <div class="as-item"><div class="as-n">142</div><div class="as-l">Orders today</div></div>
-        <div class="as-item"><div class="as-n">2.1s</div><div class="as-l">Avg process</div></div>
-        <div class="as-item"><div class="as-n">99.9%</div><div class="as-l">Accuracy</div></div>
-      </div>
+      <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
 
-    <div class="agent-card">
-      <div class="agent-hdr">
-        <div class="agent-avatar" style="background:rgba(245,158,11,0.12)">💰</div>
-        <div class="agent-info"><h4>Luna AI</h4><div class="agent-status"><div class="status-dot dot-green"></div><span style="color:#16a34a">Tracking 8,240 prices</span></div></div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">⚡</span><span class="toggle-label">Deal Alerts</span></div>
+        <div class="toggle-desc">Flash sales, limited-time offers, and daily deals curated for you</div>
       </div>
-      <div class="agent-activity">Found 14 price drops in the last hour · Sony XM5 lowest in 6 months</div>
-      <div class="agent-stat">
-        <div class="as-item"><div class="as-n">14</div><div class="as-l">Drops today</div></div>
-        <div class="as-item"><div class="as-n">8,240</div><div class="as-l">Items tracked</div></div>
-        <div class="as-item"><div class="as-n">₹2.1M</div><div class="as-l">User savings</div></div>
-      </div>
+      <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
 
-    <div class="agent-card">
-      <div class="agent-hdr">
-        <div class="agent-avatar" style="background:rgba(236,72,153,0.12)">🎯</div>
-        <div class="agent-info"><h4>Aria AI</h4><div class="agent-status"><div class="status-dot dot-amber"></div><span style="color:#d97706">Running campaign</span></div></div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">💰</span><span class="toggle-label">Points &amp; Rewards</span></div>
+        <div class="toggle-desc">VibeCash earned, referral credits, and loyalty tier upgrades</div>
       </div>
-      <div class="agent-activity">Flash Sale campaign active · Sending personalised push to 42K users</div>
-      <div class="agent-stat">
-        <div class="as-item"><div class="as-n">₹4.2L</div><div class="as-l">Revenue today</div></div>
-        <div class="as-item"><div class="as-n">3.8%</div><div class="as-l">Conv. rate</div></div>
-        <div class="as-item"><div class="as-n">42K</div><div class="as-l">Reached</div></div>
-      </div>
+      <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
 
-    <div class="notif-settings">
-      <div class="ns-title">⚙️ Notification Settings</div>
-      <div class="ns-row"><span>Order updates</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="ns-row"><span>Price drop alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="ns-row"><span>Flash sale alerts</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="ns-row"><span>Referral updates</span><div class="toggle on" onclick="this.classList.toggle('on')"></div></div>
-      <div class="ns-row"><span>AI agent reports</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
-      <div class="ns-row"><span>Marketing emails</span><div class="toggle" onclick="this.classList.toggle('on')"></div></div>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">🔐</span><span class="toggle-label">Account Security</span></div>
+        <div class="toggle-desc">Login alerts, password changes, and suspicious activity warnings</div>
+      </div>
+      <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
-  </aside>
-</div>
 
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.7);padding:40px 24px 24px">
-  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-bottom:32px">
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Shop</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="collections.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Collections</a>
-        <a href="sale.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Sale</a>
-        <a href="compare.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Compare</a>
-        <a href="gift-cards.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Gift Cards</a>
-        <a href="blog.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Blog</a>
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">📧</span><span class="toggle-label">Newsletter</span></div>
+        <div class="toggle-desc">Weekly product roundups, tips, and VibeStore news</div>
       </div>
+      <button class="toggle" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Support</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="returns.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Returns</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact Us</a>
-        <a href="faq.html" style="color:rgba(255,255,255,0.6);text-decoration:none">FAQ</a>
-        <a href="track.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Track Order</a>
-        <a href="notifications.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Notifications</a>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">🤖</span><span class="toggle-label">AI Recommendations</span></div>
+        <div class="toggle-desc">Personalized product picks and smart suggestions from Luna, Echo &amp; Zen</div>
       </div>
+      <button class="toggle on" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Account</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="account.html" style="color:rgba(255,255,255,0.6);text-decoration:none">My Account</a>
-        <a href="loyalty.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Loyalty</a>
-        <a href="wishlist.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Wishlist</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referrals</a>
+
+    <div class="toggle-row">
+      <div class="toggle-info">
+        <div class="toggle-label-row"><span class="toggle-icon">🏪</span><span class="toggle-label">Seller Updates</span></div>
+        <div class="toggle-desc">New arrivals and restocks from sellers you follow on VibeStore Marketplace</div>
       </div>
+      <button class="toggle" onclick="this.classList.toggle('on')" aria-label="Toggle"></button>
     </div>
-    <div>
-      <div style="font-weight:700;color:white;margin-bottom:12px;font-size:0.85rem;text-transform:uppercase;letter-spacing:0.06em">Company</div>
-      <div style="display:flex;flex-direction:column;gap:8px;font-size:0.82rem">
-        <a href="index.html" style="color:rgba(255,255,255,0.6);text-decoration:none">About Us</a>
-        <a href="referral.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Referral Program</a>
-        <a href="contact.html" style="color:rgba(255,255,255,0.6);text-decoration:none">Contact</a>
-      </div>
+
+    <button class="btn-save-prefs" onclick="toast('✅ Preferences saved!')">Save Preferences</button>
+
+    <!-- Extra info -->
+    <div style="margin-top:20px;background:#f7f7f7;border-radius:8px;padding:14px;">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:6px;">📱 Push Notifications</div>
+      <div style="font-size:0.78rem;color:var(--muted);margin-bottom:10px;">Get instant alerts on your device even when not browsing VibeStore.</div>
+      <button onclick="toast('Push notifications enabled!')" style="width:100%;background:var(--navy);color:white;border:none;border-radius:6px;padding:9px;font-size:0.8rem;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;">Enable Push Notifications</button>
     </div>
   </div>
-  <div style="max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:20px;font-size:0.75rem;color:rgba(255,255,255,0.4);text-align:center">© 2025 VibeStore. All rights reserved.</div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-top" onclick="window.scrollTo(0,0)">Back to top</div>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <a href="store.html">Store Home</a>
+      <a href="collections.html">Collections</a>
+      <a href="sale.html">Today's Deals</a>
+      <a href="compare.html">Compare Products</a>
+      <a href="gift-cards.html">Gift Cards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <a href="returns.html">Returns &amp; Refunds</a>
+      <a href="contact.html">Contact Us</a>
+      <a href="faq.html">FAQ</a>
+      <a href="track.html">Track Your Order</a>
+      <a href="notifications.html">Notifications</a>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <a href="account.html">My Account</a>
+      <a href="wishlist.html">Your Wishlist</a>
+      <a href="loyalty.html">VibeCash &amp; Loyalty</a>
+      <a href="referral.html">Referral Program</a>
+    </div>
+    <div class="footer-col">
+      <h4>Discover</h4>
+      <a href="blog.html">Blog &amp; Tips</a>
+      <a href="sale.html">Flash Sales</a>
+      <a href="app.html">VibeStore App</a>
+      <a href="search.html">Search</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a href="become-seller.html">Sell on VibeStore</a>
+      <a href="seller-central.html">Seller Central</a>
+      <a href="#">Affiliate Program</a>
+      <a href="#">Advertise</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace by MyOoumph Networks Pvt Ltd. All rights reserved.</div>
 </footer>
 
 <script src="rex-chat.js"></script>
 <script>
-const TODAY_NOTIFS = [
-  {type:'ship',icon:'🚚',iconClass:'ship',agent:'Zen AI',time:'2 min ago',title:'Your order is out for delivery!',desc:'Order #VS-48291 (Sony WH-1000XM5) is out for delivery. Expected by 6:00 PM today.',unread:true,actions:[{label:'Track Live',primary:true,href:'track.html'},{label:'Contact Driver',primary:false}]},
-  {type:'price',icon:'📉',iconClass:'price',agent:'Luna AI',time:'18 min ago',title:'Price drop on your wishlist item!',desc:'Sony WH-1000XM5 dropped ₹3,000 (from ₹32,990 to ₹29,990). This is the lowest price in 6 months.',unread:true,actions:[{label:'Buy Now',primary:true,href:'product.html?id=p1'},{label:'View Wishlist',primary:false,href:'wishlist.html'}]},
-  {type:'promo',icon:'🎟️',iconClass:'promo',agent:'Aria AI',time:'42 min ago',title:'Flash Sale — 4 hours left!',desc:'Your saved categories have up to 60% off. Aria AI picked 12 items matching your taste.',unread:true,actions:[{label:'Shop Sale',primary:true,href:'store.html'},{label:'View Deals',primary:false,href:'collections.html'}]},
-  {type:'ref',icon:'🎁',iconClass:'ref',agent:'Aria AI',time:'1h ago',title:'Referral reward credited!',desc:'Priya S. completed her first order. ₹750 has been added to your VibeWallet.',unread:true,actions:[{label:'View Earnings',primary:true,href:'referral.html'},{label:'Share More',primary:false}]},
-  {type:'price',icon:'📉',iconClass:'price',agent:'Luna AI',time:'2h ago',title:'3 wishlist items on sale now',desc:'JBL Charge 5 (41% off), Samsung Galaxy Watch 6 (17% off), and Bose SoundLink Max (11% off) are all on sale.',unread:true,actions:[{label:'View Wishlist',primary:true,href:'wishlist.html'}]},
-  {type:'order',icon:'📦',iconClass:'order',agent:'Zen AI',time:'3h ago',title:'Order confirmed — #VS-48310',desc:'Your order for Apple AirPods Max (₹49,900) has been confirmed. Zen AI is preparing it for dispatch.',unread:true,actions:[{label:'Track Order',primary:true,href:'track.html'},{label:'View Order',primary:false,href:'account.html'}]},
-  {type:'system',icon:'⭐',iconClass:'review',agent:'Echo AI',time:'5h ago',title:'Leave a review — earn 200 VibeCash',desc:'You received Sony WH-1000XM5 last week. Share your experience and Echo AI will post it to help other buyers.',unread:false,actions:[{label:'Write Review',primary:true},{label:'Remind Later',primary:false}]},
-  {type:'promo',icon:'🎯',iconClass:'promo',agent:'Atlas AI',time:'6h ago',title:'New picks just for you',desc:'Atlas AI analysed your browsing history and curated 8 new products you'll love. Updated daily.',unread:false,actions:[{label:'See Picks',primary:true,href:'search.html'}]},
+// Cart count
+const cart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+document.getElementById('cartCount').textContent = cart.reduce((s,c) => s+c.qty, 0);
+
+const TODAY = [
+  {id:'n1',icon:'📦',iconClass:'icon-order',unread:true,title:'Your order has been shipped!',desc:'Order #VS-48291 (Sony WH-1000XM5) is on its way. Expected delivery: Today by 6:00 PM.',time:'2 hours ago',actions:[{label:'Track Order',primary:true,href:'track.html'},{label:'View Order',primary:false,href:'account.html'}]},
+  {id:'n2',icon:'⚡',iconClass:'icon-deal',unread:true,title:'Flash Sale ending in 4 hours — up to 60% off',desc:'Items in your wishlist are on sale now. JBL Charge 5 is ₹7,000 off. Limited stock remaining.',time:'3 hours ago',actions:[{label:'View Deal',primary:true,href:'sale.html'},{label:'Your Wishlist',primary:false,href:'wishlist.html'}]},
+  {id:'n3',icon:'🎁',iconClass:'icon-reward',unread:true,title:'Referral reward credited — ₹200 earned!',desc:'Priya S. completed her first purchase. ₹200 VibeCash has been credited to your account automatically.',time:'4 hours ago',actions:[{label:'View Earnings',primary:true,href:'referral.html'}]},
+  {id:'n4',icon:'🔐',iconClass:'icon-account',unread:true,title:'New login detected on your account',desc:'A new login was detected from Chrome on Windows in Lucknow, India. If this was you, no action needed.',time:'5 hours ago',actions:[{label:'Secure Account',primary:true,href:'account.html'},{label:'It was me',primary:false}]},
+  {id:'n5',icon:'📦',iconClass:'icon-order',unread:true,title:'Order #VS-48310 confirmed!',desc:'Your Apple AirPods Max (₹49,900) order is confirmed. Zen AI has dispatched it to the warehouse.',time:'6 hours ago',actions:[{label:'Track Order',primary:true,href:'track.html'}]},
+  {id:'n6',icon:'⚡',iconClass:'icon-deal',unread:true,title:'Price drop on Sony WH-1000XM5 — ₹3,000 off',desc:'Luna AI detected a price drop to ₹29,990 (from ₹32,990). This is the lowest price in 6 months.',time:'7 hours ago',actions:[{label:'View Deal',primary:true,href:'sale.html'},{label:'Add to Cart',primary:false,href:'wishlist.html'}]},
+  {id:'n7',icon:'🎁',iconClass:'icon-reward',unread:true,title:'You earned 500 VibePoints today!',desc:'Your loyalty points have been updated. You now have 4,200 total VibePoints — only 800 more to Gold tier.',time:'9 hours ago',actions:[{label:'View Points',primary:true,href:'loyalty.html'}]},
+  {id:'nm1',icon:'🏪',iconClass:'icon-ship',unread:true,title:'TechHub Electronics shipped your order',desc:'Seller TechHub Electronics has dispatched Order #VS-48301 (Wireless Headphones). Track your shipment for live updates.',time:'2 hours ago',actions:[{label:'Track Order',primary:true,href:'track.html'},{label:'View Seller',primary:false}]},
+  {id:'nm2',icon:'⭐',iconClass:'icon-reward',unread:false,title:'Your review on Wireless Headphones helped 47 buyers',desc:'Your honest review has been marked helpful by 47 shoppers on VibeStore Marketplace. You earned 50 bonus VibePoints!',time:'5 hours ago',actions:[{label:'View Review',primary:false},{label:'View Points',primary:false,href:'loyalty.html'}]},
+  {id:'nm3',icon:'💰',iconClass:'icon-deal',unread:true,title:'VibePass deal: Extra 15% off at FashionFirst today',desc:'Exclusive VibePass deal active now — FashionFirst seller is offering an extra 15% off their entire catalogue. Valid till midnight.',time:'1 hour ago',actions:[{label:'Shop Now',primary:true,href:'sale.html'}]},
+  {id:'n8',icon:'📦',iconClass:'icon-order',unread:false,title:'Leave a review — earn 200 VibePoints',desc:'You received Sony WH-1000XM5 last week. Share your experience to help other buyers and earn bonus points.',time:'10 hours ago',actions:[{label:'Write Review',primary:true},{label:'Remind Later',primary:false}]},
+  {id:'n9',icon:'⚡',iconClass:'icon-deal',unread:false,title:'3 wishlist items are now on sale',desc:'JBL Charge 5 (41% off), Galaxy Watch 6 (17% off), and Bose SoundLink Max (11% off) are on sale now.',time:'11 hours ago',actions:[{label:'Shop Sale',primary:true,href:'sale.html'}]},
+  {id:'n10',icon:'🔐',iconClass:'icon-account',unread:false,title:'Monthly security audit complete',desc:'Zen AI completed your monthly security check. All devices and login activity look normal.',time:'12 hours ago',actions:[]},
 ];
 
-const OLD_NOTIFS = [
-  {type:'ship',icon:'✅',iconClass:'ship',agent:'Zen AI',time:'Yesterday 4:32 PM',title:'Order delivered successfully',desc:'Order #VS-48278 was delivered. Zen AI confirmed receipt via your building\'s smart locker.',unread:false,actions:[{label:'Rate Delivery',primary:false},{label:'View Order',primary:false,href:'account.html'}]},
-  {type:'price',icon:'📈',iconClass:'price',agent:'Luna AI',time:'Yesterday 2:11 PM',title:'Price alert — AirPods Max rising',desc:'Apple AirPods Max price increased by ₹2,000 since last week. Luna AI recommends buying soon if interested.',unread:false,actions:[{label:'View Item',primary:true,href:'wishlist.html'}]},
-  {type:'system',icon:'🔐',iconClass:'system',agent:'Nova AI',time:'Yesterday 10:00 AM',title:'Account security check passed',desc:'Nova AI completed your monthly security audit. All devices and logins look normal.',unread:false,actions:[]},
-  {type:'ref',icon:'👥',iconClass:'ref',agent:'Aria AI',time:'Yesterday 9:14 AM',title:'New referral signed up!',desc:'Ananya K. joined VibeStore using your code SARTH-VS42. You\'ll earn ₹750 when she places her first order.',unread:false,actions:[{label:'View Referrals',primary:false,href:'referral.html'}]},
+const YESTERDAY = [
+  {id:'n11',icon:'📦',iconClass:'icon-order',unread:false,title:'Order delivered successfully ✓',desc:'Order #VS-48278 was delivered at 4:32 PM. Enjoy your new Logitech MX Master 3S!',time:'Yesterday 4:32 PM',actions:[{label:'Rate Delivery',primary:false},{label:'View Order',primary:false,href:'account.html'}]},
+  {id:'n12',icon:'⚡',iconClass:'icon-deal',unread:false,title:'AirPods Max price alert — rising trend',desc:'Luna AI detected a ₹2,000 price increase on Apple AirPods Max. Consider buying soon if interested.',time:'Yesterday 2:11 PM',actions:[{label:'View Item',primary:true,href:'wishlist.html'}]},
+  {id:'n13',icon:'🎁',iconClass:'icon-reward',unread:false,title:'New referral signed up — Ananya K.',desc:"Ananya K. joined VibeStore using your code ARYAN-VS2025. You'll earn ₹200 when she places her first order.",time:'Yesterday 9:14 AM',actions:[{label:'View Referrals',primary:false,href:'referral.html'}]},
 ];
 
-function renderNotif(n, idx, isOld) {
-  return `<div class="notif${n.unread?' unread':''}" id="notif-${isOld?'old':'new'}-${idx}">
-    <div class="notif-icon ${n.iconClass}">${n.icon}</div>
-    <div class="notif-body">
-      <div class="notif-top">
-        <span class="notif-agent">${n.agent}</span>
-        <span class="notif-time">${n.time}</span>
+let allUnread = 7;
+let activeTab = 'all';
+
+function renderNotifs(list, containerId) {
+  const el = document.getElementById(containerId);
+  if (!list.length) { el.innerHTML = '<div style="padding:24px;text-align:center;color:var(--muted);font-size:0.86rem;">No notifications here.</div>'; return; }
+  el.innerHTML = list.map((n, idx) => `
+    <div class="notif-row${n.unread ? ' unread' : ''}" id="notif-${n.id}">
+      <div class="notif-icon-wrap ${n.iconClass}">${n.icon}</div>
+      <div class="notif-body">
+        <div class="notif-top">
+          <div class="notif-title">${n.title}</div>
+          <span class="notif-time">${n.time}</span>
+        </div>
+        <div class="notif-desc">${n.desc}</div>
+        ${n.actions.length ? `<div class="notif-actions">${n.actions.map(a =>
+          `<${a.href ? `a href="${a.href}"` : 'button onclick="void(0)"'} class="btn-action ${a.primary ? 'btn-action-primary' : 'btn-action-secondary'}">${a.label}</${a.href ? 'a' : 'button'}>`
+        ).join('')}</div>` : ''}
       </div>
-      <div class="notif-title">${n.title}</div>
-      <div class="notif-desc">${n.desc}</div>
-      ${n.actions.length?`<div class="notif-actions">${n.actions.map(a=>`<button class="na-btn${a.primary?' primary':''}" onclick="${a.href?`window.location.href='${a.href}'`:'void(0)'}">${a.label}</button>`).join('')}</div>`:''}
-    </div>
-    ${n.unread?'<div class="unread-dot"></div>':''}
-  </div>`;
+      ${n.unread ? '<div class="unread-dot"></div>' : ''}
+      <button class="notif-dismiss" onclick="dismissNotif('${n.id}')" title="Dismiss">✕</button>
+    </div>`).join('');
+}
+
+function getFilteredList(list, tab) {
+  if (tab === 'all') return list;
+  if (tab === 'unread') return list.filter(n => n.unread);
+  if (tab === 'orders') return list.filter(n => n.iconClass === 'icon-order');
+  if (tab === 'deals') return list.filter(n => n.iconClass === 'icon-deal');
+  if (tab === 'account') return list.filter(n => n.iconClass === 'icon-account' || n.iconClass === 'icon-reward');
+  return list;
 }
 
 function renderAll() {
-  document.getElementById('notifList').innerHTML = TODAY_NOTIFS.map((n,i)=>renderNotif(n,i,false)).join('');
-  document.getElementById('notifListOld').innerHTML = OLD_NOTIFS.map((n,i)=>renderNotif(n,i,true)).join('');
+  renderNotifs(getFilteredList(TODAY, activeTab), 'notifList');
+  renderNotifs(getFilteredList(YESTERDAY, activeTab), 'notifListOld');
+  const unread = [...TODAY, ...YESTERDAY].filter(n => n.unread).length;
+  document.getElementById('unreadBadge').textContent = unread + ' unread';
+}
+
+function setTab(el, tab) {
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
 }
 
 function markAllRead() {
-  TODAY_NOTIFS.forEach(n=>n.unread=false);
-  OLD_NOTIFS.forEach(n=>n.unread=false);
-  document.getElementById('unreadCount').textContent = '0 unread';
+  [...TODAY, ...YESTERDAY].forEach(n => n.unread = false);
   renderAll();
+  toast('✓ All notifications marked as read');
 }
 
-function clearRead() {
-  TODAY_NOTIFS.filter(n=>!n.unread).forEach((_,i)=>{}); // no-op visual
-  renderAll();
+function dismissNotif(id) {
+  const el = document.getElementById('notif-' + id);
+  if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(20px)'; el.style.transition = 'all 0.25s'; setTimeout(() => el.remove(), 250); }
 }
 
-function setFilter(el, type) {
-  document.querySelectorAll('.filter-item').forEach(f=>f.classList.remove('active'));
-  el.classList.add('active');
+let toastTimer;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
-
-function loadMore() { alert('Aria AI is fetching older notifications...'); }
-
-// Live Zen AI activity updates
-const zenActivities = [
-  'Dispatching order #VS-48302 · Verifying payment for #VS-48310',
-  'Processing 3 return requests · Scheduling pickup for order #VS-48299',
-  'Fraud check passed for #VS-48315 · Notifying warehouse',
-  'Coordinating same-day delivery for #VS-48320 · ETA: 5:30 PM',
-];
-let zenIdx = 0;
-setInterval(()=>{
-  const el = document.getElementById('zenActivity');
-  if(el){el.style.opacity='0';setTimeout(()=>{el.textContent=zenActivities[++zenIdx%zenActivities.length];el.style.opacity='1';},300);}
-},4000);
 
 renderAll();
 </script>

@@ -4,222 +4,260 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>404 — Page Not Found · VibeStore</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --navy:#06060f;--navy2:#0d0d1f;--navy3:#13132a;
-  --purple:#7c3aed;--purple2:#9d5cf5;--cyan:#06b6d4;--cyan2:#22d3ee;
-  --lavender:#c4b5fd;--white:#f1f0ff;--gray:#94a3b8;
-  --card:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.08);
-}
-html,body{height:100%;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow-x:hidden}
 body{
   font-family:'Inter',sans-serif;
-  background:var(--navy);
-  color:var(--white);
-  overflow-x:hidden;
+  background:#0b0e13;
+  color:#f1f1f1;
   min-height:100vh;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:20px;
+  display:flex;
+  flex-direction:column;
 }
 
-/* CANVAS */
-canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+/* ── MINIMAL AMAZON NAV ── */
+.primary-nav{background:#131921;border-bottom:2px solid #FF9900;position:relative;z-index:200}
+.nav-inner{max-width:1500px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;gap:14px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:800;color:white;border:1px solid transparent;padding:4px 8px;border-radius:4px;transition:border-color .15s}
+.nav-logo:hover{border-color:rgba(255,255,255,.4)}
+.nav-logo span{color:#FF9900}
+.nav-search{flex:1;display:flex;height:38px;border-radius:4px;overflow:hidden;max-width:540px;margin-left:16px}
+.nav-search input{flex:1;border:none;padding:0 14px;font-size:.88rem;color:#0f1111;font-family:'Inter',sans-serif;outline:none}
+.nav-search button{background:#FF9900;border:none;width:44px;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;transition:background .15s}
+.nav-search button:hover{background:#e68900}
+.nav-home-link{margin-left:auto;color:rgba(255,255,255,.8);font-size:.82rem;border:1px solid rgba(255,255,255,.3);border-radius:4px;padding:6px 14px;transition:all .2s}
+.nav-home-link:hover{border-color:#FF9900;color:#FF9900}
 
-/* MAIN CONTENT */
-.container{position:relative;z-index:2;text-align:center;max-width:680px;width:100%;}
+/* ── CANVAS ── */
+canvas#particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
 
-/* 404 BIG */
+/* ── MAIN CONTENT ── */
+.main{flex:1;display:flex;align-items:center;justify-content:center;padding:32px 16px;position:relative;z-index:10}
+.container{text-align:center;max-width:700px;width:100%}
+
+/* 404 NUMBER */
 .num-404{
   font-family:'Space Grotesk',sans-serif;
-  font-size:min(160px,22vw);
+  font-size:clamp(100px,20vw,180px);
   font-weight:800;
-  line-height:1;
-  background:linear-gradient(135deg,var(--purple2),var(--cyan2),var(--lavender));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:.95;
+  background:linear-gradient(135deg,#FF9900 0%,#FF6600 40%,#ffcc44 80%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
   background-clip:text;
-  animation:glow-pulse 3s ease-in-out infinite;
-  letter-spacing:-4px;
-  margin-bottom:0;
+  filter:drop-shadow(0 0 30px rgba(255,153,0,.35));
+  animation:glow 3s ease-in-out infinite;
+  letter-spacing:-6px;
+  margin-bottom:4px
 }
-@keyframes glow-pulse{
-  0%,100%{filter:drop-shadow(0 0 20px rgba(124,58,237,0.4));}
-  50%{filter:drop-shadow(0 0 40px rgba(6,182,212,0.6));}
+@keyframes glow{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(255,153,0,.35))}
+  50%{filter:drop-shadow(0 0 50px rgba(255,153,0,.7))}
 }
 
 .heading{
   font-family:'Space Grotesk',sans-serif;
-  font-size:clamp(1.4rem,4vw,2rem);
+  font-size:clamp(1.4rem,4vw,2.1rem);
   font-weight:700;
-  margin-bottom:14px;
-  margin-top:8px;
+  color:white;
+  margin-bottom:12px
+}
+.subtext{
+  color:rgba(255,255,255,.5);
+  font-size:.95rem;
+  line-height:1.7;
+  margin-bottom:32px;
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto
 }
 
-.sub{color:var(--gray);font-size:0.95rem;line-height:1.7;margin-bottom:32px;max-width:420px;margin-left:auto;margin-right:auto;}
-
-/* REX BUBBLE */
-.rex-wrap{display:inline-flex;align-items:flex-end;gap:12px;margin-bottom:36px;flex-wrap:wrap;justify-content:center;}
-.rex-avatar{
-  width:56px;height:56px;border-radius:50%;
-  background:linear-gradient(135deg,var(--purple),var(--cyan));
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.5rem;flex-shrink:0;
-  box-shadow:0 0 20px rgba(124,58,237,0.4);
-  animation:rex-bounce 2s ease-in-out infinite;
-}
-@keyframes rex-bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
-.speech-bubble{
-  background:var(--navy2);
-  border:1px solid var(--border);
-  border-radius:18px 18px 18px 4px;
-  padding:14px 18px;
-  font-size:0.88rem;
-  color:var(--white);
-  line-height:1.6;
-  max-width:360px;
-  text-align:left;
-  position:relative;
-}
-.speech-bubble::after{
-  content:'';position:absolute;bottom:0;left:-8px;
-  border:8px solid transparent;
-  border-right-color:var(--navy2);
-  border-bottom:none;
-}
-.rex-name{font-size:0.7rem;color:var(--cyan);font-weight:700;display:block;margin-bottom:3px;}
-
-/* TYPING INDICATOR */
-.typing{display:inline-flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:100px;padding:8px 16px;margin-bottom:32px;font-size:0.82rem;color:var(--gray);}
-.typing-dots{display:flex;gap:4px;margin-left:4px;}
-.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--cyan);animation:dot-pulse 1.2s ease-in-out infinite;}
-.typing-dot:nth-child(2){animation-delay:0.2s;}
-.typing-dot:nth-child(3){animation-delay:0.4s;}
-@keyframes dot-pulse{0%,80%,100%{transform:scale(0.6);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
-
-/* SEARCH BAR */
-.search-wrap{position:relative;max-width:440px;margin:0 auto 36px;}
+/* ── SEARCH BAR ── */
+.search-wrap{display:flex;height:48px;border-radius:6px;overflow:hidden;max-width:480px;margin:0 auto 32px;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 .search-wrap input{
-  width:100%;background:var(--card);border:1px solid var(--border);
-  border-radius:14px;padding:14px 50px 14px 18px;
-  font-size:0.92rem;color:var(--white);font-family:'Inter',sans-serif;
-  outline:none;transition:border-color 0.2s;
+  flex:1;background:#fff;border:none;padding:0 18px;font-size:.95rem;
+  color:#0f1111;font-family:'Inter',sans-serif;outline:none
 }
-.search-wrap input::placeholder{color:var(--gray);}
-.search-wrap input:focus{border-color:rgba(124,58,237,0.5);}
+.search-wrap input::placeholder{color:#aaa}
 .search-wrap button{
-  position:absolute;right:8px;top:50%;transform:translateY(-50%);
-  background:linear-gradient(135deg,var(--purple),var(--cyan));
-  border:none;border-radius:9px;width:36px;height:36px;
-  font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:#FF9900;border:none;padding:0 22px;font-size:.9rem;
+  font-weight:700;color:#0f1111;cursor:pointer;font-family:'Inter',sans-serif;
+  transition:background .15s;white-space:nowrap
 }
+.search-wrap button:hover{background:#e68900}
 
-/* SUGGESTION CARDS */
-.suggestions{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px;}
+/* ── QUICK CHIPS ── */
+.quick-chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:40px}
+.chip{
+  padding:8px 20px;border-radius:100px;font-size:.82rem;font-weight:600;
+  cursor:pointer;transition:all .2s;border:none;font-family:'Inter',sans-serif
+}
+.chip-home{background:#FF9900;color:#0f1111}
+.chip-home:hover{background:#e68900}
+.chip-shop{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)}
+.chip-shop:hover{background:rgba(255,255,255,.2);border-color:rgba(255,255,255,.4)}
+.chip-orders{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)}
+.chip-orders:hover{background:rgba(255,255,255,.2)}
+.chip-contact{background:rgba(255,255,255,.1);color:white;border:1px solid rgba(255,255,255,.2)}
+.chip-contact:hover{background:rgba(255,255,255,.2)}
+
+/* ── SUGGESTED PAGES ── */
+.suggested-label{font-size:.72rem;font-weight:700;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.cards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:40px}
 .sug-card{
-  background:var(--card);border:1px solid var(--border);border-radius:16px;
-  padding:22px 16px;cursor:pointer;text-decoration:none;
-  transition:all 0.25s;display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:8px;
+  padding:20px 14px;
+  cursor:pointer;
+  transition:all .25s;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  text-decoration:none
 }
-.sug-card:hover{border-color:rgba(124,58,237,0.4);background:rgba(124,58,237,0.08);transform:translateY(-3px);}
-.sug-icon{font-size:2rem;}
-.sug-title{font-weight:700;font-size:0.9rem;color:var(--white);}
-.sug-desc{font-size:0.75rem;color:var(--gray);text-align:center;}
-
-/* QUICK LINKS */
-.quick-links{border-top:1px solid var(--border);padding-top:24px;}
-.ql-label{font-size:0.72rem;color:var(--gray);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:12px;}
-.ql-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
-.ql-link{
-  background:var(--card);border:1px solid var(--border);border-radius:100px;
-  padding:7px 16px;font-size:0.8rem;color:var(--gray);text-decoration:none;
-  transition:all 0.2s;
+.sug-card:hover{
+  background:rgba(255,153,0,.12);
+  border-color:rgba(255,153,0,.4);
+  transform:translateY(-3px);
+  box-shadow:0 8px 24px rgba(255,153,0,.15)
 }
-.ql-link:hover{border-color:var(--cyan);color:var(--cyan2);}
+.sug-card-icon{font-size:2rem}
+.sug-card-title{font-weight:700;font-size:.88rem;color:white}
+.sug-card-desc{font-size:.73rem;color:rgba(255,255,255,.45);text-align:center}
 
-@media(max-width:600px){
-  .suggestions{grid-template-columns:1fr;}
-  .num-404{font-size:20vw;}
+/* ── REX FLOATING BUBBLE ── */
+.rex-float{
+  position:fixed;bottom:28px;right:28px;z-index:500;
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px
+}
+.rex-speech{
+  background:#131921;border:1px solid rgba(255,153,0,.4);
+  border-radius:14px 14px 4px 14px;
+  padding:14px 18px;max-width:240px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+  animation:speech-pop .5s ease .8s both
+}
+@keyframes speech-pop{from{opacity:0;transform:scale(.8) translateY(12px)}to{opacity:1;transform:none}}
+.rex-speech .rs-label{font-size:.67rem;font-weight:700;color:#FF9900;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.rex-speech p{font-size:.82rem;color:rgba(255,255,255,.85);line-height:1.5}
+.rex-bubble-btn{
+  display:flex;align-items:center;gap:10px;
+  background:#FF9900;color:#0f1111;border:none;border-radius:100px;
+  padding:12px 20px;font-size:.88rem;font-weight:700;
+  cursor:pointer;font-family:'Inter',sans-serif;
+  box-shadow:0 6px 24px rgba(255,153,0,.4);
+  transition:background .15s;white-space:nowrap;
+  animation:bubble-pop .5s ease .4s both
+}
+@keyframes bubble-pop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+.rex-bubble-btn:hover{background:#e68900}
+.rex-avatar-sm{font-size:1.4rem;animation:rex-bounce 2s ease-in-out infinite}
+@keyframes rex-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+
+@media(max-width:700px){
+  .cards-grid{grid-template-columns:repeat(2,1fr)}
+  .rex-float{bottom:16px;right:16px}
+  .rex-speech{display:none}
+  .num-404{letter-spacing:-2px}
+}
+@media(max-width:400px){
+  .cards-grid{grid-template-columns:1fr 1fr}
+  .quick-chips{gap:7px}
 }
 </style>
 </head>
 <body>
 
+<!-- PARTICLE CANVAS -->
 <canvas id="particles"></canvas>
 
-<div class="container">
-
-  <div class="num-404">404</div>
-
-  <h1 class="heading">Oops! This page wandered off.</h1>
-
-  <p class="sub">The page you're looking for doesn't exist, has been moved, or the URL might have a typo. Let's get you back on track.</p>
-
-  <!-- Rex AI -->
-  <div class="rex-wrap">
-    <div class="rex-avatar">🤖</div>
-    <div class="speech-bubble">
-      <span class="rex-name">Rex AI</span>
-      Hi! I'm Rex. I couldn't find that page but I can help you find what you need 👋 Try searching below or browse the popular links.
+<!-- MINIMAL NAV -->
+<nav class="primary-nav">
+  <div class="nav-inner">
+    <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
+    <div class="nav-search">
+      <input type="text" id="navSearch" placeholder="Search for what you need..." onkeydown="if(event.key==='Enter')doSearch()"/>
+      <button onclick="doSearch()">🔍</button>
     </div>
+    <a href="mystore.html" class="nav-home-link">← Back to Home</a>
   </div>
+</nav>
 
-  <!-- Typing indicator -->
-  <div class="typing">
-    🤖 Rex AI is searching for what you meant
-    <div class="typing-dots">
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
-      <div class="typing-dot"></div>
+<!-- MAIN -->
+<div class="main">
+  <div class="container">
+
+    <div class="num-404">404</div>
+    <h1 class="heading">Oops! Page not found 🤖</h1>
+    <p class="subtext">Looks like this page wandered off. Rex is on the case! The page you're looking for may have moved, been removed, or the URL has a typo.</p>
+
+    <!-- Search -->
+    <div class="search-wrap">
+      <input type="text" id="mainSearch" placeholder="Search for what you need..." onkeydown="if(event.key==='Enter')doSearch()"/>
+      <button onclick="doSearch()">Search</button>
     </div>
-  </div>
 
-  <!-- Search -->
-  <div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Search for what you were looking for..." onkeydown="if(event.key==='Enter')doSearch()"/>
-    <button onclick="doSearch()">🔍</button>
-  </div>
-
-  <!-- Suggestion Cards -->
-  <div class="suggestions">
-    <a href="index.html" class="sug-card">
-      <div class="sug-icon">🏠</div>
-      <div class="sug-title">Go Home</div>
-      <div class="sug-desc">Back to VibeStore homepage</div>
-    </a>
-    <a href="collections.html" class="sug-card">
-      <div class="sug-icon">🛍️</div>
-      <div class="sug-title">Browse Products</div>
-      <div class="sug-desc">Explore thousands of products</div>
-    </a>
-    <a href="contact.html" class="sug-card">
-      <div class="sug-icon">💬</div>
-      <div class="sug-title">Contact Support</div>
-      <div class="sug-desc">Get help from our team</div>
-    </a>
-  </div>
-
-  <!-- Quick Links -->
-  <div class="quick-links">
-    <div class="ql-label">Quick Links</div>
-    <div class="ql-grid">
-      <a href="collections.html" class="ql-link">🔥 Popular Collections</a>
-      <a href="sale.html" class="ql-link">🏷️ Today's Deals</a>
-      <a href="track.html" class="ql-link">📦 Track Order</a>
-      <a href="faq.html" class="ql-link">❓ Help Center</a>
-      <a href="search.html" class="ql-link">🔍 Search</a>
-      <a href="blog.html" class="ql-link">📝 Blog</a>
+    <!-- Quick links -->
+    <div class="quick-chips">
+      <button class="chip chip-home" onclick="window.location.href='mystore.html'">🏠 Home</button>
+      <button class="chip chip-shop" onclick="window.location.href='collections.html'">🛍️ Shop</button>
+      <button class="chip chip-orders" onclick="window.location.href='track.html'">📦 My Orders</button>
+      <button class="chip chip-contact" onclick="window.location.href='contact.html'">💬 Contact</button>
     </div>
-  </div>
 
+    <!-- Suggested pages -->
+    <div class="suggested-label">Suggested Pages</div>
+    <div class="cards-grid">
+      <a href="mystore.html" class="sug-card">
+        <div class="sug-card-icon">🏠</div>
+        <div class="sug-card-title">Home</div>
+        <div class="sug-card-desc">VibeStore homepage</div>
+      </a>
+      <a href="collections.html" class="sug-card">
+        <div class="sug-card-icon">🛍️</div>
+        <div class="sug-card-title">Shop</div>
+        <div class="sug-card-desc">Browse all products</div>
+      </a>
+      <a href="track.html" class="sug-card">
+        <div class="sug-card-icon">📦</div>
+        <div class="sug-card-title">My Orders</div>
+        <div class="sug-card-desc">Track your shipments</div>
+      </a>
+      <a href="sale.html" class="sug-card">
+        <div class="sug-card-icon">🏷️</div>
+        <div class="sug-card-title">Sale</div>
+        <div class="sug-card-desc">Today's best deals</div>
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- REX FLOATING BUBBLE (separate from rex-chat.js widget) -->
+<div class="rex-float" id="rexFloat">
+  <div class="rex-speech">
+    <div class="rs-label">Rex AI</div>
+    <p>Lost? I'll guide you home! 👋<br/>Try searching or use one of the quick links above.</p>
+  </div>
+  <button class="rex-bubble-btn" onclick="openRexChat()">
+    <span class="rex-avatar-sm">🤖</span>
+    Chat with Rex
+  </button>
 </div>
 
 <script src="rex-chat.js"></script>
 <script>
-// ── PARTICLE CANVAS (same as index.html) ──
+// ── PARTICLE CANVAS ──
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
-let W, H, particles = [];
+let W, H;
+const particles = [];
+const PARTICLE_COUNT = 80;
+const CONNECT_DIST = 120;
 
 function resize(){
   W = canvas.width = window.innerWidth;
@@ -228,61 +266,98 @@ function resize(){
 resize();
 window.addEventListener('resize', resize);
 
-class Particle{
-  constructor(){this.reset();}
-  reset(){
-    this.x = Math.random()*W;
-    this.y = Math.random()*H;
-    this.r = Math.random()*1.5+0.5;
-    this.vx = (Math.random()-0.5)*0.4;
-    this.vy = (Math.random()-0.5)*0.4;
-    this.alpha = Math.random()*0.5+0.1;
-    this.color = Math.random()>0.5 ? '#7c3aed' : '#06b6d4';
+const COLORS = ['#FF9900','#FF6600','#ffcc44','#FF9900','#e68900'];
+
+class Particle {
+  constructor(){this.reset(true);}
+  reset(init){
+    this.x = Math.random() * W;
+    this.y = init ? Math.random() * H : (Math.random() > .5 ? -4 : H + 4);
+    this.r = Math.random() * 2 + .8;
+    const speed = Math.random() * .45 + .1;
+    const angle = Math.random() * Math.PI * 2;
+    this.vx = Math.cos(angle) * speed;
+    this.vy = Math.sin(angle) * speed;
+    this.alpha = Math.random() * .55 + .1;
+    this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
   }
   update(){
-    this.x += this.vx; this.y += this.vy;
-    if(this.x<0||this.x>W||this.y<0||this.y>H) this.reset();
+    this.x += this.vx;
+    this.y += this.vy;
+    if(this.x < -6 || this.x > W+6 || this.y < -6 || this.y > H+6) this.reset(false);
   }
   draw(){
     ctx.beginPath();
-    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
     ctx.fillStyle = this.color;
     ctx.globalAlpha = this.alpha;
     ctx.fill();
   }
 }
 
-for(let i=0;i<80;i++) particles.push(new Particle());
+for(let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
 
 function animate(){
-  ctx.clearRect(0,0,W,H);
-  // draw connections
-  for(let i=0;i<particles.length;i++){
-    for(let j=i+1;j<particles.length;j++){
-      const dx=particles[i].x-particles[j].x, dy=particles[i].y-particles[j].y;
-      const dist=Math.sqrt(dx*dx+dy*dy);
-      if(dist<100){
+  ctx.clearRect(0, 0, W, H);
+  // Draw connections
+  for(let i = 0; i < particles.length; i++){
+    for(let j = i+1; j < particles.length; j++){
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < CONNECT_DIST){
+        const opacity = (1 - dist/CONNECT_DIST) * 0.18;
         ctx.beginPath();
-        ctx.moveTo(particles[i].x,particles[i].y);
-        ctx.lineTo(particles[j].x,particles[j].y);
-        ctx.strokeStyle='rgba(124,58,237,'+(0.08*(1-dist/100))+')';
-        ctx.globalAlpha=1;
-        ctx.lineWidth=0.5;
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(255,153,0,${opacity})`;
+        ctx.globalAlpha = 1;
+        ctx.lineWidth = .7;
         ctx.stroke();
       }
     }
-    particles[i].update();
-    particles[i].draw();
   }
-  ctx.globalAlpha=1;
+  // Draw particles
+  particles.forEach(p => { p.update(); p.draw(); });
+  ctx.globalAlpha = 1;
   requestAnimationFrame(animate);
 }
 animate();
 
+// ── SEARCH ──
 function doSearch(){
-  const q = document.getElementById('searchInput').value.trim();
-  if(q) window.location.href = 'search.html?q='+encodeURIComponent(q);
+  const q = (document.getElementById('mainSearch').value || document.getElementById('navSearch').value || '').trim();
+  if(q) window.location.href = 'search.html?q=' + encodeURIComponent(q);
+  else window.location.href = 'search.html';
 }
+
+// ── REX CHAT ──
+function openRexChat(){
+  // Trigger rex-chat.js widget if available
+  if(window.RexChat && typeof window.RexChat.open === 'function'){
+    window.RexChat.open();
+  } else {
+    // fallback — hide the float bubble speech and show message
+    const speech = document.querySelector('.rex-speech');
+    speech.querySelector('p').textContent = 'Opening chat... If the chat widget doesn\'t appear, try clicking the chat icon in the corner!';
+  }
+}
+
+// Auto-hide Rex bubble on scroll up
+let lastScroll = 0;
+window.addEventListener('scroll',()=>{
+  const s = window.scrollY;
+  const float = document.getElementById('rexFloat');
+  if(s > lastScroll + 60){
+    float.style.opacity = '.4';
+    float.style.transform = 'scale(.9)';
+  } else {
+    float.style.opacity = '1';
+    float.style.transform = 'scale(1)';
+  }
+  float.style.transition = 'opacity .3s, transform .3s';
+  lastScroll = s;
+});
 </script>
 </body>
 </html>

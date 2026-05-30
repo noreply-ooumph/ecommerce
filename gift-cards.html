@@ -4,435 +4,618 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Gift Cards — VibeStore</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
-  --bg:#f8f8f5;--card:#fff;--accent:#6d28d9;--accent2:#0891b2;
-  --text:#111;--muted:#6b7280;--border:#e5e7eb;
-  --navy:#0f0f1a;--purple:#7c3aed;--cyan:#06b6d4;
-}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#f0f2f5;color:#0f1111;line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none}
 
-/* NAV */
-.nav{background:var(--navy);padding:0 24px;height:64px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:500;}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:white;text-decoration:none;display:flex;align-items:center;gap:8px;}
-.nav-logo span{background:linear-gradient(135deg,#9d5cf5,#06b6d4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px var(--cyan);animation:pulse 2s infinite;flex-shrink:0;}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
-.nav-links{display:flex;gap:16px;align-items:center;margin-left:auto;}
-.nav-links a{color:rgba(255,255,255,0.65);text-decoration:none;font-size:0.85rem;transition:color 0.2s;}
-.nav-links a:hover,.nav-links a.active{color:white;}
-.nav-cart{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 14px;color:white;font-size:0.82rem;font-weight:600;cursor:pointer;position:relative;}
-.cc{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.nav-hamburger{display:none;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:7px 10px;color:white;cursor:pointer;}
+/* ── AMAZON NAV ── */
+.primary-nav{background:#131921;position:sticky;top:0;z-index:400;border-bottom:2px solid #FF9900}
+.nav-inner{max-width:1500px;margin:0 auto;padding:0 16px;height:60px;display:flex;align-items:center;gap:12px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.45rem;font-weight:800;color:white;white-space:nowrap;flex-shrink:0;border:1px solid transparent;padding:4px 8px;border-radius:4px;transition:border-color .15s}
+.nav-logo:hover{border-color:rgba(255,255,255,.4)}
+.nav-logo span{color:#FF9900}
+.search-form{flex:1;display:flex;height:40px;border-radius:4px;overflow:hidden;max-width:860px}
+.search-cat{background:#f3f3f3;border:none;border-right:1px solid #cdcdcd;padding:0 10px;font-size:.75rem;color:#333;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.search-input{flex:1;border:none;padding:0 14px;font-size:.9rem;color:#0f1111;font-family:'Inter',sans-serif}
+.search-input:focus{outline:none}
+.search-btn{background:#FF9900;border:none;width:48px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.1rem;flex-shrink:0;transition:background .15s}
+.search-btn:hover{background:#e68900}
+.nav-right{display:flex;align-items:center;gap:2px;margin-left:auto;flex-shrink:0}
+.nav-item{color:rgba(255,255,255,.85);font-size:.72rem;line-height:1.3;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s;white-space:nowrap}
+.nav-item:hover{border-color:rgba(255,255,255,.4)}
+.nav-item strong{color:white;font-size:.82rem;display:block}
+.nav-cart{display:flex;align-items:center;gap:6px;color:white;font-size:.82rem;font-weight:700;padding:6px 10px;border:1px solid transparent;border-radius:4px;cursor:pointer;transition:border-color .15s}
+.nav-cart:hover{border-color:rgba(255,255,255,.4)}
+.nav-cart-icon{font-size:1.6rem;line-height:1}
+.cart-qty{color:#FF9900;font-size:1.1rem;font-weight:800}
+.secondary-nav{background:#232f3e;overflow-x:auto}
+.secondary-nav::-webkit-scrollbar{display:none}
+.sec-inner{max-width:1500px;margin:0 auto;padding:0 16px;display:flex;align-items:center;height:38px;gap:0}
+.sec-link{color:rgba(255,255,255,.9);font-size:.82rem;font-weight:500;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;border:1px solid transparent;border-radius:2px;transition:border-color .15s}
+.sec-link:hover{border-color:rgba(255,255,255,.5)}
+.sec-link.active{font-weight:700;color:#FF9900}
 
-/* HERO */
-.hero{background:linear-gradient(135deg,#1a0533,#0c1a3a);padding:52px 24px 44px;text-align:center;overflow:hidden;position:relative;}
-.hero-sparkles{position:absolute;inset:0;pointer-events:none;overflow:hidden;}
-.sparkle{position:absolute;width:4px;height:4px;border-radius:50%;background:#fbbf24;animation:sparkle-float 3s infinite;}
-@keyframes sparkle-float{0%{transform:translateY(0) scale(1);opacity:1;}100%{transform:translateY(-80px) scale(0);opacity:0;}}
-.hero h1{font-family:'Space Grotesk',sans-serif;font-size:2.4rem;font-weight:700;color:white;margin-bottom:10px;}
-.hero p{color:rgba(255,255,255,0.6);font-size:1rem;max-width:480px;margin:0 auto 28px;}
+/* ── HERO ── */
+.page-hero{background:#131921;padding:36px 16px;text-align:center;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(255,153,0,.18),transparent 60%);pointer-events:none}
+.page-hero h1{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:800;color:white;margin-bottom:8px;position:relative}
+.page-hero p{color:rgba(255,255,255,.6);font-size:.92rem;margin-bottom:24px;position:relative}
+.hero-balance-chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,153,0,.15);border:1px solid rgba(255,153,0,.4);border-radius:100px;padding:6px 18px;font-size:.8rem;color:#FF9900;font-weight:700;position:relative}
 
-/* Animated gift card visual in hero */
-.hero-card{width:240px;height:145px;border-radius:16px;background:linear-gradient(135deg,#7c3aed,#06b6d4);margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;box-shadow:0 20px 60px rgba(0,0,0,0.4);animation:card-float 3s ease-in-out infinite;}
-@keyframes card-float{0%,100%{transform:translateY(0) rotate(-2deg);}50%{transform:translateY(-12px) rotate(2deg);}}
-.hero-card .card-shine{position:absolute;inset:0;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,0.2) 0%,transparent 50%);pointer-events:none;}
-.hero-card .card-logo{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;color:white;}
-.hero-card .card-amount{font-family:'Space Grotesk',sans-serif;font-size:1.8rem;font-weight:800;color:white;position:absolute;bottom:18px;left:18px;}
-.hero-card .card-gif{position:absolute;top:14px;right:14px;font-size:1.4rem;}
+/* ── MAIN TABS ── */
+.page{max-width:1200px;margin:0 auto;padding:24px 16px 60px}
+.main-tabs{display:flex;border-bottom:3px solid #e7e7e7;margin-bottom:28px;gap:0;background:#fff;border-radius:8px 8px 0 0;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.main-tab-btn{flex:1;padding:16px 24px;font-size:.95rem;font-weight:700;color:#666;background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.main-tab-btn.active{color:#0f1111;border-bottom-color:#FF9900;background:#fff8e1}
+.main-tab-btn:hover:not(.active){background:#fafafa;color:#0f1111}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
 
-/* PAGE */
-.page{max-width:1100px;margin:0 auto;padding:32px 16px 60px;}
-.two-col{display:grid;grid-template-columns:1fr 360px;gap:28px;}
+/* ── BUY TAB LAYOUT ── */
+.buy-grid{display:grid;grid-template-columns:1fr 360px;gap:24px}
 
-/* SECTION HEADINGS */
-.sec-heading{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--border);}
+/* form card */
+.form-card{background:#fff;border:1px solid #e7e7e7;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:24px}
+.form-section-label{font-size:.8rem;font-weight:700;color:#0f1111;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #f0f0f0;padding-bottom:8px;margin-top:20px}
+.form-section-label:first-child{margin-top:0}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:.82rem;font-weight:600;color:#333;margin-bottom:5px}
+.form-input{width:100%;border:1px solid #ccc;border-radius:4px;padding:10px 12px;font-size:.88rem;color:#0f1111;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s}
+.form-input:focus{border-color:#FF9900;box-shadow:0 0 0 3px rgba(255,153,0,.15)}
+textarea.form-input{resize:vertical;min-height:80px}
 
-/* CARD SECTION */
-.form-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;}
-.form-group{margin-bottom:18px;}
-.form-group label{display:block;font-size:0.8rem;font-weight:600;color:var(--text);margin-bottom:6px;}
-.form-input{width:100%;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:0.88rem;color:var(--text);font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;background:white;}
-.form-input:focus{border-color:var(--accent);}
-textarea.form-input{resize:vertical;min-height:80px;}
+/* Design selector */
+.design-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:4px}
+.design-card{border-radius:8px;aspect-ratio:1.6;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-start;padding:8px}
+.design-card:hover{transform:scale(1.04)}
+.design-card.selected{border-color:#FF9900;box-shadow:0 0 0 2px #FF9900}
+.design-card .d-emoji{font-size:1.6rem;position:absolute;top:8px;right:8px}
+.design-card .d-label{font-size:.6rem;font-weight:700;color:white;text-shadow:0 1px 4px rgba(0,0,0,.4);z-index:1;position:absolute;bottom:6px;left:8px}
+.dc1{background:linear-gradient(135deg,#cc3300,#ff6600)}
+.dc2{background:linear-gradient(135deg,#7c1fa2,#e040fb)}
+.dc3{background:linear-gradient(135deg,#1565c0,#29b6f6)}
+.dc4{background:linear-gradient(135deg,#2e7d32,#81c784)}
 
-/* Denomination selector */
-.denom-grid{display:flex;flex-wrap:wrap;gap:8px;}
-.denom-btn{background:white;border:2px solid var(--border);border-radius:10px;padding:9px 16px;font-size:0.88rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s;color:var(--text);}
-.denom-btn:hover,.denom-btn.active{border-color:var(--accent);background:rgba(109,40,217,0.07);color:var(--accent);}
-.custom-input-wrap{display:flex;align-items:center;gap:6px;margin-top:8px;}
-.custom-prefix{font-size:0.9rem;font-weight:700;color:var(--muted);}
-.custom-input{width:120px;border:2px solid var(--border);border-radius:10px;padding:9px 12px;font-size:0.88rem;font-weight:700;color:var(--text);outline:none;font-family:'Inter',sans-serif;transition:border-color 0.2s;}
-.custom-input:focus{border-color:var(--accent);}
+/* Amount chips */
+.amount-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.amt-chip{background:#fff;border:2px solid #ccc;border-radius:4px;padding:8px 16px;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;color:#0f1111}
+.amt-chip:hover,.amt-chip.selected{border-color:#FF9900;background:#fff8e1;color:#CC0C39}
+.custom-amt-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+.custom-prefix{font-size:.9rem;font-weight:700;color:#555}
+.custom-amt-input{border:1px solid #ccc;border-radius:4px;padding:9px 12px;font-size:.88rem;width:130px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s}
+.custom-amt-input:focus{border-color:#FF9900}
 
-/* Design themes */
-.themes-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-.theme-card{height:70px;border-radius:10px;cursor:pointer;border:3px solid transparent;transition:all 0.2s;position:relative;overflow:hidden;}
-.theme-card:hover,.theme-card.active{border-color:var(--accent);transform:scale(1.04);}
-.theme-card::after{content:'✓';position:absolute;top:4px;right:5px;font-size:0.7rem;font-weight:700;color:white;opacity:0;transition:opacity 0.2s;}
-.theme-card.active::after{opacity:1;}
-.t1{background:linear-gradient(135deg,#7c3aed,#06b6d4);}
-.t2{background:linear-gradient(135deg,#f59e0b,#ef4444);}
-.t3{background:linear-gradient(135deg,#16a34a,#06b6d4);}
-.t4{background:linear-gradient(135deg,#ec4899,#8b5cf6);}
+/* Delivery radio */
+.delivery-opts{display:flex;gap:16px;margin-bottom:4px}
+.delivery-opt{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:.88rem;font-weight:500}
+.delivery-opt input{accent-color:#FF9900;width:16px;height:16px}
+.schedule-date{margin-top:10px;display:none}
+.schedule-date.show{display:block}
 
-/* Delivery toggle */
-.radio-group{display:flex;gap:12px;}
-.radio-opt{display:flex;align-items:center;gap:6px;cursor:pointer;font-size:0.85rem;}
-.radio-opt input{accent-color:var(--accent);}
+/* Send button */
+.btn-send-gc{width:100%;background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:14px;font-size:1rem;font-weight:800;cursor:pointer;margin-top:20px;transition:background .15s;letter-spacing:.01em}
+.btn-send-gc:hover{background:#e68900}
 
-/* Date picker */
-.date-group{display:none;}
-.date-group.show{display:block;}
+/* ── LIVE PREVIEW ── */
+.preview-sticky{position:sticky;top:82px}
+.preview-label{font-size:.72rem;font-weight:700;color:#666;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+.gc-preview{width:100%;aspect-ratio:1.6;border-radius:14px;background:linear-gradient(135deg,#cc3300,#ff6600);padding:22px;position:relative;overflow:hidden;transition:background .4s;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.gc-preview .shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.2) 0%,transparent 55%);border-radius:14px;pointer-events:none}
+.gc-preview .strip{position:absolute;top:0;right:0;width:70px;height:100%;background:rgba(255,255,255,.05);transform:skewX(-12deg) translateX(35px)}
+.gc-preview .gcp-to{font-size:.72rem;color:rgba(255,255,255,.65)}
+.gc-preview .gcp-name{font-family:'Space Grotesk',sans-serif;font-size:1.15rem;font-weight:700;color:white}
+.gc-preview .gcp-msg{font-size:.72rem;color:rgba(255,255,255,.7);margin-top:8px;max-width:180px;line-height:1.5;font-style:italic}
+.gc-preview .gcp-emoji{position:absolute;top:14px;right:14px;font-size:2rem}
+.gc-preview .gcp-amt{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;color:white;position:absolute;bottom:18px;left:22px}
+.gc-preview .gcp-brand{position:absolute;bottom:20px;right:18px;font-family:'Space Grotesk',sans-serif;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.04em}
 
-/* PREVIEW CARD */
-.preview-section{position:sticky;top:80px;}
-.preview-label{font-size:0.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:10px;}
-.gift-preview{width:100%;aspect-ratio:1.6;border-radius:18px;background:linear-gradient(135deg,#7c3aed,#06b6d4);padding:22px;position:relative;overflow:hidden;transition:background 0.4s;}
-.gift-preview .gp-shine{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.15) 0%,transparent 55%);pointer-events:none;border-radius:18px;}
-.gift-preview .gp-to{font-size:0.75rem;color:rgba(255,255,255,0.65);margin-bottom:3px;}
-.gift-preview .gp-name{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:white;}
-.gift-preview .gp-msg{font-size:0.75rem;color:rgba(255,255,255,0.7);margin-top:8px;max-width:200px;line-height:1.5;font-style:italic;}
-.gift-preview .gp-amt{font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:800;color:white;position:absolute;bottom:20px;left:22px;}
-.gift-preview .gp-brand{position:absolute;bottom:22px;right:20px;font-family:'Space Grotesk',sans-serif;font-size:0.75rem;font-weight:700;color:rgba(255,255,255,0.7);}
-.gift-preview .gp-strip{position:absolute;top:0;right:0;width:80px;height:100%;background:rgba(255,255,255,0.05);transform:skewX(-15deg) translateX(40px);}
+.preview-info{background:#fff;border:1px solid #e7e7e7;border-radius:8px;padding:14px 16px;margin-top:12px}
+.preview-info p{font-size:.78rem;color:#666;line-height:1.6}
+.preview-info strong{color:#007600}
 
-/* ADD TO CART */
-.btn-addcart{width:100%;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;color:white;border-radius:12px;padding:14px;font-size:0.95rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;margin-top:20px;transition:opacity 0.2s;}
-.btn-addcart:hover{opacity:0.9;}
+/* ── REDEEM TAB ── */
+.redeem-center{max-width:560px;margin:0 auto}
+.redeem-card-input{background:#fff;border:1px solid #e7e7e7;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:32px;text-align:center;margin-bottom:24px}
+.redeem-card-input h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.redeem-card-input p{font-size:.82rem;color:#666;margin-bottom:20px}
+.gc-code-input{width:100%;border:2px solid #ddd;border-radius:8px;padding:16px 20px;font-size:1.1rem;font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:.1em;text-align:center;outline:none;transition:border-color .2s;color:#0f1111;margin-bottom:14px}
+.gc-code-input:focus{border-color:#FF9900}
+.gc-code-input::placeholder{font-weight:400;letter-spacing:.05em;color:#aaa;font-family:'Inter',sans-serif;font-size:.9rem}
+.btn-redeem-now{width:100%;background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:14px;font-size:1rem;font-weight:800;cursor:pointer;transition:background .15s}
+.btn-redeem-now:hover{background:#e68900}
 
-/* FEATURES */
-.features-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:32px 0;}
-.feat{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px 14px;text-align:center;}
-.feat-icon{font-size:1.8rem;margin-bottom:8px;}
-.feat-title{font-weight:700;font-size:0.85rem;margin-bottom:3px;}
-.feat-desc{font-size:0.75rem;color:var(--muted);}
+/* Balance display */
+.balance-display{background:#f0fff4;border:1px solid #b7dfbf;border-radius:8px;padding:16px 20px;margin-top:16px;display:flex;align-items:center;gap:12px;display:none}
+.balance-display.show{display:flex}
+.bal-icon{font-size:2rem}
+.bal-amt{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800;color:#007600}
+.bal-label{font-size:.78rem;color:#555;margin-top:2px}
 
-/* REDEEM SECTION */
-.redeem-section{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:32px;}
-.redeem-toggle{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;cursor:pointer;user-select:none;}
-.redeem-toggle h3{font-weight:700;font-size:0.95rem;}
-.redeem-toggle .arrow{transition:transform 0.3s;font-size:0.9rem;}
-.redeem-toggle.open .arrow{transform:rotate(180deg);}
-.redeem-body{display:none;padding:0 20px 20px;border-top:1px solid var(--border);}
-.redeem-body.open{display:block;}
-.redeem-input-row{display:flex;gap:10px;margin-top:14px;}
-.redeem-input{flex:1;border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:0.88rem;font-family:'Inter',sans-serif;outline:none;transition:border-color 0.2s;}
-.redeem-input:focus{border-color:var(--accent);}
-.btn-apply{background:var(--accent);color:white;border:none;border-radius:10px;padding:10px 18px;font-size:0.84rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
-.balance-tag{display:inline-flex;align-items:center;gap:6px;background:#dcfce7;border:1px solid rgba(22,163,74,0.25);border-radius:8px;padding:6px 12px;font-size:0.82rem;font-weight:600;color:#16a34a;margin-top:12px;display:none;}
+/* How it works */
+.hiw{background:#fff;border:1px solid #e7e7e7;border-radius:8px;padding:24px;margin-bottom:24px}
+.hiw h3{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:700;margin-bottom:18px}
+.hiw-steps{display:flex;gap:24px}
+.hiw-step{flex:1;text-align:center}
+.hiw-num{width:40px;height:40px;border-radius:50%;background:#FF9900;color:#0f1111;font-size:1.1rem;font-weight:800;display:flex;align-items:center;justify-content:center;margin:0 auto 10px}
+.hiw-step p{font-size:.8rem;color:#555;line-height:1.5}
+.hiw-step strong{display:block;font-size:.88rem;color:#0f1111;margin-bottom:4px}
 
-/* CORPORATE CTA */
-.corp-cta{background:linear-gradient(135deg,#1a0533,#0c1a3a);border-radius:18px;padding:28px 32px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
-.corp-cta .cta-text h3{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;color:white;margin-bottom:5px;}
-.corp-cta .cta-text p{font-size:0.85rem;color:rgba(255,255,255,0.6);}
-.btn-corp{margin-left:auto;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;color:white;border-radius:10px;padding:10px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;}
+/* ── FAQ ACCORDION ── */
+.faq-section{margin-top:32px}
+.faq-item{background:#fff;border:1px solid #e7e7e7;border-radius:8px;margin-bottom:8px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.faq-q{width:100%;padding:16px 20px;background:none;border:none;text-align:left;font-size:.9rem;font-weight:700;color:#0f1111;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-family:'Inter',sans-serif}
+.faq-q .faq-arrow{color:#888;font-size:.75rem;transition:transform .3s}
+.faq-q.open .faq-arrow{transform:rotate(180deg)}
+.faq-q:hover{background:#fafafa}
+.faq-a{display:none;padding:0 20px 16px;font-size:.85rem;color:#555;line-height:1.7;border-top:1px solid #f0f0f0}
+.faq-a.show{display:block}
 
-@media(max-width:900px){
-  .two-col{grid-template-columns:1fr;}
-  .preview-section{position:static;}
-  .themes-grid{grid-template-columns:repeat(4,1fr);}
-  .features-row{grid-template-columns:repeat(2,1fr);}
-  .corp-cta{flex-direction:column;text-align:center;}
-  .btn-corp{width:100%;}
+/* ── ECHO AI NOTE ── */
+.echo-note{background:#fff;border:2px solid #007185;border-radius:8px;padding:18px 20px;margin-top:28px;display:flex;align-items:flex-start;gap:14px}
+.echo-avatar{width:42px;height:42px;background:#007185;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.echo-text{font-size:.84rem;color:#333;line-height:1.6}
+.echo-label{font-size:.68rem;font-weight:700;color:#007185;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+
+/* ── SUCCESS MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9000;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-box{background:#fff;border-radius:12px;padding:36px 40px;max-width:420px;width:90%;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.3);animation:modal-pop .3s ease}
+@keyframes modal-pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-emoji{font-size:4rem;margin-bottom:16px}
+.modal-title{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;margin-bottom:8px;color:#0f1111}
+.modal-sub{font-size:.9rem;color:#666;margin-bottom:24px;line-height:1.6}
+.btn-modal-close{background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:12px 32px;font-size:.95rem;font-weight:700;cursor:pointer}
+.btn-modal-close:hover{background:#e68900}
+
+/* ── FOOTER ── */
+footer{background:#131921;color:rgba(255,255,255,.6);font-size:.78rem;margin-top:40px}
+.footer-links{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;max-width:1300px;margin:0 auto;padding:32px 16px}
+.footer-col h4{color:white;font-size:.85rem;font-weight:700;margin-bottom:12px}
+.footer-col a{display:block;color:rgba(255,255,255,.6);font-size:.78rem;margin-bottom:8px;transition:color .15s}
+.footer-col a:hover{color:#FF9900}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.12);text-align:center;padding:16px;color:rgba(255,255,255,.4);font-size:.73rem}
+
+@media(max-width:960px){
+  .buy-grid{grid-template-columns:1fr}
+  .preview-sticky{position:static}
+  .footer-links{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:600px){
-  .nav-links{display:none;}
-  .nav-hamburger{display:block;}
-  .hero h1{font-size:1.6rem;}
-  .features-row{grid-template-columns:1fr 1fr;}
+  .nav-right .nav-item:not(.nav-cart){display:none}
+  .search-cat{display:none}
+  .design-grid{grid-template-columns:repeat(2,1fr)}
+  .hiw-steps{flex-direction:column;gap:12px}
+  .footer-links{grid-template-columns:1fr 1fr}
+  .main-tab-btn{font-size:.82rem;padding:12px 10px}
 }
 </style>
 </head>
 <body>
 
-<nav class="nav">
-  <a href="mystore.html" class="nav-logo">
-    <div class="nav-dot"></div>
-    <span>Vibe</span>Store
-  </a>
-  <div class="nav-links">
-    <a href="collections.html">Shop</a>
-    <a href="sale.html">Sale</a>
-    <a href="blog.html">Blog</a>
-    <a href="gift-cards.html" class="active">Gift Cards</a>
-    <a href="account.html">Account</a>
-    <a href="track.html">Orders</a>
-    <a href="wishlist.html">Wishlist</a>
-    <a href="cart.html" class="nav-cart">🛒 Cart <span class="cc" id="cartCount">0</span></a>
+<!-- PRIMARY NAV -->
+<nav class="primary-nav">
+  <div class="nav-inner">
+    <a href="mystore.html" class="nav-logo">Vibe<span>Store</span></a>
+    <form class="search-form" onsubmit="return false">
+      <select class="search-cat">
+        <option>All</option>
+        <option>Electronics</option>
+        <option>Gift Cards</option>
+        <option>Fashion</option>
+      </select>
+      <input class="search-input" type="text" placeholder="Search products..."/>
+      <button class="search-btn" type="submit">🔍</button>
+    </form>
+    <div class="nav-right">
+      <a href="account.html" class="nav-item">Hello, Sign in<strong>Account &amp; Lists</strong></a>
+      <a href="track.html" class="nav-item">Returns<strong>&amp; Orders</strong></a>
+      <a href="cart.html" class="nav-cart"><span class="nav-cart-icon">🛒</span>Cart<span class="cart-qty" id="cartQty">0</span></a>
+    </div>
   </div>
-  <button class="nav-hamburger">☰</button>
+</nav>
+<nav class="secondary-nav">
+  <div class="sec-inner">
+    <a href="mystore.html" class="sec-link">🏠 Home</a>
+    <a href="collections.html" class="sec-link">Shop All</a>
+    <a href="sale.html" class="sec-link">Today's Deals</a>
+    <a href="gift-cards.html" class="sec-link active">🎁 Gift Cards</a>
+    <a href="loyalty.html" class="sec-link">Rewards</a>
+    <a href="faq.html" class="sec-link">Help</a>
+    <a href="become-seller.html" class="sec-link">Become a Seller</a>
+    <a href="seller-central.html" class="sec-link">Seller Central</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<div class="hero">
-  <div class="hero-sparkles" id="sparkles"></div>
-  <h1>Give the Gift of Choice 🎁</h1>
-  <p>The perfect present for everyone on your list — shop anything, anytime, with a VibeStore gift card.</p>
-  <div class="hero-card">
-    <div class="card-shine"></div>
-    <div class="card-gif">🎁</div>
-    <div class="card-logo">VibeStore</div>
-    <div class="card-amount">₹1,000</div>
-  </div>
+<div class="page-hero">
+  <h1>🎁 VibeStore Gift Cards</h1>
+  <p>Give the perfect present — valid at all VibeStore Marketplace sellers, delivered instantly to their inbox.</p>
+  <div class="hero-balance-chip">💳 Your gift card balance: <strong style="margin-left:4px">₹350</strong></div>
 </div>
 
 <div class="page">
 
-  <!-- Redeem section (at top for visibility) -->
-  <div class="redeem-section" style="margin-bottom:28px;">
-    <div class="redeem-toggle" id="redeemToggle" onclick="toggleRedeem()">
-      <h3>🎟️ Have a gift card? Redeem it here</h3>
-      <span class="arrow">▼</span>
-    </div>
-    <div class="redeem-body" id="redeemBody">
-      <p style="font-size:0.82rem;color:var(--muted);margin-top:14px;">Enter your 16-digit gift card code to apply the balance to your account.</p>
-      <div class="redeem-input-row">
-        <input type="text" class="redeem-input" id="redeemCode" placeholder="VIBE-XXXX-XXXX-XXXX" maxlength="19"/>
-        <button class="btn-apply" onclick="applyCode()">Apply</button>
-      </div>
-      <div class="balance-tag" id="balanceTag">✓ Gift card applied! Balance: ₹1,000</div>
-    </div>
+  <!-- MAIN TABS -->
+  <div class="main-tabs">
+    <button class="main-tab-btn active" onclick="switchMainTab('buy',this)">🎁 Buy a Gift Card</button>
+    <button class="main-tab-btn" onclick="switchMainTab('redeem',this)">💳 Redeem a Gift Card</button>
   </div>
 
-  <!-- BUY SECTION -->
-  <div class="sec-heading">Buy a Gift Card</div>
-  <div class="two-col">
+  <!-- ══ BUY TAB ══ -->
+  <div class="tab-panel active" id="tab-buy">
+    <div class="buy-grid">
 
-    <div class="form-card">
-      <!-- Design Themes -->
-      <div class="form-group">
-        <label>Choose a Design</label>
-        <div class="themes-grid">
-          <div class="theme-card t1 active" onclick="selectTheme(this,'linear-gradient(135deg,#7c3aed,#06b6d4)')"></div>
-          <div class="theme-card t2" onclick="selectTheme(this,'linear-gradient(135deg,#f59e0b,#ef4444)')"></div>
-          <div class="theme-card t3" onclick="selectTheme(this,'linear-gradient(135deg,#16a34a,#06b6d4)')"></div>
-          <div class="theme-card t4" onclick="selectTheme(this,'linear-gradient(135deg,#ec4899,#8b5cf6)')"></div>
-        </div>
-      </div>
+      <!-- LEFT: FORM -->
+      <div class="form-card">
 
-      <!-- Denomination -->
-      <div class="form-group">
-        <label>Select Amount</label>
-        <div class="denom-grid">
-          <button class="denom-btn" onclick="selectDenom(this,'500')">₹500</button>
-          <button class="denom-btn active" onclick="selectDenom(this,'1000')">₹1,000</button>
-          <button class="denom-btn" onclick="selectDenom(this,'2000')">₹2,000</button>
-          <button class="denom-btn" onclick="selectDenom(this,'5000')">₹5,000</button>
+        <div class="form-section-label">1 · Choose a Design</div>
+        <div class="design-grid">
+          <div class="design-card dc1 selected" data-bg="linear-gradient(135deg,#cc3300,#ff6600)" data-emoji="🎂" data-label="Birthday" onclick="selectDesign(this)">
+            <div class="d-emoji">🎂</div><div class="d-label">Birthday</div>
+          </div>
+          <div class="design-card dc2" data-bg="linear-gradient(135deg,#7c1fa2,#e040fb)" data-emoji="💍" data-label="Wedding" onclick="selectDesign(this)">
+            <div class="d-emoji">💍</div><div class="d-label">Wedding</div>
+          </div>
+          <div class="design-card dc3" data-bg="linear-gradient(135deg,#1565c0,#29b6f6)" data-emoji="🎉" data-label="Celebration" onclick="selectDesign(this)">
+            <div class="d-emoji">🎉</div><div class="d-label">Celebration</div>
+          </div>
+          <div class="design-card dc4" data-bg="linear-gradient(135deg,#2e7d32,#81c784)" data-emoji="❤️" data-label="Thank You" onclick="selectDesign(this)">
+            <div class="d-emoji">❤️</div><div class="d-label">Thank You</div>
+          </div>
         </div>
-        <div class="custom-input-wrap">
+
+        <div class="form-section-label" style="margin-top:20px">2 · Select Amount</div>
+        <div class="amount-chips">
+          <button class="amt-chip" onclick="selectAmt(this,100)">₹100</button>
+          <button class="amt-chip" onclick="selectAmt(this,250)">₹250</button>
+          <button class="amt-chip selected" onclick="selectAmt(this,500)">₹500</button>
+          <button class="amt-chip" onclick="selectAmt(this,1000)">₹1,000</button>
+          <button class="amt-chip" onclick="selectAmt(this,2000)">₹2,000</button>
+          <button class="amt-chip" onclick="selectAmt(this,5000)">₹5,000</button>
+        </div>
+        <div class="custom-amt-row">
           <span class="custom-prefix">₹</span>
-          <input type="number" class="custom-input" id="customAmt" placeholder="Custom" min="100" max="50000" oninput="setCustomAmt(this.value)"/>
+          <input type="number" class="custom-amt-input" id="customAmt" placeholder="Custom amount" min="50" max="50000" oninput="setCustomAmt(this.value)"/>
         </div>
-      </div>
 
-      <!-- Recipient -->
-      <div class="form-group">
-        <label>Recipient Name</label>
-        <input type="text" class="form-input" id="recipName" placeholder="e.g. Riya Sharma" oninput="updatePreview()"/>
-      </div>
-
-      <div class="form-group">
-        <label>Recipient Email</label>
-        <input type="email" class="form-input" placeholder="riya@example.com"/>
-      </div>
-
-      <!-- Message -->
-      <div class="form-group">
-        <label>Personal Message</label>
-        <textarea class="form-input" id="cardMsg" placeholder="Happy Birthday! Hope you find something you love 🎉" oninput="updatePreview()"></textarea>
-      </div>
-
-      <!-- Delivery -->
-      <div class="form-group">
-        <label>Delivery</label>
-        <div class="radio-group">
-          <label class="radio-opt"><input type="radio" name="delivery" value="instant" checked onchange="toggleDate(false)"/> ⚡ Instant Email</label>
-          <label class="radio-opt"><input type="radio" name="delivery" value="scheduled" onchange="toggleDate(true)"/> 📅 Schedule Date</label>
+        <div class="form-section-label" style="margin-top:20px">3 · Recipient Details</div>
+        <div class="form-group">
+          <label>To (Name)</label>
+          <input type="text" class="form-input" id="recipName" placeholder="e.g. Riya Sharma" oninput="syncPreview()"/>
         </div>
-        <div class="date-group" id="dateGroup" style="margin-top:10px;">
-          <input type="date" class="form-input" style="width:auto;"/>
+        <div class="form-group">
+          <label>Recipient Email</label>
+          <input type="email" class="form-input" id="recipEmail" placeholder="riya@example.com"/>
         </div>
+        <div class="form-group">
+          <label>From (Your Name)</label>
+          <input type="text" class="form-input" placeholder="e.g. Arjun"/>
+        </div>
+        <div class="form-group">
+          <label>Personal Message</label>
+          <textarea class="form-input" id="giftMsg" placeholder="Write a heartfelt message... e.g. Happy Birthday! Wishing you lots of joy 🎉" oninput="syncPreview()"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Delivery Date</label>
+          <div class="delivery-opts">
+            <label class="delivery-opt"><input type="radio" name="delivery" value="instant" checked onchange="toggleSchedule(false)"/> ⚡ Send Instantly</label>
+            <label class="delivery-opt"><input type="radio" name="delivery" value="schedule" onchange="toggleSchedule(true)"/> 📅 Schedule</label>
+          </div>
+          <div class="schedule-date" id="scheduleDate">
+            <input type="date" class="form-input" style="width:auto;margin-top:8px"/>
+          </div>
+        </div>
+
+        <button class="btn-send-gc" id="sendBtn" onclick="sendGiftCard()">Send Gift Card — ₹<span id="btnAmt">500</span></button>
       </div>
 
-      <button class="btn-addcart" onclick="addToCart()">🛒 Add to Cart — ₹<span id="cartAmt">1,000</span></button>
-    </div>
+      <!-- RIGHT: LIVE PREVIEW -->
+      <div class="preview-sticky">
+        <div class="preview-label">Live Preview</div>
+        <div class="gc-preview" id="gcPreview">
+          <div class="shine"></div>
+          <div class="strip"></div>
+          <div class="gcp-emoji" id="prevEmoji">🎂</div>
+          <div class="gcp-to">To:</div>
+          <div class="gcp-name" id="prevName">Your Recipient</div>
+          <div class="gcp-msg" id="prevMsg">Add a message above...</div>
+          <div class="gcp-amt" id="prevAmt">₹500</div>
+          <div class="gcp-brand">VibeStore</div>
+        </div>
+        <div class="preview-info">
+          <p><strong>✓ Instant delivery</strong> to recipient's inbox within minutes of purchase confirmation. Gift cards never expire and are valid at all VibeStore Marketplace sellers.</p>
+        </div>
 
-    <!-- PREVIEW -->
-    <div class="preview-section">
-      <div class="preview-label">Live Preview</div>
-      <div class="gift-preview" id="giftPreview">
-        <div class="gp-shine"></div>
-        <div class="gp-strip"></div>
-        <div class="gp-to">To:</div>
-        <div class="gp-name" id="previewName">Your Recipient</div>
-        <div class="gp-msg" id="previewMsg">Add a message above...</div>
-        <div class="gp-amt" id="previewAmt">₹1,000</div>
-        <div class="gp-brand">VibeStore</div>
-      </div>
-      <div style="margin-top:16px;background:#f0fdf4;border:1px solid rgba(22,163,74,0.2);border-radius:12px;padding:14px 16px;">
-        <p style="font-size:0.8rem;color:#16a34a;font-weight:600;margin-bottom:3px;">🎁 Delivery Info</p>
-        <p style="font-size:0.76rem;color:var(--muted);">Your gift card will be delivered to the recipient's email within minutes of your order being confirmed.</p>
+        <!-- Echo AI note -->
+        <div class="echo-note" style="margin-top:16px">
+          <div class="echo-avatar">🤖</div>
+          <div>
+            <div class="echo-label">Echo AI</div>
+            <div class="echo-text">Echo personalizes gift card delivery timing based on the recipient's timezone — ensuring they receive your gift at the perfect moment! Select a <strong style="color:#007185">Birthday</strong> or <strong style="color:#007185">Wedding</strong> design and Echo will also suggest a custom message automatically!</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- FEATURES -->
-  <div class="features-row">
-    <div class="feat">
-      <div class="feat-icon">♾️</div>
-      <div class="feat-title">Never Expires</div>
-      <div class="feat-desc">Use your balance anytime, no time limit</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">0️⃣</div>
-      <div class="feat-title">Zero Fees</div>
-      <div class="feat-desc">No purchase fees, no maintenance fees</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🔄</div>
-      <div class="feat-title">Reloadable</div>
-      <div class="feat-desc">Add more balance to an existing card</div>
-    </div>
-    <div class="feat">
-      <div class="feat-icon">🛍️</div>
-      <div class="feat-title">Works Everywhere</div>
-      <div class="feat-desc">Valid on all products across the store</div>
-    </div>
-  </div>
+  <!-- ══ REDEEM TAB ══ -->
+  <div class="tab-panel" id="tab-redeem">
+    <div class="redeem-center">
 
-  <!-- CORPORATE CTA -->
-  <div class="corp-cta">
-    <div style="font-size:2.5rem;">🏢</div>
-    <div class="cta-text">
-      <h3>Corporate Gifting Made Easy</h3>
-      <p>Buying 10+ cards? We offer bulk pricing, custom branding, and dedicated account support for corporate orders.</p>
+      <!-- Redeem form -->
+      <div class="redeem-card-input">
+        <div style="font-size:3rem;margin-bottom:12px">🎟️</div>
+        <h3>Enter Your Gift Card Code</h3>
+        <p>Paste or type your 16-character VibeStore gift card code below to add the balance to your account.</p>
+        <input type="text" class="gc-code-input" id="redeemCode" placeholder="VIBE-XXXX-XXXX-XXXX" maxlength="19" oninput="formatCode(this)"/>
+        <button class="btn-redeem-now" onclick="redeemCode()">Redeem Now</button>
+        <div class="balance-display" id="balanceDisplay">
+          <div class="bal-icon">💳</div>
+          <div>
+            <div class="bal-amt">₹350</div>
+            <div class="bal-label">Current gift card balance applied to your account</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="hiw">
+        <h3>How It Works</h3>
+        <div class="hiw-steps">
+          <div class="hiw-step">
+            <div class="hiw-num">1</div>
+            <strong>Enter Code</strong>
+            <p>Type or paste your gift card code in the field above</p>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-num">2</div>
+            <strong>Balance Added</strong>
+            <p>The value is instantly added to your VibeStore account</p>
+          </div>
+          <div class="hiw-step">
+            <div class="hiw-num">3</div>
+            <strong>Shop &amp; Save</strong>
+            <p>Your balance is automatically applied at checkout on any order</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="faq-section">
+        <div class="section-title" style="margin-bottom:14px">Frequently Asked Questions</div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Do VibeStore gift cards expire? <span class="faq-arrow">▼</span></button>
+          <div class="faq-a">No, VibeStore gift cards never expire. Once redeemed to your account, the balance stays until you use it — there's no time limit.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can I use multiple gift cards on one order? <span class="faq-arrow">▼</span></button>
+          <div class="faq-a">Yes! You can redeem multiple gift cards and the total balance accumulates in your account. At checkout, your full balance is applied automatically.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What if my gift card code doesn't work? <span class="faq-arrow">▼</span></button>
+          <div class="faq-a">Make sure you're entering the code exactly as received (VIBE-XXXX-XXXX-XXXX format). If the issue persists, contact our support team with the code and order number of your purchase.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can gift cards be refunded or exchanged for cash? <span class="faq-arrow">▼</span></button>
+          <div class="faq-a">Gift cards are non-refundable and cannot be exchanged for cash once purchased. However, if the recipient doesn't redeem it within 90 days of purchase, the buyer may request a replacement.</div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can I send a gift card internationally? <span class="faq-arrow">▼</span></button>
+          <div class="faq-a">Currently, VibeStore gift cards are valid for purchases on VibeStore India only. The recipient's email can be from any country, but the balance is in INR and works only on VibeStore.in.</div>
+        </div>
+      </div>
+
     </div>
-    <button class="btn-corp" onclick="window.location.href='contact.html'">Contact Us for Bulk Pricing →</button>
   </div>
 
 </div>
 
-<footer style="background:#0f0f1a;color:rgba(255,255,255,0.5);text-align:center;padding:24px;font-size:0.78rem;margin-top:0;">
-  © 2024 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India
-  <br/><br/>
-  <strong style="color:rgba(255,255,255,0.7)">SHOP:</strong>
-  <a href="collections.html" style="color:#a78bfa;margin:0 8px">Collections</a><a href="sale.html" style="color:#a78bfa;margin:0 8px">Sale</a><a href="compare.html" style="color:#a78bfa;margin:0 8px">Compare</a><a href="gift-cards.html" style="color:#a78bfa;margin:0 8px">Gift Cards</a><a href="blog.html" style="color:#a78bfa;margin:0 8px">Blog</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">SUPPORT:</strong>
-  <a href="returns.html" style="color:#a78bfa;margin:0 8px">Returns</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a><a href="faq.html" style="color:#a78bfa;margin:0 8px">FAQ</a><a href="track.html" style="color:#a78bfa;margin:0 8px">Track Order</a><a href="notifications.html" style="color:#a78bfa;margin:0 8px">Notifications</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">ACCOUNT:</strong>
-  <a href="account.html" style="color:#a78bfa;margin:0 8px">My Account</a><a href="loyalty.html" style="color:#a78bfa;margin:0 8px">Loyalty</a><a href="wishlist.html" style="color:#a78bfa;margin:0 8px">Wishlist</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referral</a>
-  &nbsp;|&nbsp;
-  <strong style="color:rgba(255,255,255,0.7)">COMPANY:</strong>
-  <a href="index.html" style="color:#a78bfa;margin:0 8px">Home</a><a href="referral.html" style="color:#a78bfa;margin:0 8px">Referrals</a><a href="contact.html" style="color:#a78bfa;margin:0 8px">Contact</a>
+<!-- CORPORATE GIFTING SECTION -->
+<div style="max-width:1200px;margin:0 auto;padding:0 16px 40px;">
+  <div style="background:linear-gradient(135deg,#131921,#1e2a38);border-radius:8px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;">
+    <div>
+      <div style="font-size:0.72rem;font-weight:700;color:#FF9900;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px;">Corporate Gifting</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;color:white;margin-bottom:10px;">🏢 Bulk Gift Cards for Businesses</div>
+      <p style="color:rgba(255,255,255,0.65);font-size:0.88rem;line-height:1.6;margin-bottom:16px;">Order gift cards in bulk for employee rewards, client appreciation, or festive gifting. Custom denominations, branded cards, and volume discounts available for orders of 50+ cards.</p>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:7px;margin-bottom:0;">
+        <li style="color:rgba(255,255,255,0.75);font-size:0.82rem;">✓ Volume discounts from 50 cards onwards</li>
+        <li style="color:rgba(255,255,255,0.75);font-size:0.82rem;">✓ Custom branding and personalized messages</li>
+        <li style="color:rgba(255,255,255,0.75);font-size:0.82rem;">✓ GST invoice provided for business expenses</li>
+        <li style="color:rgba(255,255,255,0.75);font-size:0.82rem;">✓ Dedicated account manager for orders 500+</li>
+      </ul>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:24px;">
+      <div style="font-size:0.85rem;font-weight:700;color:white;margin-bottom:16px;">Get a Corporate Quote</div>
+      <div style="margin-bottom:12px;"><input type="text" placeholder="Company Name" style="width:100%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);border-radius:4px;padding:10px 12px;font-size:0.85rem;color:white;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='#FF9900'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"/></div>
+      <div style="margin-bottom:12px;"><input type="email" placeholder="Business Email" style="width:100%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);border-radius:4px;padding:10px 12px;font-size:0.85rem;color:white;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='#FF9900'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"/></div>
+      <div style="margin-bottom:16px;"><input type="number" placeholder="Number of cards needed" style="width:100%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);border-radius:4px;padding:10px 12px;font-size:0.85rem;color:white;font-family:'Inter',sans-serif;outline:none;" onfocus="this.style.borderColor='#FF9900'" onblur="this.style.borderColor='rgba(255,255,255,0.2)'"/></div>
+      <button onclick="document.getElementById('toastEl') && document.getElementById('toastEl').innerHTML || alert('Request submitted! Our corporate team will contact you within 24 hours.')" style="width:100%;background:#FF9900;color:#0f1111;border:none;border-radius:20px;padding:12px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background 0.15s;" onmouseover="this.style.background='#e68900'" onmouseout="this.style.background='#FF9900'">Submit Corporate Request →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-emoji">🎉</div>
+    <div class="modal-title">Gift Card Sent!</div>
+    <div class="modal-sub" id="modalSubText">Your gift card has been sent successfully. The recipient will receive it via email within a few minutes.</div>
+    <button class="btn-modal-close" onclick="closeModal()">Done</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <div class="footer-col">
+      <h4>Get to Know Us</h4>
+      <a href="index.html">About VibeStore Marketplace</a>
+      <a href="blog.html">Blog</a>
+      <a href="contact.html">Careers</a>
+      <a href="contact.html">Press</a>
+    </div>
+    <div class="footer-col">
+      <h4>Shop With Us</h4>
+      <a href="collections.html">All Products</a>
+      <a href="sale.html">Today's Deals</a>
+      <a href="gift-cards.html">Gift Cards</a>
+      <a href="compare.html">Compare Products</a>
+    </div>
+    <div class="footer-col">
+      <h4>Your Account</h4>
+      <a href="account.html">Account Dashboard</a>
+      <a href="loyalty.html">VibePass Rewards</a>
+      <a href="wishlist.html">Wishlist</a>
+      <a href="referral.html">Refer a Friend</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help &amp; Support</h4>
+      <a href="track.html">Track Order</a>
+      <a href="returns.html">Returns &amp; Refunds</a>
+      <a href="faq.html">FAQ / Help Center</a>
+      <a href="contact.html">Contact Us</a>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <a href="become-seller.html">Sell on VibeStore</a>
+      <a href="seller-central.html">Seller Central</a>
+      <a href="#">Affiliate Program</a>
+      <a href="#">Advertise</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 VibeStore Marketplace · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
 </footer>
 
 <script src="rex-chat.js"></script>
 <script>
-// Cart count from localStorage
-function updateCartCount(){
+// Cart count
+function updateCartQty(){
   try{
     const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
     const count=cart.reduce((s,i)=>s+(i.qty||1),0);
-    const el=document.getElementById('cartCount');
+    const el=document.getElementById('cartQty');
     if(el) el.textContent=count;
   }catch(e){}
 }
-updateCartCount();
+updateCartQty();
 
-let currentAmt = 1000;
+let currentAmt=500;
+let currentBg='linear-gradient(135deg,#cc3300,#ff6600)';
+let currentEmoji='🎂';
 
-function selectDenom(btn, val){
-  document.querySelectorAll('.denom-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  currentAmt = parseInt(val);
-  document.getElementById('customAmt').value = '';
-  updateAmtDisplay();
+// Main tab switch
+function switchMainTab(id,el){
+  document.querySelectorAll('.main-tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
 }
 
-function setCustomAmt(val){
-  document.querySelectorAll('.denom-btn').forEach(b => b.classList.remove('active'));
-  currentAmt = parseInt(val) || 0;
-  updateAmtDisplay();
-}
-
-function updateAmtDisplay(){
-  document.getElementById('previewAmt').textContent = '₹' + currentAmt.toLocaleString('en-IN');
-  document.getElementById('cartAmt').textContent = currentAmt.toLocaleString('en-IN');
-  // Update hero card too
-  document.querySelector('.hero-card .card-amount').textContent = '₹' + currentAmt.toLocaleString('en-IN');
-}
-
-function updatePreview(){
-  const name = document.getElementById('recipName').value || 'Your Recipient';
-  const msg = document.getElementById('cardMsg').value || 'Add a message above...';
-  document.getElementById('previewName').textContent = name;
-  document.getElementById('previewMsg').textContent = msg.length > 80 ? msg.substring(0,80)+'...' : msg;
-}
-
-function selectTheme(card, gradient){
-  document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('active'));
-  card.classList.add('active');
-  document.getElementById('giftPreview').style.background = gradient;
-}
-
-function toggleDate(show){
-  document.getElementById('dateGroup').classList.toggle('show', show);
-}
-
-function toggleRedeem(){
-  const toggle = document.getElementById('redeemToggle');
-  const body = document.getElementById('redeemBody');
-  toggle.classList.toggle('open');
-  body.classList.toggle('open');
-}
-
-function applyCode(){
-  const code = document.getElementById('redeemCode').value;
-  if(code.length >= 4){
-    const tag = document.getElementById('balanceTag');
-    tag.style.display = 'inline-flex';
-    document.getElementById('redeemCode').style.borderColor = '#16a34a';
-  } else {
-    alert('Please enter a valid gift card code.');
+// Design selector
+const echoMessages={
+  '🎂':'Happy Birthday! Hope your day is filled with joy and this little treat helps you celebrate in style 🎂',
+  '💍':'Wishing you a lifetime of happiness together. A small gift to celebrate your special day 💍',
+  '🎉':'Congratulations! You deserve to celebrate every moment — treat yourself to something amazing 🎉',
+  '❤️':'Thank you so much for everything. Words can\'t express how grateful I am — hope this brings a smile ❤️'
+};
+function selectDesign(card){
+  document.querySelectorAll('.design-card').forEach(c=>c.classList.remove('selected'));
+  card.classList.add('selected');
+  currentBg=card.dataset.bg;
+  currentEmoji=card.dataset.emoji;
+  document.getElementById('gcPreview').style.background=currentBg;
+  document.getElementById('prevEmoji').textContent=currentEmoji;
+  // Echo AI auto-suggest message
+  const echo=echoMessages[currentEmoji];
+  if(echo&&!document.getElementById('giftMsg').value){
+    document.getElementById('giftMsg').value=echo;
+    syncPreview();
   }
 }
 
-function addToCart(){
-  // Save to vs_cart localStorage
-  try{
-    const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
-    const name='VibeStore Gift Card ₹'+currentAmt.toLocaleString('en-IN');
-    const existing=cart.find(i=>i.name===name);
-    if(existing) existing.qty=(existing.qty||1)+1;
-    else cart.push({name,price:currentAmt,qty:1,addedAt:Date.now()});
-    localStorage.setItem('vs_cart',JSON.stringify(cart));
-    updateCartCount();
-  }catch(e){}
-  const btn = document.querySelector('.btn-addcart');
-  btn.textContent = '✓ Added to Cart!';
-  btn.style.background = '#16a34a';
-  setTimeout(() => {
-    btn.innerHTML = '🛒 Add to Cart — ₹<span id="cartAmt">' + currentAmt.toLocaleString('en-IN') + '</span>';
-    btn.style.background = '';
-  }, 2000);
+// Amount
+function selectAmt(btn,val){
+  document.querySelectorAll('.amt-chip').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+  currentAmt=val;
+  document.getElementById('customAmt').value='';
+  updateAmtDisplay();
+}
+function setCustomAmt(val){
+  document.querySelectorAll('.amt-chip').forEach(b=>b.classList.remove('selected'));
+  currentAmt=parseInt(val)||0;
+  updateAmtDisplay();
+}
+function updateAmtDisplay(){
+  const fmt=currentAmt.toLocaleString('en-IN');
+  document.getElementById('prevAmt').textContent='₹'+fmt;
+  document.getElementById('btnAmt').textContent=fmt;
 }
 
-// Sparkles
-const sparklesEl = document.getElementById('sparkles');
-for(let i=0;i<20;i++){
-  const s = document.createElement('div');
-  s.className = 'sparkle';
-  s.style.left = Math.random()*100 + '%';
-  s.style.top = Math.random()*100 + '%';
-  s.style.animationDelay = Math.random()*3 + 's';
-  s.style.animationDuration = (2+Math.random()*2) + 's';
-  s.style.width = s.style.height = (2+Math.random()*4)+'px';
-  sparklesEl.appendChild(s);
+// Preview sync
+function syncPreview(){
+  const name=document.getElementById('recipName').value.trim()||'Your Recipient';
+  const msg=document.getElementById('giftMsg').value.trim()||'Add a message above...';
+  document.getElementById('prevName').textContent=name;
+  document.getElementById('prevMsg').textContent=msg.length>80?msg.substring(0,80)+'...':msg;
+}
+
+// Schedule date toggle
+function toggleSchedule(show){
+  document.getElementById('scheduleDate').classList.toggle('show',show);
+}
+
+// FAQ accordion
+function toggleFaq(btn){
+  const ans=btn.nextElementSibling;
+  const isOpen=ans.classList.contains('show');
+  // close all
+  document.querySelectorAll('.faq-a').forEach(a=>a.classList.remove('show'));
+  document.querySelectorAll('.faq-q').forEach(b=>b.classList.remove('open'));
+  if(!isOpen){ans.classList.add('show');btn.classList.add('open');}
+}
+
+// Gift card code format
+function formatCode(input){
+  let val=input.value.replace(/[^A-Za-z0-9]/g,'').toUpperCase();
+  let out='VIBE-';
+  val=val.replace(/^VIBE/,'');
+  const parts=val.match(/.{1,4}/g)||[];
+  out='VIBE-'+parts.slice(0,3).join('-');
+  input.value=out;
+}
+
+// Redeem code
+function redeemCode(){
+  const code=document.getElementById('redeemCode').value;
+  if(code.length<10){alert('Please enter a valid gift card code (VIBE-XXXX-XXXX-XXXX)');return;}
+  document.getElementById('redeemCode').style.borderColor='#007600';
+  document.getElementById('balanceDisplay').classList.add('show');
+}
+
+// Send gift card
+function sendGiftCard(){
+  const email=document.getElementById('recipEmail').value;
+  const name=document.getElementById('recipName').value;
+  if(!email||!name){alert('Please fill in the recipient name and email.');return;}
+  if(currentAmt<50){alert('Please select or enter a valid amount (minimum ₹50).');return;}
+  // save to cart as well
+  try{
+    const cart=JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const gcName='VibeStore Gift Card ₹'+currentAmt.toLocaleString('en-IN')+' → '+name;
+    cart.push({name:gcName,price:currentAmt,qty:1,addedAt:Date.now()});
+    localStorage.setItem('vs_cart',JSON.stringify(cart));
+    updateCartQty();
+  }catch(e){}
+  document.getElementById('modalSubText').textContent=
+    'Your ₹'+currentAmt.toLocaleString('en-IN')+' gift card has been sent to '+name+' at '+email+'. They\'ll receive it within minutes!';
+  document.getElementById('successModal').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('successModal').classList.remove('show');
 }
 </script>
 </body>

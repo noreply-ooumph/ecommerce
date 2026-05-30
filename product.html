@@ -3,876 +3,899 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Product — MyStore</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<title>Sony WH-1000XM5 Wireless Headphones — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#fafaf8;--bg2:#f3f3ef;--white:#fff;--dark:#0f0f1a;--purple:#6d28d9;--purple2:#7c3aed;--cyan:#0891b2;--gray:#6b7280;--gray2:#9ca3af;--border:#e5e5e0;--green:#16a34a;--red:#dc2626;--yellow:#d97706;--orange:#ea580c}
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);line-height:1.6}
-a{text-decoration:none;color:inherit}
-button{font-family:'Inter',sans-serif;cursor:pointer}
+:root{
+  --nav:#131921;--nav2:#232f3e;--teal:#007185;--teal2:#005f6b;
+  --orange:#FF9900;--buy:#FF6600;--bg:#f0f2f5;--white:#fff;
+  --border:#d5d9d9;--muted:#565959;--dark:#0f1111;--deal:#CC0C39;
+  --green:#007600;--star:#FF9900;--gold:#B8860B;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);line-height:1.4;font-size:14px}
+a{text-decoration:none;color:var(--teal)}
+a:hover{text-decoration:underline;color:var(--teal2)}
+button{font-family:'Inter',sans-serif;cursor:pointer;border:none;outline:none}
+select{font-family:'Inter',sans-serif}
 
-nav{background:white;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200}
-.nav-inner{max-width:1300px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;gap:20px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:800;cursor:pointer}
-.nav-logo .ai-tag{font-size:0.55rem;background:linear-gradient(135deg,var(--purple),var(--cyan));color:white;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-weight:700}
-.breadcrumb{flex:1;display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--gray)}
-.breadcrumb a{color:var(--gray);cursor:pointer}
-.breadcrumb a:hover{color:var(--dark)}
-.breadcrumb span{color:var(--gray2)}
-.nav-right{display:flex;align-items:center;gap:10px}
-.nav-icon{width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1rem;transition:all 0.2s;position:relative}
-.nav-icon:hover{border-color:var(--purple)}
-.cart-count{position:absolute;top:-6px;right:-6px;background:var(--purple);color:white;width:18px;height:18px;border-radius:50%;font-size:0.6rem;font-weight:700;display:flex;align-items:center;justify-content:center}
+/* NAV */
+#top-nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:8px;padding:8px 16px;height:60px}
+.nav-logo{color:#fff;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:700;flex-shrink:0}
+.nav-logo span{color:var(--orange)}
+.nav-deliver{display:flex;flex-direction:column;justify-content:center;flex-shrink:0;margin-left:4px}
+.nav-deliver small{font-size:0.67rem;color:#ccc}
+.nav-deliver b{font-size:0.78rem;color:#fff}
+.nav-search{flex:1;display:flex;height:40px;border-radius:4px;overflow:hidden;max-width:720px;margin:0 8px}
+.nav-cat{background:#e8e8e8;border:none;padding:0 10px;font-size:0.75rem;color:#333;border-right:1px solid #c9c9c9;cursor:pointer;min-width:50px}
+.nav-input{flex:1;padding:0 12px;font-size:0.9rem;border:none;outline:none;color:#333}
+.nav-btn{background:var(--orange);border:none;width:46px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+.nav-btn:hover{background:#e88b00}
+.nav-right{display:flex;align-items:center;gap:12px;flex-shrink:0;margin-left:8px}
+.nav-link{color:#fff;font-size:0.8rem;cursor:pointer;white-space:nowrap;padding:4px}
+.nav-link:hover{outline:1px solid #fff;border-radius:2px}
+.nav-link small{display:block;font-size:0.67rem;color:#ccc;font-weight:400}
+.nav-link b{display:block;font-size:0.82rem}
+.nav-cart{position:relative;color:#fff;font-size:1.6rem;padding:0 4px}
+.nav-cart-count{position:absolute;top:-4px;right:-2px;background:var(--orange);color:var(--nav);font-size:0.7rem;font-weight:800;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center}
+.nav2{background:var(--nav2);padding:6px 16px;display:flex;gap:16px;overflow:hidden}
+.nav2 a{color:#fff;font-size:0.8rem;padding:4px 6px;white-space:nowrap}
+.nav2 a:hover{outline:1px solid #fff;border-radius:2px;text-decoration:none}
+
+/* BREADCRUMB */
+.breadcrumb{font-size:0.78rem;color:var(--muted);padding:10px 0 6px}
+.breadcrumb a{color:var(--teal)}
+.breadcrumb span{margin:0 4px}
 
 /* MAIN LAYOUT */
-.page{max-width:1300px;margin:0 auto;padding:32px 24px}
+.main-wrap{max-width:1400px;margin:0 auto;padding:12px 16px}
+.product-grid{display:grid;grid-template-columns:45% 35% 20%;gap:20px;align-items:start}
 
-/* PRODUCT SECTION */
-.prod-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;margin-bottom:60px}
+/* CARD BASE */
+.card{background:var(--white);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:20px}
 
-/* GALLERY */
-.gallery{display:flex;flex-direction:column;gap:12px}
-.main-img{background:var(--bg2);border:1px solid var(--border);border-radius:20px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:8rem;position:relative;overflow:hidden}
-.img-badge{position:absolute;top:16px;left:16px;padding:5px 12px;border-radius:100px;font-size:0.72rem;font-weight:700}
-.thumbs{display:flex;gap:10px}
-.thumb{width:72px;height:72px;border-radius:10px;background:var(--bg2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.6rem;cursor:pointer;transition:border-color 0.2s}
-.thumb:hover,.thumb.active{border-color:var(--purple)}
+/* ── LEFT: GALLERY ── */
+.gallery-wrap{}
+.main-img-box{background:#f7f8fa;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;height:380px;cursor:zoom-in;position:relative;border:1px solid #e7e8e8;overflow:hidden}
+.main-img-emoji{font-size:160px;line-height:1;user-select:none;transition:transform 0.3s}
+.main-img-box:hover .main-img-emoji{transform:scale(1.08)}
+.zoom-hint{font-size:0.72rem;color:var(--muted);margin-top:10px;display:flex;align-items:center;gap:4px}
+.thumbnails{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.thumb{width:64px;height:64px;background:#f7f8fa;border-radius:8px;border:2px solid transparent;display:flex;align-items:center;justify-content:center;font-size:2.2rem;cursor:pointer;transition:border-color 0.2s}
+.thumb:hover,.thumb.active{border-color:var(--orange)}
+.gallery-actions{display:flex;gap:10px;margin-top:14px}
+.gal-btn{flex:1;padding:8px;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:0.82rem;color:var(--dark);display:flex;align-items:center;justify-content:center;gap:6px;transition:background 0.15s}
+.gal-btn:hover{background:#f0f2f5}
 
-/* PRODUCT INFO */
-.prod-info{display:flex;flex-direction:column;gap:0}
-.prod-cat-tag{font-size:0.72rem;color:var(--cyan);font-weight:700;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:8px}
-.prod-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(1.4rem,3vw,2rem);font-weight:800;line-height:1.2;margin-bottom:12px}
-.rating-row{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
-.stars{color:#f59e0b;font-size:0.9rem}
-.rating-val{font-weight:700;font-size:0.88rem}
-.rating-count{font-size:0.82rem;color:var(--gray);text-decoration:underline;cursor:pointer}
-.in-stock{font-size:0.78rem;color:var(--green);font-weight:600;display:flex;align-items:center;gap:4px}
-.price-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:6px}
-.price-main{font-family:'Space Grotesk',sans-serif;font-size:2.2rem;font-weight:800}
-.price-og{font-size:1rem;color:var(--gray2);text-decoration:line-through}
-.price-save{background:#dcfce7;color:var(--green);font-size:0.78rem;font-weight:700;padding:4px 10px;border-radius:100px}
-.price-note{font-size:0.75rem;color:var(--gray);margin-bottom:20px}
-.ai-price-box{background:rgba(109,40,217,0.06);border:1px solid rgba(109,40,217,0.15);border-radius:10px;padding:12px 14px;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.ai-price-icon{font-size:1.1rem}
-.ai-price-text{font-size:0.78rem;color:var(--purple)}
-.divider{height:1px;background:var(--border);margin:20px 0}
+/* ── CENTER: INFO ── */
+.info-wrap{}
+.brand-link{font-size:0.82rem;color:var(--teal);font-weight:500}
+.prod-title{font-family:'Space Grotesk',sans-serif;font-size:1.28rem;font-weight:700;color:var(--dark);margin:6px 0 8px;line-height:1.35}
+.ratings-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.stars{color:var(--star);font-size:1rem;letter-spacing:1px}
+.rating-num{font-size:0.85rem;color:var(--teal)}
+.best-seller-badge{display:inline-flex;align-items:center;gap:5px;background:#FFF3CD;color:#856404;border:1px solid #ffc107;border-radius:4px;padding:3px 9px;font-size:0.78rem;font-weight:600;margin-bottom:10px}
+.divider{border:none;border-top:1px solid var(--border);margin:10px 0}
+.price-main{font-size:1.9rem;font-weight:700;color:var(--dark)}
+.price-main sup{font-size:0.85rem;vertical-align:super}
+.price-was{font-size:0.9rem;color:var(--muted);text-decoration:line-through;margin-left:6px}
+.price-save{color:var(--deal);font-size:0.85rem;font-weight:600;margin-left:4px}
+.price-tax{font-size:0.75rem;color:var(--muted);margin-top:2px}
+.emi-row{font-size:0.82rem;color:var(--teal);margin:6px 0}
+.bank-offer{background:#EEF9F0;border:1px solid #b2dfdb;border-radius:6px;padding:8px 12px;font-size:0.82rem;margin:8px 0;cursor:pointer}
+.bank-offer summary{color:var(--dark);font-weight:500;list-style:none;display:flex;align-items:center;justify-content:space-between}
+.bank-offer summary::after{content:'▾';font-size:0.8rem;color:var(--muted)}
+.bank-offer[open] summary::after{content:'▴'}
+.bank-offer p{margin-top:6px;color:var(--muted);font-size:0.8rem}
+.countdown-box{display:flex;align-items:center;gap:8px;background:#FFF8E1;border:1px solid #FFD54F;border-radius:6px;padding:8px 12px;font-size:0.82rem;margin:8px 0}
+.countdown-label{color:var(--deal);font-weight:600}
+#countdown{font-weight:700;font-size:0.95rem;color:var(--deal);font-variant-numeric:tabular-nums}
+.variants-section{margin:10px 0}
+.variants-section h4{font-size:0.82rem;font-weight:600;margin-bottom:6px;color:var(--muted)}
+.size-pills{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.pill{padding:5px 14px;border:1px solid var(--border);border-radius:4px;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
+.pill:hover,.pill.active{border-color:var(--orange);background:#FFF3CD;font-weight:600}
+.color-circles{display:flex;gap:8px}
+.color-circle{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s}
+.color-circle:hover,.color-circle.active{border-color:var(--orange);outline:2px solid var(--orange);outline-offset:2px}
+.about-section{margin:12px 0}
+.about-section h3{font-size:0.9rem;font-weight:700;margin-bottom:8px}
+.about-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.about-list li{font-size:0.83rem;display:flex;gap:7px;align-items:flex-start}
+.about-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0;margin-top:1px}
+.sold-by-box{background:#F8FAF8;border:1px solid var(--border);border-radius:6px;padding:10px 14px;margin-top:12px;font-size:0.82rem}
+.sold-by-box .seller-name{color:var(--teal);font-weight:600}
+.fulfilled-badge{display:inline-flex;align-items:center;gap:4px;background:#EEF9F0;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:2px 7px;font-size:0.72rem;font-weight:600;margin-left:6px}
 
-/* STOCK INDICATOR */
-.stock-indicator{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
-.stock-label{font-size:0.82rem;font-weight:700;color:var(--orange);display:flex;align-items:center;gap:6px}
-.stock-bar-track{width:100%;height:5px;background:var(--border);border-radius:4px;overflow:hidden}
-.stock-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--orange),#f97316);transition:width 0.5s ease}
+/* ── RIGHT: BUY BOX ── */
+.buybox{position:sticky;top:76px}
+.buybox-price{font-family:'Space Grotesk',sans-serif;font-size:1.65rem;font-weight:700;margin-bottom:6px}
+.buybox-price sup{font-size:0.8rem;vertical-align:super}
+.delivery-info{color:var(--teal);font-size:0.85rem;font-weight:600;margin-bottom:2px}
+.deliver-change{font-size:0.78rem;color:var(--muted);margin-bottom:8px}
+.deliver-change a{color:var(--teal)}
+.in-stock{color:var(--green);font-size:0.88rem;font-weight:600;margin-bottom:8px}
+.qty-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.qty-row label{font-size:0.82rem;font-weight:600}
+.qty-select{border:1px solid var(--border);border-radius:4px;padding:5px 10px;font-size:0.85rem;background:#fff;cursor:pointer}
+.btn-cart{width:100%;padding:11px;background:var(--orange);border:none;border-radius:100px;font-size:0.92rem;font-weight:700;color:var(--dark);cursor:pointer;transition:background 0.15s;margin-bottom:8px}
+.btn-cart:hover{background:#e88b00}
+.btn-buy{width:100%;padding:11px;background:var(--buy);border:none;border-radius:100px;font-size:0.92rem;font-weight:700;color:#fff;cursor:pointer;transition:background 0.15s;margin-bottom:8px}
+.btn-buy:hover{background:#e05a00}
+.wishlist-link{display:block;text-align:center;font-size:0.82rem;color:var(--teal);margin-bottom:10px}
+.buybox-meta{font-size:0.8rem;color:var(--dark);display:flex;flex-direction:column;gap:5px;margin:8px 0}
+.buybox-meta span{display:flex;gap:6px}
+.buybox-meta span b{min-width:70px;color:var(--muted)}
+.secure-row{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--muted);margin:6px 0}
+.share-row{font-size:0.78rem;color:var(--muted);display:flex;gap:12px;margin:4px 0}
+.share-row a{color:var(--teal)}
+.other-sellers-mini{margin-top:10px;border-top:1px solid var(--border);padding-top:10px}
+.other-sellers-mini h4{font-size:0.8rem;font-weight:700;margin-bottom:8px}
+.osm-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;gap:6px}
+.osm-row:last-child{border-bottom:none}
+.osm-seller{font-size:0.78rem;color:var(--teal)}
+.osm-price{font-size:0.85rem;font-weight:700;flex-shrink:0}
+.osm-add{font-size:0.75rem;color:var(--teal);cursor:pointer}
+.osm-add:hover{text-decoration:underline}
 
-/* OPTIONS */
-.opt-label{font-size:0.82rem;font-weight:700;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
-.size-guide-link{font-size:0.75rem;font-weight:600;color:var(--purple);cursor:pointer;text-decoration:underline}
-.size-guide-link:hover{color:var(--purple2)}
-.color-opts{display:flex;gap:8px;margin-bottom:20px}
-.color-opt{width:36px;height:36px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:all 0.2s}
-.color-opt:hover,.color-opt.active{border-color:var(--purple);transform:scale(1.1)}
-.size-opts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}
-.size-opt{padding:8px 18px;border:1px solid var(--border);border-radius:8px;font-size:0.83rem;font-weight:500;cursor:pointer;background:white;transition:all 0.2s;position:relative}
-.size-opt:hover:not(.oos),.size-opt.active{border-color:var(--purple);background:rgba(109,40,217,0.06);color:var(--purple)}
-.size-opt.oos{color:var(--gray2);cursor:not-allowed;text-decoration:line-through;background:var(--bg2);border-color:var(--border)}
-.variant-selected-text{font-size:0.75rem;color:var(--gray);margin-bottom:16px}
-.variant-selected-text strong{color:var(--dark)}
+/* BELOW FOLD */
+.section{max-width:1400px;margin:20px auto;padding:0 16px}
+.section-card{background:var(--white);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);padding:22px}
+.section-title{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--orange)}
 
-/* QTY + ADD */
-.qty-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-.qty-ctrl{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:white}
-.qty-btn{width:40px;height:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;font-weight:700;cursor:pointer;transition:background 0.2s;border:none;background:transparent}
-.qty-btn:hover{background:var(--bg2)}
-.qty-num{width:44px;text-align:center;font-size:0.95rem;font-weight:700;border:none;outline:none;font-family:'Inter',sans-serif;background:transparent}
-.btn-add{flex:1;background:var(--dark);color:white;border:none;border-radius:10px;height:46px;font-size:0.95rem;font-weight:700;transition:all 0.2s}
-.btn-add:hover{background:var(--purple2)}
-.btn-add.added{background:var(--green)}
-.btn-buy{width:100%;background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:10px;height:46px;font-size:0.95rem;font-weight:700;margin-bottom:14px;transition:all 0.2s}
-.btn-buy:hover{opacity:0.9;transform:translateY(-1px)}
-.btn-wish{width:100%;background:white;color:var(--dark);border:1px solid var(--border);border-radius:10px;height:44px;font-size:0.88rem;font-weight:600;transition:all 0.2s}
-.btn-wish:hover{border-color:var(--red);color:var(--red)}
+/* FBT */
+.fbt-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.fbt-item{display:flex;flex-direction:column;align-items:center;gap:6px;width:160px}
+.fbt-img{font-size:3.5rem;background:#f7f8fa;border-radius:8px;width:90px;height:90px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border)}
+.fbt-name{font-size:0.78rem;text-align:center;line-height:1.3;color:var(--dark)}
+.fbt-price{font-size:0.88rem;font-weight:700}
+.fbt-plus{font-size:1.8rem;color:var(--muted);font-weight:300}
+.fbt-total{display:flex;flex-direction:column;gap:8px;margin-left:auto}
+.fbt-total p{font-size:0.85rem}
+.fbt-total b{font-size:1rem}
+.btn-fbt{padding:10px 20px;background:var(--orange);border:none;border-radius:6px;font-size:0.85rem;font-weight:700;cursor:pointer}
+.btn-fbt:hover{background:#e88b00}
 
-.trust-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.trust-pill{display:flex;align-items:center;gap:5px;background:var(--bg2);border-radius:100px;padding:5px 12px;font-size:0.72rem;color:var(--gray);font-weight:500}
+/* SELLERS TABLE */
+.sellers-controls{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.sellers-controls label{font-size:0.82rem;font-weight:600}
+.sort-btn{padding:5px 12px;border:1px solid var(--border);border-radius:4px;background:#fff;font-size:0.78rem;cursor:pointer;transition:all 0.15s}
+.sort-btn.active,.sort-btn:hover{border-color:var(--orange);background:#FFF3CD;font-weight:600}
+.sellers-table{width:100%;border-collapse:collapse;font-size:0.83rem}
+.sellers-table th{text-align:left;padding:8px 10px;background:#f7f8fa;border-bottom:2px solid var(--border);font-weight:600;color:var(--muted)}
+.sellers-table td{padding:10px 10px;border-bottom:1px solid #f0f0f0;vertical-align:middle}
+.sellers-table tr:last-child td{border-bottom:none}
+.sellers-table tr:hover td{background:#fafafa}
+.seller-stars{color:var(--star);letter-spacing:0.5px}
+.fulfilled-pill{display:inline-block;background:#EEF9F0;color:var(--green);border:1px solid #a5d6a7;border-radius:3px;padding:2px 6px;font-size:0.7rem;font-weight:600;margin-left:4px}
+.condition-new{color:var(--green);font-weight:600}
+.atc-link{color:var(--teal);cursor:pointer;font-weight:500}
+.atc-link:hover{text-decoration:underline}
 
-/* TABS */
-.tabs-bar{display:flex;border-bottom:2px solid var(--border);margin-bottom:24px}
-.tab-btn{padding:12px 24px;font-size:0.88rem;font-weight:600;color:var(--gray);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all 0.2s}
-.tab-btn:hover{color:var(--dark)}
-.tab-btn.active{color:var(--purple);border-bottom-color:var(--purple)}
-.tab-panel{display:none}
-.tab-panel.active{display:block}
+/* HORIZONTAL SCROLL */
+.h-scroll{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin}
+.h-scroll::-webkit-scrollbar{height:4px}
+.h-scroll::-webkit-scrollbar-track{background:#f0f2f5}
+.h-scroll::-webkit-scrollbar-thumb{background:#ccc;border-radius:2px}
+.prod-card{flex-shrink:0;width:170px;background:#fff;border-radius:8px;border:1px solid var(--border);padding:12px;cursor:pointer;transition:box-shadow 0.2s}
+.prod-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.12)}
+.prod-card-img{font-size:3rem;text-align:center;margin-bottom:8px;height:60px;display:flex;align-items:center;justify-content:center}
+.prod-card-name{font-size:0.78rem;line-height:1.3;margin-bottom:4px;color:var(--dark);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.prod-card-stars{color:var(--star);font-size:0.75rem}
+.prod-card-price{font-weight:700;font-size:0.88rem;margin-top:4px}
 
 /* DESCRIPTION */
-.desc-text{font-size:0.88rem;color:var(--gray);line-height:1.8;margin-bottom:16px}
-.feature-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:0.85rem}
-.feature-list li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.desc-text{font-size:0.85rem;line-height:1.7;color:#333}
+.desc-text p{margin-bottom:10px}
+.read-more-btn{color:var(--teal);background:none;border:none;font-size:0.83rem;cursor:pointer;padding:4px 0;margin-top:4px}
 
-/* SPECS */
-.specs-table{width:100%;border-collapse:collapse;font-size:0.85rem}
-.specs-table tr:nth-child(even) td{background:var(--bg2)}
-.specs-table td{padding:11px 14px;border-bottom:1px solid var(--border)}
-.specs-table td:first-child{color:var(--gray);font-weight:500;width:40%}
-.specs-table td:last-child{font-weight:600}
+/* SPECS TABLE */
+.specs-table{width:100%;border-collapse:collapse;font-size:0.83rem}
+.specs-table tr:nth-child(even) td{background:#f7f8fa}
+.specs-table td{padding:9px 14px;border-bottom:1px solid #eee}
+.specs-table td:first-child{font-weight:600;color:var(--muted);width:35%}
 
-/* REVIEWS SECTION */
-.reviews-summary{display:grid;grid-template-columns:auto 1fr;gap:32px;margin-bottom:28px;align-items:center}
-.rating-big{text-align:center}
-.rating-big-num{font-family:'Space Grotesk',sans-serif;font-size:3rem;font-weight:800}
-.rating-big-stars{color:#f59e0b;font-size:1.1rem;margin:4px 0}
-.rating-big-count{font-size:0.75rem;color:var(--gray)}
-.rating-bars{display:flex;flex-direction:column;gap:6px}
-.rating-bar-row{display:flex;align-items:center;gap:10px;font-size:0.78rem}
-.bar-track{flex:1;height:6px;background:var(--border);border-radius:4px;overflow:hidden}
-.bar-fill{height:100%;border-radius:4px;background:#f59e0b}
-.reviews-list{display:flex;flex-direction:column;gap:16px}
-.review-item{padding:18px;background:white;border:1px solid var(--border);border-radius:12px}
-.review-hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.review-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--purple2),var(--cyan));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:0.8rem;flex-shrink:0}
-.review-name{font-weight:600;font-size:0.85rem}
-.review-date{font-size:0.72rem;color:var(--gray2);margin-top:1px}
-.review-stars-small{color:#f59e0b;font-size:0.78rem;margin-left:auto}
-.review-text{font-size:0.83rem;color:var(--gray);line-height:1.6}
-.verified-badge{font-size:0.65rem;color:var(--green);display:flex;align-items:center;gap:3px;margin-top:6px}
-.ai-review-note{background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.12);border-radius:8px;padding:10px 14px;font-size:0.75rem;color:var(--purple);margin-bottom:16px}
+/* REVIEWS */
+.reviews-top{display:flex;gap:30px;margin-bottom:20px;flex-wrap:wrap}
+.overall-rating{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:120px}
+.big-rating{font-size:3.5rem;font-weight:800;line-height:1;font-family:'Space Grotesk',sans-serif}
+.big-stars{color:var(--star);font-size:1.5rem;letter-spacing:2px}
+.rating-count{font-size:0.78rem;color:var(--muted)}
+.rating-bars{flex:1;max-width:400px;display:flex;flex-direction:column;gap:6px}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:0.8rem}
+.bar-label{color:var(--teal);width:24px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:14px;background:#e8e8e8;border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;background:var(--orange);border-radius:3px}
+.bar-pct{color:var(--muted);width:30px;flex-shrink:0}
+.review-filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.filter-tab{padding:6px 14px;border:1px solid var(--border);border-radius:4px;background:#fff;font-size:0.82rem;cursor:pointer;transition:all 0.15s}
+.filter-tab.active,.filter-tab:hover{border-color:var(--orange);background:#FFF3CD;font-weight:600}
+.review-card{border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:14px}
+.reviewer-name{font-weight:700;font-size:0.88rem}
+.review-meta{display:flex;align-items:center;gap:8px;margin:4px 0;flex-wrap:wrap}
+.review-stars{color:var(--star)}
+.verified-badge{background:#f0f8f0;color:var(--green);border:1px solid #c3e6cb;border-radius:3px;padding:1px 6px;font-size:0.7rem;font-weight:600}
+.review-date{font-size:0.75rem;color:var(--muted)}
+.review-title{font-weight:600;font-size:0.88rem;margin:6px 0}
+.review-text{font-size:0.83rem;line-height:1.6;color:#333}
+.review-helpful{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:0.78rem;color:var(--muted)}
+.helpful-btn{display:flex;align-items:center;gap:4px;padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:#fff;font-size:0.78rem;cursor:pointer;transition:all 0.15s}
+.helpful-btn:hover{border-color:var(--orange);background:#FFF3CD}
+.write-review-btn{padding:10px 20px;background:var(--orange);border:none;border-radius:6px;font-size:0.85rem;font-weight:700;cursor:pointer;margin-top:16px}
+.write-review-btn:hover{background:#e88b00}
 
-/* RELATED */
-.related-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
-.rel-card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.rel-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
-.rel-img{height:100px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:2.5rem}
-.rel-info{padding:12px}
-.rel-name{font-size:0.82rem;font-weight:600;margin-bottom:4px}
-.rel-price{font-weight:700;font-size:0.9rem;color:var(--purple)}
-.rel-add{width:100%;margin-top:8px;background:var(--dark);color:white;border:none;border-radius:7px;padding:7px;font-size:0.78rem;font-weight:600;transition:background 0.2s}
-.rel-add:hover{background:var(--purple2)}
-
-/* FREQUENTLY BOUGHT TOGETHER */
-.fbt-section{background:white;border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:48px}
-.fbt-header{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:4px}
-.fbt-subheader{font-size:0.78rem;color:var(--gray);margin-bottom:20px}
-.fbt-products{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
-.fbt-card{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
-.fbt-card-img{width:90px;height:90px;background:var(--bg2);border-radius:12px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:2.2rem;transition:border-color 0.2s;position:relative}
-.fbt-card.checked .fbt-card-img{border-color:var(--purple)}
-.fbt-card-name{font-size:0.75rem;font-weight:600;text-align:center;max-width:90px;color:var(--dark)}
-.fbt-card-price{font-size:0.8rem;font-weight:700;color:var(--purple)}
-.fbt-check{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:var(--purple);color:white;font-size:0.65rem;display:flex;align-items:center;justify-content:center;font-weight:700}
-.fbt-plus{font-size:1.3rem;color:var(--gray2);font-weight:300}
-.fbt-footer{display:flex;align-items:center;justify-content:space-between;padding-top:16px;border-top:1px solid var(--border);flex-wrap:wrap;gap:12px}
-.fbt-total-text{font-size:0.85rem;color:var(--gray)}
-.fbt-total-price{font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;color:var(--dark)}
-.btn-fbt{background:var(--dark);color:white;border:none;border-radius:10px;padding:11px 24px;font-size:0.88rem;font-weight:700;transition:background 0.2s}
-.btn-fbt:hover{background:var(--purple2)}
-
-/* RECENTLY VIEWED */
-.recently-viewed{margin-bottom:48px}
-.rv-header{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:16px}
-.rv-strip{display:flex;gap:16px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent}
-.rv-strip::-webkit-scrollbar{height:4px}
-.rv-strip::-webkit-scrollbar-track{background:transparent}
-.rv-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
-.rv-card{flex-shrink:0;width:140px;background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:all 0.2s}
-.rv-card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,0.08)}
-.rv-img{height:80px;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:2rem}
-.rv-info{padding:10px}
-.rv-name{font-size:0.75rem;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rv-price{font-size:0.8rem;font-weight:700;color:var(--purple)}
-
-/* SIZE GUIDE MODAL */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:800;backdrop-filter:blur(4px);align-items:center;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-box{background:white;border-radius:18px;width:90%;max-width:520px;max-height:80vh;overflow-y:auto;box-shadow:0 24px 80px rgba(0,0,0,0.18)}
-.modal-hdr{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:white;z-index:1}
-.modal-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700}
-.modal-close{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.9rem}
-.modal-body{padding:24px}
-.sg-table{width:100%;border-collapse:collapse;font-size:0.83rem}
-.sg-table th{background:var(--bg2);padding:10px 14px;text-align:left;font-weight:700;font-size:0.75rem;text-transform:uppercase;letter-spacing:0.04em;color:var(--gray)}
-.sg-table td{padding:10px 14px;border-bottom:1px solid var(--border)}
-.sg-table tr:last-child td{border:none}
-.sg-table tr:nth-child(even) td{background:rgba(0,0,0,0.015)}
-.sg-note{font-size:0.75rem;color:var(--gray);margin-top:14px;line-height:1.6}
-
-/* STICKY BUY BAR */
-#sticky-bar{position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;gap:16px;z-index:100;transform:translateY(100%);transition:transform 0.3s;box-shadow:0 -4px 20px rgba(0,0,0,0.08)}
-#sticky-bar.show{transform:translateY(0)}
-.sticky-info{flex:1}
-.sticky-name{font-weight:700;font-size:0.9rem}
-.sticky-price{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;color:var(--purple)}
-.sticky-add{background:var(--dark);color:white;border:none;border-radius:10px;padding:11px 28px;font-weight:700;font-size:0.9rem;transition:background 0.2s}
-.sticky-add:hover{background:var(--purple2)}
-
-/* CART DRAWER */
-#cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;backdrop-filter:blur(3px)}
-#cart-overlay.open{display:block}
-#cart-drawer{position:fixed;top:0;right:-100%;width:400px;max-width:95vw;height:100vh;background:white;z-index:501;transition:right 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.15)}
-#cart-drawer.open{right:0}
-.cart-hdr{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.cart-title{font-family:'Space Grotesk',sans-serif;font-size:1.05rem;font-weight:700}
-.cart-close{width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer}
-.cart-body{flex:1;overflow-y:auto;padding:16px 24px}
-.cart-item{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
-.cart-item:last-child{border:none}
-.ci-img{width:56px;height:56px;background:var(--bg2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0}
-.ci-name{font-size:0.82rem;font-weight:600;margin-bottom:4px}
-.ci-price{font-weight:700;font-size:0.85rem;color:var(--purple)}
-.ci-qty{display:flex;align-items:center;gap:6px;margin-top:6px}
-.ci-qbtn{width:24px;height:24px;border:1px solid var(--border);border-radius:5px;background:var(--bg2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.85rem;font-weight:700}
-.ci-qnum{font-size:0.8rem;font-weight:600;min-width:18px;text-align:center}
-.ci-rm{margin-left:auto;color:var(--gray2);cursor:pointer;font-size:0.8rem;align-self:flex-start}
-.ci-rm:hover{color:var(--red)}
-.cart-footer-d{padding:16px 24px;border-top:1px solid var(--border);flex-shrink:0}
-.cart-tot-row{display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:6px}
-.cart-tot-main{display:flex;justify-content:space-between;font-weight:700;font-size:1rem;padding-top:10px;border-top:1px solid var(--border);margin-bottom:14px}
-.btn-co{width:100%;background:var(--dark);color:white;border:none;border-radius:10px;padding:13px;font-size:0.9rem;font-weight:700;margin-bottom:8px;transition:background 0.2s}
-.btn-co:hover{background:var(--purple2)}
-.btn-cs{width:100%;background:white;color:var(--gray);border:1px solid var(--border);border-radius:10px;padding:11px;font-size:0.83rem;font-weight:500;transition:all 0.2s}
-.btn-cs:hover{border-color:var(--dark);color:var(--dark)}
+/* Q&A */
+.qa-item{border-bottom:1px solid var(--border);padding:12px 0}
+.qa-item:last-child{border-bottom:none}
+.qa-q{font-size:0.85rem;font-weight:700;margin-bottom:5px;display:flex;gap:8px}
+.qa-q::before{content:'Q:';color:var(--orange);font-weight:800}
+.qa-a{font-size:0.83rem;color:#333;display:flex;gap:8px;line-height:1.5}
+.qa-a::before{content:'A:';color:var(--teal);font-weight:700;flex-shrink:0}
+.qa-meta{font-size:0.72rem;color:var(--muted);margin-top:3px}
+.qa-actions{display:flex;gap:12px;margin-top:6px;font-size:0.78rem}
 
 /* TOAST */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999}
-.toast-i{background:var(--dark);color:white;border-radius:100px;padding:10px 20px;font-size:0.82rem;font-weight:500;display:flex;align-items:center;gap:8px;animation:slideUp 0.3s ease;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,0.2)}
-@keyframes slideUp{from{opacity:0;transform:translateX(-50%) translateY(10px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+#toast{position:fixed;bottom:28px;right:28px;background:var(--dark);color:#fff;padding:12px 22px;border-radius:8px;font-size:0.85rem;z-index:9999;opacity:0;transform:translateY(12px);transition:all 0.3s;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
 
-/* RESPONSIVE */
-@media(max-width:900px){.prod-layout{grid-template-columns:1fr;gap:32px}.related-grid{grid-template-columns:repeat(2,1fr)}.fbt-products{justify-content:center}}
-@media(max-width:600px){.related-grid{grid-template-columns:repeat(2,1fr)}.reviews-summary{grid-template-columns:1fr}.page{padding:16px}}
+/* FOOTER */
+footer{background:var(--nav2);color:#fff;text-align:center;padding:24px;font-size:0.8rem;margin-top:32px}
+footer a{color:#ccc}
+
+/* SELLER BANNER */
+.seller-central-banner{background:#00897b;color:#fff;text-align:center;padding:9px 16px;font-size:0.83rem;font-weight:600;display:none}
+.seller-central-banner a{color:#b2dfdb;margin-left:8px}
+
+@media(max-width:1100px){.product-grid{grid-template-columns:1fr 1fr;}.buybox{position:relative;grid-column:1/-1}}
+@media(max-width:1024px){
+  .product-grid{grid-template-columns:1fr 1fr;}
+  .buybox{grid-column:1/-1;position:static;}
+}
+@media(max-width:768px){
+  .product-grid{grid-template-columns:1fr;}
+  .gallery-wrap{max-width:100%;}
+  .thumbnails{flex-wrap:wrap;}
+  .buybox{position:static;}
+  .fbt-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:8px;}
+  .reviews-top{flex-direction:column;}
+  .rating-bars{max-width:100%;}
+}
+@media(max-width:700px){.product-grid{grid-template-columns:1fr;}.fbt-row{flex-direction:column}.buybox{position:relative}}
+@media(max-width:480px){
+  .buybox-price{font-size:1.4rem;}
+  .prod-title{font-size:1.1rem;}
+}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="nav-logo" href="mystore.html" style="text-decoration:none;color:inherit">MyStore <span class="ai-tag">AI</span></a>
-    <div class="breadcrumb">
-      <a href="mystore.html">Home</a>
-      <span>›</span>
-      <a href="collections.html">Collections</a>
-      <span>›</span>
-      <span id="bc-name" style="color:var(--dark)">Product</span>
+<!-- ═══ SELLER BANNER ═══ -->
+<div class="seller-central-banner" id="sellerBanner">
+  📊 You are viewing this as a seller. <a href="seller-dashboard.html">Manage this type of product in Seller Central →</a>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<div id="top-nav">
+  <div class="nav-top">
+    <div class="nav-logo">Vibe<span>Store</span></div>
+    <div class="nav-deliver">
+      <small>Deliver to</small>
+      <b>Delhi 110001</b>
+    </div>
+    <div class="nav-search">
+      <select class="nav-cat"><option>All</option><option>Electronics</option><option>Fashion</option><option>Books</option></select>
+      <input class="nav-input" type="text" placeholder="Search VibeStore..."/>
+      <button class="nav-btn">🔍</button>
     </div>
     <div class="nav-right">
-      <a class="nav-icon" href="collections.html" title="Shop">🛍️</a>
-      <a class="nav-icon" href="sale.html" title="Sale">🔥</a>
-      <a class="nav-icon" href="blog.html" title="Blog">📝</a>
-      <a class="nav-icon" href="search.html" title="Search">🔍</a>
-      <a class="nav-icon" href="account.html" title="Account">👤</a>
-      <a class="nav-icon" href="track.html" title="Orders">📦</a>
-      <a class="nav-icon" href="wishlist.html" title="Wishlist" onclick="event.preventDefault();wishThis()">♡</a>
-      <a class="nav-icon" href="compare.html" title="Compare" style="font-size:0.75rem;padding:4px 8px;width:auto">⚖️ Compare</a>
-      <div class="nav-icon" onclick="openCart()">🛒<div class="cart-count" id="cartCount">0</div></div>
-      <button style="background:var(--dark);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:0.8rem;font-weight:600" onclick="window.location.href='app.html'">Admin →</button>
+      <div class="nav-link"><small>Returns &</small><b>Orders</b></div>
+      <a href="index.html" class="nav-link" id="navAccountLink" style="color:#fff"><small class="vs-nav-greeting">Hello, Sign in</small><b>Account</b></a>
+      <a href="cart.html" class="nav-cart" style="color:#fff">🛒<span class="nav-cart-count" id="cart-count">0</span></a>
     </div>
   </div>
-</nav>
+  <div class="nav2">
+    <a href="index.html">Home</a>
+    <a href="#">Today's Deals</a>
+    <a href="collections.html">Electronics</a>
+    <a href="#">Fashion</a>
+    <a href="#">Books</a>
+    <a href="#">Appliances</a>
+    <a href="#">Sports</a>
+    <a href="seller-profile.html">Sell on VibeStore</a>
+    <a href="#" style="color:#FF9900;font-weight:700">New Arrivals</a>
+  </div>
+</div>
 
-<div class="page">
-  <div class="prod-layout">
-    <!-- GALLERY -->
-    <div class="gallery">
-      <div class="main-img" id="mainImg">
-        <span id="mainEmoji" style="font-size:8rem">🎧</span>
-        <span class="img-badge badge-hot" style="background:#fee2e2;color:#dc2626" id="mainBadge">🔥 Hot</span>
+<div class="main-wrap">
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb">
+    <a href="index.html">Home</a><span>›</span>
+    <a href="collections.html">Electronics</a><span>›</span>
+    <a href="#">Headphones</a><span>›</span>
+    <span>Sony WH-1000XM5</span>
+  </div>
+
+  <!-- 3-COLUMN PRODUCT GRID -->
+  <div class="product-grid">
+
+    <!-- ═══ LEFT: GALLERY ═══ -->
+    <div class="gallery-wrap card">
+      <div class="main-img-box" id="main-img-box" onclick="this.style.transform=this.style.transform?'':'scale(1.05)'">
+        <div class="main-img-emoji" id="main-emoji">🎧</div>
+        <div class="zoom-hint">🔍 Click to zoom</div>
       </div>
-      <div class="thumbs" id="thumbs"></div>
+      <div class="thumbnails" id="thumbnails">
+        <div class="thumb active" data-emoji="🎧" onclick="setThumb(this,'🎧')">🎧</div>
+        <div class="thumb" data-emoji="🎵" onclick="setThumb(this,'🎵')">🎵</div>
+        <div class="thumb" data-emoji="📻" onclick="setThumb(this,'📻')">📻</div>
+        <div class="thumb" data-emoji="🔊" onclick="setThumb(this,'🔊')">🔊</div>
+        <div class="thumb" data-emoji="🎼" onclick="setThumb(this,'🎼')">🎼</div>
+      </div>
+      <div class="gallery-actions">
+        <button class="gal-btn">📤 Share</button>
+        <button class="gal-btn" onclick="toggleWishlist(this)">❤️ Add to Wishlist</button>
+      </div>
     </div>
 
-    <!-- INFO -->
-    <div class="prod-info">
-      <div class="prod-cat-tag" id="pCat">Audio</div>
-      <div class="prod-title" id="pName">Wireless Earbuds Pro</div>
-      <div class="rating-row">
-        <span class="stars">★★★★★</span>
-        <span class="rating-val" id="pRating">4.9</span>
-        <span class="rating-count" id="pReviews" onclick="switchTab('reviews')">(284 reviews)</span>
-        <span class="in-stock">✓ In Stock</span>
-      </div>
-      <div class="price-row">
-        <span class="price-main" id="pPrice">$89</span>
-        <span class="price-og" id="pOg">$119</span>
-        <span class="price-save" id="pSave">Save $30</span>
-      </div>
-      <div class="price-note">Inclusive of all taxes · Free shipping on this order</div>
+    <!-- ═══ CENTER: INFO ═══ -->
+    <div class="info-wrap card">
+      <a class="brand-link" href="collections.html">Sony</a>
+      <h1 class="prod-title">Sony WH-1000XM5 Industry Leading Wireless Noise Cancelling Headphones</h1>
 
-      <!-- STOCK INDICATOR (NEW) -->
-      <div class="stock-indicator">
-        <div class="stock-label">🔥 In Stock — Only 7 left!</div>
-        <div class="stock-bar-track"><div class="stock-bar-fill" id="stockBar" style="width:14%"></div></div>
+      <div class="ratings-row">
+        <span class="stars">★★★★☆</span>
+        <a class="rating-num" href="#reviews">4.2</a>
+        <a class="rating-num" href="#reviews">1,247 ratings</a>
+        <a class="rating-num" href="#qa">89 answered questions</a>
       </div>
 
-      <div class="ai-price-box">
-        <div class="ai-price-icon">🤖</div>
-        <div class="ai-price-text"><strong>Luna AI:</strong> Price dropped 25% today based on competitor analysis. This is the lowest it's been in 30 days.</div>
+      <div class="best-seller-badge">🥇 #1 Best Seller in Wireless Headphones</div>
+
+      <hr class="divider"/>
+
+      <div style="margin:10px 0">
+        <span class="price-main"><sup>₹</sup>2,499</span>
+        <span class="price-was">₹4,999</span>
+        <span class="price-save">Save ₹2,500 (50%)</span>
+        <div class="price-tax">Inclusive of all taxes</div>
       </div>
 
-      <div class="divider"></div>
+      <div class="emi-row">💳 No cost EMI from <a href="#">₹208/month</a>. <a href="#">See all EMI options</a></div>
 
-      <!-- COLOR VARIANT SELECTOR (ENHANCED) -->
-      <div class="opt-label">Color</div>
-      <div class="color-opts">
-        <div class="color-opt active" style="background:#1a1a2e" title="Midnight Black" onclick="selectColor(this,'Black')"></div>
-        <div class="color-opt" style="background:#c4b5fd" title="Lavender" onclick="selectColor(this,'Lavender')"></div>
-        <div class="color-opt" style="background:#06b6d4" title="Ocean Blue" onclick="selectColor(this,'Ocean Blue')"></div>
-        <div class="color-opt" style="background:#f87171" title="Coral" onclick="selectColor(this,'Coral')"></div>
+      <details class="bank-offer">
+        <summary>🏦 Bank Offer: Get ₹200 cashback on HDFC cards</summary>
+        <p>Valid on HDFC Credit and Debit Cards. Min. transaction ₹2,000. Offer valid till 31 May 2026. T&amp;C apply.</p>
+      </details>
+
+      <div class="countdown-box">
+        <span class="countdown-label">⚡ Deal ends in</span>
+        <span id="countdown">00:00:00</span>
       </div>
 
-      <!-- SIZE VARIANT SELECTOR (NEW) -->
-      <div class="opt-label">
-        <span>Size</span>
-        <span class="size-guide-link" onclick="openSizeGuide()">Size Guide</span>
-      </div>
-      <div class="size-opts">
-        <div class="size-opt" onclick="selectSize(this,'XS')">XS</div>
-        <div class="size-opt active" onclick="selectSize(this,'M')">M</div>
-        <div class="size-opt" onclick="selectSize(this,'S')">S</div>
-        <div class="size-opt" onclick="selectSize(this,'L')">L</div>
-        <div class="size-opt oos" title="Out of stock">XL</div>
-      </div>
-      <div class="variant-selected-text" id="variantText">Selected: <strong>Size M</strong>, <strong>Color Black</strong></div>
+      <hr class="divider"/>
 
-      <div class="opt-label">Storage / Variant</div>
-      <div class="size-opts">
-        <div class="size-opt active" onclick="selectSize2(this)">Standard</div>
-        <div class="size-opt" onclick="selectSize2(this)">Pro+ (ANC)</div>
-        <div class="size-opt oos" title="Out of stock">Limited Ed.</div>
+      <!-- VARIANTS -->
+      <div class="variants-section">
+        <h4>Size:</h4>
+        <div class="size-pills" id="size-pills">
+          <div class="pill active" onclick="selectPill(this,'size-pills')">Over-Ear</div>
+          <div class="pill" onclick="selectPill(this,'size-pills')">On-Ear</div>
+          <div class="pill" onclick="selectPill(this,'size-pills')">In-Ear</div>
+        </div>
+        <h4>Color:</h4>
+        <div class="color-circles" id="color-circles">
+          <div class="color-circle active" style="background:#1a1a1a" title="Midnight Black" onclick="selectCircle(this,'color-circles')"></div>
+          <div class="color-circle" style="background:#e8e4df" title="Platinum Silver" onclick="selectCircle(this,'color-circles')"></div>
+          <div class="color-circle" style="background:#2c4a7c" title="Midnight Blue" onclick="selectCircle(this,'color-circles')"></div>
+          <div class="color-circle" style="background:#8B4513" title="Earth Brown" onclick="selectCircle(this,'color-circles')"></div>
+        </div>
       </div>
 
-      <div class="divider"></div>
+      <hr class="divider"/>
+
+      <!-- ABOUT -->
+      <div class="about-section">
+        <h3>About this item</h3>
+        <ul class="about-list">
+          <li>Industry-leading noise cancelling with Dual Noise Sensor Technology – 8 microphones</li>
+          <li>30-hour battery life with Quick Charge (3 min charge = 3 hrs playback)</li>
+          <li>Crystal clear hands-free calling with Precise Voice Pickup Technology</li>
+          <li>Seamlessly connects to two Bluetooth devices simultaneously with Multipoint Connection</li>
+          <li>Lightweight folding design with ultra-soft cushioning for all-day comfort</li>
+        </ul>
+      </div>
+
+      <hr class="divider"/>
+
+      <!-- SOLD BY -->
+      <div class="sold-by-box">
+        <span>Sold by <a class="seller-name" href="seller-profile.html">TechHub Electronics</a></span>
+        <span class="fulfilled-badge">✔ VibeStore Fulfilled</span>
+        <div style="margin-top:4px;color:var(--muted)">Seller rating: <span style="color:var(--star)">★★★★☆</span> 4.3 (2,180 ratings)</div>
+      </div>
+    </div>
+
+    <!-- ═══ RIGHT: BUY BOX ═══ -->
+    <div class="buybox card">
+      <div class="buybox-price"><sup>₹</sup>2,499</div>
+      <div class="delivery-info">🚀 FREE delivery Tomorrow, 23 May</div>
+      <div class="deliver-change">Deliver to Delhi 110001 — <a href="#">Change</a></div>
+      <div class="in-stock">✔ In Stock</div>
+
+      <div style="margin-bottom:8px;font-size:0.8rem">
+        <span>Sold by <a href="seller-profile.html">TechHub Electronics</a></span>
+        <span class="fulfilled-badge">✔ VibeStore Fulfilled</span>
+      </div>
 
       <div class="qty-row">
-        <div class="qty-ctrl">
-          <button class="qty-btn" onclick="changeQty(-1)">−</button>
-          <input class="qty-num" id="qty" value="1" readonly/>
-          <button class="qty-btn" onclick="changeQty(1)">+</button>
+        <label>Qty:</label>
+        <select class="qty-select" id="qty-select">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+          <option>9</option><option>10</option>
+        </select>
+      </div>
+
+      <button class="btn-cart" onclick="addToCart()">Add to Cart</button>
+      <button class="btn-buy" onclick="buyNow()">Buy Now</button>
+      <a class="wishlist-link" href="#">Add to Wish List</a>
+
+      <hr class="divider"/>
+
+      <div class="buybox-meta">
+        <span><b>Ships from:</b> VibeStore Warehouse</span>
+        <span><b>Sold by:</b> <a href="seller-profile.html">TechHub Electronics</a></span>
+        <span><b>Returns:</b> Eligible within 30 days</span>
+      </div>
+
+      <div class="secure-row">🔒 Secure transaction</div>
+      <div class="share-row">
+        <a href="#">📤 Share</a>
+        <a href="#">🎁 Gift wrap available</a>
+      </div>
+
+      <!-- OTHER SELLERS MINI -->
+      <div class="other-sellers-mini">
+        <h4>Other sellers on VibeStore:</h4>
+        <div class="osm-row">
+          <div>
+            <div class="osm-seller"><a href="seller-profile.html">GadgetZone</a></div>
+            <div style="font-size:0.7rem;color:var(--muted)">★4.1 · New</div>
+          </div>
+          <div class="osm-price">₹2,649</div>
+          <div class="osm-add" onclick="addToCartGeneric('GadgetZone',2649)">Add to Cart</div>
         </div>
-        <button class="btn-add" id="addBtn" onclick="addToCart()">Add to Cart</button>
+        <div class="osm-row">
+          <div>
+            <div class="osm-seller"><a href="seller-profile.html">ElectroMart</a></div>
+            <div style="font-size:0.7rem;color:var(--muted)">★4.5 · New</div>
+          </div>
+          <div class="osm-price">₹2,799</div>
+          <div class="osm-add" onclick="addToCartGeneric('ElectroMart',2799)">Add to Cart</div>
+        </div>
+        <div class="osm-row">
+          <div>
+            <div class="osm-seller"><a href="seller-profile.html">AudioWorld</a></div>
+            <div style="font-size:0.7rem;color:var(--muted)">★3.9 · New</div>
+          </div>
+          <div class="osm-price">₹2,599</div>
+          <div class="osm-add" onclick="addToCartGeneric('AudioWorld',2599)">Add to Cart</div>
+        </div>
       </div>
-      <button class="btn-buy" onclick="buyNow()">⚡ Buy Now</button>
-      <button class="btn-wish" onclick="wishThis()">♡ Add to Wishlist</button>
+    </div><!-- end buybox -->
 
-      <div class="trust-pills">
-        <div class="trust-pill">🚚 Free delivery</div>
-        <div class="trust-pill">↩️ 30-day returns</div>
-        <div class="trust-pill">🔒 Secure checkout</div>
-        <div class="trust-pill">🤖 AI support 24/7</div>
+  </div><!-- end product-grid -->
+</div><!-- end main-wrap -->
+
+<!-- ═══ FREQUENTLY BOUGHT TOGETHER ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Frequently Bought Together</div>
+    <div class="fbt-row">
+      <div class="fbt-item">
+        <div class="fbt-img">🎧</div>
+        <div class="fbt-name">Sony WH-1000XM5 Headphones</div>
+        <div class="fbt-price">₹2,499</div>
       </div>
-
-      <div class="divider"></div>
-      <div style="font-size:0.78rem;color:var(--gray);display:flex;flex-direction:column;gap:4px">
-        <div>🤖 <strong>Sage AI</strong> wrote and optimised this listing for SEO</div>
-        <div>📦 <strong>Zen AI</strong> will process and dispatch within 2 hours</div>
-        <div>💬 <strong>Rex AI</strong> is available 24/7 if you need help</div>
+      <div class="fbt-plus">+</div>
+      <div class="fbt-item">
+        <div class="fbt-img">📱</div>
+        <div class="fbt-name">Sony Xperia 5 V Smartphone</div>
+        <div class="fbt-price">₹54,990</div>
+      </div>
+      <div class="fbt-plus">+</div>
+      <div class="fbt-item">
+        <div class="fbt-img">🔋</div>
+        <div class="fbt-name">Anker PowerCore 26800 mAh</div>
+        <div class="fbt-price">₹3,299</div>
+      </div>
+      <div class="fbt-total">
+        <p>Total price:</p>
+        <b>₹60,788</b>
+        <button class="btn-fbt" onclick="addBundle()">Add all 3 to Cart</button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- TABS -->
-  <div class="tabs-bar">
-    <div class="tab-btn active" onclick="switchTab('desc')">Description</div>
-    <div class="tab-btn" onclick="switchTab('specs')">Specifications</div>
-    <div class="tab-btn" onclick="switchTab('reviews')">Reviews (284)</div>
-    <div class="tab-btn" onclick="switchTab('ai')">🤖 AI Insights</div>
-  </div>
-
-  <div id="tab-desc" class="tab-panel active" style="margin-bottom:48px">
-    <p class="desc-text">The <strong>Wireless Earbuds Pro</strong> delivers studio-quality sound in a compact, ergonomic design. Engineered for audiophiles who demand the best — whether commuting, working out, or simply unwinding.</p>
-    <p class="desc-text">Powered by custom-tuned 10mm dynamic drivers, these earbuds reproduce every frequency with unparalleled clarity. The adaptive EQ automatically adjusts based on your ear shape for a truly personalised listening experience.</p>
-    <ul class="feature-list">
-      <li>40-hour total battery life (8hrs earbuds + 32hrs case)</li>
-      <li>Active Noise Cancellation with 4-mic array</li>
-      <li>IPX5 water resistance — sweatproof and rainproof</li>
-      <li>Bluetooth 5.3 with multipoint connection (2 devices)</li>
-      <li>Touch controls with customisable gestures</li>
-      <li>Wireless charging (Qi compatible)</li>
-      <li>Transparency mode for ambient awareness</li>
-    </ul>
-  </div>
-
-  <div id="tab-specs" class="tab-panel" style="margin-bottom:48px">
-    <table class="specs-table">
-      <tr><td>Driver Size</td><td>10mm Dynamic + 6mm Planar</td></tr>
-      <tr><td>Frequency Response</td><td>20Hz – 20kHz</td></tr>
-      <tr><td>Bluetooth</td><td>5.3 (Multipoint)</td></tr>
-      <tr><td>Battery — Buds</td><td>8 hours (ANC on)</td></tr>
-      <tr><td>Battery — Case</td><td>32 hours additional</td></tr>
-      <tr><td>Charging</td><td>USB-C + Wireless Qi</td></tr>
-      <tr><td>Water Resistance</td><td>IPX5</td></tr>
-      <tr><td>Weight</td><td>5.4g per bud, 48g case</td></tr>
-      <tr><td>Codecs</td><td>AAC, SBC, aptX, LDAC</td></tr>
-      <tr><td>Noise Cancellation</td><td>Up to -42dB (Hybrid ANC)</td></tr>
-      <tr><td>Colours</td><td>Midnight Black, Lavender, Ocean Blue, Coral</td></tr>
-      <tr><td>In the Box</td><td>Earbuds, Case, USB-C cable, 3 ear tip sizes</td></tr>
+<!-- ═══ OTHER SELLERS TABLE ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Other Sellers on VibeStore</div>
+    <div class="sellers-controls">
+      <label>Sort by:</label>
+      <button class="sort-btn active" onclick="sortSellers('featured',this)">Featured</button>
+      <button class="sort-btn" onclick="sortSellers('price',this)">Price: Low to High</button>
+      <button class="sort-btn" onclick="sortSellers('rating',this)">Seller Rating</button>
+    </div>
+    <table class="sellers-table" id="sellers-table">
+      <thead>
+        <tr>
+          <th>Seller</th>
+          <th>Rating</th>
+          <th>Price</th>
+          <th>Condition</th>
+          <th>Delivery</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="sellers-body">
+        <!-- filled by JS -->
+      </tbody>
     </table>
   </div>
+</div>
 
-  <div id="tab-reviews" class="tab-panel" style="margin-bottom:48px">
-    <div class="ai-review-note">🤖 <strong>Rex AI analysed</strong> all 284 reviews and found: 94% mention sound quality positively · 89% praise battery life · Most common request: longer ANC range</div>
-    <div class="reviews-summary">
-      <div class="rating-big">
-        <div class="rating-big-num">4.9</div>
-        <div class="rating-big-stars">★★★★★</div>
-        <div class="rating-big-count">284 reviews</div>
+<!-- ═══ CUSTOMERS ALSO BOUGHT ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Customers Also Bought</div>
+    <div class="h-scroll">
+      <div class="prod-card"><div class="prod-card-img">🎤</div><div class="prod-card-name">Blue Yeti USB Microphone</div><div class="prod-card-stars">★★★★☆ 4.4</div><div class="prod-card-price">₹8,499</div></div>
+      <div class="prod-card"><div class="prod-card-img">🖥️</div><div class="prod-card-name">Dell UltraSharp 27" Monitor</div><div class="prod-card-stars">★★★★★ 4.7</div><div class="prod-card-price">₹31,999</div></div>
+      <div class="prod-card"><div class="prod-card-img">⌨️</div><div class="prod-card-name">Keychron K2 Mechanical Keyboard</div><div class="prod-card-stars">★★★★☆ 4.3</div><div class="prod-card-price">₹6,499</div></div>
+      <div class="prod-card"><div class="prod-card-img">🖱️</div><div class="prod-card-name">Logitech MX Master 3S Mouse</div><div class="prod-card-stars">★★★★★ 4.8</div><div class="prod-card-price">₹9,995</div></div>
+      <div class="prod-card"><div class="prod-card-img">📡</div><div class="prod-card-name">TP-Link AX3000 WiFi 6 Router</div><div class="prod-card-stars">★★★★☆ 4.2</div><div class="prod-card-price">₹5,999</div></div>
+      <div class="prod-card"><div class="prod-card-img">🔌</div><div class="prod-card-name">Anker 65W GaN Charger (4-port)</div><div class="prod-card-stars">★★★★☆ 4.5</div><div class="prod-card-price">₹2,799</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PRODUCT DESCRIPTION ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Product Description</div>
+    <div class="desc-text">
+      <div id="desc-short">
+        <p>The Sony WH-1000XM5 redefines what you can expect from a premium noise-cancelling headphone. With our most advanced noise cancelling ever achieved, eight microphones and two processors work in tandem to detect the precise frequencies of noise around you and cancel them out in real time — whether you're on a packed metro, in a crowded office, or anywhere life takes you.</p>
+        <p>Experience a whole new dimension of sound quality powered by Sony's Integrated Processor V1 and the new 30mm driver units with a carbon-fibre-composite dome. Crystal clear spatial audio creates an immersive listening field that faithfully reproduces the artist's original intent, from the deepest bass to the highest treble.</p>
+      </div>
+      <div id="desc-full" style="display:none">
+        <p>Speak to be heard — but only by those you choose. Precise Voice Pickup Technology uses five microphones and advanced AI signal processing so your voice sounds natural and clear during calls, even in windy or noisy conditions. Wind noise reduction ensures your voice remains intelligible when outdoors.</p>
+        <p>Stay connected and productive without sacrificing your music. Multipoint Connection lets the WH-1000XM5 seamlessly connect to two Bluetooth devices simultaneously, so you can take calls from your phone while your laptop plays music — switching instantly without skipping a beat.</p>
+        <p>With Quick Charge technology, just 3 minutes of charging gives you 3 hours of playback. A full charge provides up to 30 hours of listening at maximum noise cancellation, or up to 40 hours with noise cancellation off. The USB-C charging port is conveniently located on the right ear cup.</p>
+        <p>The redesigned headband uses a sleek, smooth surface material that minimises pressure points on the top of your head. Ultra-soft synthetic leather cushions the ear pads, wrapping comfortably around your ears for long listening sessions. The slim, folding design makes the WH-1000XM5 easy to stow in the included premium carry case.</p>
+      </div>
+      <button class="read-more-btn" id="desc-toggle" onclick="toggleDesc()">▸ Read more</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ TECH SPECS ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Technical Specifications</div>
+    <table class="specs-table">
+      <tr><td>Brand</td><td>Sony</td></tr>
+      <tr><td>Model</td><td>WH-1000XM5</td></tr>
+      <tr><td>Connectivity</td><td>Bluetooth 5.2, 3.5mm audio jack, USB-C</td></tr>
+      <tr><td>Driver Size</td><td>30mm Carbon Fibre Composite Dome</td></tr>
+      <tr><td>Frequency Response</td><td>4 Hz – 40,000 Hz</td></tr>
+      <tr><td>Battery Life</td><td>Up to 30 hrs (NC on) / 40 hrs (NC off)</td></tr>
+      <tr><td>Charging Time</td><td>3.5 hrs full / Quick Charge 3 min → 3 hrs</td></tr>
+      <tr><td>Weight</td><td>250g</td></tr>
+      <tr><td>Microphones</td><td>8 microphones (4 Feedback + 4 Feedforward)</td></tr>
+      <tr><td>Noise Cancellation</td><td>Dual Noise Sensor Technology + HD QN1 + V1 Processor</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ CUSTOMER REVIEWS ═══ -->
+<div class="section" id="reviews">
+  <div class="section-card">
+    <div class="section-title">Customer Reviews</div>
+    <div class="reviews-top">
+      <div class="overall-rating">
+        <div class="big-rating">4.2</div>
+        <div class="big-stars">★★★★☆</div>
+        <div class="rating-count">1,247 ratings</div>
       </div>
       <div class="rating-bars">
-        <div class="rating-bar-row"><span>5★</span><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div><span style="min-width:28px">82%</span></div>
-        <div class="rating-bar-row"><span>4★</span><div class="bar-track"><div class="bar-fill" style="width:12%"></div></div><span style="min-width:28px">12%</span></div>
-        <div class="rating-bar-row"><span>3★</span><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div><span style="min-width:28px">4%</span></div>
-        <div class="rating-bar-row"><span>2★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span style="min-width:28px">1%</span></div>
-        <div class="rating-bar-row"><span>1★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span style="min-width:28px">1%</span></div>
+        <div class="bar-row"><span class="bar-label">5★</span><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><span class="bar-pct">78%</span></div>
+        <div class="bar-row"><span class="bar-label">4★</span><div class="bar-track"><div class="bar-fill" style="width:15%"></div></div><span class="bar-pct">15%</span></div>
+        <div class="bar-row"><span class="bar-label">3★</span><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div><span class="bar-pct">4%</span></div>
+        <div class="bar-row"><span class="bar-label">2★</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-pct">2%</span></div>
+        <div class="bar-row"><span class="bar-label">1★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-pct">1%</span></div>
       </div>
     </div>
-    <div class="reviews-list">
-      <div class="review-item"><div class="review-hdr"><div class="review-avatar">AK</div><div><div class="review-name">Aryan Kapoor</div><div class="review-date">May 10, 2025</div></div><div class="review-stars-small" style="margin-left:auto">★★★★★</div></div><div class="review-text">"Best earbuds I've ever owned. The ANC is incredible — blocks out everything. Battery lasts my entire workday. Sound is warm and detailed."</div><div class="verified-badge">✓ Verified Purchase · Helpful (42)</div></div>
-      <div class="review-item"><div class="review-hdr"><div class="review-avatar">PS</div><div><div class="review-name">Priya Sharma</div><div class="review-date">Apr 28, 2025</div></div><div class="review-stars-small" style="margin-left:auto">★★★★★</div></div><div class="review-text">"Received in 2 days. Sound quality is exceptional for the price. Rex AI helped me with sizing questions instantly — no waiting."</div><div class="verified-badge">✓ Verified Purchase · Helpful (28)</div></div>
-      <div class="review-item"><div class="review-hdr"><div class="review-avatar">JL</div><div><div class="review-name">James Liu</div><div class="review-date">Apr 15, 2025</div></div><div class="review-stars-small" style="margin-left:auto">★★★★☆</div></div><div class="review-text">"Very good earbuds. LDAC support makes a real difference for high-res audio. Docking one star only because the case could be smaller."</div><div class="verified-badge">✓ Verified Purchase · Helpful (17)</div></div>
-    </div>
-  </div>
 
-  <div id="tab-ai" class="tab-panel" style="margin-bottom:48px">
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
-      <div style="background:rgba(109,40,217,0.05);border:1px solid rgba(109,40,217,0.12);border-radius:14px;padding:20px">
-        <div style="font-size:1.4rem;margin-bottom:8px">💲</div>
-        <div style="font-weight:700;margin-bottom:4px;font-size:0.9rem">Luna — Price Intelligence</div>
-        <div style="font-size:0.78rem;color:var(--gray)">This product is currently priced 18% below market average. Luna detected 3 competitors raising prices today — your price will auto-adjust for max margin tonight.</div>
-      </div>
-      <div style="background:rgba(8,145,178,0.05);border:1px solid rgba(8,145,178,0.15);border-radius:14px;padding:20px">
-        <div style="font-size:1.4rem;margin-bottom:8px">📊</div>
-        <div style="font-weight:700;margin-bottom:4px;font-size:0.9rem">Atlas — Demand Forecast</div>
-        <div style="font-size:0.78rem;color:var(--gray)">High demand predicted next 7 days. Similar products spiked 34% during the last sale season. Atlas recommends stocking 200 additional units.</div>
-      </div>
-      <div style="background:rgba(22,163,74,0.05);border:1px solid rgba(22,163,74,0.15);border-radius:14px;padding:20px">
-        <div style="font-size:1.4rem;margin-bottom:8px">🔍</div>
-        <div style="font-weight:700;margin-bottom:4px;font-size:0.9rem">Sage — SEO Status</div>
-        <div style="font-size:0.78rem;color:var(--gray)">Ranking #3 for "best wireless earbuds india". Title tag, meta description, and structured data are all optimised. CTR improved 12% since last update.</div>
-      </div>
+    <div class="review-filters">
+      <button class="filter-tab active" onclick="filterReviews('all',this)">All Reviews</button>
+      <button class="filter-tab" onclick="filterReviews('positive',this)">Positive</button>
+      <button class="filter-tab" onclick="filterReviews('critical',this)">Critical</button>
     </div>
-  </div>
 
-  <!-- FREQUENTLY BOUGHT TOGETHER (NEW) -->
-  <div class="fbt-section">
-    <div class="fbt-header">🤖 Atlas AI — Customers who bought this also bought:</div>
-    <div class="fbt-subheader">Frequently bought together — save more when you bundle</div>
-    <div class="fbt-products" id="fbtProducts">
-      <div class="fbt-card checked" id="fbt0" onclick="toggleFbt(0)">
-        <div class="fbt-card-img">🎧<div class="fbt-check">✓</div></div>
-        <div class="fbt-card-name">Earbuds Pro</div>
-        <div class="fbt-card-price">$89</div>
+    <div id="reviews-list">
+      <div class="review-card" data-type="positive">
+        <div class="reviewer-name">Arjun Mehta</div>
+        <div class="review-meta">
+          <span class="review-stars">★★★★★</span>
+          <span class="verified-badge">✔ Verified Purchase</span>
+          <span class="review-date">12 April 2026</span>
+        </div>
+        <div class="review-title">Best noise cancelling I've ever experienced</div>
+        <div class="review-text">The noise cancellation on these headphones is simply unreal. I took them on a flight from Delhi to Mumbai and could not hear a single engine sound. The audio quality is phenomenal — rich bass, clear mids, and detailed highs without any harshness. Build quality feels premium, and the ear cushions are incredibly soft.</div>
+        <div class="review-helpful"><span id="helpful-count-1">234</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-1',this)">👍 Helpful</button></div>
       </div>
-      <div class="fbt-plus">+</div>
-      <div class="fbt-card checked" id="fbt1" onclick="toggleFbt(1)">
-        <div class="fbt-card-img">🔌<div class="fbt-check">✓</div></div>
-        <div class="fbt-card-name">USB-C Hub Pro</div>
-        <div class="fbt-card-price">$49</div>
+      <div class="review-card" data-type="positive">
+        <div class="reviewer-name">Priya Sharma</div>
+        <div class="review-meta">
+          <span class="review-stars">★★★★☆</span>
+          <span class="verified-badge">✔ Verified Purchase</span>
+          <span class="review-date">5 March 2026</span>
+        </div>
+        <div class="review-title">Great headphones, minor complaints about call quality</div>
+        <div class="review-text">Music listening is absolutely top-notch. The 30-hour battery life is real — I barely need to charge these. Multipoint is a game changer for switching between my phone and laptop. The only issue is that call quality can sometimes sound slightly robotic on the other end. But everything else is stellar.</div>
+        <div class="review-helpful"><span id="helpful-count-2">87</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-2',this)">👍 Helpful</button></div>
       </div>
-      <div class="fbt-plus">+</div>
-      <div class="fbt-card checked" id="fbt2" onclick="toggleFbt(2)">
-        <div class="fbt-card-img">💻<div class="fbt-check">✓</div></div>
-        <div class="fbt-card-name">Laptop Stand</div>
-        <div class="fbt-card-price">$67</div>
+      <div class="review-card" data-type="critical">
+        <div class="reviewer-name">Rahul Verma</div>
+        <div class="review-meta">
+          <span class="review-stars">★★★☆☆</span>
+          <span class="verified-badge">✔ Verified Purchase</span>
+          <span class="review-date">18 February 2026</span>
+        </div>
+        <div class="review-title">Good product but not foldable anymore</div>
+        <div class="review-text">Performance wise these are exceptional. However I was used to the XM4 which folded flat into a nice compact form. These do not fold that way, making them slightly bulkier to carry. The carry case is also larger. If portability is a priority for you, factor that in. Sound and NC are still best in class.</div>
+        <div class="review-helpful"><span id="helpful-count-3">52</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-3',this)">👍 Helpful</button></div>
+      </div>
+      <div class="review-card" data-type="positive">
+        <div class="reviewer-name">Sneha Iyer</div>
+        <div class="review-meta">
+          <span class="review-stars">★★★★★</span>
+          <span class="verified-badge">✔ Verified Purchase</span>
+          <span class="review-date">2 January 2026</span>
+        </div>
+        <div class="review-title">Worth every rupee — transformed my work from home</div>
+        <div class="review-text">Working from home with two kids was impossible before these headphones. Now I can focus completely. The ANC blocks out everything — TV, kitchen sounds, even the neighbours. Battery lasts me almost a full week of work days. Wearing comfort is exceptional even after 8 hours. VibeStore delivery was quick too.</div>
+        <div class="review-helpful"><span id="helpful-count-4">176</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-4',this)">👍 Helpful</button></div>
       </div>
     </div>
-    <div class="fbt-footer">
-      <div>
-        <div class="fbt-total-text">Combined price:</div>
-        <div class="fbt-total-price" id="fbtTotal">$205</div>
-      </div>
-      <button class="btn-fbt" onclick="addAllFbt()">Add all to cart</button>
-    </div>
-  </div>
 
-  <!-- RELATED PRODUCTS -->
-  <div style="margin-bottom:48px">
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:6px">You May Also Like</div>
-    <div style="font-size:0.82rem;color:var(--gray);margin-bottom:20px">🤖 Recommended by Atlas AI based on your browsing</div>
-    <div class="related-grid">
-      <div class="rel-card" onclick="window.location.href='product.html?id=p2'">
-        <div class="rel-img">⌚</div>
-        <div class="rel-info"><div class="rel-name">Smart Watch Ultra</div><div class="rel-price">$249</div><button class="rel-add" onclick="event.stopPropagation();quickAdd({id:'p2',name:'Smart Watch Ultra',price:249,emoji:'⌚'})">Add to Cart</button></div>
-      </div>
-      <div class="rel-card" onclick="window.location.href='product.html?id=p7'">
-        <div class="rel-img">🔌</div>
-        <div class="rel-info"><div class="rel-name">USB-C Hub Pro 9-in-1</div><div class="rel-price">$49</div><button class="rel-add" onclick="event.stopPropagation();quickAdd({id:'p7',name:'USB-C Hub Pro',price:49,emoji:'🔌'})">Add to Cart</button></div>
-      </div>
-      <div class="rel-card" onclick="window.location.href='product.html?id=p9'">
-        <div class="rel-img">🎙️</div>
-        <div class="rel-info"><div class="rel-name">Studio Condenser Mic</div><div class="rel-price">$129</div><button class="rel-add" onclick="event.stopPropagation();quickAdd({id:'p9',name:'Studio Mic',price:129,emoji:'🎙️'})">Add to Cart</button></div>
-      </div>
-      <div class="rel-card" onclick="window.location.href='product.html?id=p3'">
-        <div class="rel-img">💻</div>
-        <div class="rel-info"><div class="rel-name">Laptop Stand Aluminium</div><div class="rel-price">$67</div><button class="rel-add" onclick="event.stopPropagation();quickAdd({id:'p3',name:'Laptop Stand',price:67,emoji:'💻'})">Add to Cart</button></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RECENTLY VIEWED (NEW) -->
-  <div class="recently-viewed">
-    <div class="rv-header">Your Recently Viewed</div>
-    <div class="rv-strip" id="rvStrip"></div>
+    <button class="write-review-btn" onclick="showToast('Review submission coming soon!')">Write a Customer Review</button>
   </div>
 </div>
 
-<!-- STICKY BAR -->
-<div id="sticky-bar">
-  <div class="sticky-info">
-    <div class="sticky-name" id="stickyName">Wireless Earbuds Pro</div>
-    <div class="sticky-price" id="stickyPrice">$89</div>
-  </div>
-  <button class="sticky-add" onclick="addToCart()">Add to Cart</button>
-  <button style="background:linear-gradient(135deg,var(--purple2),var(--cyan));color:white;border:none;border-radius:10px;padding:11px 22px;font-weight:700;font-size:0.88rem" onclick="buyNow()">Buy Now</button>
-</div>
-
-<!-- CART DRAWER -->
-<div id="cart-overlay" onclick="closeCart()"></div>
-<div id="cart-drawer">
-  <div class="cart-hdr"><div class="cart-title">🛒 Cart <span id="cartBadge" style="background:var(--dark);color:white;border-radius:100px;padding:2px 8px;font-size:0.68rem">0</span></div><div class="cart-close" onclick="closeCart()">✕</div></div>
-  <div class="cart-body" id="cartBody"></div>
-  <div class="cart-footer-d" id="cartFooter" style="display:none">
-    <div class="cart-tot-row"><span>Subtotal</span><span id="cSub">$0</span></div>
-    <div class="cart-tot-row"><span>Shipping</span><span style="color:var(--green)" id="cShip">FREE</span></div>
-    <div class="cart-tot-main"><span>Total</span><span id="cTot">$0</span></div>
-    <button class="btn-co" onclick="window.location.href='checkout.html'">Checkout →</button>
-    <button class="btn-cs" onclick="closeCart()">Continue Shopping</button>
-  </div>
-</div>
-
-<!-- SIZE GUIDE MODAL (NEW) -->
-<div class="modal-overlay" id="sizeGuideModal">
-  <div class="modal-box">
-    <div class="modal-hdr">
-      <div class="modal-title">📏 Size Guide</div>
-      <div class="modal-close" onclick="closeSizeGuide()">✕</div>
+<!-- ═══ Q & A ═══ -->
+<div class="section" id="qa">
+  <div class="section-card">
+    <div class="section-title">Questions &amp; Answers</div>
+    <div class="qa-item">
+      <div class="qa-q">Does this work with Sony 360 Reality Audio?</div>
+      <div class="qa-a">Yes! The WH-1000XM5 fully supports Sony 360 Reality Audio when paired with the Sony Music app. You can also enjoy spatial audio from Apple Music and Amazon Music HD.</div>
+      <div class="qa-meta">Answer by VibeStore Customer · 3 March 2026 · <a href="#">10 people found this helpful</a></div>
     </div>
-    <div class="modal-body">
-      <p style="font-size:0.82rem;color:var(--gray);margin-bottom:16px">Measure yourself and compare to our size chart below. All measurements are in centimetres (cm).</p>
-      <table class="sg-table">
-        <thead>
-          <tr>
-            <th>Size</th>
-            <th>Chest (cm)</th>
-            <th>Waist (cm)</th>
-            <th>Hips (cm)</th>
-            <th>Fits Height</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>XS</strong></td><td>81–86</td><td>61–66</td><td>86–91</td><td>155–160 cm</td></tr>
-          <tr><td><strong>S</strong></td><td>86–91</td><td>66–71</td><td>91–96</td><td>160–165 cm</td></tr>
-          <tr><td><strong>M</strong></td><td>91–96</td><td>71–76</td><td>96–101</td><td>165–170 cm</td></tr>
-          <tr><td><strong>L</strong></td><td>96–101</td><td>76–81</td><td>101–106</td><td>170–175 cm</td></tr>
-          <tr><td><strong>XL</strong></td><td>101–106</td><td>81–86</td><td>106–111</td><td>175–180 cm</td></tr>
-        </tbody>
-      </table>
-      <p class="sg-note">💡 <strong>Tip:</strong> If you're between sizes, we recommend sizing up for a more relaxed fit. For a snug fit, size down. Unsure? Chat with Rex AI for a personalised recommendation.</p>
-      <button onclick="closeSizeGuide()" style="margin-top:20px;width:100%;background:var(--dark);color:white;border:none;border-radius:10px;padding:12px;font-size:0.88rem;font-weight:700;transition:background 0.2s" onmouseover="this.style.background='var(--purple2)'" onmouseout="this.style.background='var(--dark)'">Got it — Close</button>
+    <div class="qa-item">
+      <div class="qa-q">Can I use it wired when the battery dies?</div>
+      <div class="qa-a">Yes, you can use the included 3.5mm audio cable for wired listening. However, note that ANC and most smart features will be disabled in wired mode. The cable is a 3.5mm TRS standard cable.</div>
+      <div class="qa-meta">Answer by TechHub Electronics (Seller) · 19 February 2026 · <a href="#">7 people found this helpful</a></div>
+    </div>
+    <div class="qa-item">
+      <div class="qa-q">Is the ear cushion replaceable?</div>
+      <div class="qa-a">Sony sells official replacement ear cushions for the WH-1000XM5. They are available on VibeStore and can be easily snapped on without any tools. They are made of the same ultra-soft synthetic leather material.</div>
+      <div class="qa-meta">Answer by VibeStore Customer · 8 January 2026 · <a href="#">15 people found this helpful</a></div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <a href="#" style="color:var(--teal);font-size:0.85rem">See all 89 questions</a>
+      <button style="padding:8px 18px;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:0.82rem;cursor:pointer" onclick="showToast('Q&amp;A submission coming soon!')">Ask a question</button>
     </div>
   </div>
 </div>
 
+<!-- ═══ RECENTLY VIEWED ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Recently Viewed</div>
+    <div class="h-scroll">
+      <div class="prod-card"><div class="prod-card-img">🎧</div><div class="prod-card-name">Bose QuietComfort 45</div><div class="prod-card-stars">★★★★☆ 4.4</div><div class="prod-card-price">₹24,990</div></div>
+      <div class="prod-card"><div class="prod-card-img">🎵</div><div class="prod-card-name">JBL Tune 770NC Wireless</div><div class="prod-card-stars">★★★★☆ 4.1</div><div class="prod-card-price">₹4,999</div></div>
+      <div class="prod-card"><div class="prod-card-img">🔊</div><div class="prod-card-name">Boat Rockerz 450 Pro</div><div class="prod-card-stars">★★★★☆ 4.0</div><div class="prod-card-price">₹1,299</div></div>
+      <div class="prod-card"><div class="prod-card-img">📻</div><div class="prod-card-name">Sennheiser HD 450BT</div><div class="prod-card-stars">★★★★☆ 4.3</div><div class="prod-card-price">₹7,490</div></div>
+      <div class="prod-card"><div class="prod-card-img">🎼</div><div class="prod-card-name">Apple AirPods Max</div><div class="prod-card-stars">★★★★☆ 4.6</div><div class="prod-card-price">₹52,900</div></div>
+      <div class="prod-card"><div class="prod-card-img">🎤</div><div class="prod-card-name">Marshall Monitor II ANC</div><div class="prod-card-stars">★★★★☆ 4.2</div><div class="prod-card-price">₹15,999</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div id="toast"></div>
 
-<script>
-const PRODUCTS_MAP = {
-  p1:{emoji:'🎧',name:'Wireless Earbuds Pro',cat:'Audio',price:89,og:119,rating:4.9,reviews:284,badge:'hot'},
-  p2:{emoji:'⌚',name:'Smart Watch Ultra',cat:'Wearables',price:249,og:299,rating:4.8,reviews:142,badge:'new'},
-  p3:{emoji:'💻',name:'Laptop Stand Aluminium',cat:'Accessories',price:67,og:67,rating:4.7,reviews:98,badge:null},
-  p4:{emoji:'⌨️',name:'Mechanical Keyboard TKL',cat:'Electronics',price:139,og:169,rating:4.9,reviews:201,badge:'sale'},
-  p7:{emoji:'🔌',name:'USB-C Hub Pro 9-in-1',cat:'Accessories',price:49,og:59,rating:4.8,reviews:167,badge:'hot'},
-  p9:{emoji:'🎙️',name:'Studio Condenser Mic',cat:'Audio',price:129,og:159,rating:4.9,reviews:88,badge:'sale'},
-};
-const thumbEmojis = ['🎧','📦','🎁','⚙️'];
-let cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
-let qty = 1;
-let selectedSize = 'M';
-let selectedColor = 'Black';
-
-// FBT state: which products are checked
-const fbtItems = [
-  {checked:true, price:89, name:'Wireless Earbuds Pro', emoji:'🎧', id:'p1'},
-  {checked:true, price:49, name:'USB-C Hub Pro', emoji:'🔌', id:'p7'},
-  {checked:true, price:67, name:'Laptop Stand', emoji:'💻', id:'p3'},
-];
-
-function init() {
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get('id') || 'p1';
-  const p = PRODUCTS_MAP[id] || PRODUCTS_MAP['p1'];
-  document.title = p.name + ' — MyStore';
-  document.getElementById('pName').textContent = p.name;
-  document.getElementById('pCat').textContent = p.cat;
-  document.getElementById('pPrice').textContent = '$'+p.price;
-  document.getElementById('pRating').textContent = p.rating;
-  document.getElementById('pReviews').textContent = '('+p.reviews+' reviews)';
-  document.getElementById('mainEmoji').textContent = p.emoji;
-  document.getElementById('bc-name').textContent = p.name;
-  document.getElementById('stickyName').textContent = p.name;
-  document.getElementById('stickyPrice').textContent = '$'+p.price;
-  if(p.og > p.price){
-    document.getElementById('pOg').textContent = '$'+p.og;
-    document.getElementById('pSave').textContent = 'Save $'+(p.og-p.price);
-  } else {
-    document.getElementById('pOg').style.display='none';
-    document.getElementById('pSave').style.display='none';
-  }
-  if(!p.badge) document.getElementById('mainBadge').style.display='none';
-  // thumbs
-  const thumbs = document.getElementById('thumbs');
-  thumbEmojis.forEach((e,i)=>{
-    const d = document.createElement('div');
-    d.className = 'thumb'+(i===0?' active':'');
-    d.textContent = i===0?p.emoji:e;
-    d.onclick = ()=>{document.querySelectorAll('.thumb').forEach(t=>t.classList.remove('active'));d.classList.add('active');document.getElementById('mainEmoji').textContent=d.textContent;};
-    thumbs.appendChild(d);
-  });
-  updateCartUI();
-  window._currentProduct = {id, name:p.name, price:p.price, emoji:p.emoji};
-  updateFbtTotal();
-  renderRecentlyViewed();
-  trackRecentlyViewed(p, id);
-}
-
-function changeQty(delta){qty=Math.max(1,qty+delta);document.getElementById('qty').value=qty;}
-
-function addToCart(){
-  const p = window._currentProduct;
-  const ex = cart.find(c=>c.id===p.id);
-  if(ex) ex.qty+=qty; else cart.push({...p,qty});
-  localStorage.setItem('vs_cart',JSON.stringify(cart));
-  updateCartUI();
-  const btn=document.getElementById('addBtn');
-  btn.textContent='✓ Added!';btn.classList.add('added');
-  setTimeout(()=>{btn.textContent='Add to Cart';btn.classList.remove('added');},1800);
-  toast('🛒 '+p.name+' added to cart');
-  openCart();
-}
-
-function quickAdd(item){
-  const ex=cart.find(c=>c.id===item.id);
-  if(ex) ex.qty++; else cart.push({...item,qty:1});
-  localStorage.setItem('vs_cart',JSON.stringify(cart));
-  updateCartUI();
-  toast('🛒 '+item.name+' added');
-}
-
-function buyNow(){
-  const p = window._currentProduct;
-  const ex=cart.find(c=>c.id===p.id);
-  if(ex) ex.qty+=qty; else cart.push({...p,qty});
-  localStorage.setItem('vs_cart',JSON.stringify(cart));
-  window.location.href='checkout.html';
-}
-
-function wishThis(){toast('♡ Saved to wishlist');}
-
-function updateCartUI(){
-  const tot=cart.reduce((s,i)=>s+i.qty,0);
-  document.getElementById('cartCount').textContent=tot;
-  document.getElementById('cartBadge').textContent=tot;
-}
-
-function openCart(){
-  renderCartDrawer();
-  document.getElementById('cart-overlay').classList.add('open');
-  document.getElementById('cart-drawer').classList.add('open');
-}
-function closeCart(){
-  document.getElementById('cart-overlay').classList.remove('open');
-  document.getElementById('cart-drawer').classList.remove('open');
-}
-
-function renderCartDrawer(){
-  const body=document.getElementById('cartBody');
-  const footer=document.getElementById('cartFooter');
-  if(cart.length===0){
-    body.innerHTML='<div style="text-align:center;padding:48px 0;color:var(--gray)"><div style="font-size:2.5rem;margin-bottom:10px">🛒</div>Cart is empty</div>';
-    footer.style.display='none';return;
-  }
-  footer.style.display='block';
-  const sub=cart.reduce((s,i)=>s+i.price*i.qty,0);
-  body.innerHTML=cart.map(i=>`<div class="cart-item"><div class="ci-img">${i.emoji}</div><div style="flex:1"><div class="ci-name">${i.name}</div><div class="ci-price">$${(i.price*i.qty).toFixed(2)}</div><div class="ci-qty"><div class="ci-qbtn" onclick="adjCart('${i.id}',-1)">−</div><span class="ci-qnum">${i.qty}</span><div class="ci-qbtn" onclick="adjCart('${i.id}',1)">+</div></div></div><div class="ci-rm" onclick="remCart('${i.id}')">✕</div></div>`).join('');
-  document.getElementById('cSub').textContent='$'+sub.toFixed(2);
-  document.getElementById('cShip').textContent=sub>=50?'FREE':'$4.99';
-  document.getElementById('cTot').textContent='$'+(sub+(sub<50?4.99:0)).toFixed(2);
-}
-
-function adjCart(id,d){const i=cart.find(c=>c.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)cart=cart.filter(c=>c.id!==id);localStorage.setItem('vs_cart',JSON.stringify(cart));updateCartUI();renderCartDrawer();}
-function remCart(id){cart=cart.filter(c=>c.id!==id);localStorage.setItem('vs_cart',JSON.stringify(cart));updateCartUI();renderCartDrawer();}
-
-function switchTab(id){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  const map={desc:0,specs:1,reviews:2,ai:3};
-  document.querySelectorAll('.tab-btn')[map[id]].classList.add('active');
-  document.getElementById('tab-'+id).classList.add('active');
-}
-
-function selectColor(el, colorName){
-  document.querySelectorAll('.color-opt').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  selectedColor = colorName;
-  updateVariantText();
-}
-
-function selectSize(el, sizeName){
-  if(el.classList.contains('oos')) return;
-  document.querySelectorAll('.size-opt:not(.size-opt + .size-opt ~ .size-opts .size-opt)').forEach(s=>{
-    if(s.closest('.size-opts') === el.closest('.size-opts')) s.classList.remove('active');
-  });
-  // target only the first size-opts group
-  const group = el.closest('.size-opts');
-  group.querySelectorAll('.size-opt').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');
-  selectedSize = sizeName;
-  updateVariantText();
-}
-
-function selectSize2(el){
-  if(el.classList.contains('oos')) return;
-  const group = el.closest('.size-opts');
-  group.querySelectorAll('.size-opt').forEach(s=>s.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function updateVariantText(){
-  document.getElementById('variantText').innerHTML = `Selected: <strong>Size ${selectedSize}</strong>, <strong>Color ${selectedColor}</strong>`;
-}
-
-// sticky bar
-window.addEventListener('scroll',()=>{
-  const bar=document.getElementById('sticky-bar');
-  bar.classList.toggle('show',window.scrollY>500);
-});
-
-function toast(msg){
-  const el=document.getElementById('toast');
-  el.innerHTML=`<div class="toast-i">${msg}</div>`;
-  setTimeout(()=>{el.innerHTML='';},2600);
-}
-
-// SIZE GUIDE MODAL
-function openSizeGuide(){
-  document.getElementById('sizeGuideModal').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeSizeGuide(){
-  document.getElementById('sizeGuideModal').classList.remove('open');
-  document.body.style.overflow='';
-}
-document.getElementById('sizeGuideModal').addEventListener('click',function(e){
-  if(e.target===this) closeSizeGuide();
-});
-
-// FREQUENTLY BOUGHT TOGETHER
-function toggleFbt(idx){
-  fbtItems[idx].checked = !fbtItems[idx].checked;
-  const card = document.getElementById('fbt'+idx);
-  card.classList.toggle('checked', fbtItems[idx].checked);
-  const checkEl = card.querySelector('.fbt-check');
-  if(checkEl) checkEl.style.display = fbtItems[idx].checked ? 'flex' : 'none';
-  updateFbtTotal();
-}
-
-function updateFbtTotal(){
-  const total = fbtItems.reduce((s,i)=>s+(i.checked?i.price:0),0);
-  document.getElementById('fbtTotal').textContent = '$'+total;
-}
-
-function addAllFbt(){
-  let added = 0;
-  fbtItems.forEach(item=>{
-    if(!item.checked) return;
-    const ex = cart.find(c=>c.id===item.id);
-    if(ex) ex.qty++; else cart.push({id:item.id,name:item.name,price:item.price,emoji:item.emoji,qty:1});
-    added++;
-  });
-  localStorage.setItem('vs_cart',JSON.stringify(cart));
-  updateCartUI();
-  toast('🛒 '+added+' items added to cart!');
-  openCart();
-}
-
-// RECENTLY VIEWED
-function trackRecentlyViewed(p, id){
-  let rv = JSON.parse(localStorage.getItem('vs_rv')||'[]');
-  rv = rv.filter(i=>i.id!==id);
-  rv.unshift({id, name:p.name, price:p.price, emoji:p.emoji});
-  rv = rv.slice(0,8);
-  localStorage.setItem('vs_rv', JSON.stringify(rv));
-}
-
-function renderRecentlyViewed(){
-  const allRv = [
-    {id:'p2',name:'Smart Watch Ultra',price:249,emoji:'⌚'},
-    {id:'p4',name:'Mechanical Keyboard TKL',price:139,emoji:'⌨️'},
-    {id:'p9',name:'Studio Condenser Mic',price:129,emoji:'🎙️'},
-    {id:'p7',name:'USB-C Hub Pro',price:49,emoji:'🔌'},
-  ];
-  let stored = JSON.parse(localStorage.getItem('vs_rv')||'[]');
-  // merge stored with fallback demos, deduplicate
-  const ids = new Set(stored.map(i=>i.id));
-  allRv.forEach(i=>{ if(!ids.has(i.id)){ stored.push(i); ids.add(i.id); } });
-  const strip = document.getElementById('rvStrip');
-  const currentId = new URLSearchParams(window.location.search).get('id')||'p1';
-  const items = stored.filter(i=>i.id!==currentId).slice(0,4);
-  strip.innerHTML = items.map(i=>`
-    <div class="rv-card" onclick="window.location.href='product.html?id=${i.id}'">
-      <div class="rv-img">${i.emoji}</div>
-      <div class="rv-info">
-        <div class="rv-name">${i.name}</div>
-        <div class="rv-price">$${i.price}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-init();
-</script>
-<footer style="background:#0f0f1a;color:white;margin-top:60px">
-  <div style="max-width:1300px;margin:0 auto;padding:48px 24px 24px;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:48px">
-    <div>
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:12px">🛍️ MyStore</div>
-      <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;line-height:1.7">AI-powered commerce. Every product curated, priced, and delivered with intelligence.</p>
-    </div>
-    <div>
-      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Shop</h4>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
-        <li><a href="collections.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none;transition:color 0.2s" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">All Collections</a></li>
-        <li><a href="sale.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Sale 🔥</a></li>
-        <li><a href="compare.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Compare Products</a></li>
-        <li><a href="gift-cards.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Gift Cards</a></li>
-        <li><a href="blog.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Blog</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Support</h4>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
-        <li><a href="returns.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Returns</a></li>
-        <li><a href="contact.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Contact Us</a></li>
-        <li><a href="faq.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">FAQ</a></li>
-        <li><a href="track.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Track Order</a></li>
-        <li><a href="notifications.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Notifications</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4 style="font-size:0.82rem;font-weight:700;margin-bottom:14px;color:rgba(255,255,255,0.9)">Account</h4>
-      <ul style="list-style:none;display:flex;flex-direction:column;gap:9px">
-        <li><a href="account.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">My Account</a></li>
-        <li><a href="loyalty.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Loyalty Rewards</a></li>
-        <li><a href="wishlist.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Wishlist</a></li>
-        <li><a href="referral.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Refer a Friend</a></li>
-        <li><a href="notifications.html" style="color:rgba(255,255,255,0.45);font-size:0.79rem;text-decoration:none" onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.45)'">Notifications</a></li>
-      </ul>
-    </div>
-  </div>
-  <div style="max-width:1300px;margin:0 auto;padding:16px 24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
-    <p style="font-size:0.74rem;color:rgba(255,255,255,0.35)">© 2025 MyStore. All rights reserved.</p>
-    <div style="display:flex;gap:16px">
-      <a href="index.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">About VibeStore</a>
-      <a href="referral.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">Referral</a>
-      <a href="contact.html" style="font-size:0.74rem;color:rgba(255,255,255,0.35);text-decoration:none">Contact</a>
-    </div>
-  </div>
+<footer>
+  <p style="margin-bottom:8px">© 2026 MyOoumph Networks Pvt Ltd · VibeStore</p>
+  <p><a href="#">Conditions of Use</a> · <a href="#">Privacy Notice</a> · <a href="seller-profile.html">Sell on VibeStore</a> · <a href="cart.html">Cart</a></p>
 </footer>
-<script src="rex-chat.js"></script></body>
+
+<script>
+// ─── CART ───
+function getCart(){try{return JSON.parse(localStorage.getItem('vs_cart')||'[]')}catch{return[]}}
+function saveCart(c){localStorage.setItem('vs_cart',JSON.stringify(c))}
+function updateCartCount(){
+  var c=getCart();
+  var total=c.reduce(function(s,i){return s+(i.qty||1)},0);
+  document.getElementById('cart-count').textContent=total;
+}
+function addToCart(){
+  var qty=parseInt(document.getElementById('qty-select').value)||1;
+  var cart=getCart();
+  var idx=cart.findIndex(function(i){return i.id==='sony-wh1000xm5'});
+  if(idx>-1){cart[idx].qty=(cart[idx].qty||1)+qty;}
+  else{cart.push({id:'sony-wh1000xm5',name:'Sony WH-1000XM5',price:2499,qty:qty,emoji:'🎧',seller:'TechHub Electronics'});}
+  saveCart(cart);updateCartCount();
+  showToast('🎧 Added to cart — '+qty+' item'+(qty>1?'s':''));
+}
+function addToCartGeneric(seller,price){
+  var cart=getCart();
+  cart.push({id:'sony-wh1000xm5-'+seller.replace(/\s/g,'-').toLowerCase(),name:'Sony WH-1000XM5 ('+seller+')',price:price,qty:1,emoji:'🎧',seller:seller});
+  saveCart(cart);updateCartCount();
+  showToast('🎧 Added from '+seller+' (₹'+price.toLocaleString('en-IN')+')');
+}
+function addBundle(){
+  var cart=getCart();
+  [{id:'sony-wh1000xm5',name:'Sony WH-1000XM5',price:2499,emoji:'🎧',seller:'TechHub Electronics'},
+   {id:'sony-xperia-5v',name:'Sony Xperia 5 V',price:54990,emoji:'📱',seller:'VibeStore'},
+   {id:'anker-powercore',name:'Anker PowerCore 26800',price:3299,emoji:'🔋',seller:'VibeStore'}
+  ].forEach(function(p){
+    p.qty=1;
+    var idx=cart.findIndex(function(i){return i.id===p.id});
+    if(idx>-1){cart[idx].qty++;}else{cart.push(p);}
+  });
+  saveCart(cart);updateCartCount();
+  showToast('🛒 All 3 items added to cart!');
+}
+function buyNow(){addToCart();window.location.href='cart.html';}
+updateCartCount();
+
+// ─── COUNTDOWN ───
+function startCountdown(){
+  var end=new Date();
+  end.setHours(end.getHours()+2);end.setMinutes(end.getMinutes()+34);end.setSeconds(end.getSeconds()+17);
+  function tick(){
+    var now=new Date();var diff=Math.max(0,end-now);
+    var h=Math.floor(diff/3600000);var m=Math.floor((diff%3600000)/60000);var s=Math.floor((diff%60000)/1000);
+    document.getElementById('countdown').textContent=
+      String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
+    if(diff>0)setTimeout(tick,1000);else document.getElementById('countdown').textContent='EXPIRED';
+  }
+  tick();
+}
+startCountdown();
+
+// ─── GALLERY ───
+function setThumb(el,emoji){
+  document.querySelectorAll('.thumb').forEach(function(t){t.classList.remove('active')});
+  el.classList.add('active');
+  document.getElementById('main-emoji').textContent=emoji;
+}
+
+// ─── VARIANTS ───
+function selectPill(el,groupId){
+  document.querySelectorAll('#'+groupId+' .pill').forEach(function(p){p.classList.remove('active')});
+  el.classList.add('active');
+}
+function selectCircle(el,groupId){
+  document.querySelectorAll('#'+groupId+' .color-circle').forEach(function(c){c.classList.remove('active')});
+  el.classList.add('active');
+}
+
+// ─── WISHLIST TOGGLE ───
+function toggleWishlist(btn){
+  if(btn.textContent.includes('Add')){btn.textContent='💔 Remove from Wishlist';showToast('Added to Wishlist ❤️');}
+  else{btn.textContent='❤️ Add to Wishlist';showToast('Removed from Wishlist');}
+}
+
+// ─── DESCRIPTION TOGGLE ───
+function toggleDesc(){
+  var full=document.getElementById('desc-full');
+  var btn=document.getElementById('desc-toggle');
+  if(full.style.display==='none'){full.style.display='block';btn.textContent='▾ Read less';}
+  else{full.style.display='none';btn.textContent='▸ Read more';}
+}
+
+// ─── SELLERS TABLE ───
+var sellers=[
+  {name:'TechHub Electronics',href:'seller-profile.html',rating:4.3,ratingCount:2180,price:2499,condition:'New',delivery:'Tomorrow FREE',fulfilled:true,featured:1},
+  {name:'GadgetZone',href:'seller-profile.html',rating:4.1,ratingCount:890,price:2649,condition:'New',delivery:'2–3 days FREE',fulfilled:false,featured:2},
+  {name:'AudioWorld',href:'seller-profile.html',rating:3.9,ratingCount:430,price:2599,condition:'New',delivery:'3–5 days',fulfilled:false,featured:5},
+  {name:'ElectroMart',href:'seller-profile.html',rating:4.5,ratingCount:3210,price:2799,condition:'New',delivery:'Tomorrow FREE',fulfilled:true,featured:3},
+  {name:'SoundPulse',href:'seller-profile.html',rating:4.0,ratingCount:670,price:2549,condition:'New',delivery:'2–4 days',fulfilled:false,featured:4},
+];
+function starsStr(r){
+  var full=Math.floor(r);var half=(r-full)>=0.5;var s='';
+  for(var i=0;i<full;i++)s+='★';if(half)s+='☆';
+  return s;
+}
+function renderSellers(data){
+  var tbody=document.getElementById('sellers-body');
+  tbody.innerHTML=data.map(function(s){
+    return '<tr>'+
+      '<td><a href="'+s.href+'" style="color:var(--teal);font-weight:600">'+s.name+'</a>'+
+      (s.fulfilled?'<span class="fulfilled-pill">✔ VibeStore Fulfilled</span>':'')+'</td>'+
+      '<td><span class="seller-stars">'+starsStr(s.rating)+'</span> '+s.rating+' ('+s.ratingCount.toLocaleString('en-IN')+')</td>'+
+      '<td style="font-weight:700">₹'+s.price.toLocaleString('en-IN')+'</td>'+
+      '<td class="condition-new">'+s.condition+'</td>'+
+      '<td>'+s.delivery+'</td>'+
+      '<td><span class="atc-link" onclick="addToCartGeneric(\''+s.name+'\','+s.price+')">Add to Cart</span></td>'+
+      '</tr>';
+  }).join('');
+}
+function sortSellers(type,btn){
+  document.querySelectorAll('.sort-btn').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  var sorted=sellers.slice();
+  if(type==='price')sorted.sort(function(a,b){return a.price-b.price});
+  else if(type==='rating')sorted.sort(function(a,b){return b.rating-a.rating});
+  else sorted.sort(function(a,b){return a.featured-b.featured});
+  renderSellers(sorted);
+}
+renderSellers(sellers.slice().sort(function(a,b){return a.featured-b.featured}));
+
+// ─── REVIEWS FILTER ───
+function filterReviews(type,btn){
+  document.querySelectorAll('.filter-tab').forEach(function(b){b.classList.remove('active')});
+  btn.classList.add('active');
+  document.querySelectorAll('.review-card').forEach(function(card){
+    if(type==='all')card.style.display='';
+    else if(type==='positive')card.style.display=(card.dataset.type==='positive')?'':'none';
+    else card.style.display=(card.dataset.type==='critical')?'':'none';
+  });
+}
+
+// ─── HELPFUL VOTES ───
+function markHelpful(countId,btn){
+  if(btn.dataset.voted){showToast('Already marked as helpful');return;}
+  btn.dataset.voted='1';
+  var el=document.getElementById(countId);
+  el.textContent=parseInt(el.textContent)+1;
+  btn.style.background='#FFF3CD';btn.style.borderColor='var(--orange)';
+  showToast('Thanks for your feedback!');
+}
+
+// ─── TOAST ───
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);
+  t._timer=setTimeout(function(){t.classList.remove('show')},2800);
+}
+</script>
+<script src="auth.js"></script>
+<script>
+(function(){
+  var auth = vsGetAuth();
+  if (auth) {
+    vsUpdateNav(auth);
+    var link = document.getElementById('navAccountLink');
+    if (link) link.href = 'account.html';
+    if (auth.role === 'seller') {
+      var banner = document.getElementById('sellerBanner');
+      if (banner) banner.style.display = 'block';
+    }
+  } else {
+    var link = document.getElementById('navAccountLink');
+    if (link) link.href = 'login.html';
+  }
+})();
+</script>
+</body>
 </html>

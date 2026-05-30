@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytics — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="auth.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: #232f3e; position: fixed; top: 0; left: 0;
+    height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: #FF9900;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    letter-spacing: -0.3px;
+  }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    color: #c8cdd4; text-decoration: none;
+    font-size: 13.5px; font-weight: 500;
+    transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent;
+    cursor: pointer;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  /* TOPBAR */
+  .topbar {
+    position: fixed; top: 0; left: 220px; right: 0; height: 60px;
+    background: #0f1111; box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    display: flex; align-items: center; padding: 0 24px;
+    z-index: 99; gap: 16px;
+  }
+  .topbar-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #FF9900; }
+  .breadcrumb { font-size: 13px; color: #8d96a0; flex: 1; margin-left: 12px; }
+  .breadcrumb strong { color: #fff; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge {
+    position: absolute; top: 0; right: 0;
+    background: #CC0C39; color: #fff;
+    font-size: 9px; font-weight: 700; min-width: 15px; height: 15px;
+    border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px;
+  }
+  .topbar-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: linear-gradient(135deg, #FF9900, #e68a00);
+    color: #fff; font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #fff; font-size: 13px; }
+  .seller-info .store { color: #8d96a0; }
+
+  /* MAIN */
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* ATLAS AI BANNER */
+  .atlas-banner {
+    background: linear-gradient(135deg, #0f1111 0%, #1a1a2e 50%, #16213e 100%);
+    border-radius: 12px; padding: 18px 22px; margin-bottom: 18px;
+    border: 1px solid rgba(99,179,237,0.2);
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .atlas-icon { font-size: 32px; flex-shrink: 0; }
+  .atlas-text { flex: 1; }
+  .atlas-title { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+  .atlas-subtitle { font-size: 12.5px; color: #8d96a0; line-height: 1.5; }
+  .atlas-highlight { background: rgba(255,153,0,0.15); border: 1px solid rgba(255,153,0,0.3); border-radius: 8px; padding: 10px 14px; flex-shrink: 0; }
+  .atlas-highlight p { font-size: 12.5px; color: #FF9900; font-weight: 600; }
+
+  /* DATE PILLS */
+  .date-pills { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .date-pill {
+    padding: 6px 14px; border-radius: 20px; font-size: 12.5px; font-weight: 500;
+    cursor: pointer; border: 1px solid #d0d5dd; color: #555; background: #fff;
+    transition: all 0.15s;
+  }
+  .date-pill:hover { border-color: #FF9900; color: #FF9900; }
+  .date-pill.active { background: #FF9900; color: #fff; border-color: #FF9900; font-weight: 600; }
+
+  /* METRIC CARDS */
+  .metrics-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; margin-bottom: 20px; }
+  .metric-card {
+    background: #fff; border-radius: 10px; padding: 16px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-top: 3px solid #ccc;
+  }
+  .metric-card.orange { border-top-color: #FF9900; }
+  .metric-card.green { border-top-color: #067D62; }
+  .metric-card.teal { border-top-color: #007185; }
+  .metric-card.blue { border-top-color: #1565C0; }
+  .metric-card.purple { border-top-color: #7c3aed; }
+  .metric-card.red { border-top-color: #CC0C39; }
+  .metric-label { font-size: 10.5px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .metric-value { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: #0f1111; margin-bottom: 4px; line-height: 1; }
+  .metric-trend { font-size: 11px; display: flex; align-items: center; gap: 3px; }
+  .trend-up { color: #067D62; }
+  .trend-down { color: #CC0C39; }
+
+  /* CHARTS ROW */
+  .charts-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .card-header {
+    padding: 14px 18px; border-bottom: 1px solid #f0f2f5;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-header h3 { font-size: 14px; font-weight: 700; color: #0f1111; flex: 1; }
+  .card-body { padding: 16px 18px; }
+  .chart-wrap { position: relative; height: 180px; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 60% 40%; gap: 16px; margin-bottom: 20px; }
+  .left-col { display: flex; flex-direction: column; gap: 16px; }
+  .right-col { display: flex; flex-direction: column; gap: 16px; }
+
+  /* TABLE */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th { font-size: 11px; text-transform: uppercase; color: #888; font-weight: 600; padding: 8px 10px; text-align: left; border-bottom: 2px solid #f0f2f5; background: #fafbfc; }
+  .data-table td { padding: 10px 10px; font-size: 13px; color: #333; border-bottom: 1px solid #f5f6f8; vertical-align: middle; }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: #fafbfc; }
+  .rank-badge { width: 22px; height: 22px; border-radius: 50%; background: #f0f2f5; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .rank-1 { background: #ffd700; color: #8a6700; }
+  .rank-2 { background: #c0c0c0; color: #555; }
+  .rank-3 { background: #cd7f32; color: #fff; }
+
+  /* CATEGORY BARS */
+  .cat-bar-row { margin-bottom: 10px; }
+  .cat-bar-label { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12.5px; }
+  .cat-bar-label span:last-child { font-weight: 600; color: #0f1111; }
+  .cat-bar-track { height: 8px; background: #f0f2f5; border-radius: 4px; overflow: hidden; }
+  .cat-bar-fill { height: 100%; border-radius: 4px; }
+
+  /* HEATMAP */
+  .heatmap-wrap { overflow-x: auto; }
+  .heatmap-grid { display: grid; grid-template-columns: 40px repeat(24, 1fr); gap: 2px; min-width: 600px; }
+  .heatmap-cell { height: 18px; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 9px; color: transparent; }
+  .heatmap-label { font-size: 10px; color: #888; display: flex; align-items: center; font-weight: 500; }
+  .heatmap-hour { font-size: 9px; color: #aaa; display: flex; align-items: center; justify-content: center; }
+
+  /* ATLAS INSIGHTS */
+  .atlas-insights-card { background: linear-gradient(180deg, #1a1a2e 0%, #0f1111 100%); border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 0; overflow: hidden; }
+  .atlas-insights-header { padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 8px; }
+  .atlas-insights-header h3 { font-size: 14px; font-weight: 700; color: #fff; flex: 1; }
+  .atlas-badge { background: rgba(255,153,0,0.2); color: #FF9900; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; border: 1px solid rgba(255,153,0,0.3); }
+  .insight-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 18px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .insight-item:last-child { border-bottom: none; }
+  .insight-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
+  .dot-green { background: #4CAF50; }
+  .dot-yellow { background: #FFC107; }
+  .dot-red { background: #f44336; }
+  .dot-blue { background: #2196F3; }
+  .insight-text { font-size: 12.5px; color: #c8cdd4; line-height: 1.5; }
+
+  /* DEMOGRAPHICS */
+  .demo-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .demo-label { width: 80px; font-size: 12px; color: #555; }
+  .demo-bar-track { flex: 1; height: 8px; background: #f0f2f5; border-radius: 4px; overflow: hidden; }
+  .demo-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #007185, #00b3c9); }
+  .demo-pct { width: 36px; text-align: right; font-size: 12px; font-weight: 600; color: #0f1111; }
+
+  /* SEARCH TERMS */
+  .search-row { display: flex; align-items: center; padding: 10px 18px; border-bottom: 1px solid #f5f6f8; gap: 10px; }
+  .search-row:last-child { border-bottom: none; }
+  .search-kw { flex: 1; font-size: 13px; color: #0f1111; font-weight: 500; }
+  .search-stat { min-width: 70px; text-align: right; font-size: 12px; color: #555; }
+  .search-badge { font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 10px; }
+  .badge-high { background: #e8f5e9; color: #2e7d32; }
+  .badge-mid { background: #fff8e1; color: #f57f17; }
+  .badge-low { background: #fce4ec; color: #c62828; }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #fff; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; }
+  @media (max-width: 1024px) {
+    .sidebar { width: 180px; }
+    .main { margin-left: 180px; }
+    .topbar { left: 180px; }
+  }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .sidebar.open ~ .sidebar-overlay { display: block; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .charts-row { grid-template-columns: 1fr !important; }
+    .two-col { grid-template-columns: 1fr !important; }
+    .heatmap-wrap { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a href="seller-dashboard.html" class="nav-item"><span class="nav-icon">📊</span> Dashboard</a>
+    <a href="seller-listings.html" class="nav-item"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a href="seller-orders.html" class="nav-item"><span class="nav-icon">📦</span> Orders</a>
+    <a href="seller-messages.html" class="nav-item"><span class="nav-icon">💬</span> Messages</a>
+    <a href="seller-payouts.html" class="nav-item"><span class="nav-icon">💰</span> Payouts</a>
+    <a href="seller-analytics.html" class="nav-item active"><span class="nav-icon">📈</span> Analytics</a>
+    <a href="seller-promotions.html" class="nav-item"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a href="seller-returns.html" class="nav-item"><span class="nav-icon">↩️</span> Returns</a>
+    <a href="seller-settings.html" class="nav-item"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a href="seller-profile.html" class="nav-item"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a href="index.html" class="nav-item"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="topbar-logo">⚡ Seller Central</div>
+  <div class="breadcrumb">Analytics &rsaquo; <strong>Business Intelligence</strong></div>
+  <div class="topbar-bell">🔔<span class="bell-badge">3</span></div>
+  <div class="seller-info"><div class="sname">Vikram S.</div><div class="store">MyStore Electronics</div></div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;cursor:pointer;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#aaa">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ATLAS AI BANNER -->
+  <div class="atlas-banner">
+    <div class="atlas-icon">📊</div>
+    <div class="atlas-text">
+      <div class="atlas-title">Atlas is analyzing your business</div>
+      <div class="atlas-subtitle">Atlas processed 2.3M data points to generate these insights — updated every 15 minutes<br>Monitoring: price trends, competitor activity, demand forecasting, inventory optimization</div>
+    </div>
+    <div class="atlas-highlight">
+      <p>🔥 Your best day ever was last Thursday</p>
+      <p style="font-size:20px;font-weight:800;color:#FF9900;margin-top:2px;">₹34,200 in sales</p>
+    </div>
+    <div style="background:rgba(255,255,255,0.05);border-radius:8px;padding:10px 14px;flex-shrink:0;">
+      <div style="font-size:11px;color:#8d96a0;margin-bottom:6px;text-transform:uppercase;font-weight:600;">Atlas Status</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12.5px;color:#4CAF50;font-weight:600;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4CAF50;animation:pulse 1.5s infinite;display:inline-block;"></span>
+        Live &mdash; Updated 4m ago
+      </div>
+    </div>
+  </div>
+
+  <!-- DATE PILLS -->
+  <div class="date-pills">
+    <div class="date-pill" onclick="setActive(this)">Today</div>
+    <div class="date-pill" onclick="setActive(this)">Yesterday</div>
+    <div class="date-pill" onclick="setActive(this)">Last 7 days</div>
+    <div class="date-pill active" onclick="setActive(this)">Last 30 days</div>
+    <div class="date-pill" onclick="setActive(this)">Last 90 days</div>
+    <div class="date-pill" onclick="setActive(this)">Custom</div>
+  </div>
+
+  <!-- 6 METRIC CARDS -->
+  <div class="metrics-grid">
+    <div class="metric-card orange">
+      <div class="metric-label">Revenue</div>
+      <div class="metric-value">₹2,34,500</div>
+      <div class="metric-trend trend-up">↑ 18.4% vs last period</div>
+    </div>
+    <div class="metric-card green">
+      <div class="metric-label">Orders</div>
+      <div class="metric-value">847</div>
+      <div class="metric-trend trend-up">↑ 12.1% vs last period</div>
+    </div>
+    <div class="metric-card teal">
+      <div class="metric-label">Page Views</div>
+      <div class="metric-value">12,400</div>
+      <div class="metric-trend trend-up">↑ 9.3% vs last period</div>
+    </div>
+    <div class="metric-card blue">
+      <div class="metric-label">Conversion</div>
+      <div class="metric-value">3.2%</div>
+      <div class="metric-trend trend-down">↓ 0.3% vs last period</div>
+    </div>
+    <div class="metric-card purple">
+      <div class="metric-label">Avg Order</div>
+      <div class="metric-value">₹277</div>
+      <div class="metric-trend trend-up">↑ 5.7% vs last period</div>
+    </div>
+    <div class="metric-card red">
+      <div class="metric-label">Return Rate</div>
+      <div class="metric-value">2.1%</div>
+      <div class="metric-trend trend-up" style="color:#067D62;">↓ 0.4% improved</div>
+    </div>
+  </div>
+
+  <!-- 3 CHARTS -->
+  <div class="charts-row">
+    <div class="card">
+      <div class="card-header"><h3>📈 Revenue (30 Days)</h3><span style="font-size:11px;color:#888;">vs last period + forecast</span></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="revenueChart"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>📦 Orders by Day of Week</h3></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="ordersChart"></canvas></div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h3>🌐 Traffic Sources</h3></div>
+      <div class="card-body"><div class="chart-wrap"><canvas id="trafficChart"></canvas></div></div>
+    </div>
+  </div>
+
+  <!-- TWO COLUMN -->
+  <div class="two-col">
+    <div class="left-col">
+      <!-- TOP PRODUCTS TABLE -->
+      <div class="card">
+        <div class="card-header"><h3>🏆 Top Products</h3><span style="font-size:11px;color:#888;">Last 30 days</span></div>
+        <div style="overflow-x:auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th><th>Product</th><th>Units</th><th>Revenue</th><th>Conv%</th><th>Return%</th><th>Trend</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><div class="rank-badge rank-1">1</div></td>
+                <td>🎧 Wireless Earbuds Pro X</td><td>218</td><td>₹87,200</td>
+                <td style="color:#067D62;font-weight:600;">4.8%</td><td style="color:#067D62;">1.2%</td><td style="color:#067D62;font-size:16px;">↑</td>
+              </tr>
+              <tr>
+                <td><div class="rank-badge rank-2">2</div></td>
+                <td>📱 USB-C Hub 7-in-1</td><td>194</td><td>₹58,200</td>
+                <td style="color:#067D62;font-weight:600;">3.9%</td><td style="color:#067D62;">0.8%</td><td style="color:#067D62;font-size:16px;">↑</td>
+              </tr>
+              <tr>
+                <td><div class="rank-badge rank-3">3</div></td>
+                <td>⌚ Smart Band V2</td><td>142</td><td>₹42,600</td>
+                <td style="color:#888;">2.1%</td><td style="color:#888;">2.4%</td><td style="color:#888;font-size:16px;">→</td>
+              </tr>
+              <tr>
+                <td><div class="rank-badge">4</div></td>
+                <td>🖱️ Ergonomic Mouse</td><td>128</td><td>₹25,600</td>
+                <td style="color:#007185;font-weight:600;">5.2%</td><td style="color:#067D62;">1.1%</td><td style="color:#067D62;font-size:16px;">↑</td>
+              </tr>
+              <tr>
+                <td><div class="rank-badge">5</div></td>
+                <td>🔌 GaN Charger 65W</td><td>98</td><td>₹19,600</td>
+                <td style="color:#888;">2.8%</td><td style="color:#CC0C39;">3.2%</td><td style="color:#CC0C39;font-size:16px;">↓</td>
+              </tr>
+              <tr>
+                <td><div class="rank-badge">6</div></td>
+                <td>🎙️ Mini Microphone USB</td><td>67</td><td>₹13,400</td>
+                <td style="color:#888;">2.3%</td><td style="color:#888;">1.9%</td><td style="color:#888;font-size:16px;">→</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- CATEGORY BARS -->
+      <div class="card">
+        <div class="card-header"><h3>🏷️ Sales by Category</h3></div>
+        <div class="card-body">
+          <div class="cat-bar-row">
+            <div class="cat-bar-label"><span>🎧 Audio & Earbuds</span><span>₹87,200 &mdash; 37%</span></div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:87%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div>
+          </div>
+          <div class="cat-bar-row">
+            <div class="cat-bar-label"><span>📱 Accessories</span><span>₹58,200 &mdash; 25%</span></div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:63%;background:linear-gradient(90deg,#007185,#00b3c9);"></div></div>
+          </div>
+          <div class="cat-bar-row">
+            <div class="cat-bar-label"><span>⌚ Wearables</span><span>₹42,600 &mdash; 18%</span></div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:48%;background:linear-gradient(90deg,#7c3aed,#a855f7);"></div></div>
+          </div>
+          <div class="cat-bar-row">
+            <div class="cat-bar-label"><span>🖱️ Peripherals</span><span>₹25,600 &mdash; 11%</span></div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:32%;background:linear-gradient(90deg,#067D62,#10b981);"></div></div>
+          </div>
+          <div class="cat-bar-row" style="margin-bottom:0;">
+            <div class="cat-bar-label"><span>🔌 Charging</span><span>₹20,900 &mdash; 9%</span></div>
+            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:22%;background:linear-gradient(90deg,#CC0C39,#f44336);"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HEATMAP -->
+      <div class="card">
+        <div class="card-header"><h3>🕐 Hourly Sales Heatmap</h3><span style="font-size:11px;color:#888;">Darker = more sales</span></div>
+        <div class="card-body">
+          <div class="heatmap-wrap" id="heatmapWrap"></div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#888;">
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.1);"></div> Low
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.5);"></div> Medium
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.95);"></div> High
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <!-- ATLAS AI INSIGHTS -->
+      <div class="atlas-insights-card">
+        <div class="atlas-insights-header">
+          <span style="font-size:18px;">📊</span>
+          <h3>Atlas AI Insights</h3>
+          <span class="atlas-badge">AI</span>
+        </div>
+        <div class="insight-item">
+          <div class="insight-dot dot-green"></div>
+          <div class="insight-text">Wireless earbuds have <strong style="color:#4CAF50;">4.2x ROI</strong> — consider expanding inventory. Atlas predicts demand will rise 28% next month.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-dot dot-yellow"></div>
+          <div class="insight-text">Conversion drops <strong style="color:#FFC107;">60% after 9 PM</strong> — Atlas auto-pauses ads at 9 PM to save your budget.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-dot dot-red"></div>
+          <div class="insight-text"><strong style="color:#f44336;">3 products</strong> have high return rates — Atlas flagged for quality review. Action needed.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-dot dot-green"></div>
+          <div class="insight-text"><strong style="color:#4CAF50;">Tuesday 2-4 PM</strong> is your peak — Atlas auto-boosts visibility during this window.</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-dot dot-blue"></div>
+          <div class="insight-text">Competitor dropped prices <strong style="color:#2196F3;">15%</strong> — Atlas adjusted your prices to stay competitive and protect margin.</div>
+        </div>
+        <div style="padding:12px 18px;border-top:1px solid rgba(255,255,255,0.05);">
+          <button style="width:100%;padding:8px;background:rgba(255,153,0,0.15);border:1px solid rgba(255,153,0,0.3);border-radius:6px;color:#FF9900;font-size:12.5px;font-weight:600;cursor:pointer;">View All Atlas Insights →</button>
+        </div>
+      </div>
+
+      <!-- BUYER DEMOGRAPHICS -->
+      <div class="card">
+        <div class="card-header"><h3>👥 Buyer Demographics</h3></div>
+        <div class="card-body">
+          <div style="font-size:11.5px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Age Groups</div>
+          <div class="demo-row"><span class="demo-label">18-24</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:22%;"></div></div><span class="demo-pct">22%</span></div>
+          <div class="demo-row"><span class="demo-label">25-34</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:38%;"></div></div><span class="demo-pct">38%</span></div>
+          <div class="demo-row"><span class="demo-label">35-44</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:24%;"></div></div><span class="demo-pct">24%</span></div>
+          <div class="demo-row"><span class="demo-label">45-54</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:11%;"></div></div><span class="demo-pct">11%</span></div>
+          <div class="demo-row" style="margin-bottom:0;"><span class="demo-label">55+</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:5%;"></div></div><span class="demo-pct">5%</span></div>
+
+          <div style="height:1px;background:#f0f2f5;margin:14px 0;"></div>
+          <div style="font-size:11.5px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Top Cities</div>
+          <div class="demo-row"><span class="demo-label">Mumbai</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:34%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div><span class="demo-pct">34%</span></div>
+          <div class="demo-row"><span class="demo-label">Delhi</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:28%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div><span class="demo-pct">28%</span></div>
+          <div class="demo-row"><span class="demo-label">Bengaluru</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:19%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div><span class="demo-pct">19%</span></div>
+          <div class="demo-row"><span class="demo-label">Hyderabad</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:11%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div><span class="demo-pct">11%</span></div>
+          <div class="demo-row" style="margin-bottom:0;"><span class="demo-label">Chennai</span><div class="demo-bar-track"><div class="demo-bar-fill" style="width:8%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div><span class="demo-pct">8%</span></div>
+
+          <div style="height:1px;background:#f0f2f5;margin:14px 0;"></div>
+          <div style="font-size:11.5px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;">Gender Split</div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <div style="flex:1;height:18px;border-radius:9px;overflow:hidden;display:flex;">
+              <div style="width:62%;background:#007185;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;">Male 62%</div>
+              <div style="width:38%;background:#FF9900;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;">Female 38%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SEARCH TERMS -->
+  <div class="card" style="margin-bottom:30px;">
+    <div class="card-header"><h3>🔍 Top Search Terms</h3><span style="font-size:11px;color:#888;">Terms buyers used to find your products</span></div>
+    <div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:8px 18px;background:#fafbfc;border-bottom:2px solid #f0f2f5;">
+        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;">Keyword</span>
+        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">Searches</span>
+        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">CTR</span>
+        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">Rank</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">wireless earbuds</span>
+        <span style="font-size:13px;color:#555;text-align:right;">4,820</span>
+        <span style="text-align:right;"><span class="search-badge badge-high">12.4%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#2</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">bluetooth earphones under 2000</span>
+        <span style="font-size:13px;color:#555;text-align:right;">3,240</span>
+        <span style="text-align:right;"><span class="search-badge badge-high">9.8%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#1</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">usb c hub multiport</span>
+        <span style="font-size:13px;color:#555;text-align:right;">2,180</span>
+        <span style="text-align:right;"><span class="search-badge badge-mid">7.2%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#5</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">smart band fitness tracker</span>
+        <span style="font-size:13px;color:#555;text-align:right;">1,940</span>
+        <span style="text-align:right;"><span class="search-badge badge-mid">6.1%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#4</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">gan charger fast charging</span>
+        <span style="font-size:13px;color:#555;text-align:right;">1,620</span>
+        <span style="text-align:right;"><span class="search-badge badge-mid">5.4%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#7</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">ergonomic wireless mouse</span>
+        <span style="font-size:13px;color:#555;text-align:right;">1,410</span>
+        <span style="text-align:right;"><span class="search-badge badge-mid">4.9%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#6</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">noise cancelling headphones</span>
+        <span style="font-size:13px;color:#555;text-align:right;">1,280</span>
+        <span style="text-align:right;"><span class="search-badge badge-low">3.2%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#14</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">usb microphone for streaming</span>
+        <span style="font-size:13px;color:#555;text-align:right;">980</span>
+        <span style="text-align:right;"><span class="search-badge badge-mid">6.8%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#3</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">laptop stand adjustable</span>
+        <span style="font-size:13px;color:#555;text-align:right;">860</span>
+        <span style="text-align:right;"><span class="search-badge badge-low">2.8%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#18</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;align-items:center;">
+        <span style="font-size:13px;font-weight:500;">portable power bank 20000mah</span>
+        <span style="font-size:13px;color:#555;text-align:right;">740</span>
+        <span style="text-align:right;"><span class="search-badge badge-low">2.1%</span></span>
+        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#22</span>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<style>
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.3);} }
+</style>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeNameEl = document.querySelector('.sidebar-store-name');
+  if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+});
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+// Date pill selection
+function setActive(el) {
+  document.querySelectorAll('.date-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// Revenue Line Chart
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+const days = Array.from({length:30},(_,i)=>`${i+1}`);
+const revenueData = [4200,3800,5100,6200,4800,7100,8200,5600,4900,6800,7400,5200,6100,8900,7200,5800,6400,9200,8100,7600,6900,8400,7800,9100,8600,7200,8800,9400,8200,9800];
+const lastPeriod = revenueData.map(v => v*0.82+Math.random()*800);
+const forecast = [...Array(25).fill(null), ...revenueData.slice(25).map(v => v*1.12)];
+new Chart(revenueCtx, {
+  type:'line',
+  data:{
+    labels:days,
+    datasets:[
+      {label:'This Period',data:revenueData,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,0.08)',tension:0.4,borderWidth:2.5,pointRadius:0,fill:true},
+      {label:'Last Period',data:lastPeriod,borderColor:'#ccc',borderDash:[4,4],tension:0.4,borderWidth:1.5,pointRadius:0,fill:false},
+      {label:'Forecast',data:forecast,borderColor:'#007185',borderDash:[2,3],tension:0.4,borderWidth:1.5,pointRadius:0,fill:false}
+    ]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{x:{ticks:{font:{size:9},maxTicksLimit:8}},y:{ticks:{font:{size:9},callback:v=>'₹'+v.toLocaleString()}}}}
+});
+
+// Orders Bar Chart
+const ordersCtx = document.getElementById('ordersChart').getContext('2d');
+new Chart(ordersCtx, {
+  type:'bar',
+  data:{
+    labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    datasets:[{label:'Orders',data:[98,145,112,178,134,167,113],backgroundColor:['rgba(255,153,0,0.7)','rgba(255,153,0,1)','rgba(255,153,0,0.7)','rgba(255,153,0,0.85)','rgba(255,153,0,0.7)','rgba(255,153,0,0.9)','rgba(255,153,0,0.6)'],borderRadius:4}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9}}}}}
+});
+
+// Traffic Doughnut
+const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+new Chart(trafficCtx, {
+  type:'doughnut',
+  data:{
+    labels:['Organic Search','Direct','Deals Page','Other'],
+    datasets:[{data:[45,28,15,12],backgroundColor:['#007185','#FF9900','#067D62','#ccc'],borderWidth:2,borderColor:'#fff'}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12,padding:8}}}}
+});
+
+// Heatmap
+(function(){
+  const wrap = document.getElementById('heatmapWrap');
+  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const intensities = [
+    [0.05,0.03,0.02,0.02,0.03,0.05,0.08,0.35,0.65,0.75,0.80,0.72,0.60,0.78,0.85,0.82,0.70,0.55,0.45,0.35,0.25,0.18,0.12,0.08],
+    [0.05,0.03,0.02,0.02,0.03,0.05,0.10,0.40,0.70,0.80,0.90,0.95,0.75,0.85,0.95,0.90,0.80,0.65,0.55,0.42,0.30,0.20,0.12,0.08],
+    [0.05,0.03,0.02,0.02,0.03,0.05,0.08,0.30,0.60,0.70,0.75,0.65,0.55,0.70,0.78,0.72,0.62,0.50,0.40,0.30,0.22,0.15,0.10,0.07],
+    [0.06,0.03,0.02,0.02,0.03,0.05,0.12,0.45,0.75,0.85,0.88,0.80,0.70,0.82,0.90,0.88,0.76,0.62,0.52,0.40,0.28,0.18,0.12,0.08],
+    [0.05,0.03,0.02,0.02,0.03,0.06,0.10,0.38,0.68,0.78,0.82,0.74,0.62,0.76,0.84,0.80,0.70,0.58,0.48,0.36,0.26,0.18,0.12,0.08],
+    [0.08,0.04,0.03,0.02,0.03,0.06,0.14,0.42,0.65,0.72,0.78,0.80,0.82,0.85,0.88,0.85,0.80,0.78,0.72,0.65,0.55,0.40,0.25,0.12],
+    [0.10,0.05,0.03,0.02,0.03,0.05,0.10,0.30,0.55,0.65,0.70,0.75,0.78,0.80,0.82,0.78,0.72,0.68,0.60,0.50,0.40,0.30,0.20,0.10],
+  ];
+  let html = '<div class="heatmap-grid">';
+  // Header row
+  html += '<div class="heatmap-label" style="font-size:9px;color:#aaa;"></div>';
+  for(let h=0;h<24;h++){
+    html += `<div class="heatmap-hour">${h}</div>`;
+  }
+  // Day rows
+  days.forEach((d,di)=>{
+    html += `<div class="heatmap-label">${d}</div>`;
+    for(let h=0;h<24;h++){
+      const op = intensities[di][h];
+      html += `<div class="heatmap-cell" style="background:rgba(255,153,0,${op});border-radius:2px;" title="${d} ${h}:00 — ${Math.round(op*100)}% activity"></div>`;
+    }
+  });
+  html += '</div>';
+  wrap.innerHTML = html;
+})();
+</script>
+</body>
+</html>

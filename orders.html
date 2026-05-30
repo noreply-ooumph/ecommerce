@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Your Orders — VibeStore</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --nav:#131921;--orange:#FF9900;--teal:#007185;--bg:#f0f2f5;
+  --white:#fff;--border:#d5d9d9;--gray:#565959;--dark:#0f1111;
+  --red:#cc0c39;--green:#007600;--gold:#c45500;--blue:#1565c0;
+  --purple:#6a1b9a;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--dark);line-height:1.5}
+a{text-decoration:none;color:inherit}
+button{font-family:'Inter',sans-serif;cursor:pointer}
+
+/* NAV */
+nav{background:var(--nav);position:sticky;top:0;z-index:300}
+.nav-top{display:flex;align-items:center;gap:10px;padding:8px 16px;height:60px}
+.nav-logo{color:white;font-family:'Space Grotesk',sans-serif;font-size:1.4rem;font-weight:800;white-space:nowrap;padding:4px 8px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;flex-shrink:0}
+.nav-logo:hover{border-color:white}
+.nav-logo span{color:var(--orange)}
+.nav-hamburger{display:none;align-items:center;justify-content:center;background:none;border:1px solid transparent;border-radius:3px;color:white;font-size:1.4rem;padding:4px 8px;cursor:pointer;flex-shrink:0}
+.nav-hamburger:hover{border-color:white}
+.nav-search{flex:1;display:flex;border-radius:4px;overflow:hidden;max-width:900px}
+.nav-search-cat{background:#f3f3f3;border:none;padding:0 10px;font-size:0.78rem;color:var(--dark);cursor:pointer;border-right:1px solid #ccc;min-width:60px}
+.nav-search input{flex:1;padding:0 12px;border:none;font-size:0.92rem;outline:none;height:40px}
+.nav-search-btn{background:var(--orange);border:none;width:46px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;cursor:pointer}
+.nav-search-btn:hover{background:#e68900}
+.nav-btn{color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;font-size:0.82rem;cursor:pointer;white-space:nowrap;line-height:1.4;transition:border-color .15s;background:none}
+.nav-btn:hover{border-color:white}
+.nav-btn span{color:rgba(255,255,255,0.8);font-size:0.7rem;display:block}
+.nav-btn strong{font-size:0.88rem}
+.nav-cart{display:flex;align-items:flex-end;gap:4px;color:white;padding:6px 10px;border:1px solid transparent;border-radius:3px;transition:border-color .15s;cursor:pointer;background:none}
+.nav-cart:hover{border-color:white}
+.nav-cart-count{color:var(--orange);font-size:1.1rem;font-weight:800;line-height:1}
+.nav-cart-text{font-size:0.85rem;font-weight:700;margin-bottom:2px}
+.nav-bottom{background:#232f3e;padding:4px 16px;display:flex;gap:4px;overflow-x:auto}
+.nav-bottom::-webkit-scrollbar{display:none}
+.nav-bot-btn{color:white;font-size:0.82rem;padding:6px 10px;border:1px solid transparent;border-radius:3px;white-space:nowrap;cursor:pointer;background:none}
+.nav-bot-btn:hover{border-color:white}
+.nav-bot-btn.active{border-color:var(--orange);color:var(--orange)}
+
+/* MOBILE DRAWER */
+.mobile-drawer{display:none;position:fixed;top:0;left:0;width:80%;max-width:320px;height:100%;background:var(--nav);z-index:999;flex-direction:column;padding:20px 0;transform:translateX(-100%);transition:transform .3s}
+.mobile-drawer.open{transform:translateX(0)}
+.mobile-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:998}
+.mobile-drawer-overlay.open{display:block}
+.drawer-close{background:none;border:none;color:white;font-size:1.4rem;padding:0 20px 16px;cursor:pointer;text-align:left;width:100%}
+.drawer-link{display:block;color:white;padding:12px 20px;font-size:0.9rem;border-bottom:1px solid rgba(255,255,255,0.08)}
+.drawer-link:hover{background:rgba(255,255,255,0.05)}
+
+/* PAGE LAYOUT */
+.page{max-width:1300px;margin:0 auto;padding:20px 16px 48px;display:flex;gap:20px;align-items:flex-start}
+
+/* SIDEBAR */
+.sidebar{width:200px;flex-shrink:0;background:white;border:1px solid var(--border);border-radius:8px;padding:16px;position:sticky;top:76px}
+.sidebar h3{font-size:0.88rem;font-weight:700;margin-bottom:12px;color:var(--dark)}
+.filter-section{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.filter-section:last-of-type{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.filter-label{font-size:0.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px}
+.filter-option{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer;font-size:0.82rem}
+.filter-option input{accent-color:var(--orange)}
+.btn-apply-filter{width:100%;background:var(--orange);color:var(--dark);border:none;border-radius:4px;padding:9px;font-size:0.83rem;font-weight:700;margin-top:14px;transition:background .15s}
+.btn-apply-filter:hover{background:#e68900}
+
+/* MOBILE FILTER TOGGLE */
+.mobile-filter-toggle{display:none;background:white;border:1px solid var(--border);border-radius:4px;padding:8px 14px;font-size:0.85rem;font-weight:600;color:var(--dark);align-items:center;gap:6px;margin-bottom:12px;cursor:pointer}
+
+/* MAIN */
+.main-content{flex:1;min-width:0}
+.orders-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px}
+.orders-title{font-family:'Space Grotesk',sans-serif;font-size:1.5rem;font-weight:800}
+.orders-count{font-size:0.85rem;color:var(--gray)}
+.orders-search-row{display:flex;gap:8px;background:white;border:1px solid var(--border);border-radius:4px;overflow:hidden;max-width:500px;margin-bottom:20px}
+.orders-search-row input{flex:1;padding:9px 14px;border:none;font-size:0.88rem;outline:none}
+.btn-search-orders{background:var(--orange);border:none;padding:9px 20px;font-size:0.85rem;font-weight:700;color:var(--dark);cursor:pointer;transition:background .15s}
+.btn-search-orders:hover{background:#e68900}
+
+/* ORDER CARD */
+.order-card{background:white;border:1px solid var(--border);border-radius:8px;margin-bottom:16px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
+.order-card-header{display:flex;align-items:center;gap:20px;padding:12px 20px;background:#f7f7f7;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.order-meta-group{display:flex;flex-direction:column;gap:2px}
+.order-meta-label{font-size:0.67rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.04em}
+.order-meta-val{font-size:0.82rem;font-weight:600;color:var(--dark)}
+.order-number{color:var(--teal)}
+.order-header-right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.invoice-link{color:var(--teal);font-size:0.78rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.invoice-link:hover{text-decoration:underline}
+
+/* ORDER ITEMS */
+.order-item{display:flex;align-items:flex-start;gap:14px;padding:16px 20px;border-bottom:1px solid #f5f5f5}
+.order-item:last-of-type{border-bottom:none}
+.item-emoji{font-size:2.6rem;flex-shrink:0;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:#f7f8fa;border:1px solid var(--border);border-radius:6px}
+.item-body{flex:1;min-width:0}
+.item-name{font-size:0.9rem;font-weight:600;margin-bottom:3px;line-height:1.3}
+.item-seller{font-size:0.78rem;color:var(--teal);margin-bottom:6px}
+.item-seller span{color:var(--gray)}
+.item-status{display:inline-flex;align-items:center;gap:5px;font-size:0.8rem;font-weight:600;margin-bottom:8px}
+.s-green{color:var(--green)}
+.s-blue{color:var(--blue)}
+.s-orange{color:#e65100}
+.s-red{color:var(--red)}
+.s-purple{color:var(--purple)}
+.item-actions{display:flex;gap:8px;flex-wrap:wrap}
+.act-btn{padding:5px 13px;border:1px solid var(--border);border-radius:3px;font-size:0.75rem;font-weight:600;background:white;cursor:pointer;white-space:nowrap;transition:all .15s;color:var(--dark)}
+.act-btn:hover{border-color:#888;background:#f7f7f7}
+.act-btn.primary{background:var(--orange);border-color:var(--orange);color:white}
+.act-btn.primary:hover{background:#e68900}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:80px 20px;background:white;border-radius:8px;border:1px solid var(--border)}
+.empty-emoji{font-size:5rem;display:block;margin-bottom:16px}
+.empty-title{font-size:1.4rem;font-weight:700;margin-bottom:8px}
+.empty-sub{color:var(--gray);margin-bottom:24px;font-size:0.9rem}
+.btn-browse{background:var(--orange);color:var(--dark);border:none;border-radius:4px;padding:11px 28px;font-size:0.9rem;font-weight:700;cursor:pointer;transition:background .15s}
+.btn-browse:hover{background:#e68900}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--dark);color:white;border-radius:100px;padding:10px 22px;font-size:0.84rem;font-weight:600;z-index:9999;transition:transform .3s;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* FOOTER */
+footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;margin-top:32px}
+.foot-inner{max-width:1300px;margin:0 auto}
+.foot-bottom{text-align:center;font-size:0.73rem;color:rgba(255,255,255,0.45);padding-top:14px}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .sidebar{width:200px}
+}
+@media(max-width:768px){
+  .nav-search{display:none}
+  .nav-hamburger{display:flex}
+  .mobile-drawer{display:flex}
+  .mobile-filter-toggle{display:flex}
+  .page{flex-direction:column}
+  .sidebar{display:none;width:100%;position:static}
+  .sidebar.mobile-open{display:block}
+  .orders-header{flex-direction:column;align-items:flex-start}
+  .order-card-header{gap:10px}
+  .item-actions{display:grid;grid-template-columns:1fr 1fr}
+  .order-header-right{width:100%;margin-left:0;justify-content:flex-end}
+}
+@media(max-width:480px){
+  .order-card-header{padding:10px 14px}
+  .order-item{padding:14px}
+  .item-emoji{font-size:2rem;width:44px;height:44px}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-top">
+    <a class="nav-logo" href="index.html">Vibe<span>Store</span></a>
+    <button class="nav-hamburger" onclick="openDrawer()" aria-label="Menu">☰</button>
+    <div class="nav-search">
+      <select class="nav-search-cat"><option>All</option><option>Electronics</option><option>Fashion</option><option>Home</option><option>Books</option></select>
+      <input type="text" placeholder="Search VibeStore..."/>
+      <button class="nav-search-btn">🔍</button>
+    </div>
+    <a href="account.html" class="nav-btn" id="navAccountBtn">
+      <span class="vs-nav-greeting">Hello, Sign in</span>
+      <strong>Account &amp; Lists ▾</strong>
+    </a>
+    <a href="orders.html" class="nav-btn" style="border-color:var(--orange);color:var(--orange)">
+      <span>Returns</span>
+      <strong>&amp; Orders</strong>
+    </a>
+    <a href="cart.html" class="nav-cart">
+      <div>
+        <div class="nav-cart-count" id="cartCount">0</div>
+        <div class="nav-cart-text">Cart 🛒</div>
+      </div>
+    </a>
+  </div>
+  <div class="nav-bottom">
+    <button class="nav-bot-btn">☰ All</button>
+    <a href="sale.html" class="nav-bot-btn">Today's Deals</a>
+    <a href="collections.html" class="nav-bot-btn">New Arrivals</a>
+    <a href="account.html" class="nav-bot-btn">Your Account</a>
+    <a href="orders.html" class="nav-bot-btn active">Your Orders</a>
+    <a href="returns.html" class="nav-bot-btn">Returns</a>
+    <a href="track.html" class="nav-bot-btn">Track Package</a>
+  </div>
+</nav>
+
+<!-- MOBILE DRAWER -->
+<div class="mobile-drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <button class="drawer-close" onclick="closeDrawer()">✕ Close</button>
+  <a href="index.html" class="drawer-link">🏠 Home</a>
+  <a href="account.html" class="drawer-link">👤 Your Account</a>
+  <a href="orders.html" class="drawer-link" style="color:var(--orange)">📦 Your Orders</a>
+  <a href="track.html" class="drawer-link">🚚 Track Package</a>
+  <a href="returns.html" class="drawer-link">↩️ Returns</a>
+  <a href="sale.html" class="drawer-link">⚡ Today's Deals</a>
+  <a href="collections.html" class="drawer-link">🛍️ Shop All</a>
+  <a href="cart.html" class="drawer-link">🛒 Cart</a>
+  <a href="#" class="drawer-link vs-logout-btn" style="display:none;color:#ff6b6b">🚪 Sign Out</a>
+</div>
+
+<div class="page" id="pageRoot">
+
+  <!-- FILTER SIDEBAR -->
+  <button class="mobile-filter-toggle" onclick="toggleMobileFilter()">Filter ▾</button>
+  <div class="sidebar" id="sidebar">
+    <h3>Filter orders</h3>
+
+    <div class="filter-section">
+      <div class="filter-label">Time period</div>
+      <label class="filter-option"><input type="radio" name="period" checked> Last 30 days</label>
+      <label class="filter-option"><input type="radio" name="period"> Last 6 months</label>
+      <label class="filter-option"><input type="radio" name="period"> 2025</label>
+      <label class="filter-option"><input type="radio" name="period"> 2024</label>
+      <label class="filter-option"><input type="radio" name="period"> Archived</label>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Category</div>
+      <label class="filter-option"><input type="checkbox"> Electronics</label>
+      <label class="filter-option"><input type="checkbox"> Fashion</label>
+      <label class="filter-option"><input type="checkbox"> Home</label>
+      <label class="filter-option"><input type="checkbox"> Books</label>
+      <label class="filter-option"><input type="checkbox"> Sports</label>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-label">Order status</div>
+      <label class="filter-option"><input type="radio" name="status" checked> All</label>
+      <label class="filter-option"><input type="radio" name="status"> Delivered</label>
+      <label class="filter-option"><input type="radio" name="status"> In Transit</label>
+      <label class="filter-option"><input type="radio" name="status"> Cancelled</label>
+      <label class="filter-option"><input type="radio" name="status"> Returns</label>
+    </div>
+
+    <button class="btn-apply-filter" onclick="showToast('Filters applied')">Apply Filters</button>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <div class="orders-header">
+      <div>
+        <div class="orders-title">Your Orders</div>
+        <div class="orders-count">Showing 1–8 of 8 orders</div>
+      </div>
+    </div>
+
+    <div class="orders-search-row">
+      <input type="text" id="orderSearch" placeholder="Search your orders by product name or order #" onkeyup="filterOrders()"/>
+      <button class="btn-search-orders" onclick="filterOrders()">Search</button>
+    </div>
+
+    <!-- ORDERS LIST -->
+    <div id="ordersList">
+
+      <!-- ORDER 1: Delivered - 2 items -->
+      <div class="order-card" data-search="wireless headphones sony wh-1000xm5 usb-c cable vs-2026-5234">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">15 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹3,798</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5234</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">🎧</div>
+          <div class="item-body">
+            <div class="item-name">Wireless Headphones Sony WH-1000XM5</div>
+            <div class="item-seller"><span>Sold by:</span> TechHub Electronics &nbsp;★4.7</div>
+            <div class="item-status s-green">✅ Delivered May 18, 2026</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn primary" onclick="buyAgain('Sony WH-1000XM5',2499)">Buy Again</button>
+              <button class="act-btn" onclick="location.href='product.html#reviews'">Write a Review</button>
+              <button class="act-btn" onclick="location.href='returns.html'">Return or Replace</button>
+            </div>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">🔌</div>
+          <div class="item-body">
+            <div class="item-name">USB-C Cable 2m (2-pack)</div>
+            <div class="item-seller"><span>Sold by:</span> TechHub Electronics</div>
+            <div class="item-status s-green">✅ Delivered May 18, 2026</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn primary" onclick="buyAgain('USB-C Cable',399)">Buy Again</button>
+              <button class="act-btn" onclick="location.href='product.html#reviews'">Write a Review</button>
+              <button class="act-btn" onclick="location.href='returns.html'">Return or Replace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 2: Delivered -->
+      <div class="order-card" data-search="nike air max 270 running shoes vs-2026-5198">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">10 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹8,995</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5198</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">👟</div>
+          <div class="item-body">
+            <div class="item-name">Nike Air Max 270 Running Shoes — Size 9 (Black)</div>
+            <div class="item-seller"><span>Sold by:</span> FashionFirst &nbsp;★4.5</div>
+            <div class="item-status s-green">✅ Delivered May 13, 2026</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn primary" onclick="buyAgain('Nike Air Max 270',8995)">Buy Again</button>
+              <button class="act-btn" onclick="location.href='product.html#reviews'">Write a Review</button>
+              <button class="act-btn" onclick="location.href='returns.html'">Return or Replace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 3: Delivered -->
+      <div class="order-card" data-search="atomic habits james clear book vs-2026-5142">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">5 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹499</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5142</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">📗</div>
+          <div class="item-body">
+            <div class="item-name">Atomic Habits — James Clear (Paperback)</div>
+            <div class="item-seller"><span>Sold by:</span> BookWorld &nbsp;★4.8</div>
+            <div class="item-status s-green">✅ Delivered May 8, 2026</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn primary" onclick="buyAgain('Atomic Habits',499)">Buy Again</button>
+              <button class="act-btn" onclick="location.href='product.html#reviews'">Write a Review</button>
+              <button class="act-btn" onclick="location.href='returns.html'">Return or Replace</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 4: In Transit -->
+      <div class="order-card" data-search="samsung galaxy buds3 pro earbuds vs-2026-5267">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">18 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹12,999</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5267</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">🎵</div>
+          <div class="item-body">
+            <div class="item-name">Samsung Galaxy Buds3 Pro True Wireless Earbuds</div>
+            <div class="item-seller"><span>Sold by:</span> TechHub Electronics &nbsp;★4.6</div>
+            <div class="item-status s-blue">🚚 Out for Delivery — arriving today</div>
+            <div class="item-actions">
+              <button class="act-btn primary" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
+              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 5: In Transit -->
+      <div class="order-card" data-search="philips air fryer xxl kitchen appliance vs-2026-5255">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">16 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹6,499</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5255</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">🍳</div>
+          <div class="item-body">
+            <div class="item-name">Philips Air Fryer XXL 6.2L — Digital Touch Panel</div>
+            <div class="item-seller"><span>Sold by:</span> HomeEssentials &nbsp;★4.3</div>
+            <div class="item-status s-blue">🚚 In Transit — expected May 21, 2026</div>
+            <div class="item-actions">
+              <button class="act-btn primary" onclick="location.href='track.html'">Track Package</button>
+              <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
+              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 6: Processing -->
+      <div class="order-card" data-search="apple watch series 10 smartwatch vs-2026-5281">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">20 May 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹44,900</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5281</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">⌚</div>
+          <div class="item-body">
+            <div class="item-name">Apple Watch Series 10 GPS 46mm — Starlight Aluminium</div>
+            <div class="item-seller"><span>Sold by:</span> ApexTech Store &nbsp;★4.9</div>
+            <div class="item-status s-orange">⏳ Processing — payment confirmed</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+              <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 7: Cancelled -->
+      <div class="order-card" data-search="levi's 511 slim jeans denim vs-2026-5101">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">28 Apr 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹2,499</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5101</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">👖</div>
+          <div class="item-body">
+            <div class="item-name">Levi's 511 Slim Fit Jeans — Dark Indigo (Size 32×30)</div>
+            <div class="item-seller"><span>Sold by:</span> FashionFirst &nbsp;★4.4</div>
+            <div class="item-status s-red">❌ Cancelled — May 1, 2026 (refund processed)</div>
+            <div class="item-actions">
+              <button class="act-btn primary" onclick="buyAgain('Levis 511 Jeans',2499)">Buy Again</button>
+              <button class="act-btn" onclick="showToast('Showing order details...')">See Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ORDER 8: Return Requested -->
+      <div class="order-card" data-search="instant pot duo 7-in-1 pressure cooker vs-2026-5078">
+        <div class="order-card-header">
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order Placed</div>
+            <div class="order-meta-val">20 Apr 2026</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Total</div>
+            <div class="order-meta-val">₹9,299</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Ship To</div>
+            <div class="order-meta-val">Aryan Kapoor</div>
+          </div>
+          <div class="order-meta-group">
+            <div class="order-meta-label">Order #</div>
+            <div class="order-meta-val order-number">#VS-2026-5078</div>
+          </div>
+          <div class="order-header-right">
+            <span class="invoice-link" onclick="showToast('📄 GST Invoice downloaded')">📄 Invoice ↓</span>
+          </div>
+        </div>
+        <div class="order-item">
+          <div class="item-emoji">🍲</div>
+          <div class="item-body">
+            <div class="item-name">Instant Pot Duo 7-in-1 Electric Pressure Cooker 5.7L</div>
+            <div class="item-seller"><span>Sold by:</span> HomeEssentials &nbsp;★4.2</div>
+            <div class="item-status s-purple" style="color:var(--purple)">↩️ Return Requested — pickup scheduled May 22</div>
+            <div class="item-actions">
+              <button class="act-btn" onclick="location.href='track.html'">Track Return</button>
+              <button class="act-btn" onclick="location.href='returns.html'">See Return Details</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /ordersList -->
+
+    <!-- EMPTY STATE (hidden by default) -->
+    <div id="emptyState" style="display:none">
+      <div class="empty-state">
+        <span class="empty-emoji">📦</span>
+        <div class="empty-title">No orders found</div>
+        <div class="empty-sub">No orders match your search. Try different keywords or browse products.</div>
+        <button class="btn-browse" onclick="location.href='index.html'">Browse Products</button>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /page -->
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-bottom">© 2026 VibeStore · MyOoumph Networks Pvt Ltd · Lucknow, India</div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="auth.js"></script>
+<script>
+// AUTH GUARD
+const auth = vsRequireAuth(['buyer']);
+if (auth) vsUpdateNav(auth);
+
+// Update account nav link
+const navAccBtn = document.getElementById('navAccountBtn');
+if (auth) {
+  navAccBtn.href = 'account.html';
+} else {
+  navAccBtn.href = 'login.html';
+}
+
+// CART COUNT
+(function(){
+  try{
+    const c = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const el = document.getElementById('cartCount');
+    if(el) el.textContent = c.reduce((s,i)=>s+(i.qty||1),0);
+  }catch{}
+})();
+
+// DRAWER
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
+
+// MOBILE FILTER TOGGLE
+function toggleMobileFilter(){
+  const sb = document.getElementById('sidebar');
+  sb.classList.toggle('mobile-open');
+}
+
+// TOAST
+let _toastTimer;
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+// BUY AGAIN
+function buyAgain(name, price){
+  try{
+    const c = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+    const ex = c.find(i=>i.name===name);
+    if(ex) ex.qty = (ex.qty||1)+1;
+    else c.push({name, price, qty:1, emoji:'📦', seller:'VibeStore'});
+    localStorage.setItem('vs_cart', JSON.stringify(c));
+    const el = document.getElementById('cartCount');
+    if(el) el.textContent = c.reduce((s,i)=>s+(i.qty||1),0);
+  }catch{}
+  showToast('Added to cart ✅');
+  setTimeout(()=>location.href='cart.html', 1200);
+}
+
+// SEARCH/FILTER
+function filterOrders(){
+  const q = document.getElementById('orderSearch').value.trim().toLowerCase();
+  const cards = document.querySelectorAll('#ordersList .order-card');
+  let visible = 0;
+  cards.forEach(card=>{
+    const text = card.dataset.search || card.textContent.toLowerCase();
+    const show = !q || text.includes(q);
+    card.style.display = show ? 'block' : 'none';
+    if(show) visible++;
+  });
+  document.getElementById('emptyState').style.display = visible === 0 ? 'block' : 'none';
+}
+</script>
+</body>
+</html>
