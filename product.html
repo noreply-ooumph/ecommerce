@@ -726,6 +726,14 @@ footer a{color:#ccc}
   </div>
 </div>
 
+<!-- ═══ ALSO VIEWED RECOMMENDATIONS ═══ -->
+<div class="section">
+  <div class="section-card">
+    <div class="section-title">Customers Also Viewed</div>
+    <div id="also-viewed-recs" style="display:flex;gap:12px;overflow-x:auto;padding:4px 0;margin-top:16px;"></div>
+  </div>
+</div>
+
 <!-- ═══ RECENTLY VIEWED ═══ -->
 <div class="section">
   <div class="section-card">
@@ -799,9 +807,86 @@ async function loadProductFromDB() {
     // Increment view count
     dbGetProductById && vsIncrementProductView && vsIncrementProductView(productId);
     document.title = p.name + ' — VibeStore';
+
+    // 1. Apply dynamic pricing
+    const dynamicProduct = typeof vsPriceProduct === 'function' ? vsPriceProduct(p) : p;
+    const finalPrice = typeof vsApplyGeoPrice === 'function' ? vsApplyGeoPrice(dynamicProduct.price) : dynamicProduct.price;
+
+    // 2. Show dynamic price with reason badge
+    const priceEl = document.querySelector('.price-main, .buy-price, .product-price');
+    if (priceEl) priceEl.textContent = '₹' + finalPrice.toLocaleString();
+
+    // Show price reason
+    if (dynamicProduct.priceReason && dynamicProduct.priceReason !== 'Standard pricing') {
+      const reasonBadge = document.getElementById('price-reason-badge') || document.createElement('div');
+      reasonBadge.id = 'price-reason-badge';
+      reasonBadge.style.cssText = 'display:inline-block;background:#fff8ee;border:1px solid #FF9900;border-radius:20px;padding:2px 10px;font-size:11px;color:#c07000;font-weight:600;margin-top:4px;';
+      reasonBadge.textContent = '⚡ ' + dynamicProduct.priceReason;
+      if (priceEl && !document.getElementById('price-reason-badge')) priceEl.after(reasonBadge);
+    }
+
+    // 3. Price anchoring — show "was" price on return visits
+    const anchorPrice = typeof vsGetAnchorPrice === 'function' ? vsGetAnchorPrice(p.id, finalPrice) : null;
+    if (anchorPrice && anchorPrice > finalPrice) {
+      const wasEl = document.getElementById('anchor-price-el') || document.createElement('div');
+      wasEl.id = 'anchor-price-el';
+      wasEl.style.cssText = 'font-size:13px;color:#999;text-decoration:line-through;margin-top:2px;';
+      wasEl.textContent = 'Was ₹' + anchorPrice.toLocaleString();
+      if (priceEl && !document.getElementById('anchor-price-el')) priceEl.after(wasEl);
+    }
+
+    // 4. Geographic pricing info
+    const city = typeof vsGetUserCity === 'function' ? vsGetUserCity() : '';
+    const geoTier = typeof vsGetGeoTier === 'function' ? vsGetGeoTier() : '';
+    if (city && geoTier === 'Metro') {
+      const geoEl = document.createElement('div');
+      geoEl.style.cssText = 'font-size:11px;color:#666;margin-top:3px;';
+      geoEl.textContent = `📍 Metro pricing (${city})`;
+      if (priceEl && !document.querySelector('.geo-price-note')) { geoEl.className='geo-price-note'; priceEl.after(geoEl); }
+    }
+
+    // 5. Track product view
+    if (typeof vsTrack === 'function') vsTrack('product_view', { productId: p.id, category: p.category, price: finalPrice });
+
+    // 6. Load similar products (recommendations)
+    if (typeof vsGetSimilarProducts === 'function') {
+      vsGetSimilarProducts(p.id, 6).then(similar => {
+        const recContainer = document.getElementById('also-viewed-recs');
+        if (recContainer && similar.length > 0) {
+          recContainer.innerHTML = similar.map(sp => `
+            <div style="flex-shrink:0;width:140px;background:#fff;border-radius:8px;padding:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;" onclick="window.location.href='product.html?id=${sp.id}'">
+              <div style="font-size:2.5rem;text-align:center;padding:8px;background:#f5f7fa;border-radius:6px;margin-bottom:8px;">${sp.emoji}</div>
+              <div style="font-size:11px;font-weight:600;line-height:1.3;margin-bottom:4px;">${sp.name.slice(0,35)}${sp.name.length>35?'...':''}</div>
+              <div style="font-size:13px;font-weight:700;color:#0f1111;">₹${Number(sp.price).toLocaleString()}</div>
+            </div>`).join('');
+        }
+      });
+    }
+
+    // 7. Buy Box algorithm for multiple sellers
+    const mockSellers = [
+      { sellerId: p.sellerId, sellerName: p.sellerName, price: finalPrice, rating: p.rating||4, fulfilment: 'vibestore', shippingDays: 1, stock: p.stock },
+      { sellerId: 'alt1', sellerName: 'QuickMart India', price: Math.round(finalPrice*1.03), rating: 3.8, fulfilment: 'seller', shippingDays: 3, stock: 12 },
+      { sellerId: 'alt2', sellerName: 'ValueZone', price: Math.round(finalPrice*0.99), rating: 3.5, fulfilment: 'seller', shippingDays: 5, stock: 4 }
+    ];
+    const winner = typeof vsBuyBoxWinner === 'function' ? vsBuyBoxWinner(mockSellers) : mockSellers[0];
+    const buyBoxEl = document.querySelector('.sold-by-name, .seller-name-link');
+    if (buyBoxEl && winner) {
+      buyBoxEl.textContent = winner.sellerName;
+      // Add buy box score badge
+      const scoreBadge = document.createElement('span');
+      scoreBadge.style.cssText = 'font-size:10px;background:#e6f9f2;color:#067D62;padding:1px 6px;border-radius:10px;margin-left:6px;font-weight:600;';
+      scoreBadge.textContent = `Score: ${winner.buyBoxScore}`;
+      buyBoxEl.after(scoreBadge);
+    }
+
     // Add to cart button
     const cartBtn = document.querySelector('#add-to-cart-btn, .add-to-cart-main');
-    if(cartBtn) cartBtn.onclick = () => addToCartDB(p.id, p.name, p.price, p.emoji, p.sellerName, p.sellerId);
+    if(cartBtn) cartBtn.onclick = () => {
+      addToCartDB(p.id, p.name, finalPrice, p.emoji, p.sellerName, p.sellerId);
+      if(typeof vsTrack==='function') vsTrack('add_to_cart', {productId: p.id, price: finalPrice});
+      if(typeof vsTrackConversion==='function') vsTrackConversion('cta_color', 'add_to_cart');
+    };
   } catch(e) { console.warn('Product load error:', e); }
 }
 
@@ -980,6 +1065,11 @@ function showToast(msg){
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
 <script src="vs_store.js"></script>
+<script src="pricing-engine.js"></script>
+<script src="tracker.js"></script>
+<script src="recommendations.js"></script>
+<script src="ab-test.js"></script>
+<script src="commission-engine.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){

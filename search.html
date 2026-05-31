@@ -568,6 +568,11 @@ body{font-family:'Inter',sans-serif;background:var(--body-bg);color:var(--text);
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
 <script src="vs_store.js"></script>
+<script src="pricing-engine.js"></script>
+<script src="tracker.js"></script>
+<script src="recommendations.js"></script>
+<script src="ab-test.js"></script>
+<script src="commission-engine.js"></script>
 <script src="rex-chat.js"></script>
 <script>
 // ===== DATA =====
@@ -877,12 +882,63 @@ function rm(id){ cart=cart.filter(c=>c.id!==id);localStorage.setItem('vs_cart',J
 function openCart(){ document.getElementById('cartOverlay').classList.add('open');document.getElementById('cartDrawer').classList.add('open'); }
 function closeCart(){ document.getElementById('cartOverlay').classList.remove('open');document.getElementById('cartDrawer').classList.remove('open'); }
 
+// ===== RANKED RESULTS (JS engines) =====
+async function renderRankedResults(query) {
+  const products = typeof dbGetProducts === 'function' ? await dbGetProducts('active') : [];
+  const ranked = typeof vsRankSearchResults === 'function' ? vsRankSearchResults(products, query) : products;
+
+  // Apply dynamic pricing to all results
+  const priced = ranked.map(p => {
+    const dyn = typeof vsPriceProduct === 'function' ? vsPriceProduct(p) : p;
+    return { ...dyn, displayPrice: typeof vsApplyGeoPrice === 'function' ? vsApplyGeoPrice(dyn.price) : dyn.price };
+  });
+
+  // Track search
+  if (typeof vsTrack === 'function') vsTrack('search', { query, resultCount: priced.length });
+
+  const container = document.getElementById('search-results') || document.getElementById('resultsContainer') || document.querySelector('.results-list');
+  if (!container || priced.length === 0) return;
+
+  const html = priced.slice(0, 10).map((p, idx) => {
+    const sav = p.mrp > p.displayPrice ? Math.round((1-p.displayPrice/p.mrp)*100) : 0;
+    const sponsored = p.sponsored || (p.searchScore && p.searchScore > 15 && idx < 3);
+    return `
+    <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:10px;display:flex;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)${sponsored?';border-left:3px solid #FF9900':''}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
+      ${sponsored?'<div style="font-size:10px;color:#999;font-weight:600;margin-bottom:4px;">Sponsored</div>':''}
+      <div style="font-size:48px;width:72px;height:72px;background:#f5f7fa;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.emoji}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;color:#007185;font-weight:600;">${p.sellerName}</div>
+        <div style="font-weight:600;font-size:14px;margin:3px 0;">${p.name}</div>
+        <div style="font-size:12px;color:#666;margin-bottom:6px;">${(p.description||'').slice(0,80)}</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <span style="font-size:17px;font-weight:700;">₹${p.displayPrice.toLocaleString()}</span>
+          ${sav>0?`<span style="font-size:11px;color:#CC0C39;font-weight:600;">${sav}% off</span>`:''}
+          ${p.priceReason&&p.priceReason!=='Standard pricing'?`<span style="font-size:10px;background:#fff8ee;border:1px solid #FF9900;border-radius:10px;padding:1px 7px;color:#c07000;">⚡${p.priceReason}</span>`:''}
+          <button onclick="event.stopPropagation();addToCartQuick('${p.id}','${p.name.replace(/'/g,"\\'")}',${p.displayPrice},'${p.emoji}')" style="background:#FF9900;color:#0f1111;border:none;padding:5px 12px;border-radius:5px;font-weight:700;font-size:11px;cursor:pointer;margin-left:auto;">Add to Cart</button>
+        </div>
+        <div style="font-size:11px;color:#007185;margin-top:4px;">🚀 FREE Delivery · ${p.fulfilment==='vibestore'?'VibeStore Fulfilled':'Seller Fulfilled'}</div>
+      </div>
+    </div>`;
+  }).join('');
+  container.insertAdjacentHTML('afterbegin', `<div style="margin-bottom:16px;"><p style="font-size:13px;color:#666;margin-bottom:10px;font-weight:600;">📊 ${priced.length} results ranked by relevance · ${typeof vsGetGeoTier==='function'?vsGetGeoTier()+' pricing':''}</p>${html}</div>`);
+}
+
+function addToCartQuick(id, name, price, emoji) {
+  const cart = JSON.parse(localStorage.getItem('vs_cart')||'[]');
+  const i = cart.findIndex(x=>x.id===id);
+  if(i>-1) cart[i].qty++; else cart.push({id,name,price,emoji,qty:1});
+  localStorage.setItem('vs_cart', JSON.stringify(cart));
+  const countEl = document.querySelector('.cart-count,#cartCount');
+  if(countEl) countEl.textContent = cart.reduce((a,x)=>a+x.qty,0);
+}
+
 // ===== URL PARAM =====
 const urlQ = new URLSearchParams(window.location.search).get('q');
 if (urlQ) {
   currentQuery = urlQ;
   document.getElementById('searchBar').value = urlQ;
   updateHeading(urlQ);
+  renderRankedResults(urlQ);
 }
 
 // ===== INIT =====

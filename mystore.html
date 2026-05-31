@@ -10,6 +10,11 @@
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
 <script src="vs_store.js"></script>
+<script src="pricing-engine.js"></script>
+<script src="tracker.js"></script>
+<script src="recommendations.js"></script>
+<script src="ab-test.js"></script>
+<script src="commission-engine.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -471,6 +476,14 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
   .nav-logo{font-size:1.1rem;}
   .footer-grid,.footer-cols{grid-template-columns:1fr 1fr!important;}
 }
+@media(max-width:768px){
+  #personalized-recs-grid{grid-template-columns:repeat(2,1fr)!important;}
+  #trending-grid{grid-template-columns:repeat(3,1fr)!important;}
+  #vibepass-banner{flex-direction:column!important;text-align:center;}
+}
+@media(max-width:480px){
+  #trending-grid{grid-template-columns:repeat(2,1fr)!important;}
+}
 </style>
 </head>
 <body>
@@ -733,6 +746,36 @@ body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overf
       <div id="marketplace-products-grid" style="display:contents;"></div>
     </div>
   </div>
+</div>
+
+<!-- PERSONALIZED RECOMMENDATIONS -->
+<section id="personalized-recs-section" style="display:none;background:#fff;margin-top:12px;padding:16px 0;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 16px;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;">🎯 Recommended For You</div>
+        <div style="font-size:12px;color:#666;margin-top:2px;">Based on your browsing history</div>
+      </div>
+    </div>
+    <div id="personalized-recs-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;"></div>
+  </div>
+</section>
+
+<!-- TRENDING NOW -->
+<section style="background:var(--bg);padding:16px 0;margin-top:4px;">
+  <div style="max-width:1280px;margin:0 auto;padding:0 16px;">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:14px;">🔥 Trending Now</div>
+    <div id="trending-grid" style="display:grid;grid-template-columns:repeat(6,1fr);gap:10px;"></div>
+  </div>
+</section>
+
+<!-- VIBEPASS BANNER -->
+<div id="vibepass-banner" style="display:none;background:linear-gradient(135deg,#131921,#232f3e);margin:12px 0;padding:20px;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+  <div style="color:#fff;">
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:4px;">⚡ Get VibePass — ₹299/month</div>
+    <div style="font-size:13px;color:rgba(255,255,255,0.7);">FREE delivery · Exclusive deals · 2x points · Early Lightning Deal access</div>
+  </div>
+  <a href="vibepass.html" style="background:#FF9900;color:#0f1111;padding:10px 22px;border-radius:6px;font-weight:700;text-decoration:none;font-size:13px;">Try Free for 30 Days →</a>
 </div>
 
 <!-- ── FLASH SALE BANNER ── -->
@@ -1224,6 +1267,53 @@ renderCart();
 
 document.addEventListener('DOMContentLoaded', () => {
   dbSeedDemo().then(() => renderMarketplaceProducts());
+
+  // Personalized recommendations section
+  if (typeof vsGetPersonalizedRecommendations === 'function') {
+    vsGetPersonalizedRecommendations(8).then(recs => {
+      const recSection = document.getElementById('personalized-recs-grid');
+      if (recSection && recs.length > 0) {
+        recSection.innerHTML = recs.map(p => {
+          const sav = p.mrp > p.price ? Math.round((1-p.price/p.mrp)*100) : 0;
+          const dynPrice = typeof vsApplyGeoPrice === 'function' ? vsApplyGeoPrice(p.price) : p.price;
+          return `<div style="background:#fff;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;" onclick="window.location.href='product.html?id=${p.id}'">
+            <div style="font-size:56px;text-align:center;padding:10px;background:#f5f7fa;border-radius:6px;margin-bottom:10px;">${p.emoji}</div>
+            <div style="font-size:11px;color:#007185;font-weight:600;">${p.sellerName}</div>
+            <div style="font-weight:600;font-size:13px;margin:4px 0;line-height:1.3;">${p.name}</div>
+            <div style="font-size:16px;font-weight:700;">₹${dynPrice.toLocaleString()}</div>
+            ${sav>0?`<div style="font-size:11px;color:#CC0C39;font-weight:600;">${sav}% off</div>`:''}
+            <button onclick="event.stopPropagation();addToCartDB('${p.id}','${p.name.replace(/'/g,"\\'")}',${dynPrice},'${p.emoji}','${p.sellerName}','${p.sellerId}')" style="width:100%;background:#FF9900;color:#0f1111;border:none;padding:8px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;margin-top:8px;">Add to Cart</button>
+          </div>`;
+        }).join('');
+        document.getElementById('personalized-recs-section').style.display = 'block';
+      }
+    });
+  }
+
+  // Trending products
+  if (typeof vsGetTrending === 'function') {
+    vsGetTrending(6).then(trending => {
+      const trendGrid = document.getElementById('trending-grid');
+      if (trendGrid && trending.length > 0) {
+        trendGrid.innerHTML = trending.map(p => `
+          <div style="background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);cursor:pointer;text-align:center;" onclick="window.location.href='product.html?id=${p.id}'">
+            <div style="font-size:2.5rem;margin-bottom:6px;">${p.emoji}</div>
+            <div style="font-size:12px;font-weight:600;line-height:1.3;">${p.name.slice(0,28)}${p.name.length>28?'...':''}</div>
+            <div style="font-size:14px;font-weight:700;color:#CC0C39;margin-top:4px;">₹${Number(p.price).toLocaleString()}</div>
+            <div style="font-size:10px;color:#999;margin-top:2px;">🔥 ${p.orders||0} sold</div>
+          </div>`).join('');
+      }
+    });
+  }
+
+  // VibePass banner for non-members
+  if (typeof vsIsVibePassMember === 'function' && !vsIsVibePassMember()) {
+    const vpBanner = document.getElementById('vibepass-banner');
+    if (vpBanner) vpBanner.style.display = 'flex';
+  }
+
+  // Track page view
+  if (typeof vsTrack === 'function') vsTrack('page_view', { page: 'marketplace_home' });
 });
 </script>
 

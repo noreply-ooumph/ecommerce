@@ -8,6 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="auth.js"></script>
+<script src="pricing-engine.js"></script>
+<script src="tracker.js"></script>
+<script src="recommendations.js"></script>
+<script src="ab-test.js"></script>
+<script src="commission-engine.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
@@ -572,6 +577,8 @@
     </div>
   </div>
 
+  <div id="ab-results-summary"></div>
+
 </main>
 
 <script>
@@ -670,6 +677,32 @@ document.addEventListener('DOMContentLoaded', () => {
   if (sellerCat) {
     const catPill = document.getElementById('seller-cat-pill');
     if (catPill) { catPill.textContent = sellerCat; catPill.style.display = 'inline-block'; }
+  }
+
+  // Show A/B test results summary
+  if (typeof vsGetABResults === 'function') {
+    const results = vsGetABResults();
+    const abContainer = document.getElementById('ab-results-summary');
+    if (abContainer) {
+      const tests = Object.values(results);
+      abContainer.innerHTML = `
+        <div style="background:#fff;border-radius:10px;padding:16px 20px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06);">
+          <div style="font-size:14px;font-weight:700;margin-bottom:12px;">🧪 A/B Test Results</div>
+          ${tests.map(t => `
+            <div style="margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid #f0f2f5;">
+              <div style="font-size:12px;color:#666;margin-bottom:4px;">${t.name}</div>
+              ${t.variants.map((v, i) => `
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:3px;">
+                  ${i===0?'<span style="font-size:10px;background:#e6f9f2;color:#067D62;padding:1px 6px;border-radius:10px;font-weight:700;">WINNER</span>':'<span style="width:46px;"></span>'}
+                  <span style="font-size:12px;flex:1;">${v.label}</span>
+                  <span style="font-size:12px;font-weight:600;color:${i===0?'#067D62':'#999'};">${v.conversionRate}%</span>
+                </div>
+              `).join('')}
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
   }
 });
 
