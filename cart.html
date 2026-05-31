@@ -517,6 +517,7 @@
 
 </div><!-- /page-wrap -->
 
+<script src="product-photos.js"></script>
 <script src="vs_store.js"></script>
 <script src="auth.js"></script>
 <script>
@@ -657,7 +658,11 @@
         }
 
         el.innerHTML = `
-          <div class="item-emoji">${item.emoji}</div>
+          <div class="item-emoji" style="width:80px;height:80px;border-radius:8px;overflow:hidden;flex-shrink:0;background:#f5f7fa;display:flex;align-items:center;justify-content:center;font-size:2.2rem;border:1px solid #eee;">
+            ${typeof vsGetProductPhoto==='function'
+              ? `<img src="${vsGetProductPhoto(item.name||'',item.category||'Other','80x80')}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.outerHTML='<span style=font-size:2rem>${item.emoji||'📦'}</span>'">`
+              : item.emoji||'📦'}
+          </div>
           <div class="item-center">
             <a class="item-name" href="product.html" title="${item.name}">${item.name}</a>
             <div class="item-meta">

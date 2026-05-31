@@ -576,6 +576,7 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
 
+<script src="product-photos.js"></script>
 <script src="auth.js"></script>
 <script src="rex-chat.js"></script>
 <script>
@@ -626,6 +627,31 @@ function submitCancel(){
   document.getElementById('cancelModal').style.display='none';
   toast('🤖 Zen AI is processing your cancellation request...');
 }
+
+// ===== INJECT PRODUCT PHOTOS INTO PACKAGE ITEMS =====
+(function() {
+  if (typeof vsGetProductPhoto !== 'function') return;
+  document.querySelectorAll('.pkg-item').forEach(function(item) {
+    const emojiEl = item.querySelector('.pkg-emoji');
+    const nameEl = item.querySelector('.pkg-name');
+    if (!emojiEl || !nameEl) return;
+    const productName = nameEl.textContent.trim();
+    const imgUrl = vsGetProductPhoto(productName, 'Electronics', '44x44');
+    const origEmoji = emojiEl.textContent.trim();
+    emojiEl.innerHTML = `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:4px;" loading="lazy" onerror="this.outerHTML='<span style=font-size:1.3rem>${origEmoji}</span>'">`;
+    emojiEl.style.padding = '0';
+    emojiEl.style.overflow = 'hidden';
+  });
+  // Also inject into buy-again cards
+  document.querySelectorAll('.ba-img').forEach(function(el) {
+    const nameEl = el.nextElementSibling && el.nextElementSibling.querySelector('.ba-name');
+    if (!nameEl) return;
+    const productName = nameEl.textContent.trim();
+    const imgUrl = vsGetProductPhoto(productName, 'Electronics', '80x80');
+    const origEmoji = el.textContent.trim();
+    el.innerHTML = `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.innerHTML='<span style=font-size:2rem>${origEmoji}</span>'">`;
+  });
+})();
 
 // ===== ANIMATE PROGRESS BAR =====
 setTimeout(()=>{

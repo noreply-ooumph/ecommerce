@@ -10,6 +10,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
+<script src="product-photos.js"></script>
 <script src="auth.js"></script>
 <script src="vs_store.js"></script>
 <script src="email-service.js"></script>
@@ -977,7 +978,11 @@ function loadSellerListings() {
       const catBadge = `<span style="background:${pColor}20;color:${pColor};padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700;">${pCat}</span>`;
       return `<tr>
         <td><input type="checkbox" class="row-check" value="${p.id}"></td>
-        <td style="font-size:24px;text-align:center;">${p.emoji || '📦'}</td>
+        <td style="text-align:center;">
+          <div style="width:48px;height:48px;border-radius:6px;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;background:#f5f7fa;">
+            ${typeof vsProductImage==='function' ? vsProductImage(p,48) : `<span style="font-size:1.5rem;">${p.emoji||'📦'}</span>`}
+          </div>
+        </td>
         <td style="font-weight:600;max-width:180px;">${p.name}<br><small style="color:#999;font-weight:400;">${p.sku || ''}</small></td>
         <td>${catBadge}</td>
         <td>₹${Number(p.price).toLocaleString()}<br><small style="color:#999;text-decoration:line-through;">₹${Number(p.mrp||0).toLocaleString()}</small></td>

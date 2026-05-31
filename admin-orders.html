@@ -293,7 +293,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10847</strong></td>
             <td>Priya Mehta</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">TechMart India</a></td>
-            <td>Sony WH-1000XM5</td>
+            <td class="prod-name-cell" data-product="Sony WH-1000XM5" data-category="Electronics">Sony WH-1000XM5</td>
             <td>22 May 2026</td>
             <td>₹24,999</td>
             <td><span class="status-badge sb-green">Delivered</span></td>
@@ -305,7 +305,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10846</strong></td>
             <td>Rahul Sharma</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">FashionKart</a></td>
-            <td>Nike Air Force 1</td>
+            <td class="prod-name-cell" data-product="Nike Air Force 1" data-category="Fashion">Nike Air Force 1</td>
             <td>22 May 2026</td>
             <td>₹8,499</td>
             <td><span class="status-badge sb-blue">Shipped</span></td>
@@ -317,7 +317,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10845</strong></td>
             <td>Aisha Khan</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">GadgetZone</a></td>
-            <td>iPhone 15 Pro</td>
+            <td class="prod-name-cell" data-product="iPhone 15 Pro" data-category="Electronics">iPhone 15 Pro</td>
             <td>21 May 2026</td>
             <td>₹1,34,999</td>
             <td><span class="status-badge sb-red">Dispute ⚖️</span></td>
@@ -331,7 +331,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10844</strong></td>
             <td>Vikram Patel</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">HomeDecor Plus</a></td>
-            <td>Ceramic Vase Set</td>
+            <td class="prod-name-cell" data-product="Ceramic Vase Set" data-category="Home">Ceramic Vase Set</td>
             <td>21 May 2026</td>
             <td>₹2,299</td>
             <td><span class="status-badge sb-yellow">Processing</span></td>
@@ -343,7 +343,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10843</strong></td>
             <td>Neha Reddy</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">BookHub</a></td>
-            <td>Harry Potter Box Set</td>
+            <td class="prod-name-cell" data-product="Harry Potter Box Set" data-category="Books">Harry Potter Box Set</td>
             <td>21 May 2026</td>
             <td>₹2,499</td>
             <td><span class="status-badge sb-green">Delivered</span></td>
@@ -355,7 +355,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10842</strong></td>
             <td>Arjun Singh</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">TechMart India</a></td>
-            <td>Samsung Galaxy S24</td>
+            <td class="prod-name-cell" data-product="Samsung Galaxy S24" data-category="Electronics">Samsung Galaxy S24</td>
             <td>20 May 2026</td>
             <td>₹79,999</td>
             <td><span class="status-badge sb-red">Dispute ⚖️</span></td>
@@ -367,7 +367,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10841</strong></td>
             <td>Meera Iyer</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">FashionKart</a></td>
-            <td>Zara Winter Jacket</td>
+            <td class="prod-name-cell" data-product="Zara Winter Jacket" data-category="Fashion">Zara Winter Jacket</td>
             <td>20 May 2026</td>
             <td>₹5,999</td>
             <td><span class="status-badge sb-green">Delivered</span></td>
@@ -379,7 +379,7 @@ td{padding:10px 12px;vertical-align:middle}
             <td><strong>#VS-10840</strong></td>
             <td>Suresh Kumar</td>
             <td><a class="teal-link" href="seller-profile.html" onclick="event.stopPropagation()">GadgetZone</a></td>
-            <td>Noise ColorFit Pro</td>
+            <td class="prod-name-cell" data-product="Noise ColorFit Pro" data-category="Electronics">Noise ColorFit Pro</td>
             <td>20 May 2026</td>
             <td>₹3,499</td>
             <td><span class="status-badge sb-gray">Cancelled</span></td>
@@ -409,6 +409,7 @@ td{padding:10px 12px;vertical-align:middle}
   <div class="panel-body" id="panelBody"></div>
 </div>
 
+<script src="product-photos.js"></script>
 <script src="auth.js"></script>
 <script>
 const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
@@ -461,6 +462,19 @@ function closePanel(){
   document.getElementById('overlay').classList.remove('show');
   document.getElementById('slidePanel').classList.remove('open');
 }
+
+// Inject product photos into order rows
+document.addEventListener('DOMContentLoaded', function() {
+  if (typeof vsGetProductPhoto !== 'function') return;
+  document.querySelectorAll('.prod-name-cell').forEach(function(td) {
+    const name = td.dataset.product || '';
+    const cat = td.dataset.category || 'Other';
+    const imgUrl = vsGetProductPhoto(name, cat, '36x36');
+    const text = td.textContent;
+    td.style.cssText = 'display:flex;align-items:center;gap:8px;';
+    td.innerHTML = `<div style="width:36px;height:36px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#f5f7fa;display:flex;align-items:center;justify-content:center;"><img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;" loading="lazy" onerror="this.style.display='none'"></div>${text}`;
+  });
+});
 </script>
 </body>
 </html>

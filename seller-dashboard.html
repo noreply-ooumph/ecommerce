@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="product-photos.js"></script>
 <script src="auth.js"></script>
 <script src="pricing-engine.js"></script>
 <script src="tracker.js"></script>
@@ -786,7 +787,9 @@ products.forEach((p, i) => {
   const pct = Math.min(100, (p.stock / 40) * 100);
   tpDiv.innerHTML += `<div class="product-row">
     <span class="rank-num">${i+1}</span>
-    <div class="product-emoji">${p.emoji}</div>
+    <div class="product-emoji" style="overflow:hidden;">
+      ${typeof vsProductImage==='function' ? vsProductImage(p,36) : `<span style="font-size:1.2rem;">${p.emoji||'📦'}</span>`}
+    </div>
     <div class="product-name">${p.name}<small>${p.units} sold today</small></div>
     <div class="product-revenue">${p.revenue}</div>
     <div>

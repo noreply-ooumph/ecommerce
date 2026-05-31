@@ -611,6 +611,7 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
 <div class="toast" id="toast"></div>
 
+<script src="product-photos.js"></script>
 <script src="cancellation.js"></script>
 <script src="email-service.js"></script>
 <script src="auth.js"></script>
@@ -676,6 +677,29 @@ function buyAgain(name, price){
   showToast('Added to cart ✅');
   setTimeout(()=>location.href='cart.html', 1200);
 }
+
+// Inject product photos into order item emojis
+(function() {
+  if (typeof vsGetProductPhoto !== 'function') return;
+  // Map of product name keywords to categories
+  const catMap = {'headphones':'Electronics','shoes':'Fashion','nike':'Fashion','book':'Books','atomic':'Books','harry':'Books','buds':'Electronics','galaxy':'Electronics','iphone':'Electronics','watch':'Electronics','apple watch':'Electronics','fryer':'Home','instant pot':'Home','jeans':'Fashion','jacket':'Fashion','cable':'Electronics','usb':'Electronics'};
+  document.querySelectorAll('.order-item').forEach(function(item) {
+    const emojiEl = item.querySelector('.item-emoji');
+    const nameEl = item.querySelector('.item-name');
+    if (!emojiEl || !nameEl) return;
+    const productName = nameEl.textContent.trim();
+    const lname = productName.toLowerCase();
+    let category = 'Other';
+    for (const [kw, cat] of Object.entries(catMap)) {
+      if (lname.includes(kw)) { category = cat; break; }
+    }
+    const imgUrl = vsGetProductPhoto(productName, category, '52x52');
+    const origEmoji = emojiEl.textContent.trim();
+    emojiEl.innerHTML = `<img src="${imgUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:6px;" loading="lazy" onerror="this.outerHTML='<span style=font-size:2.6rem>${origEmoji}</span>'">`;
+    emojiEl.style.padding = '0';
+    emojiEl.style.overflow = 'hidden';
+  });
+})();
 
 // SEARCH/FILTER
 function filterOrders(){
