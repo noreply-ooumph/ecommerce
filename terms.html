@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Terms of Service — VibeStore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="auth.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #111; overflow-x: hidden; }
+
+/* NAV */
+.nav-top { background: #131921; padding: 10px 0; position: sticky; top: 0; z-index: 1000; }
+.nav-top-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; gap: 16px; }
+.logo { color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 22px; text-decoration: none; letter-spacing: -0.5px; }
+.logo span { color: #FF9900; }
+.nav-right { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+.nav-link { color: #fff; text-decoration: none; font-size: 13px; padding: 6px 10px; border: 1px solid transparent; border-radius: 4px; white-space: nowrap; }
+.nav-link:hover { border-color: #fff; }
+.nav-hamburger { display: none; background: none; border: 1px solid transparent; color: #fff; font-size: 22px; padding: 4px 8px; border-radius: 4px; cursor: pointer; }
+.nav-hamburger:hover { border-color: #fff; }
+
+/* PAGE */
+.page-wrap { max-width: 860px; margin: 36px auto 48px; padding: 0 16px; }
+.back-link { display: inline-flex; align-items: center; gap: 6px; color: #007185; font-size: 14px; text-decoration: none; margin-bottom: 20px; }
+.back-link:hover { color: #c45500; text-decoration: underline; }
+
+/* HERO CARD */
+.legal-hero { background: #131921; border-radius: 12px 12px 0 0; padding: 48px 48px 36px; color: #fff; }
+.legal-hero h1 { font-family: 'Space Grotesk', sans-serif; font-size: 36px; font-weight: 700; margin-bottom: 10px; }
+.legal-hero h1 span { color: #FF9900; }
+.legal-hero .subtitle { color: #aaa; font-size: 16px; margin-bottom: 16px; }
+.badge-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.badge { display: inline-block; background: rgba(255,153,0,0.15); border: 1px solid rgba(255,153,0,0.4); color: #FF9900; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; letter-spacing: 0.3px; }
+.badge.green { background: rgba(0,200,100,0.12); border-color: rgba(0,200,100,0.35); color: #00c864; }
+
+/* CONTENT CARD */
+.legal-card { background: #fff; border-radius: 0 0 12px 12px; padding: 48px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+
+/* TOC */
+.toc { background: #f8f9fa; border: 1px solid #e8eaed; border-radius: 8px; padding: 24px 28px; margin-bottom: 40px; }
+.toc h3 { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; color: #111; margin-bottom: 16px; }
+.toc ol { padding-left: 20px; columns: 2; gap: 24px; }
+.toc ol li { margin-bottom: 8px; }
+.toc ol li a { color: #007185; font-size: 13px; text-decoration: none; line-height: 1.5; }
+.toc ol li a:hover { color: #c45500; text-decoration: underline; }
+
+/* SECTIONS */
+.legal-section { margin-bottom: 40px; padding-bottom: 40px; border-bottom: 1px solid #f0f0f0; }
+.legal-section:last-child { border-bottom: none; margin-bottom: 0; }
+.section-heading { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.section-num { width: 36px; height: 36px; background: #FF9900; color: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0; font-family: 'Space Grotesk', sans-serif; }
+.section-heading h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #111; }
+.legal-section p { font-size: 14px; line-height: 1.8; color: #333; margin-bottom: 12px; }
+.legal-section p:last-child { margin-bottom: 0; }
+.legal-section ul, .legal-section ol { padding-left: 22px; margin-bottom: 12px; }
+.legal-section li { font-size: 14px; line-height: 1.8; color: #333; margin-bottom: 4px; }
+
+/* NOTE BOX */
+.note-box { background: #fff8ee; border: 1px solid #ffcc80; border-left: 4px solid #FF9900; border-radius: 6px; padding: 14px 18px; margin: 16px 0; }
+.note-box p { margin: 0; font-size: 13px; color: #5a3e00; }
+.note-box strong { color: #c45500; }
+
+/* FOOTER */
+.footer-top { background: #37475A; padding: 12px; text-align: center; margin-top: 24px; }
+.footer-top a { color: #fff; font-size: 13px; font-weight: 500; text-decoration: none; }
+.footer-top a:hover { text-decoration: underline; }
+.footer-main { background: #232f3e; padding: 36px 0 24px; }
+.footer-inner { max-width: 1400px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 32px; }
+.footer-col h4 { color: #fff; font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+.footer-col ul { list-style: none; }
+.footer-col ul li { margin-bottom: 8px; }
+.footer-col ul li a { color: #ddd; font-size: 13px; text-decoration: none; }
+.footer-col ul li a:hover { text-decoration: underline; color: #fff; }
+.footer-bottom { background: #131921; padding: 20px; text-align: center; }
+.footer-logo { color: #fff; font-family: 'Space Grotesk', sans-serif; font-weight: 700; font-size: 20px; margin-bottom: 12px; }
+.footer-logo span { color: #FF9900; }
+.footer-links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+.footer-links a { color: #aaa; font-size: 12px; text-decoration: none; }
+.footer-links a:hover { color: #fff; }
+.footer-copy { color: #777; font-size: 12px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .nav-right { display: none; }
+  .nav-hamburger { display: block; }
+  .legal-hero { padding: 32px 24px 28px; }
+  .legal-hero h1 { font-size: 26px; }
+  .legal-card { padding: 28px 20px; }
+  .toc ol { columns: 1; }
+  .footer-inner { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .legal-hero h1 { font-size: 22px; }
+  .footer-inner { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav-top">
+  <div class="nav-top-inner">
+    <a class="logo" href="index.html">⚡ Vibe<span>Store</span></a>
+    <div class="nav-right">
+      <a class="nav-link" href="index.html">Home</a>
+      <a class="nav-link" href="collections.html">Shop</a>
+      <a class="nav-link" href="become-seller.html">Sell</a>
+      <a class="nav-link" href="account.html">Account</a>
+      <a class="nav-link" href="cart.html">🛒 Cart</a>
+    </div>
+    <button class="nav-hamburger" onclick="document.getElementById('mobileMenu').style.display='block'">☰</button>
+  </div>
+</nav>
+
+<!-- PAGE -->
+<div class="page-wrap">
+  <a class="back-link" href="index.html">← Back to VibeStore</a>
+
+  <!-- HERO -->
+  <div class="legal-hero">
+    <h1>Terms of <span>Service</span></h1>
+    <p class="subtitle">Please read these terms carefully before using the VibeStore platform.</p>
+    <div class="badge-row">
+      <span class="badge">Last Updated: May 2026</span>
+      <span class="badge green">Effective Date: 1 June 2026</span>
+    </div>
+  </div>
+
+  <!-- CONTENT CARD -->
+  <div class="legal-card">
+
+    <!-- TOC -->
+    <div class="toc">
+      <h3>📋 Table of Contents</h3>
+      <ol>
+        <li><a href="#s1">Acceptance of Terms</a></li>
+        <li><a href="#s2">About VibeStore</a></li>
+        <li><a href="#s3">User Accounts</a></li>
+        <li><a href="#s4">Buyer Terms</a></li>
+        <li><a href="#s5">Seller Terms</a></li>
+        <li><a href="#s6">Prohibited Items</a></li>
+        <li><a href="#s7">Fees and Payments</a></li>
+        <li><a href="#s8">Intellectual Property</a></li>
+        <li><a href="#s9">Privacy</a></li>
+        <li><a href="#s10">Limitation of Liability</a></li>
+        <li><a href="#s11">Dispute Resolution</a></li>
+        <li><a href="#s12">Governing Law</a></li>
+        <li><a href="#s13">Changes to Terms</a></li>
+        <li><a href="#s14">Contact</a></li>
+      </ol>
+    </div>
+
+    <!-- S1 -->
+    <div class="legal-section" id="s1">
+      <div class="section-heading">
+        <div class="section-num">1</div>
+        <h2>Acceptance of Terms</h2>
+      </div>
+      <p>By accessing or using the VibeStore platform (the "Platform"), including our website, mobile application, or any related services, you ("User") agree to be legally bound by these Terms of Service ("Terms"). These Terms constitute a legally binding agreement between you and VibeStore Marketplace Pvt Ltd.</p>
+      <p>If you are using the Platform on behalf of an organisation or business entity, you represent that you have the authority to bind that entity to these Terms, and "you" shall refer to both you personally and the entity.</p>
+      <div class="note-box"><p><strong>Important:</strong> If you do not agree to these Terms in their entirety, please do not access or use the VibeStore platform. Continued use of the Platform constitutes your acceptance of these Terms and any modifications thereto.</p></div>
+    </div>
+
+    <!-- S2 -->
+    <div class="legal-section" id="s2">
+      <div class="section-heading">
+        <div class="section-num">2</div>
+        <h2>About VibeStore</h2>
+      </div>
+      <p>VibeStore is an online marketplace platform operated by <strong>VibeStore Marketplace Pvt Ltd</strong>, a company incorporated under the Companies Act, 2013 in India. VibeStore provides a technology platform that connects independent buyers and sellers of goods and services across India.</p>
+      <p>VibeStore acts solely as an intermediary marketplace. <strong>VibeStore is not the seller of record</strong> for any products listed on the Platform. Each individual seller is the seller of record for their respective products. VibeStore does not take title to any products sold through the Platform.</p>
+      <p>VibeStore is classified as an intermediary under the Information Technology Act, 2000 and is subject to the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021.</p>
+      <div class="note-box"><p><strong>Note:</strong> Any disputes regarding product quality, authenticity, delivery, or fulfilment are primarily between the buyer and the seller. VibeStore provides a grievance mechanism to assist in resolution.</p></div>
+    </div>
+
+    <!-- S3 -->
+    <div class="legal-section" id="s3">
+      <div class="section-heading">
+        <div class="section-num">3</div>
+        <h2>User Accounts</h2>
+      </div>
+      <p><strong>Eligibility:</strong> To create an account on VibeStore, you must be at least 18 years of age. If you are between 13 and 18 years of age, you may use the Platform only with the involvement and consent of a parent or legal guardian, who agrees to be bound by these Terms on your behalf.</p>
+      <p><strong>Account Security:</strong> You are solely responsible for maintaining the confidentiality of your account credentials, including your username and password. You agree to notify VibeStore immediately at security@vibestore.in if you suspect any unauthorised use of your account. VibeStore shall not be liable for any loss or damage arising from your failure to comply with this security obligation.</p>
+      <p><strong>Account Restrictions:</strong></p>
+      <ul>
+        <li>Each individual or entity is permitted to maintain only one buyer account.</li>
+        <li>You must provide accurate, current, and complete information during registration and keep such information updated.</li>
+        <li>You must not create accounts using false identities or impersonate any person or entity.</li>
+        <li>You must not transfer, sell, or assign your account to any third party.</li>
+      </ul>
+      <p><strong>Suspension and Termination:</strong> VibeStore reserves the right, at its sole discretion, to suspend, disable, or permanently terminate any account that violates these Terms, engages in fraudulent activity, or poses a risk to the Platform or its users. VibeStore will endeavour to provide notice prior to suspension except where immediate action is required to protect Platform security or user safety.</p>
+    </div>
+
+    <!-- S4 -->
+    <div class="legal-section" id="s4">
+      <div class="section-heading">
+        <div class="section-num">4</div>
+        <h2>Buyer Terms</h2>
+      </div>
+      <p><strong>Product Information:</strong> All product descriptions, specifications, images, pricing, and other product-related information displayed on VibeStore are the sole responsibility of the respective sellers. VibeStore does not independently verify or warrant the accuracy, completeness, or reliability of any product listing.</p>
+      <p><strong>Seller Liability:</strong> VibeStore shall not be held liable for any misrepresentation, inaccuracy, or omission in a seller's product listing. Buyers are encouraged to review product details carefully and contact sellers through the Platform messaging system before making a purchase.</p>
+      <p><strong>Returns and Refunds:</strong> Returns and refunds are subject to the individual seller's return policy as displayed on the product listing page, as well as VibeStore's platform-wide Return Policy. Your statutory rights under the <strong>Consumer Protection Act, 2019</strong> are not affected by these Terms. In the event of a dispute regarding returns or refunds, VibeStore's Grievance Mechanism shall be the first point of contact.</p>
+      <div class="note-box"><p><strong>Consumer Rights:</strong> As a consumer under the Consumer Protection Act, 2019, you have the right to seek redressal for defective goods or deficient services. VibeStore's Grievance Officer is available at grievance@vibestore.in to assist with such matters.</p></div>
+      <p><strong>Payment:</strong> All payments made through the Platform are processed via secure payment gateways. By completing a purchase, you authorise VibeStore and its payment partners to process your payment. All prices on the Platform are inclusive of applicable GST unless stated otherwise.</p>
+    </div>
+
+    <!-- S5 -->
+    <div class="legal-section" id="s5">
+      <div class="section-heading">
+        <div class="section-num">5</div>
+        <h2>Seller Terms</h2>
+      </div>
+      <p>Sellers on the VibeStore Platform must comply with all requirements set forth in the VibeStore Seller Agreement in addition to these Terms. Key obligations include:</p>
+      <p><strong>Registration Requirements:</strong></p>
+      <ul>
+        <li>Sellers must be registered businesses or individuals with a valid <strong>Permanent Account Number (PAN)</strong> issued by the Income Tax Department of India.</li>
+        <li>GST registration is mandatory for sellers with annual aggregate turnover exceeding ₹40 lakhs (₹20 lakhs for special category states) under the Goods and Services Tax Act.</li>
+        <li>A valid, operational bank account in the seller's name or the registered business's name is required for payout processing.</li>
+      </ul>
+      <p><strong>Product Listings:</strong></p>
+      <ul>
+        <li>Sellers must provide accurate, complete, and truthful product descriptions, images, pricing, and specifications.</li>
+        <li>All product listings must comply with the <strong>Legal Metrology Act, 2009</strong> and Legal Metrology (Packaged Commodities) Rules, 2011, including mandatory declaration of MRP, net quantity, and country of origin.</li>
+        <li>Food products must comply with the <strong>Food Safety and Standards Act, 2006</strong> and applicable FSSAI regulations. A valid FSSAI licence number must be displayed.</li>
+        <li>Products falling under the purview of the Drugs and Cosmetics Act, 1940 must be listed only by appropriately licensed entities.</li>
+      </ul>
+      <div class="note-box"><p><strong>Regulatory Compliance:</strong> Sellers are solely responsible for ensuring their products and listings comply with all applicable Indian laws and regulations. Non-compliance may result in immediate listing removal and account suspension.</p></div>
+      <p><strong>Counterfeit Prohibition:</strong> Listing, selling, or attempting to sell counterfeit, replica, or unauthorised goods is strictly prohibited and may result in immediate account termination and legal action.</p>
+    </div>
+
+    <!-- S6 -->
+    <div class="legal-section" id="s6">
+      <div class="section-heading">
+        <div class="section-num">6</div>
+        <h2>Prohibited Items</h2>
+      </div>
+      <p>The following categories of items are strictly prohibited from being listed or sold on the VibeStore Platform:</p>
+      <ul>
+        <li><strong>Weapons and Firearms:</strong> Firearms, ammunition, explosives, and related paraphernalia (except as permitted by applicable law for licensed dealers).</li>
+        <li><strong>Drugs and Controlled Substances:</strong> Narcotic drugs, psychotropic substances, and other controlled substances as defined under the Narcotic Drugs and Psychotropic Substances Act, 1985.</li>
+        <li><strong>Counterfeit Goods:</strong> Products that infringe upon registered trademarks, patents, copyrights, or other intellectual property rights.</li>
+        <li><strong>Adult Content:</strong> Pornographic, obscene, or sexually explicit materials.</li>
+        <li><strong>Stolen Goods:</strong> Products obtained through theft, fraud, or other illegal means.</li>
+        <li><strong>Items Violating Intellectual Property Rights:</strong> Pirated software, media, or other copyright-infringing materials.</li>
+        <li><strong>Endangered Species Products:</strong> Products derived from endangered flora or fauna in violation of the Wildlife Protection Act, 1972.</li>
+        <li><strong>Hazardous Materials:</strong> Items that are hazardous, toxic, radioactive, or otherwise dangerous without proper authorisation.</li>
+      </ul>
+      <div class="note-box"><p><strong>Reporting:</strong> If you encounter any prohibited listing on VibeStore, please report it immediately to trust@vibestore.in. VibeStore will review and take appropriate action within 48 hours of receiving such reports as required under the IT Rules, 2021.</p></div>
+    </div>
+
+    <!-- S7 -->
+    <div class="legal-section" id="s7">
+      <div class="section-heading">
+        <div class="section-num">7</div>
+        <h2>Fees and Payments</h2>
+      </div>
+      <p><strong>Platform Commission:</strong> VibeStore charges sellers a commission on each completed transaction. Commission rates vary by product category and typically range from <strong>8% to 18%</strong> of the order value. Current commission rates are available in the Seller Help Centre.</p>
+      <p><strong>GST on Commission:</strong> Goods and Services Tax at the applicable rate (currently 18%) is levied on the platform commission charged to sellers. This is deducted before seller payout.</p>
+      <p><strong>Payment Processing Fees:</strong> A payment processing fee is applicable per transaction and is deducted from the seller payout. Current rates are published in the Seller Fee Schedule.</p>
+      <p><strong>Subscription Plans:</strong> Sellers may opt for subscription plans ranging from Bronze (₹0/month) to Platinum (₹9,999/month) offering enhanced features, lower commission rates, and priority support.</p>
+      <p><strong>Payout Schedule:</strong></p>
+      <ul>
+        <li>Bronze tier: Payouts every 14 days</li>
+        <li>Silver tier: Payouts every 10 days</li>
+        <li>Gold tier: Payouts every 7 days</li>
+        <li>Platinum tier: Payouts every 5 days</li>
+      </ul>
+      <div class="note-box"><p><strong>Fee Changes:</strong> VibeStore reserves the right to modify its fee structure with 30 days' advance notice to sellers. Continued use of the Platform after fee changes constitutes acceptance of the revised fees.</p></div>
+    </div>
+
+    <!-- S8 -->
+    <div class="legal-section" id="s8">
+      <div class="section-heading">
+        <div class="section-num">8</div>
+        <h2>Intellectual Property</h2>
+      </div>
+      <p><strong>VibeStore's Rights:</strong> The VibeStore Platform, including its software, design, technology, brand identity, logos, trademarks, and all content created by VibeStore, is the exclusive property of VibeStore Marketplace Pvt Ltd and is protected by applicable intellectual property laws of India and international copyright treaties.</p>
+      <p><strong>Seller Content:</strong> Sellers retain full ownership of all product content, images, descriptions, and other materials they upload to the Platform ("Seller Content"). By uploading Seller Content, each seller grants VibeStore a <strong>non-exclusive, worldwide, royalty-free, sublicensable licence</strong> to use, reproduce, modify, adapt, display, distribute, and promote such Seller Content solely for the purpose of operating, marketing, and improving the Platform.</p>
+      <p><strong>User Licence:</strong> VibeStore grants users a limited, non-exclusive, non-transferable, revocable licence to access and use the Platform for personal, non-commercial purposes in accordance with these Terms.</p>
+      <p><strong>Restrictions:</strong> Users may not copy, modify, distribute, sell, lease, or create derivative works of any VibeStore content without express written permission from VibeStore.</p>
+    </div>
+
+    <!-- S9 -->
+    <div class="legal-section" id="s9">
+      <div class="section-heading">
+        <div class="section-num">9</div>
+        <h2>Privacy</h2>
+      </div>
+      <p>VibeStore is committed to protecting the privacy of its users. Our collection, use, and sharing of personal information is governed by our <a href="privacy.html" style="color:#007185;">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+      <p>By creating an account and using the VibeStore Platform, you acknowledge that you have read and understood our Privacy Policy and consent to the collection, processing, and use of your personal data as described therein.</p>
+      <p>VibeStore processes personal data in compliance with applicable Indian data protection laws, including the Information Technology Act, 2000, and applicable rules thereunder. VibeStore is committed to upholding the principles of the Personal Data Protection Bill, 2023 as and when it comes into effect.</p>
+      <div class="note-box"><p><strong>Your Data Rights:</strong> You have the right to access, correct, and request deletion of your personal data. Please contact privacy@vibestore.in for any data-related requests.</p></div>
+    </div>
+
+    <!-- S10 -->
+    <div class="legal-section" id="s10">
+      <div class="section-heading">
+        <div class="section-num">10</div>
+        <h2>Limitation of Liability</h2>
+      </div>
+      <p><strong>Liability Cap:</strong> To the maximum extent permitted under applicable Indian law, VibeStore's total aggregate liability to any user for any claims arising out of or relating to these Terms or the Platform shall not exceed the total amount of fees paid by such user to VibeStore in the <strong>three (3) months immediately preceding the event giving rise to such claim</strong>.</p>
+      <p><strong>Exclusions:</strong> VibeStore shall not be liable for:</p>
+      <ul>
+        <li>Any actions, omissions, product defects, or misrepresentations of sellers;</li>
+        <li>Delivery delays caused by logistics partners, weather, or other external factors;</li>
+        <li>Product defects, damages, or safety hazards caused by seller products;</li>
+        <li>Any indirect, incidental, special, consequential, or punitive damages;</li>
+        <li>Loss of profits, revenue, data, goodwill, or business opportunities;</li>
+        <li>Any failure or disruption of the Platform due to circumstances beyond VibeStore's reasonable control (force majeure).</li>
+      </ul>
+      <div class="note-box"><p><strong>Statutory Rights:</strong> Nothing in this section shall limit or exclude liability that cannot be excluded under applicable law, including your rights as a consumer under the Consumer Protection Act, 2019.</p></div>
+    </div>
+
+    <!-- S11 -->
+    <div class="legal-section" id="s11">
+      <div class="section-heading">
+        <div class="section-num">11</div>
+        <h2>Dispute Resolution</h2>
+      </div>
+      <p><strong>Informal Resolution:</strong> Before initiating any formal proceedings, both parties agree to attempt to resolve any dispute, controversy, or claim arising out of or relating to these Terms or the Platform informally. The party raising the dispute shall send written notice to the other party describing the nature of the dispute and the desired relief. Both parties shall engage in good-faith negotiations for a period of <strong>thirty (30) calendar days</strong> from the date of such notice.</p>
+      <p><strong>Arbitration:</strong> If informal resolution fails, any dispute shall be submitted to and finally resolved by binding arbitration conducted under the <strong>Arbitration and Conciliation Act, 1996</strong>, as amended. The arbitration shall be conducted by a sole arbitrator mutually agreed upon by the parties, or appointed by the relevant court. The seat and venue of arbitration shall be <strong>Noida, Uttar Pradesh, India</strong>. The language of arbitration shall be English.</p>
+      <p><strong>Consumer Forum:</strong> Nothing in this clause shall prevent individual consumers from approaching the District Consumer Disputes Redressal Forum or other consumer courts as provided under the Consumer Protection Act, 2019.</p>
+      <div class="note-box"><p><strong>Grievance Mechanism:</strong> For faster resolution, VibeStore's Grievance Officer is available at grievance@vibestore.in and is committed to responding within 48 hours as required under the IT (Intermediary Guidelines) Rules, 2021.</p></div>
+    </div>
+
+    <!-- S12 -->
+    <div class="legal-section" id="s12">
+      <div class="section-heading">
+        <div class="section-num">12</div>
+        <h2>Governing Law</h2>
+      </div>
+      <p>These Terms and any disputes arising therefrom shall be governed by and construed in accordance with the <strong>laws of India</strong>. The following legislation, among others, may apply to transactions and activities on the Platform:</p>
+      <ul>
+        <li>The Indian Contract Act, 1872</li>
+        <li>The Consumer Protection Act, 2019 and Consumer Protection (E-Commerce) Rules, 2020</li>
+        <li>The Information Technology Act, 2000</li>
+        <li>The Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021</li>
+        <li>The Goods and Services Tax Act, 2017</li>
+        <li>The Legal Metrology Act, 2009</li>
+        <li>The Copyright Act, 1957</li>
+        <li>The Trade Marks Act, 1999</li>
+      </ul>
+      <p>Subject to the arbitration clause above, the courts of competent jurisdiction in <strong>Noida, Uttar Pradesh</strong> shall have exclusive jurisdiction over any disputes that are not subject to arbitration.</p>
+    </div>
+
+    <!-- S13 -->
+    <div class="legal-section" id="s13">
+      <div class="section-heading">
+        <div class="section-num">13</div>
+        <h2>Changes to Terms</h2>
+      </div>
+      <p>VibeStore reserves the right to modify, amend, or update these Terms at any time. We are committed to transparency and will provide users with advance notice of material changes.</p>
+      <p><strong>Material Changes:</strong> For any changes that materially affect your rights or obligations under these Terms, VibeStore will provide at least <strong>thirty (30) days' advance notice</strong> via email to the registered email address associated with your account, and by posting a notice on the Platform homepage.</p>
+      <p><strong>Non-Material Changes:</strong> Minor or non-material changes (such as typographical corrections or clarifications that do not affect rights) may be made without prior notice and will be effective immediately upon posting.</p>
+      <p>Your continued use of the Platform after the effective date of any revised Terms constitutes your acceptance of the changes. If you do not agree to the revised Terms, you must stop using the Platform and may request account deletion.</p>
+    </div>
+
+    <!-- S14 -->
+    <div class="legal-section" id="s14">
+      <div class="section-heading">
+        <div class="section-num">14</div>
+        <h2>Contact</h2>
+      </div>
+      <p>For any questions, concerns, or notices relating to these Terms of Service, please contact us through the following channels:</p>
+      <p><strong>Legal Matters:</strong><br>
+      Email: <a href="mailto:legal@vibestore.in" style="color:#007185;">legal@vibestore.in</a></p>
+      <p><strong>Registered Office:</strong><br>
+      VibeStore Marketplace Pvt Ltd<br>
+      4th Floor, Tech Park, Sector 62,<br>
+      Noida, Uttar Pradesh 201301, India<br>
+      CIN: U74999UP2024PTC000001</p>
+      <p><strong>Grievance Officer:</strong><br>
+      As required under Rule 3(2) of the Information Technology (Intermediary Guidelines and Digital Media Ethics Code) Rules, 2021:<br>
+      Email: <a href="mailto:grievance@vibestore.in" style="color:#007185;">grievance@vibestore.in</a><br>
+      Response Time: Within 48 hours of receipt (acknowledgement), resolution within 15 days.</p>
+      <div class="note-box"><p><strong>Response Commitment:</strong> VibeStore's legal team endeavours to respond to all enquiries within 5 business days. For urgent matters relating to account security or illegal content, please use the subject line "URGENT" to expedite processing.</p></div>
+    </div>
+
+  </div><!-- /legal-card -->
+</div><!-- /page-wrap -->
+
+<!-- FOOTER -->
+<div class="footer-top">
+  <a href="#">Back to top ↑</a>
+</div>
+<div class="footer-main">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="collections.html">All Categories</a></li>
+        <li><a href="sale.html">Today's Deals</a></li>
+        <li><a href="search.html">Search Products</a></li>
+        <li><a href="compare.html">Compare Products</a></li>
+        <li><a href="gift-cards.html">Gift Cards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact Us</a></li>
+        <li><a href="returns.html">Returns Centre</a></li>
+        <li><a href="track.html">Track Order</a></li>
+        <li><a href="mailto:grievance@vibestore.in">Grievance Officer</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Account</h4>
+      <ul>
+        <li><a href="account.html">Your Account</a></li>
+        <li><a href="orders.html">Your Orders</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+        <li><a href="vibepass.html">VibePass</a></li>
+        <li><a href="loyalty.html">Rewards</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="contact.html">About Us</a></li>
+        <li><a href="blog.html">Blog</a></li>
+        <li><a href="terms.html">Terms of Service</a></li>
+        <li><a href="privacy.html">Privacy Policy</a></li>
+        <li><a href="seller-agreement.html">Seller Agreement</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Make Money with Us</h4>
+      <ul>
+        <li><a href="seller-onboarding.html">Sell on VibeStore</a></li>
+        <li><a href="seller-login.html">Seller Sign In</a></li>
+        <li><a href="become-seller.html">Become a Seller</a></li>
+        <li><a href="seller-agreement.html">Seller Agreement</a></li>
+        <li><a href="referral.html">Refer & Earn</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="footer-bottom">
+  <div class="footer-logo">⚡Vibe<span>Store</span></div>
+  <div class="footer-links">
+    <a href="terms.html">Terms of Service</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="seller-agreement.html">Seller Agreement</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 MyOoumph Networks Pvt Ltd. All rights reserved. VibeStore Marketplace Pvt Ltd is registered under the Companies Act, 2013.</div>
+</div>
+
+</body>
+</html>

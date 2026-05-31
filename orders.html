@@ -433,7 +433,7 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
             <div class="item-actions">
               <button class="act-btn primary" onclick="location.href='track.html'">Track Package</button>
               <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
-              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+              <button class="act-btn" onclick="vsShowCancellationModal('VS-2026-5267',{})">Cancel Order</button>
             </div>
           </div>
         </div>
@@ -471,7 +471,7 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
             <div class="item-actions">
               <button class="act-btn primary" onclick="location.href='track.html'">Track Package</button>
               <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
-              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+              <button class="act-btn" onclick="vsShowCancellationModal('VS-2026-5255',{})">Cancel Order</button>
             </div>
           </div>
         </div>
@@ -507,7 +507,7 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
             <div class="item-seller"><span>Sold by:</span> ApexTech Store &nbsp;★4.9</div>
             <div class="item-status s-orange">⏳ Processing — payment confirmed</div>
             <div class="item-actions">
-              <button class="act-btn" onclick="showToast('Order cancellation requested')">Cancel Order</button>
+              <button class="act-btn" onclick="vsShowCancellationModal('VS-2026-5281',{})">Cancel Order</button>
               <button class="act-btn" onclick="showToast('Opening seller chat...')">Contact Seller</button>
             </div>
           </div>
@@ -611,6 +611,8 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
 <div class="toast" id="toast"></div>
 
+<script src="cancellation.js"></script>
+<script src="email-service.js"></script>
 <script src="auth.js"></script>
 <script>
 // AUTH GUARD

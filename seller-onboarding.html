@@ -1409,6 +1409,7 @@
 </div><!-- .wizard-container -->
 
 <script src="auth.js"></script>
+<script src="email-service.js"></script>
 <script>
 // ===================================================
 // STATE
@@ -1838,6 +1839,11 @@ function goToDashboard() {
 
   // Log in with role override to set vs_auth properly
   vsLogin(sellerEmail, sellerName, 'seller');
+
+  // Send welcome email to new seller
+  if (typeof vsEmailWelcomeSeller === 'function') {
+    vsEmailWelcomeSeller({ email: sellerEmail, name: sellerName, storeName: storeName });
+  }
 
   localStorage.removeItem('vs_onboarding');
   window.location.href = 'seller-dashboard.html';

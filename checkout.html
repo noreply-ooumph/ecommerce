@@ -6,6 +6,7 @@
 <title>Checkout — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
 <script src="gst-invoice.js"></script>
+<script src="email-service.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -606,6 +607,13 @@ function init() {
     if (fnEl) fnEl.value = nameParts[0] || '';
     if (lnEl) lnEl.value = nameParts.slice(1).join(' ') || '';
   }
+  // Send welcome email to first-time buyers
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  const isNewBuyer = auth && !localStorage.getItem('vs_welcome_sent_' + auth.email);
+  if (isNewBuyer && typeof vsEmailWelcomeBuyer === 'function') {
+    vsEmailWelcomeBuyer(auth);
+    localStorage.setItem('vs_welcome_sent_' + auth.email, '1');
+  }
   renderSummary();
   renderReview();
 }
@@ -788,7 +796,7 @@ async function submitOrderToDB() {
   const auth = vsGetAuth ? vsGetAuth() : null;
   const cartItems = JSON.parse(localStorage.getItem('vs_cart')||'[]');
   for (const item of cartItems) {
-    await dbPlaceOrder({
+    const order = await dbPlaceOrder({
       buyerEmail:   auth?.email || 'guest@vibestore.com',
       buyerName:    auth?.name  || 'Guest',
       sellerId:     item.sellerId    || 'unknown',
@@ -799,6 +807,13 @@ async function submitOrderToDB() {
       qty:          item.qty || 1,
       amount:       item.price * (item.qty||1)
     });
+    // Send order confirmation email
+    if (auth && typeof vsEmailOrderConfirmation === 'function') {
+      vsEmailOrderConfirmation(
+        { id: order?.id || ('VS-' + Date.now()), productName: item.name, productEmoji: item.emoji||'📦', amount: item.price*(item.qty||1), sellerName: item.sellerName||'VibeStore Seller' },
+        { name: auth.name, email: auth.email }
+      );
+    }
   }
   localStorage.removeItem('vs_cart');
 }

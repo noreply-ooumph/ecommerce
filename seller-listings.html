@@ -12,6 +12,7 @@
 <script src="db.js"></script>
 <script src="auth.js"></script>
 <script src="vs_store.js"></script>
+<script src="email-service.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
@@ -1035,6 +1036,17 @@ async function handleAddProduct() {
     emoji:       document.getElementById('selected-emoji')?.textContent || '📦',
     sku:         document.getElementById('prod-sku')?.value || '',
   });
+
+  // Send seller confirmation email (product submitted)
+  if (typeof vsSendEmail === 'function') {
+    vsSendEmail('template_product_submitted', {
+      to_email: auth.email,
+      to_name: auth.storeName || auth.name,
+      subject: 'Product submitted for review | VibeStore Seller Central',
+      product_name: name,
+      review_time: '24 hours'
+    });
+  }
 
   showToast('✅ Product submitted — Admin will review within 24h');
   closeAddPanel();
