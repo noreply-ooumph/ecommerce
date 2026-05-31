@@ -371,7 +371,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="9999" data-discount="60">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🎧</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;" data-emoji="🎧" data-name="Sony WH-1000XM5" data-cat="Electronics">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🎧',name:'Sony WH-1000XM5',category:'Electronics'},120) : '<span style="font-size:4.5rem;">🎧</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">60% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -394,7 +396,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="22000" data-discount="45">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">⌚</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'⌚',name:'Apple Watch Series 9',category:'Electronics'},120) : '<span style="font-size:4.5rem;">⌚</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">45% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -417,7 +421,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="clearance" data-cat="fashion" data-price="3599" data-discount="55">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">👟</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'👟',name:'Nike Air Max 270',category:'Fashion'},120) : '<span style="font-size:4.5rem;">👟</span>'}
+          </div>
           <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
           <div class="deal-pct-badge">55% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -436,7 +442,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="beauty" data-price="2999" data-discount="40">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">💄</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'💄',name:'Charlotte Tilbury Foundation Set',category:'Beauty'},120) : '<span style="font-size:4.5rem;">💄</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">40% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -459,7 +467,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="74990" data-discount="35">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">💻</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'💻',name:'MacBook Air M2',category:'Electronics'},120) : '<span style="font-size:4.5rem;">💻</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">35% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -482,7 +492,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="clearance" data-cat="sports" data-price="6499" data-discount="50">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🏋️</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🏋️',name:'Bowflex SelectTech Dumbbells',category:'Sports'},120) : '<span style="font-size:4.5rem;">🏋️</span>'}
+          </div>
           <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
           <div class="deal-pct-badge">50% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -501,7 +513,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="home" data-price="4699" data-discount="42">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🍳</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🍳',name:'Instant Pot Duo Pressure Cooker',category:'Home'},120) : '<span style="font-size:4.5rem;">🍳</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">42% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -524,7 +538,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="fashion" data-price="5999" data-discount="60">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🕶️</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🕶️',name:'Ray-Ban Aviator Classic Sunglasses',category:'Fashion'},120) : '<span style="font-size:4.5rem;">🕶️</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">60% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -547,7 +563,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="87999" data-discount="30">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">📱</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'📱',name:'Samsung Galaxy S24 Ultra',category:'Electronics'},120) : '<span style="font-size:4.5rem;">📱</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">30% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -570,7 +588,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="clearance" data-cat="beauty" data-price="24900" data-discount="38">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">💇</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'💇',name:'Dyson Airwrap Multi-Styler',category:'Beauty'},120) : '<span style="font-size:4.5rem;">💇</span>'}
+          </div>
           <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
           <div class="deal-pct-badge">38% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -589,7 +609,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="lightning" data-cat="electronics" data-price="34999" data-discount="36">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🎮</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🎮',name:'PlayStation 5 Slim Bundle',category:'Electronics'},120) : '<span style="font-size:4.5rem;">🎮</span>'}
+          </div>
           <div class="deal-badge-tl badge-lightning">⚡ LIGHTNING DEAL</div>
           <div class="deal-pct-badge">36% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -612,7 +634,9 @@ footer{background:var(--nav);color:rgba(255,255,255,0.8);padding:24px 16px 16px;
 
       <div class="deal-card" data-dealtype="clearance" data-cat="home" data-price="19900" data-discount="58">
         <div class="deal-img-wrap">
-          <div class="deal-emoji-bg">🌀</div>
+          <div class="deal-emoji-bg dc-img" style="overflow:hidden;position:relative;">
+            ${typeof vsProductImage==='function' ? vsProductImage({emoji:'🌀',name:'Dyson V15 Cordless Vacuum',category:'Home'},120) : '<span style="font-size:4.5rem;">🌀</span>'}
+          </div>
           <div class="deal-badge-tl badge-clearance">🏷️ CLEARANCE</div>
           <div class="deal-pct-badge">58% OFF</div>
           <div class="deal-wish" onclick="event.stopPropagation();wishItem(this)">♡</div>
@@ -995,6 +1019,7 @@ setInterval(()=>{
   }
 }, 18000);
 </script>
+<script src="product-photos.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){ const a = vsGetAuth ? vsGetAuth() : null; if(a) vsUpdateNav(a); })();

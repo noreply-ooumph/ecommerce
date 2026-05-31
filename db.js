@@ -273,6 +273,9 @@ async function dbSeedDemo() {
     const ref = db.collection(COL_PRODUCTS).doc('demo_' + i);
     batch.set(ref, {
       ...d,
+      photoUrl:       typeof vsGetProductPhoto === 'function'
+                        ? vsGetProductPhoto(d.name, d.category, '400x400')
+                        : null,
       featured:       d.featured || false,
       tags:           [],
       sku:            '',

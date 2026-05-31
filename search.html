@@ -567,6 +567,7 @@ body{font-family:'Inter',sans-serif;background:var(--body-bg);color:var(--text);
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
+<script src="product-photos.js"></script>
 <script src="vs_store.js"></script>
 <script src="pricing-engine.js"></script>
 <script src="tracker.js"></script>
@@ -674,7 +675,9 @@ async function loadLiveSearchResults(query) {
     const html = matched.slice(0,6).map(p => {
       const sav = p.mrp>p.price ? Math.round((1-p.price/p.mrp)*100) : 0;
       return `<div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:12px;display:flex;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06);border-left:3px solid #FF9900;">
-        <div style="font-size:56px;width:80px;height:80px;background:#f5f7fa;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.emoji}</div>
+        <div style="width:80px;height:80px;background:#f5f7fa;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          ${typeof vsProductImage==='function' ? vsProductImage(p,80) : `<span style="font-size:2rem;">${p.emoji||'📦'}</span>`}
+        </div>
         <div style="flex:1;">
           <div style="font-size:11px;color:#007185;font-weight:600;">${p.sellerName}</div>
           <div style="font-weight:700;font-size:15px;margin:4px 0;">${p.name}</div>
@@ -723,8 +726,8 @@ function renderListView(container) {
     }
 
     html += `<div class="rcard" onclick="window.location.href='product.html?id=${p.id}'">
-      <div class="rcard-img">
-        <span style="font-size:5.2rem">${p.emoji}</span>
+      <div class="rcard-img" style="overflow:hidden;">
+        ${typeof vsProductImage==='function' ? vsProductImage(p,200) : `<span style="font-size:5.2rem">${p.emoji||'📦'}</span>`}
         ${p.sponsored ? '<span class="badge-sponsored-r">Sponsored</span>' : `<span class="badge-sale-r">-${save}%</span>`}
       </div>
       <div class="rcard-body">
@@ -762,7 +765,9 @@ function renderAtlasCard() {
   return `<div class="atlas-card" onclick="window.location.href='product.html?id=${p.id}'">
     <div class="atlas-badge">🤖 Atlas AI Recommends</div>
     <div class="atlas-inner">
-      <div class="atlas-emoji">${p.emoji}</div>
+      <div class="atlas-emoji" style="overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        ${typeof vsProductImage==='function' ? vsProductImage(p,110) : `<span style="font-size:4.8rem">${p.emoji||'📦'}</span>`}
+      </div>
       <div class="atlas-info">
         <div class="rcard-brand">${p.brand}</div>
         <div class="rcard-name">${p.name}</div>
@@ -805,8 +810,8 @@ function renderGridView(container) {
     const inCart = cart.find(c => c.id === p.id);
     const isVF = SELLERS_VF.includes(p.seller);
     html += `<div class="gcard" onclick="window.location.href='product.html?id=${p.id}'">
-      <div class="gcard-img">
-        <span style="font-size:4.3rem">${p.emoji}</span>
+      <div class="gcard-img" style="overflow:hidden;">
+        ${typeof vsProductImage==='function' ? vsProductImage(p,175) : `<span style="font-size:4.3rem">${p.emoji||'📦'}</span>`}
         ${p.sponsored ? '<span class="badge-sponsored-r">Sponsored</span>' : `<span class="badge-sale-r">-${save}%</span>`}
       </div>
       <div class="gcard-body">
@@ -905,7 +910,9 @@ async function renderRankedResults(query) {
     return `
     <div style="background:#fff;border-radius:8px;padding:16px;margin-bottom:10px;display:flex;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,0.06)${sponsored?';border-left:3px solid #FF9900':''}" onclick="window.location.href='product.html?id=${p.id}'" style="cursor:pointer;">
       ${sponsored?'<div style="font-size:10px;color:#999;font-weight:600;margin-bottom:4px;">Sponsored</div>':''}
-      <div style="font-size:48px;width:72px;height:72px;background:#f5f7fa;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${p.emoji}</div>
+      <div style="width:72px;height:72px;background:#f5f7fa;border-radius:8px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        ${typeof vsProductImage==='function' ? vsProductImage(p,72) : `<span style="font-size:2rem;">${p.emoji||'📦'}</span>`}
+      </div>
       <div style="flex:1;min-width:0;">
         <div style="font-size:11px;color:#007185;font-weight:600;">${p.sellerName}</div>
         <div style="font-weight:600;font-size:14px;margin:3px 0;">${p.name}</div>

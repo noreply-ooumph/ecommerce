@@ -1,5 +1,6 @@
 // vs_store.js — VibeStore Shared Marketplace Data Layer
 // Used by all 3 portals. Products flow: Seller lists → Admin approves → Buyer sees.
+// Depends on: <script src="product-photos.js"></script> (must load before this file)
 
 const VS_PRODUCTS_KEY = 'vs_marketplace_products';
 const VS_ORDERS_KEY   = 'vs_marketplace_orders';
@@ -172,8 +173,16 @@ function vsSeedDemoData() {
     { sellerId:'green@grove.com', sellerName:'GreenGrove Organics', sellerEmail:'green@grove.com', name:'Cold Pressed Coconut Oil 1L', category:'Grocery', price:599, mrp:899, emoji:'🥥', stock:88, description:'100% cold-pressed virgin coconut oil, no chemicals added.', status:'active' },
     { sellerId:'seller@techhub.com', sellerName:'TechHub Electronics', sellerEmail:'seller@techhub.com', name:'Anker 26800mAh Power Bank', category:'Electronics', price:2799, mrp:4499, emoji:'🔋', stock:15, description:'26800mAh high-capacity power bank with 65W fast charging.', status:'active' },
   ];
+  // Attach real Unsplash photo URLs
+  const demosWithPhotos = demos.map(d => ({
+    ...d,
+    photoUrl: typeof vsGetProductPhoto === 'function'
+      ? vsGetProductPhoto(d.name, d.category, '400x400')
+      : null
+  }));
+
   // Mark as seeded with proper IDs
-  const products = demos.map((d, i) => ({
+  const products = demosWithPhotos.map((d, i) => ({
     ...d,
     id: 'prod_demo_' + i,
     listedAt: Date.now() - (i * 86400000),

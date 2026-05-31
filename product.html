@@ -343,7 +343,7 @@ footer a{color:#ccc}
 
     <!-- ═══ LEFT: GALLERY ═══ -->
     <div class="gallery-wrap card">
-      <div class="main-img-box" id="main-img-box" onclick="this.style.transform=this.style.transform?'':'scale(1.05)'">
+      <div class="main-img-box" id="main-img-box" id="main-product-img-container" onclick="this.style.transform=this.style.transform?'':'scale(1.05)'">
         <div class="main-img-emoji" id="main-emoji">🎧</div>
         <div class="zoom-hint">🔍 Click to zoom</div>
       </div>
@@ -712,6 +712,30 @@ async function loadProductFromDB() {
     if(priceEl) priceEl.textContent = '₹' + Number(p.price).toLocaleString();
     const emojiEl = document.querySelector('.product-emoji-main, .main-image-emoji, .product-main-emoji');
     if(emojiEl) emojiEl.textContent = p.emoji;
+
+    // Show real product photo in main image container
+    const mainImgContainer = document.querySelector('#main-img-box, .product-main-img, .main-product-image');
+    if (mainImgContainer && typeof vsGetProductPhoto === 'function') {
+      const photoUrl = p.photoUrl || vsGetProductPhoto(p.name, p.category, '500x500');
+      mainImgContainer.style.backgroundImage = `url(${photoUrl})`;
+      mainImgContainer.style.backgroundSize = 'cover';
+      mainImgContainer.style.backgroundPosition = 'center';
+      mainImgContainer.style.backgroundRepeat = 'no-repeat';
+      const imgTag = mainImgContainer.querySelector('img');
+      if (imgTag) { imgTag.src = photoUrl; imgTag.style.objectFit = 'cover'; }
+      const emojiMainEl = mainImgContainer.querySelector('.main-img-emoji, .product-emoji-main, .main-image-emoji');
+      if (emojiMainEl) emojiMainEl.style.display = 'none';
+    }
+
+    // Update thumbnails with real photos
+    const thumbnails = document.querySelectorAll('.thumb-img, .product-thumb, .thumbnail-img');
+    thumbnails.forEach((thumb, i) => {
+      const sizes = ['front', 'side', 'back', 'detail'];
+      const url = typeof vsGetProductPhoto === 'function'
+        ? vsGetProductPhoto(p.name + ' ' + sizes[i], p.category, '100x100')
+        : null;
+      if (url) { thumb.src = url; thumb.style.objectFit = 'cover'; }
+    });
     const sellerEl = document.querySelector('.seller-name-link, .sold-by-name');
     if(sellerEl) sellerEl.textContent = p.sellerName;
     const descEl = document.querySelector('.product-description-text, .product-desc-content');
@@ -813,7 +837,9 @@ async function loadProductFromDB() {
         if (recContainer && similar.length > 0) {
           recContainer.innerHTML = similar.map(sp => `
             <div style="flex-shrink:0;width:140px;background:#fff;border-radius:8px;padding:10px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;" onclick="window.location.href='product.html?id=${sp.id}'">
-              <div style="font-size:2.5rem;text-align:center;padding:8px;background:#f5f7fa;border-radius:6px;margin-bottom:8px;">${sp.emoji}</div>
+              <div style="width:100%;height:80px;background:#f5f7fa;border-radius:6px;margin-bottom:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+                ${typeof vsProductImage==='function' ? vsProductImage(sp,80) : `<span style="font-size:2.5rem;">${sp.emoji||'📦'}</span>`}
+              </div>
               <div style="font-size:11px;font-weight:600;line-height:1.3;margin-bottom:4px;">${sp.name.slice(0,35)}${sp.name.length>35?'...':''}</div>
               <div style="font-size:13px;font-weight:700;color:#0f1111;">₹${Number(sp.price).toLocaleString()}</div>
             </div>`).join('');
@@ -1022,6 +1048,7 @@ function showToast(msg){
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
+<script src="product-photos.js"></script>
 <script src="vs_store.js"></script>
 <script src="pricing-engine.js"></script>
 <script src="tracker.js"></script>

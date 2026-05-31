@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="firebase-config.js"></script>
 <script src="db.js"></script>
+<script src="product-photos.js"></script>
 <script src="vs_store.js"></script>
 <script src="pricing-engine.js"></script>
 <script src="tracker.js"></script>
@@ -1226,7 +1227,9 @@ function renderMarketplaceProducts() {
       const sav = p.mrp > p.price ? Math.round((1-p.price/p.mrp)*100) : 0;
       return `<div class="product-card" style="background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;" onclick="window.location.href='product.html?id=${p.id}'">
         ${p.featured?'<span style="background:#CC0C39;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;display:inline-block;margin-bottom:8px;">⚡ FEATURED</span>':''}
-        <div style="font-size:64px;text-align:center;padding:16px 0;background:#f5f7fa;border-radius:6px;margin-bottom:12px;">${p.emoji}</div>
+        <div style="width:100%;height:180px;background:#f5f7fa;border-radius:6px;margin-bottom:12px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+          ${typeof vsProductImage==='function' ? vsProductImage(p,180) : `<span style="font-size:64px;">${p.emoji||'📦'}</span>`}
+        </div>
         <div style="font-size:11px;color:#007185;font-weight:600;margin-bottom:4px;">${p.sellerName}</div>
         <div style="font-weight:600;font-size:14px;margin-bottom:4px;line-height:1.3;">${p.name}</div>
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1281,7 +1284,9 @@ document.addEventListener('DOMContentLoaded', () => {
           const sav = p.mrp > p.price ? Math.round((1-p.price/p.mrp)*100) : 0;
           const dynPrice = typeof vsApplyGeoPrice === 'function' ? vsApplyGeoPrice(p.price) : p.price;
           return `<div style="background:#fff;border-radius:8px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.08);cursor:pointer;" onclick="window.location.href='product.html?id=${p.id}'">
-            <div style="font-size:56px;text-align:center;padding:10px;background:#f5f7fa;border-radius:6px;margin-bottom:10px;">${p.emoji}</div>
+            <div style="width:100%;height:160px;background:#f5f7fa;border-radius:6px;margin-bottom:10px;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+              ${typeof vsProductImage==='function' ? vsProductImage(p,160) : `<span style="font-size:56px;">${p.emoji||'📦'}</span>`}
+            </div>
             <div style="font-size:11px;color:#007185;font-weight:600;">${p.sellerName}</div>
             <div style="font-weight:600;font-size:13px;margin:4px 0;line-height:1.3;">${p.name}</div>
             <div style="font-size:16px;font-weight:700;">₹${dynPrice.toLocaleString()}</div>
@@ -1301,7 +1306,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (trendGrid && trending.length > 0) {
         trendGrid.innerHTML = trending.map(p => `
           <div style="background:#fff;border-radius:8px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);cursor:pointer;text-align:center;" onclick="window.location.href='product.html?id=${p.id}'">
-            <div style="font-size:2.5rem;margin-bottom:6px;">${p.emoji}</div>
+            <div style="width:80px;height:80px;background:#f5f7fa;border-radius:6px;overflow:hidden;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;">
+              ${typeof vsProductImage==='function' ? vsProductImage(p,80) : `<span style="font-size:2.5rem;">${p.emoji||'📦'}</span>`}
+            </div>
             <div style="font-size:12px;font-weight:600;line-height:1.3;">${p.name.slice(0,28)}${p.name.length>28?'...':''}</div>
             <div style="font-size:14px;font-weight:700;color:#CC0C39;margin-top:4px;">₹${Number(p.price).toLocaleString()}</div>
             <div style="font-size:10px;color:#999;margin-top:2px;">🔥 ${p.orders||0} sold</div>
