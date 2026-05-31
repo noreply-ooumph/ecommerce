@@ -381,6 +381,7 @@
     <a class="nav-item" href="seller-payouts.html"><span class="nav-icon">💰</span> Payouts</a>
     <a class="nav-item" href="seller-analytics.html"><span class="nav-icon">📈</span> Analytics</a>
     <a class="nav-item" href="seller-promotions.html"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a class="nav-item" href="seller-ads.html"><span class="nav-icon">📢</span> Advertise</a>
     <a class="nav-item" href="seller-returns.html"><span class="nav-icon">↩️</span> Returns</a>
     <a class="nav-item" href="seller-settings.html"><span class="nav-icon">⚙️</span> Settings</a>
     <div class="nav-divider"></div>
@@ -489,6 +490,14 @@
       <textarea id="prod-desc" placeholder="Describe your product — Aria AI will optimize this for search visibility..."></textarea>
     </div>
 
+    <!-- PRODUCT VARIANTS -->
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12px;font-weight:600;color:#333;margin-bottom:5px;">Product Variants</label>
+      <div style="font-size:11px;color:#666;margin-bottom:8px;">Add size, color or other variants with separate stock counts</div>
+      <div id="variants-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;"></div>
+      <button type="button" onclick="addVariant()" style="background:#f5f7fa;border:1px solid #ddd;border-radius:6px;padding:6px 14px;font-size:12px;cursor:pointer;font-family:inherit;">+ Add Variant</button>
+    </div>
+
     <!-- CATEGORY-SPECIFIC DYNAMIC FIELDS -->
     <div class="form-section-title">Category Details</div>
     <div id="category-specific-fields"></div>
@@ -499,6 +508,37 @@
     <button class="btn-primary" onclick="handleAddProduct()">Submit for Review</button>
   </div>
 </div>
+
+<!-- CSV IMPORT PANEL -->
+<div id="csv-panel" style="display:none;position:fixed;top:0;right:0;bottom:0;width:480px;background:#fff;z-index:1001;box-shadow:-4px 0 20px rgba(0,0,0,0.15);overflow-y:auto;padding:24px;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px;">
+    <button onclick="document.getElementById('csv-panel').style.display='none';document.getElementById('csv-overlay').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;">←</button>
+    <h3 style="font-size:16px;font-weight:700;">Import Products via CSV</h3>
+  </div>
+
+  <div style="background:#e8f4ff;border:1px solid #b3d9ff;border-radius:8px;padding:14px;margin-bottom:16px;font-size:13px;color:#0052a3;">
+    <strong>CSV Format Required:</strong><br>
+    name, category, price, mrp, stock, description, emoji<br>
+    <a href="#" onclick="downloadCSVTemplate();return false;" style="color:#007185;font-weight:600;">📥 Download Template</a>
+  </div>
+
+  <div id="csv-drop-zone" style="border:2px dashed #ddd;border-radius:10px;padding:40px;text-align:center;cursor:pointer;margin-bottom:16px;transition:border-color .2s;" ondragover="event.preventDefault();this.style.borderColor='#FF9900'" ondragleave="this.style.borderColor='#ddd'" ondrop="handleCSVDrop(event)">
+    <div style="font-size:2rem;margin-bottom:8px;">📄</div>
+    <div style="font-weight:600;margin-bottom:4px;">Drag &amp; drop your CSV file here</div>
+    <div style="font-size:12px;color:#999;margin-bottom:12px;">or</div>
+    <label style="background:#FF9900;color:#0f1111;padding:8px 18px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;">
+      Browse File <input type="file" accept=".csv" onchange="handleCSVFile(this.files[0])" style="display:none;">
+    </label>
+  </div>
+
+  <div id="csv-preview" style="display:none;">
+    <div style="font-weight:600;font-size:13px;margin-bottom:10px;" id="csv-count"></div>
+    <div id="csv-table" style="overflow-x:auto;max-height:300px;overflow-y:auto;margin-bottom:16px;"></div>
+    <div id="csv-errors" style="display:none;background:#fce8ec;border:1px solid #ffb3c1;border-radius:8px;padding:12px;font-size:12px;color:#CC0C39;margin-bottom:14px;"></div>
+    <button onclick="importCSVProducts()" style="width:100%;background:#FF9900;color:#0f1111;border:none;padding:12px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;">Import All Products →</button>
+  </div>
+</div>
+<div id="csv-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:1000;" onclick="document.getElementById('csv-panel').style.display='none';this.style.display='none'"></div>
 
 <!-- MAIN -->
 <main class="main">
@@ -626,6 +666,7 @@
       <option>Stock: Low First</option>
     </select>
     <div class="filter-bar-spacer"></div>
+    <button class="btn-outline" onclick="document.getElementById('csv-panel').style.display='block';document.getElementById('csv-overlay').style.display='block'">📥 Import CSV</button>
     <button class="btn-orange" onclick="openAddPanel()">+ Add Single Product</button>
   </div>
 
@@ -1035,6 +1076,7 @@ async function handleAddProduct() {
     description: document.getElementById('prod-desc')?.value || '',
     emoji:       document.getElementById('selected-emoji')?.textContent || '📦',
     sku:         document.getElementById('prod-sku')?.value || '',
+    variants:    collectVariants(),
   });
 
   // Send seller confirmation email (product submitted)
@@ -1056,7 +1098,118 @@ async function handleAddProduct() {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  document.getElementById('variants-list').innerHTML = '';
+  _variantCount = 0;
   renderCategoryFields(selectedCategory);
+}
+
+// ---- PRODUCT VARIANTS ----
+let _variantCount = 0;
+function addVariant() {
+  _variantCount++;
+  const row = document.createElement('div');
+  row.id = 'variant-' + _variantCount;
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML = `
+    <input type="text" placeholder="Name (e.g. Small, Red)" style="flex:1;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit;" id="var-name-${_variantCount}">
+    <input type="number" placeholder="Stock" style="width:70px;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit;" id="var-stock-${_variantCount}" min="0">
+    <input type="number" placeholder="Extra ₹" style="width:80px;padding:7px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:12px;font-family:inherit;" id="var-price-${_variantCount}" min="0">
+    <button onclick="document.getElementById('variant-${_variantCount}').remove()" style="background:none;border:none;color:#CC0C39;font-size:16px;cursor:pointer;flex-shrink:0;">×</button>
+  `;
+  document.getElementById('variants-list').appendChild(row);
+}
+
+function collectVariants() {
+  const variants = [];
+  document.querySelectorAll('[id^="variant-"]').forEach(row => {
+    const id = row.id.split('-')[1];
+    const name = document.getElementById('var-name-'+id)?.value?.trim();
+    const stock = parseInt(document.getElementById('var-stock-'+id)?.value) || 0;
+    const priceExtra = parseFloat(document.getElementById('var-price-'+id)?.value) || 0;
+    if (name) variants.push({ name, stock, priceExtra });
+  });
+  return variants;
+}
+
+// ---- CSV IMPORT ----
+let _csvData = [];
+
+function downloadCSVTemplate() {
+  const csv = 'name,category,price,mrp,stock,description,emoji\nWireless Headphones,Electronics,2499,4999,50,"Premium sound quality",🎧\nCotton Kurta Set,Fashion,1299,2499,100,"Pure cotton",👗';
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'vibestore_product_template.csv';
+  a.click();
+}
+
+function handleCSVDrop(event) {
+  event.preventDefault();
+  document.getElementById('csv-drop-zone').style.borderColor = '#ddd';
+  const file = event.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) handleCSVFile(file);
+}
+
+function handleCSVFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => parseCSV(e.target.result);
+  reader.readAsText(file);
+}
+
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g,''));
+  const required = ['name','category','price'];
+  const missing = required.filter(r => !headers.includes(r));
+  if (missing.length > 0) {
+    showToast('❌ CSV missing required columns: ' + missing.join(', '));
+    return;
+  }
+  _csvData = lines.slice(1).map(line => {
+    const values = line.match(/(".*?"|[^,]+)/g) || line.split(',');
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (values[i]||'').replace(/"/g,'').trim());
+    obj.price = parseFloat(obj.price) || 0;
+    obj.mrp = parseFloat(obj.mrp) || obj.price * 1.5;
+    obj.stock = parseInt(obj.stock) || 10;
+    obj.emoji = obj.emoji || '📦';
+    return obj;
+  }).filter(r => r.name && r.price > 0);
+
+  document.getElementById('csv-count').textContent = `✅ ${_csvData.length} products ready to import`;
+  document.getElementById('csv-table').innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead style="background:#f5f7fa;">
+        <tr>${['emoji','name','category','price','stock'].map(h=>`<th style="padding:6px 10px;text-align:left;font-weight:600;">${h}</th>`).join('')}</tr>
+      </thead>
+      <tbody>${_csvData.slice(0,10).map(r=>`<tr style="border-bottom:1px solid #f0f2f5;">${['emoji','name','category','price','stock'].map(k=>`<td style="padding:6px 10px;">${r[k]}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>
+    ${_csvData.length>10?`<p style="text-align:center;color:#999;padding:8px;font-size:11px;">...and ${_csvData.length-10} more</p>`:''}
+  `;
+  document.getElementById('csv-preview').style.display = 'block';
+}
+
+async function importCSVProducts() {
+  if (_csvData.length === 0) return;
+  const authObj = vsGetAuth ? vsGetAuth() : null;
+  let imported = 0, errors = 0;
+  const btn = document.querySelector('#csv-panel button:last-of-type');
+  if (btn) btn.textContent = '⏳ Importing...';
+  for (const row of _csvData) {
+    try {
+      await dbAddProduct({ sellerId: authObj.email, sellerName: authObj.storeName||authObj.name, sellerEmail: authObj.email, ...row });
+      imported++;
+    } catch(e) { errors++; }
+  }
+  if (btn) btn.textContent = `✅ Imported ${imported} products${errors?` (${errors} failed)`:''}`;
+  setTimeout(() => {
+    document.getElementById('csv-panel').style.display='none';
+    document.getElementById('csv-overlay').style.display='none';
+    _csvData = [];
+    document.getElementById('csv-preview').style.display = 'none';
+    loadSellerListings();
+  }, 2000);
 }
 </script>
 </body>

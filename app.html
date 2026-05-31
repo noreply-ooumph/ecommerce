@@ -6,6 +6,7 @@
 <title>Dashboard — VibeStore Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="flash-sale-scheduler.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter',sans-serif;background:#f0f2f5;display:flex;height:100vh;overflow:hidden}
@@ -465,12 +466,112 @@ td{padding:10px 12px;vertical-align:middle}
       </div>
     </div>
 
+    <!-- FLYWHEEL DASHBOARD -->
+    <div style="background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-bottom:20px;">
+      <div style="padding:16px 20px;border-bottom:1px solid #f0f2f5;display:flex;align-items:center;gap:10px;">
+        <h3 style="font-size:15px;font-weight:700;color:#0f1111;flex:1;">🔄 Platform Flywheel Metrics</h3>
+        <span style="font-size:11px;color:#666;">The virtuous cycle — updated in real time</span>
+      </div>
+      <div style="padding:20px;">
+        <!-- Flywheel visual -->
+        <div style="display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap;margin-bottom:24px;">
+          <div class="flywheel-node" style="background:#1565C020;border:2px solid #1565C0;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">🏪</div>
+            <div style="font-size:12px;font-weight:700;color:#1565C0;">Sellers</div>
+            <div id="fw-sellers" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+          <div style="font-size:1.5rem;color:#FF9900;padding:0 6px;">→</div>
+          <div class="flywheel-node" style="background:#FF990020;border:2px solid #FF9900;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">🏷️</div>
+            <div style="font-size:12px;font-weight:700;color:#FF9900;">Products</div>
+            <div id="fw-products" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+          <div style="font-size:1.5rem;color:#FF9900;padding:0 6px;">→</div>
+          <div class="flywheel-node" style="background:#CC0C3920;border:2px solid #CC0C39;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">⬇️</div>
+            <div style="font-size:12px;font-weight:700;color:#CC0C39;">Lower Prices</div>
+            <div id="fw-avg-price" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+          <div style="font-size:1.5rem;color:#FF9900;padding:0 6px;">→</div>
+          <div class="flywheel-node" style="background:#2E7D3220;border:2px solid #2E7D32;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">🛍️</div>
+            <div style="font-size:12px;font-weight:700;color:#2E7D32;">Buyers</div>
+            <div id="fw-buyers" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+          <div style="font-size:1.5rem;color:#FF9900;padding:0 6px;">→</div>
+          <div class="flywheel-node" style="background:#7B1FA220;border:2px solid #7B1FA2;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">💰</div>
+            <div style="font-size:12px;font-weight:700;color:#7B1FA2;">Revenue</div>
+            <div id="fw-revenue" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+          <div style="font-size:1.5rem;color:#FF9900;padding:0 6px;">→</div>
+          <div class="flywheel-node" style="background:#00838F20;border:2px solid #00838F;border-radius:12px;padding:14px 18px;text-align:center;min-width:120px;">
+            <div style="font-size:1.5rem;margin-bottom:4px;">🔄</div>
+            <div style="font-size:12px;font-weight:700;color:#00838F;">More Sellers</div>
+            <div id="fw-growth" style="font-size:1.2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;">—</div>
+          </div>
+        </div>
+        <!-- Flywheel health score -->
+        <div style="background:#f5f7fa;border-radius:8px;padding:16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+          <div>
+            <div style="font-size:11px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.5px;">Flywheel Health Score</div>
+            <div id="fw-health-score" style="font-size:2rem;font-weight:800;font-family:'Space Grotesk',sans-serif;color:#067D62;">—</div>
+          </div>
+          <div style="flex:1;min-width:200px;">
+            <div id="fw-health-bar" style="background:#eee;border-radius:4px;height:10px;overflow:hidden;margin-bottom:6px;">
+              <div id="fw-health-fill" style="background:#067D62;height:100%;width:0%;border-radius:4px;transition:width 1s ease;"></div>
+            </div>
+            <div id="fw-health-note" style="font-size:12px;color:#666;">Loading flywheel data...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script src="auth.js"></script>
 <script>
 const auth = vsRequireAuth(['admin']); if(!auth) throw new Error();
+
+async function loadFlywheelData() {
+  try {
+    const [products, orders, sellers] = await Promise.all([
+      typeof dbGetProducts === 'function' ? dbGetProducts('active') : [],
+      typeof dbGetOrders === 'function' ? dbGetOrders('all') : [],
+      typeof dbGetSellers === 'function' ? dbGetSellers() : []
+    ]);
+    const revenue = orders.reduce((s,o) => s+(o.amount||0), 0);
+    const avgPrice = products.length ? Math.round(products.reduce((s,p)=>s+p.price,0)/products.length) : 0;
+    const uniqueBuyers = new Set(orders.map(o=>o.buyerEmail)).size;
+    const growthRate = sellers.length > 0 ? Math.min(100, Math.round(sellers.length / 10)) : 0;
+
+    const set = (id, val) => { const el=document.getElementById(id); if(el) el.textContent=val; };
+    set('fw-sellers', sellers.length.toLocaleString());
+    set('fw-products', products.length.toLocaleString());
+    set('fw-avg-price', avgPrice > 0 ? '₹'+avgPrice.toLocaleString('en-IN') : 'Competitive');
+    set('fw-buyers', uniqueBuyers.toLocaleString());
+    set('fw-revenue', '₹'+revenue.toLocaleString('en-IN'));
+    set('fw-growth', sellers.length > 0 ? '+'+growthRate+'%' : 'Growing');
+
+    const healthScore = Math.min(100, Math.round(
+      (Math.min(sellers.length, 50)/50*25) +
+      (Math.min(products.length, 100)/100*25) +
+      (Math.min(uniqueBuyers, 100)/100*25) +
+      (Math.min(revenue, 100000)/100000*25)
+    ));
+    set('fw-health-score', healthScore + '/100');
+    const fill = document.getElementById('fw-health-fill');
+    const note = document.getElementById('fw-health-note');
+    if (fill) setTimeout(()=>fill.style.width=healthScore+'%', 100);
+    if (note) note.textContent = healthScore < 30 ? 'Early stage — focus on seller acquisition' : healthScore < 60 ? 'Growing — add more products and buyers' : 'Healthy flywheel — optimise for retention';
+    if (fill) fill.style.background = healthScore < 30 ? '#CC0C39' : healthScore < 60 ? '#FF9900' : '#067D62';
+  } catch(e) { console.warn('Flywheel data error:', e); }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadFlywheelData();
+});
 function toggleSidebar(){
   document.getElementById('sidebar').classList.toggle('open');
   document.getElementById('sidebarOverlay').classList.toggle('show');

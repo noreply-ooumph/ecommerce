@@ -790,6 +790,10 @@
 </head>
 <body>
 
+<div id="agreement-reminder" style="display:none;text-align:center;padding:12px;background:#fff8ee;border-bottom:1px solid #ffe0a0;font-size:13px;">
+  📋 Before continuing, please <a href="seller-agreement.html" style="color:#FF9900;font-weight:700;">read and accept the Seller Agreement</a>
+</div>
+
 <!-- TOP NAV -->
 <nav class="top-nav">
   <a href="index.html" class="nav-logo">⚡ VibeStore <span>Seller Central</span></a>
@@ -1411,6 +1415,22 @@
 <script src="auth.js"></script>
 <script src="email-service.js"></script>
 <script>
+// Check seller agreement acceptance
+(function() {
+  const agreed = localStorage.getItem('vs_seller_agreement_accepted');
+  const currentPage = window.location.pathname;
+  // Only redirect if coming fresh (not from the agreement page)
+  if (!agreed && document.referrer && !document.referrer.includes('seller-agreement')) {
+    window.location.href = 'seller-agreement.html';
+  }
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('vs_seller_agreement_accepted')) {
+    document.getElementById('agreement-reminder')?.style.setProperty('display','block');
+  }
+});
+
 // ===================================================
 // STATE
 // ===================================================

@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advertise — ⚡ Seller Central</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="firebase-config.js"></script>
+<script src="db.js"></script>
+<script src="auth.js"></script>
+<script src="commission-engine.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: 220px; background: #232f3e; position: fixed; top: 0; left: 0;
+    height: 100vh; display: flex; flex-direction: column; z-index: 100; overflow-y: auto;
+  }
+  .sidebar-logo {
+    padding: 20px 18px 16px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 18px; font-weight: 700; color: #FF9900;
+    border-bottom: 1px solid rgba(255,255,255,0.08); letter-spacing: -0.3px;
+  }
+  .sidebar-logo span { font-size: 12px; color: #8d96a0; font-weight: 400; display: block; margin-top: 2px; font-family: 'Inter', sans-serif; }
+  .nav-section { padding: 10px 0; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px; color: #c8cdd4; text-decoration: none;
+    font-size: 13.5px; font-weight: 500; transition: background 0.15s, color 0.15s;
+    border-left: 3px solid transparent; cursor: pointer;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.06); color: #fff; }
+  .nav-item.active { border-left-color: #FF9900; color: #FF9900; background: rgba(255,153,0,0.08); }
+  .nav-item .nav-icon { font-size: 15px; width: 20px; text-align: center; }
+  .nav-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 8px 18px; }
+  .live-badge { margin-left: auto; background: #067D62; color: #fff; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 10px; }
+
+  /* TOPBAR */
+  .topbar {
+    position: fixed; top: 0; left: 220px; right: 0; height: 60px;
+    background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    display: flex; align-items: center; padding: 0 24px; z-index: 99; gap: 16px;
+  }
+  .breadcrumb { font-size: 13px; color: #555; flex: 1; }
+  .breadcrumb a { color: #007185; text-decoration: none; }
+  .breadcrumb strong { color: #0f1111; font-weight: 600; }
+  .topbar-bell { position: relative; font-size: 20px; cursor: pointer; padding: 4px; }
+  .bell-badge { position: absolute; top: 0; right: 0; background: #CC0C39; color: #fff; font-size: 9px; font-weight: 700; min-width: 15px; height: 15px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0 3px; }
+  .topbar-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #FF9900, #e68a00); color: #fff; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+  .seller-info { font-size: 12px; text-align: right; }
+  .seller-info .sname { font-weight: 600; color: #0f1111; font-size: 13px; }
+  .seller-info .store { color: #666; }
+  .topbar-hamburger { display: none; background: none; border: none; font-size: 22px; cursor: pointer; padding: 4px 8px; color: #333; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 99; }
+
+  /* MAIN */
+  .main { margin-left: 220px; margin-top: 60px; padding: 20px 24px; }
+
+  /* ATLAS BANNER */
+  .atlas-banner {
+    background: linear-gradient(135deg, #0f1111 0%, #1a2332 50%, #232f3e 100%);
+    border-radius: 12px; padding: 22px 24px; margin-bottom: 20px; position: relative; overflow: hidden;
+  }
+  .atlas-banner::before {
+    content: '📊'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+    font-size: 80px; opacity: 0.1;
+  }
+  .atlas-banner h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 16px; }
+  .atlas-stats { display: flex; gap: 6px; flex-wrap: wrap; }
+  .atlas-stat {
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px; padding: 10px 14px; text-align: center; min-width: 100px;
+  }
+  .atlas-stat-val { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #FF9900; }
+  .atlas-stat-lbl { font-size: 11px; color: #8d96a0; margin-top: 2px; }
+
+  /* HOW IT WORKS */
+  .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
+  .how-card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); padding: 20px; text-align: center; }
+  .how-icon { font-size: 2rem; margin-bottom: 10px; }
+  .how-step { font-size: 10px; font-weight: 700; color: #FF9900; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .how-title { font-size: 14px; font-weight: 700; color: #0f1111; margin-bottom: 6px; }
+  .how-desc { font-size: 12.5px; color: #666; line-height: 1.5; }
+
+  /* CARD */
+  .card { background: #fff; border-radius: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); margin-bottom: 20px; overflow: hidden; }
+  .card-header { padding: 16px 20px; border-bottom: 1px solid #f0f2f5; display: flex; align-items: center; gap: 10px; }
+  .card-header h3 { font-size: 15px; font-weight: 700; color: #0f1111; flex: 1; }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { padding: 11px 12px; background: #f7f8fa; font-size: 11px; font-weight: 700; color: #666; text-transform: uppercase; letter-spacing: 0.4px; text-align: left; border-bottom: 1px solid #eee; white-space: nowrap; }
+  td { padding: 11px 12px; border-bottom: 1px solid #f5f6f8; color: #333; vertical-align: middle; }
+  tr:hover td { background: #fafbfd; }
+
+  /* STATUS BADGES */
+  .badge-active { background: #e6f9f2; color: #067D62; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .badge-paused { background: #f0f2f5; color: #666; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .badge-depleted { background: #fff3e0; color: #e65c00; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+
+  /* TOGGLE */
+  .toggle-switch { position: relative; display: inline-block; width: 36px; height: 20px; }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 20px; transition: .3s; }
+  .toggle-slider:before { position: absolute; content: ''; height: 14px; width: 14px; left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s; }
+  input:checked + .toggle-slider { background: #067D62; }
+  input:checked + .toggle-slider:before { transform: translateX(16px); }
+
+  /* BUTTONS */
+  .btn-orange { background: #FF9900; color: #0f1111; border: none; border-radius: 8px; padding: 9px 18px; font-size: 13.5px; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif; transition: background 0.2s; white-space: nowrap; }
+  .btn-orange:hover { background: #e68a00; }
+  .btn-outline { background: transparent; border: 1.5px solid #d0d5dd; border-radius: 7px; padding: 7px 14px; font-size: 13px; font-weight: 600; color: #333; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.2s; }
+  .btn-outline:hover { border-color: #FF9900; color: #FF9900; }
+  .btn-sm-edit { background: #e8f4ff; color: #1565C0; border: none; border-radius: 6px; padding: 5px 10px; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+
+  /* SLIDE PANEL */
+  .panel-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 200; }
+  .panel-overlay.open { display: block; }
+  .slide-panel {
+    position: fixed; top: 0; right: -540px; width: 520px; max-width: 100vw;
+    height: 100vh; background: #fff; box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    z-index: 201; display: flex; flex-direction: column;
+    transition: right 0.32s cubic-bezier(0.4,0,0.2,1); overflow: hidden;
+  }
+  .slide-panel.open { right: 0; }
+  .panel-header { padding: 20px 22px 16px; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .panel-header h3 { font-size: 16px; font-weight: 700; color: #0f1111; flex: 1; }
+  .panel-close { background: #f5f5f5; border: none; border-radius: 6px; width: 32px; height: 32px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #555; }
+  .panel-body { flex: 1; overflow-y: auto; padding: 20px 22px; }
+  .panel-footer { padding: 14px 22px; border-top: 1px solid #eee; display: flex; gap: 10px; flex-shrink: 0; background: #fafbfc; }
+
+  /* FORM */
+  .form-group { margin-bottom: 14px; }
+  .form-group label { display: block; font-size: 12px; font-weight: 600; color: #333; margin-bottom: 5px; }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 8px 10px; border: 1.5px solid #ddd; border-radius: 6px;
+    font-size: 13px; font-family: 'Inter', sans-serif; background: #fff; color: #333;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input:focus, .form-group select:focus { border-color: #FF9900; box-shadow: 0 0 0 3px rgba(255,153,0,0.1); }
+  .form-hint { font-size: 11px; color: #888; margin-top: 4px; }
+  .form-section { font-size: 12px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.6px; margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #eee; }
+
+  /* AD TYPE PILLS */
+  .ad-type-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .ad-type-pill { flex: 1; min-width: 100px; }
+  .ad-type-pill input { display: none; }
+  .ad-type-pill label {
+    display: block; padding: 10px 12px; border: 2px solid #eee; border-radius: 8px;
+    text-align: center; cursor: pointer; font-size: 12.5px; font-weight: 600; color: #666;
+    transition: all 0.2s; background: #fafbfc;
+  }
+  .ad-type-pill input:checked + label { border-color: #FF9900; color: #FF9900; background: #fff8ee; }
+
+  /* AD PREVIEW */
+  .ad-preview {
+    background: #f5f7fa; border: 1.5px solid #e8eaed; border-radius: 8px; padding: 14px;
+    margin-bottom: 14px;
+  }
+  .ad-preview-lbl { font-size: 10px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+  .ad-preview-card {
+    background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px;
+    display: flex; align-items: center; gap: 12px; position: relative;
+  }
+  .ad-preview-sponsored { position: absolute; top: 6px; right: 8px; font-size: 9px; color: #888; font-weight: 600; }
+  .ad-preview-emoji { font-size: 2rem; }
+  .ad-preview-name { font-size: 13px; font-weight: 600; color: #0f1111; }
+  .ad-preview-price { font-size: 14px; font-weight: 700; color: #067D62; }
+  .ad-preview-old { font-size: 11px; color: #999; text-decoration: line-through; }
+
+  /* BILLING */
+  .billing-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .balance-big { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; font-weight: 700; color: #0f1111; }
+  .fund-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .fund-pill { background: #f0f2f5; border: 1.5px solid #ddd; border-radius: 6px; padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+  .fund-pill:hover, .fund-pill.selected { background: #FF9900; color: #0f1111; border-color: #FF9900; }
+
+  /* ATLAS INSIGHTS */
+  .insights-card {
+    background: linear-gradient(135deg, #0f1111 0%, #1a2332 100%);
+    border-radius: 10px; padding: 20px; margin-bottom: 20px;
+  }
+  .insights-card h3 { color: #fff; font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+  .insight-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+  .insight-item:last-child { margin-bottom: 0; }
+  .insight-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF9900; flex-shrink: 0; margin-top: 5px; }
+  .insight-text { font-size: 13px; color: rgba(255,255,255,0.85); line-height: 1.5; }
+
+  /* CHART */
+  .chart-wrap { padding: 20px; height: 240px; position: relative; }
+
+  /* TOGGLE ROW */
+  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f2f5; }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-size: 13px; font-weight: 500; color: #333; }
+  .toggle-sub { font-size: 11px; color: #888; margin-top: 2px; }
+
+  @media (max-width: 1024px) { .sidebar { width: 180px; } .main { margin-left: 180px; } .topbar { left: 180px; } .how-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 768px) {
+    .sidebar { position: fixed; left: -220px; top: 0; bottom: 0; z-index: 1000; transition: left 0.3s ease; width: 220px; }
+    .sidebar.open { left: 0; }
+    .main { margin-left: 0; }
+    .topbar { left: 0; }
+    .topbar-hamburger { display: flex !important; }
+    .how-grid { grid-template-columns: 1fr; }
+    .atlas-stats { gap: 6px; }
+    .slide-panel { width: 100%; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">⚡ Seller Central <span class="sidebar-store-name">MyStore Electronics</span></div>
+  <div class="nav-section">
+    <a class="nav-item" href="seller-dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="seller-listings.html"><span class="nav-icon">🏷️</span> My Listings</a>
+    <a class="nav-item" href="seller-orders.html"><span class="nav-icon">📦</span> Orders</a>
+    <a class="nav-item" href="seller-messages.html"><span class="nav-icon">💬</span> Messages</a>
+    <a class="nav-item" href="seller-payouts.html"><span class="nav-icon">💰</span> Payouts</a>
+    <a class="nav-item" href="seller-analytics.html"><span class="nav-icon">📈</span> Analytics</a>
+    <a class="nav-item" href="seller-promotions.html"><span class="nav-icon">🎟️</span> Promotions</a>
+    <a class="nav-item active" href="seller-ads.html"><span class="nav-icon">📢</span> Advertise</a>
+    <a class="nav-item" href="seller-returns.html"><span class="nav-icon">↩️</span> Returns</a>
+    <a class="nav-item" href="seller-settings.html"><span class="nav-icon">⚙️</span> Settings</a>
+    <div class="nav-divider"></div>
+    <a class="nav-item" href="seller-profile.html"><span class="nav-icon">🛍️</span> View My Storefront <span class="live-badge">Live</span></a>
+    <a class="nav-item" href="index.html"><span class="nav-icon">🏠</span> Go to VibeStore</a>
+  </div>
+</nav>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <button class="topbar-hamburger" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+  <div class="breadcrumb">
+    <a href="seller-dashboard.html">Seller Central</a> &rsaquo; <strong>Advertise</strong>
+  </div>
+  <div class="topbar-bell">🔔<span class="bell-badge">5</span></div>
+  <div class="seller-info">
+    <div class="sname">Rahul Sharma</div>
+    <div class="store">MyStore Electronics</div>
+  </div>
+  <div class="topbar-avatar" onclick="vsLogout()" title="Sign Out" style="display:flex;flex-direction:column;align-items:center;width:auto;border-radius:8px;padding:4px 8px;">
+    <span class="vs-nav-avatar">SC</span>
+    <span style="font-size:11px;color:#999">Sign Out</span>
+  </div>
+</header>
+<div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- CREATE CAMPAIGN PANEL -->
+<div class="panel-overlay" id="campaign-overlay" onclick="closeCampaignPanel()"></div>
+<div class="slide-panel" id="campaign-panel">
+  <div class="panel-header">
+    <h3>🚀 Create New Campaign</h3>
+    <button class="panel-close" onclick="closeCampaignPanel()">✕</button>
+  </div>
+  <div class="panel-body">
+
+    <div class="form-section">Product</div>
+    <div class="form-group">
+      <label>Select Product</label>
+      <select id="camp-product">
+        <option value="">-- Loading products... --</option>
+      </select>
+    </div>
+
+    <div class="form-section">Ad Type</div>
+    <div class="ad-type-row">
+      <div class="ad-type-pill">
+        <input type="radio" name="ad-type" id="type-sponsored" value="Sponsored Product" checked>
+        <label for="type-sponsored">🎯 Sponsored Product</label>
+      </div>
+      <div class="ad-type-pill">
+        <input type="radio" name="ad-type" id="type-brand" value="Sponsored Brand">
+        <label for="type-brand">🏷️ Sponsored Brand</label>
+      </div>
+      <div class="ad-type-pill">
+        <input type="radio" name="ad-type" id="type-display" value="Display Ad">
+        <label for="type-display">🖼️ Display Ad</label>
+      </div>
+    </div>
+
+    <div class="form-section">Budget</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="form-group">
+        <label>Daily Budget (₹)</label>
+        <input type="number" id="camp-budget" placeholder="e.g. 200" min="50" value="200">
+        <div class="form-hint">Minimum ₹50/day</div>
+      </div>
+      <div class="form-group">
+        <label>Max CPC Bid (₹)</label>
+        <input type="number" id="camp-cpc" placeholder="e.g. 5" min="1" step="0.5" value="5">
+        <div class="form-hint" id="cpc-hint" style="color:#067D62;">Atlas suggests ₹4–6 for Electronics</div>
+      </div>
+    </div>
+
+    <div class="form-section">Duration</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" id="date-fields">
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="date" id="camp-start">
+      </div>
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="date" id="camp-end">
+      </div>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Run Indefinitely</div>
+        <div class="toggle-sub">No end date — pause manually anytime</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="run-indefinitely" onchange="toggleDateFields(this)">
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="form-section">Optimisation</div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Let Atlas AI Auto-Optimise Bids</div>
+        <div class="toggle-sub">Atlas adjusts your CPC bids in real time for max ROAS</div>
+      </div>
+      <label class="toggle-switch">
+        <input type="checkbox" id="auto-optimise" checked>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <div class="form-section">Ad Preview</div>
+    <div class="ad-preview">
+      <div class="ad-preview-lbl">How your sponsored listing will appear in search results</div>
+      <div class="ad-preview-card">
+        <span class="ad-preview-sponsored">Sponsored</span>
+        <div class="ad-preview-emoji" id="prev-emoji">🎧</div>
+        <div>
+          <div class="ad-preview-name" id="prev-name">Wireless Headphones — Select a product</div>
+          <div class="ad-preview-price" id="prev-price">₹—</div>
+          <div class="ad-preview-old" id="prev-mrp"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="panel-footer">
+    <button class="btn-outline" style="flex:0 0 auto;" onclick="closeCampaignPanel()">Cancel</button>
+    <button class="btn-orange" style="flex:1;" onclick="launchCampaign()">🚀 Launch Campaign</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ATLAS AI BANNER -->
+  <div class="atlas-banner">
+    <h2>📢 Sponsored Listings — Powered by Atlas AI</h2>
+    <div class="atlas-stats">
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">2</div>
+        <div class="atlas-stat-lbl">Active Campaigns</div>
+      </div>
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">₹3,400</div>
+        <div class="atlas-stat-lbl">Budget Spent</div>
+      </div>
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">12,400</div>
+        <div class="atlas-stat-lbl">Impressions</div>
+      </div>
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">847</div>
+        <div class="atlas-stat-lbl">Clicks</div>
+      </div>
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">₹4.02</div>
+        <div class="atlas-stat-lbl">Avg CPC</div>
+      </div>
+      <div class="atlas-stat">
+        <div class="atlas-stat-val">3.4x</div>
+        <div class="atlas-stat-lbl">ROAS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how-grid">
+    <div class="how-card">
+      <div class="how-icon">🎯</div>
+      <div class="how-step">Step 1</div>
+      <div class="how-title">Choose Products</div>
+      <div class="how-desc">Select which of your listings to sponsor. Your products will appear at the top of search results and category pages.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-icon">💰</div>
+      <div class="how-step">Step 2</div>
+      <div class="how-title">Set Budget</div>
+      <div class="how-desc">Set your daily budget and maximum cost-per-click bid. You only pay when a buyer clicks your sponsored listing.</div>
+    </div>
+    <div class="how-card">
+      <div class="how-icon">📊</div>
+      <div class="how-step">Step 3</div>
+      <div class="how-title">Atlas Optimises</div>
+      <div class="how-desc">Atlas AI continuously adjusts your bids in real time, targeting maximum ROAS and the best placement slots.</div>
+    </div>
+  </div>
+
+  <!-- ACTIVE CAMPAIGNS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📋 Active Campaigns</h3>
+      <button class="btn-orange" onclick="openCampaignPanel()">+ Create Campaign</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Daily Budget</th>
+            <th>Spent Today</th>
+            <th>Impressions</th>
+            <th>Clicks</th>
+            <th>CPC</th>
+            <th>ROAS</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="campaigns-tbody">
+          <tr>
+            <td><strong>🎧 Wireless Headphones</strong><br><small style="color:#999;">Sponsored Product</small></td>
+            <td>₹200/day</td>
+            <td>₹187</td>
+            <td>5,240</td>
+            <td>364</td>
+            <td>₹5.13</td>
+            <td style="color:#067D62;font-weight:700;">4.1x</td>
+            <td><span class="badge-active">● Active</span></td>
+            <td style="display:flex;gap:6px;align-items:center;">
+              <label class="toggle-switch"><input type="checkbox" checked onchange="toggleCampaign(this,'wh')"><span class="toggle-slider"></span></label>
+              <button class="btn-sm-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>💻 Mechanical Keyboard RGB</strong><br><small style="color:#999;">Sponsored Product</small></td>
+            <td>₹300/day</td>
+            <td>₹0</td>
+            <td>7,160</td>
+            <td>483</td>
+            <td>₹3.21</td>
+            <td style="color:#067D62;font-weight:700;">2.8x</td>
+            <td><span class="badge-paused">● Paused</span></td>
+            <td style="display:flex;gap:6px;align-items:center;">
+              <label class="toggle-switch"><input type="checkbox" onchange="toggleCampaign(this,'kb')"><span class="toggle-slider"></span></label>
+              <button class="btn-sm-edit">Edit</button>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>🖱️ Logitech MX Master 3</strong><br><small style="color:#999;">Display Ad</small></td>
+            <td>₹150/day</td>
+            <td>₹150</td>
+            <td>0</td>
+            <td>0</td>
+            <td>—</td>
+            <td style="color:#e65c00;font-weight:700;">—</td>
+            <td><span class="badge-depleted">● Budget Depleted</span></td>
+            <td style="display:flex;gap:6px;align-items:center;">
+              <label class="toggle-switch"><input type="checkbox" disabled><span class="toggle-slider"></span></label>
+              <button class="btn-sm-edit">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PERFORMANCE CHART -->
+  <div class="card">
+    <div class="card-header">
+      <h3>📈 Performance — Last 7 Days</h3>
+      <div style="display:flex;gap:14px;font-size:12px;">
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:16px;height:2px;background:#1565C0;display:inline-block;border-radius:2px;"></span>Impressions</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:16px;height:2px;background:#FF9900;display:inline-block;border-radius:2px;"></span>Clicks</span>
+        <span style="display:flex;align-items:center;gap:5px;"><span style="width:16px;height:2px;background:#CC0C39;display:inline-block;border-radius:2px;"></span>Spend (₹)</span>
+      </div>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="perfChart"></canvas>
+    </div>
+  </div>
+
+  <!-- BILLING SECTION -->
+  <div class="card">
+    <div class="card-header">
+      <h3>💳 Ad Billing</h3>
+    </div>
+    <div style="padding:20px;">
+      <div class="billing-row">
+        <div>
+          <div style="font-size:12px;color:#888;margin-bottom:4px;">Current Ad Balance</div>
+          <div class="balance-big">₹2,400</div>
+          <div style="font-size:12px;color:#888;margin-top:4px;">Campaigns will pause when balance hits ₹0</div>
+        </div>
+        <button class="btn-orange" onclick="document.getElementById('add-funds-section').style.display=document.getElementById('add-funds-section').style.display==='none'?'block':'none'">💳 Add Funds</button>
+      </div>
+      <div id="add-funds-section" style="display:none;margin-top:16px;padding:16px;background:#f5f7fa;border-radius:8px;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Select amount to add:</div>
+        <div class="fund-pills">
+          <div class="fund-pill" onclick="selectFund(this,'500')">₹500</div>
+          <div class="fund-pill" onclick="selectFund(this,'1000')">₹1,000</div>
+          <div class="fund-pill" onclick="selectFund(this,'2000')">₹2,000</div>
+          <div class="fund-pill" onclick="selectFund(this,'custom')">Custom</div>
+        </div>
+        <div id="custom-fund-wrap" style="display:none;margin-top:10px;">
+          <input type="number" id="custom-fund-input" placeholder="Enter amount (₹)" style="padding:9px 12px;border:1.5px solid #ddd;border-radius:6px;font-size:13px;font-family:inherit;width:200px;">
+        </div>
+        <button class="btn-orange" style="margin-top:12px;" onclick="addFunds()">Add Funds →</button>
+      </div>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f2f5;">
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Auto-Recharge</div>
+            <div class="toggle-sub">Automatically add ₹1,000 when balance drops below threshold</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-recharge">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="form-group" style="margin-top:10px;display:none;" id="recharge-threshold-wrap">
+          <label>Minimum Balance Threshold (₹)</label>
+          <input type="number" id="recharge-threshold" value="500" min="100" style="max-width:200px;">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ATLAS INSIGHTS -->
+  <div class="insights-card">
+    <h3>🤖 Atlas AI Insights</h3>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div class="insight-text">Electronics has <strong style="color:#FF9900;">4.2x avg ROAS</strong> on Tuesdays — consider increasing your daily budget by 30% on Tuesdays for better returns.</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div class="insight-text">Your Wireless Headphones ad has a <strong style="color:#FF9900;">6.8% CTR</strong> — significantly above the 2.1% Electronics benchmark. This is a top-performing creative.</div>
+    </div>
+    <div class="insight-item">
+      <div class="insight-dot"></div>
+      <div class="insight-text">Increase budget by <strong style="color:#FF9900;">₹100/day</strong> on the Keyboard campaign for an estimated <strong style="color:#FF9900;">40% more impressions</strong> this week based on current bid landscape.</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// Auth guard
+const auth = vsRequireAuth(['seller']);
+if (!auth) throw new Error('Not authenticated');
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
+  const storeEl = document.querySelector('.sidebar-store-name');
+  if (storeEl) storeEl.textContent = auth.storeName || auth.name;
+
+  // Set today as default start date
+  const today = new Date().toISOString().split('T')[0];
+  const startEl = document.getElementById('camp-start');
+  if (startEl) startEl.value = today;
+
+  // Load products for campaign panel
+  loadProductsForAds();
+
+  // Wire auto-recharge toggle
+  document.getElementById('auto-recharge').addEventListener('change', function() {
+    document.getElementById('recharge-threshold-wrap').style.display = this.checked ? 'block' : 'none';
+  });
+
+  // Render performance chart
+  renderPerfChart();
+});
+
+function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
+function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
+
+function openCampaignPanel() {
+  document.getElementById('campaign-panel').classList.add('open');
+  document.getElementById('campaign-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeCampaignPanel() {
+  document.getElementById('campaign-panel').classList.remove('open');
+  document.getElementById('campaign-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function toggleDateFields(cb) {
+  document.getElementById('date-fields').style.display = cb.checked ? 'none' : 'grid';
+}
+
+async function loadProductsForAds() {
+  const sel = document.getElementById('camp-product');
+  if (!sel) return;
+  try {
+    const products = typeof dbGetProducts === 'function' ? await dbGetProducts(auth.email) : [];
+    if (products.length === 0) {
+      sel.innerHTML = '<option value="">No products found — add listings first</option>';
+      return;
+    }
+    sel.innerHTML = products.map(p =>
+      `<option value="${p.id}" data-emoji="${p.emoji||'📦'}" data-price="${p.price}" data-mrp="${p.mrp||''}" data-name="${p.name}">${p.emoji||'📦'} ${p.name} — ₹${Number(p.price).toLocaleString()}</option>`
+    ).join('');
+    updateAdPreview();
+  } catch(e) {
+    sel.innerHTML = '<option value="">-- Select a product --</option>';
+  }
+  sel.addEventListener('change', updateAdPreview);
+}
+
+function updateAdPreview() {
+  const sel = document.getElementById('camp-product');
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt || !opt.value) return;
+  document.getElementById('prev-emoji').textContent = opt.dataset.emoji || '📦';
+  document.getElementById('prev-name').textContent = opt.dataset.name || 'Product';
+  document.getElementById('prev-price').textContent = '₹' + Number(opt.dataset.price).toLocaleString();
+  document.getElementById('prev-mrp').textContent = opt.dataset.mrp ? 'MRP ₹' + Number(opt.dataset.mrp).toLocaleString() : '';
+}
+
+async function launchCampaign() {
+  const sel = document.getElementById('camp-product');
+  const opt = sel.options[sel.selectedIndex];
+  if (!opt || !opt.value) { showToast('❌ Please select a product'); return; }
+
+  const adType = document.querySelector('input[name="ad-type"]:checked')?.value || 'Sponsored Product';
+  const budget = parseFloat(document.getElementById('camp-budget').value) || 0;
+  const cpc = parseFloat(document.getElementById('camp-cpc').value) || 0;
+  const indefinite = document.getElementById('run-indefinitely').checked;
+  const autoOpt = document.getElementById('auto-optimise').checked;
+
+  if (budget < 50) { showToast('❌ Minimum daily budget is ₹50'); return; }
+  if (cpc < 1) { showToast('❌ Minimum CPC bid is ₹1'); return; }
+
+  const campaign = {
+    id: 'camp_' + Date.now(),
+    productId: opt.value,
+    productName: opt.dataset.name,
+    productEmoji: opt.dataset.emoji,
+    type: adType,
+    dailyBudget: budget,
+    maxCPC: cpc,
+    startDate: document.getElementById('camp-start')?.value || new Date().toISOString().split('T')[0],
+    endDate: indefinite ? null : (document.getElementById('camp-end')?.value || null),
+    autoOptimise: autoOpt,
+    status: 'active',
+    impressions: 0,
+    clicks: 0,
+    spend: 0,
+    createdAt: Date.now()
+  };
+
+  const existing = JSON.parse(localStorage.getItem('vs_ad_campaigns') || '[]');
+  existing.push(campaign);
+  localStorage.setItem('vs_ad_campaigns', JSON.stringify(existing));
+
+  showToast('✅ Campaign launched! Atlas AI is now optimising your bids.');
+  closeCampaignPanel();
+}
+
+function toggleCampaign(cb, id) {
+  const row = cb.closest('tr');
+  const badge = row.querySelector('[class^="badge-"]');
+  if (!badge) return;
+  if (cb.checked) {
+    badge.className = 'badge-active';
+    badge.textContent = '● Active';
+  } else {
+    badge.className = 'badge-paused';
+    badge.textContent = '● Paused';
+  }
+}
+
+let _selectedFund = '500';
+function selectFund(el, val) {
+  document.querySelectorAll('.fund-pill').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  _selectedFund = val;
+  document.getElementById('custom-fund-wrap').style.display = val === 'custom' ? 'block' : 'none';
+}
+
+function addFunds() {
+  let amount = _selectedFund === 'custom'
+    ? parseFloat(document.getElementById('custom-fund-input').value) || 0
+    : parseFloat(_selectedFund);
+  if (amount < 100) { showToast('❌ Minimum top-up is ₹100'); return; }
+  showToast(`✅ ₹${amount.toLocaleString()} added to your ad balance!`);
+  document.getElementById('add-funds-section').style.display = 'none';
+}
+
+function renderPerfChart() {
+  const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const impressions = [1420, 1840, 1620, 2100, 1780, 1960, 1680];
+  const clicks = [98, 134, 112, 157, 120, 143, 83];
+  const spend = [420, 620, 510, 740, 560, 680, 370];
+
+  new Chart(document.getElementById('perfChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Impressions', data: impressions, borderColor: '#1565C0', backgroundColor: 'rgba(21,101,192,0.07)', borderWidth: 2, tension: 0.4, fill: true, pointRadius: 4, yAxisID: 'y' },
+        { label: 'Clicks', data: clicks, borderColor: '#FF9900', backgroundColor: 'transparent', borderWidth: 2, tension: 0.4, pointRadius: 4, yAxisID: 'y1' },
+        { label: 'Spend (₹)', data: spend, borderColor: '#CC0C39', backgroundColor: 'transparent', borderWidth: 2, tension: 0.4, pointRadius: 4, yAxisID: 'y1' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { position: 'left', ticks: { font: { size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
+        y1: { position: 'right', ticks: { font: { size: 11 } }, grid: { display: false } },
+        x: { ticks: { font: { size: 11 } }, grid: { display: false } }
+      }
+    }
+  });
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#232f3e;color:#fff;padding:12px 20px;border-radius:8px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+</script>
+</body>
+</html>

@@ -626,77 +626,14 @@ footer a{color:#ccc}
 
 <!-- ═══ CUSTOMER REVIEWS ═══ -->
 <div class="section" id="reviews">
-  <div class="section-card">
-    <div class="section-title">Customer Reviews</div>
-    <div class="reviews-top">
-      <div class="overall-rating">
-        <div class="big-rating">4.2</div>
-        <div class="big-stars">★★★★☆</div>
-        <div class="rating-count">1,247 ratings</div>
-      </div>
-      <div class="rating-bars">
-        <div class="bar-row"><span class="bar-label">5★</span><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><span class="bar-pct">78%</span></div>
-        <div class="bar-row"><span class="bar-label">4★</span><div class="bar-track"><div class="bar-fill" style="width:15%"></div></div><span class="bar-pct">15%</span></div>
-        <div class="bar-row"><span class="bar-label">3★</span><div class="bar-track"><div class="bar-fill" style="width:4%"></div></div><span class="bar-pct">4%</span></div>
-        <div class="bar-row"><span class="bar-label">2★</span><div class="bar-track"><div class="bar-fill" style="width:2%"></div></div><span class="bar-pct">2%</span></div>
-        <div class="bar-row"><span class="bar-label">1★</span><div class="bar-track"><div class="bar-fill" style="width:1%"></div></div><span class="bar-pct">1%</span></div>
-      </div>
+  <!-- REVIEWS SECTION -->
+  <div style="background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.06);margin-top:20px;">
+    <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:20px;">Customer Reviews</h2>
+    <div id="reviews-list-container"></div>
+    <div style="margin-top:24px;border-top:1px solid #f0f2f5;padding-top:20px;">
+      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px;">Write a Review</h3>
+      <div id="review-form-container"></div>
     </div>
-
-    <div class="review-filters">
-      <button class="filter-tab active" onclick="filterReviews('all',this)">All Reviews</button>
-      <button class="filter-tab" onclick="filterReviews('positive',this)">Positive</button>
-      <button class="filter-tab" onclick="filterReviews('critical',this)">Critical</button>
-    </div>
-
-    <div id="reviews-list">
-      <div class="review-card" data-type="positive">
-        <div class="reviewer-name">Arjun Mehta</div>
-        <div class="review-meta">
-          <span class="review-stars">★★★★★</span>
-          <span class="verified-badge">✔ Verified Purchase</span>
-          <span class="review-date">12 April 2026</span>
-        </div>
-        <div class="review-title">Best noise cancelling I've ever experienced</div>
-        <div class="review-text">The noise cancellation on these headphones is simply unreal. I took them on a flight from Delhi to Mumbai and could not hear a single engine sound. The audio quality is phenomenal — rich bass, clear mids, and detailed highs without any harshness. Build quality feels premium, and the ear cushions are incredibly soft.</div>
-        <div class="review-helpful"><span id="helpful-count-1">234</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-1',this)">👍 Helpful</button></div>
-      </div>
-      <div class="review-card" data-type="positive">
-        <div class="reviewer-name">Priya Sharma</div>
-        <div class="review-meta">
-          <span class="review-stars">★★★★☆</span>
-          <span class="verified-badge">✔ Verified Purchase</span>
-          <span class="review-date">5 March 2026</span>
-        </div>
-        <div class="review-title">Great headphones, minor complaints about call quality</div>
-        <div class="review-text">Music listening is absolutely top-notch. The 30-hour battery life is real — I barely need to charge these. Multipoint is a game changer for switching between my phone and laptop. The only issue is that call quality can sometimes sound slightly robotic on the other end. But everything else is stellar.</div>
-        <div class="review-helpful"><span id="helpful-count-2">87</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-2',this)">👍 Helpful</button></div>
-      </div>
-      <div class="review-card" data-type="critical">
-        <div class="reviewer-name">Rahul Verma</div>
-        <div class="review-meta">
-          <span class="review-stars">★★★☆☆</span>
-          <span class="verified-badge">✔ Verified Purchase</span>
-          <span class="review-date">18 February 2026</span>
-        </div>
-        <div class="review-title">Good product but not foldable anymore</div>
-        <div class="review-text">Performance wise these are exceptional. However I was used to the XM4 which folded flat into a nice compact form. These do not fold that way, making them slightly bulkier to carry. The carry case is also larger. If portability is a priority for you, factor that in. Sound and NC are still best in class.</div>
-        <div class="review-helpful"><span id="helpful-count-3">52</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-3',this)">👍 Helpful</button></div>
-      </div>
-      <div class="review-card" data-type="positive">
-        <div class="reviewer-name">Sneha Iyer</div>
-        <div class="review-meta">
-          <span class="review-stars">★★★★★</span>
-          <span class="verified-badge">✔ Verified Purchase</span>
-          <span class="review-date">2 January 2026</span>
-        </div>
-        <div class="review-title">Worth every rupee — transformed my work from home</div>
-        <div class="review-text">Working from home with two kids was impossible before these headphones. Now I can focus completely. The ANC blocks out everything — TV, kitchen sounds, even the neighbours. Battery lasts me almost a full week of work days. Wearing comfort is exceptional even after 8 hours. VibeStore delivery was quick too.</div>
-        <div class="review-helpful"><span id="helpful-count-4">176</span> people found this helpful <button class="helpful-btn" onclick="markHelpful('helpful-count-4',this)">👍 Helpful</button></div>
-      </div>
-    </div>
-
-    <button class="write-review-btn" onclick="showToast('Review submission coming soon!')">Write a Customer Review</button>
   </div>
 </div>
 
@@ -754,7 +691,7 @@ footer a{color:#ccc}
 
 <footer>
   <p style="margin-bottom:8px">© 2026 MyOoumph Networks Pvt Ltd · VibeStore</p>
-  <p><a href="#">Conditions of Use</a> · <a href="#">Privacy Notice</a> · <a href="seller-profile.html">Sell on VibeStore</a> · <a href="cart.html">Cart</a></p>
+  <p><a href="terms.html">Conditions of Use</a> · <a href="privacy.html">Privacy Notice</a> · <a href="seller-profile.html">Sell on VibeStore</a> · <a href="cart.html">Cart</a></p>
 </footer>
 
 <script>
@@ -807,6 +744,27 @@ async function loadProductFromDB() {
     // Increment view count
     dbGetProductById && vsIncrementProductView && vsIncrementProductView(productId);
     document.title = p.name + ' — VibeStore';
+
+    // Load real reviews
+    if (typeof vsRenderReviews === 'function') vsRenderReviews(p.id, 'reviews-list-container');
+    if (typeof vsRenderReviewForm === 'function') vsRenderReviewForm(p.id, p.name, p.sellerId, p.sellerEmail || p.sellerId, p.sellerName, 'review-form-container');
+
+    // Wishlist heart button
+    const wishBtn = document.querySelector('.wishlist-btn, #wishlist-btn, .add-to-wishlist');
+    if (wishBtn && typeof vsIsWishlisted === 'function') {
+      vsIsWishlisted(p.id).then(isWishlisted => {
+        wishBtn.textContent = isWishlisted ? '❤️ Wishlisted' : '🤍 Add to Wishlist';
+        wishBtn.onclick = async () => {
+          if (await vsIsWishlisted(p.id)) {
+            await vsRemoveFromWishlist(p.id);
+            wishBtn.textContent = '🤍 Add to Wishlist';
+          } else {
+            await vsAddToWishlist({ id: p.id, name: p.name, price: p.price, emoji: p.emoji, sellerName: p.sellerName });
+            wishBtn.textContent = '❤️ Wishlisted';
+          }
+        };
+      });
+    }
 
     // 1. Apply dynamic pricing
     const dynamicProduct = typeof vsPriceProduct === 'function' ? vsPriceProduct(p) : p;
@@ -1070,6 +1028,8 @@ function showToast(msg){
 <script src="recommendations.js"></script>
 <script src="ab-test.js"></script>
 <script src="commission-engine.js"></script>
+<script src="reviews.js"></script>
+<script src="wishlist-sync.js"></script>
 <script src="auth.js"></script>
 <script>
 (function(){
