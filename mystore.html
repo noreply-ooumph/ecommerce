@@ -15,6 +15,7 @@
 <script src="recommendations.js"></script>
 <script src="ab-test.js"></script>
 <script src="commission-engine.js"></script>
+<link rel="manifest" href="manifest.json">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -1266,6 +1267,9 @@ updateCount();
 renderCart();
 
 document.addEventListener('DOMContentLoaded', () => {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ecommerce/service-worker.js').catch(err => console.warn('SW:', err));
+  }
   dbSeedDemo().then(() => renderMarketplaceProducts());
 
   // Personalized recommendations section

@@ -8,6 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="auth.js"></script>
+<script src="pricing-engine.js"></script>
+<script src="tracker.js"></script>
+<script src="recommendations.js"></script>
+<script src="commission-engine.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', sans-serif; background: #f0f2f5; display: flex; min-height: 100vh; }
@@ -310,169 +314,89 @@
   <div class="metrics-grid">
     <div class="metric-card orange">
       <div class="metric-label">Revenue</div>
-      <div class="metric-value">₹2,34,500</div>
-      <div class="metric-trend trend-up">↑ 18.4% vs last period</div>
+      <div class="metric-value" id="metric-revenue">...</div>
+      <div class="metric-trend trend-up">Last 30 days</div>
     </div>
     <div class="metric-card green">
       <div class="metric-label">Orders</div>
-      <div class="metric-value">847</div>
-      <div class="metric-trend trend-up">↑ 12.1% vs last period</div>
+      <div class="metric-value" id="metric-orders">...</div>
+      <div class="metric-trend trend-up">Last 30 days</div>
     </div>
     <div class="metric-card teal">
       <div class="metric-label">Page Views</div>
-      <div class="metric-value">12,400</div>
-      <div class="metric-trend trend-up">↑ 9.3% vs last period</div>
+      <div class="metric-value" id="metric-views">...</div>
+      <div class="metric-trend trend-up">Last 30 days</div>
     </div>
     <div class="metric-card blue">
       <div class="metric-label">Conversion</div>
-      <div class="metric-value">3.2%</div>
-      <div class="metric-trend trend-down">↓ 0.3% vs last period</div>
+      <div class="metric-value" id="metric-conversion">...</div>
+      <div class="metric-trend">Views → Purchases</div>
     </div>
     <div class="metric-card purple">
       <div class="metric-label">Avg Order</div>
-      <div class="metric-value">₹277</div>
-      <div class="metric-trend trend-up">↑ 5.7% vs last period</div>
+      <div class="metric-value" id="metric-avg-order">...</div>
+      <div class="metric-trend">Per order value</div>
     </div>
     <div class="metric-card red">
       <div class="metric-label">Return Rate</div>
-      <div class="metric-value">2.1%</div>
-      <div class="metric-trend trend-up" style="color:#067D62;">↓ 0.4% improved</div>
+      <div class="metric-value" id="metric-return-rate">...</div>
+      <div class="metric-trend trend-up" style="color:#067D62;">Estimated</div>
     </div>
   </div>
 
   <!-- 3 CHARTS -->
   <div class="charts-row">
     <div class="card">
-      <div class="card-header"><h3>📈 Revenue (30 Days)</h3><span style="font-size:11px;color:#888;">vs last period + forecast</span></div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="revenueChart"></canvas></div></div>
+      <div class="card-header"><h3>📈 Revenue (30 Days)</h3><span style="font-size:11px;color:#888;">Real orders from Firestore</span></div>
+      <div class="card-body"><div style="position:relative;height:260px;"><canvas id="revenueChart"></canvas></div></div>
     </div>
     <div class="card">
-      <div class="card-header"><h3>📦 Orders by Day of Week</h3></div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="ordersChart"></canvas></div></div>
+      <div class="card-header"><h3>🕐 Hourly Views Heatmap</h3><span style="font-size:11px;color:#888;">When buyers browse your store</span></div>
+      <div class="card-body">
+        <div id="hourly-heatmap" style="display:flex;flex-wrap:wrap;gap:4px;"></div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#888;">
+          <div style="width:14px;height:14px;border-radius:2px;background:#f5f7fa;border:1px solid #eee;"></div> Low
+          <div style="width:14px;height:14px;border-radius:2px;background:#FF9900;"></div> Medium
+          <div style="width:14px;height:14px;border-radius:2px;background:#CC0C39;"></div> High
+        </div>
+      </div>
     </div>
     <div class="card">
       <div class="card-header"><h3>🌐 Traffic Sources</h3></div>
-      <div class="card-body"><div class="chart-wrap"><canvas id="trafficChart"></canvas></div></div>
+      <div class="card-body"><div style="position:relative;height:220px;"><canvas id="trafficChart"></canvas></div></div>
     </div>
   </div>
 
   <!-- TWO COLUMN -->
   <div class="two-col">
     <div class="left-col">
-      <!-- TOP PRODUCTS TABLE -->
+      <!-- TOP PRODUCTS — Real Data -->
       <div class="card">
-        <div class="card-header"><h3>🏆 Top Products</h3><span style="font-size:11px;color:#888;">Last 30 days</span></div>
-        <div style="overflow-x:auto;">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>#</th><th>Product</th><th>Units</th><th>Revenue</th><th>Conv%</th><th>Return%</th><th>Trend</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><div class="rank-badge rank-1">1</div></td>
-                <td>🎧 Wireless Earbuds Pro X</td><td>218</td><td>₹87,200</td>
-                <td style="color:#067D62;font-weight:600;">4.8%</td><td style="color:#067D62;">1.2%</td><td style="color:#067D62;font-size:16px;">↑</td>
-              </tr>
-              <tr>
-                <td><div class="rank-badge rank-2">2</div></td>
-                <td>📱 USB-C Hub 7-in-1</td><td>194</td><td>₹58,200</td>
-                <td style="color:#067D62;font-weight:600;">3.9%</td><td style="color:#067D62;">0.8%</td><td style="color:#067D62;font-size:16px;">↑</td>
-              </tr>
-              <tr>
-                <td><div class="rank-badge rank-3">3</div></td>
-                <td>⌚ Smart Band V2</td><td>142</td><td>₹42,600</td>
-                <td style="color:#888;">2.1%</td><td style="color:#888;">2.4%</td><td style="color:#888;font-size:16px;">→</td>
-              </tr>
-              <tr>
-                <td><div class="rank-badge">4</div></td>
-                <td>🖱️ Ergonomic Mouse</td><td>128</td><td>₹25,600</td>
-                <td style="color:#007185;font-weight:600;">5.2%</td><td style="color:#067D62;">1.1%</td><td style="color:#067D62;font-size:16px;">↑</td>
-              </tr>
-              <tr>
-                <td><div class="rank-badge">5</div></td>
-                <td>🔌 GaN Charger 65W</td><td>98</td><td>₹19,600</td>
-                <td style="color:#888;">2.8%</td><td style="color:#CC0C39;">3.2%</td><td style="color:#CC0C39;font-size:16px;">↓</td>
-              </tr>
-              <tr>
-                <td><div class="rank-badge">6</div></td>
-                <td>🎙️ Mini Microphone USB</td><td>67</td><td>₹13,400</td>
-                <td style="color:#888;">2.3%</td><td style="color:#888;">1.9%</td><td style="color:#888;font-size:16px;">→</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="card-header"><h3>🏆 Top Products</h3><span style="font-size:11px;color:#888;">Last 30 days · real Firestore data</span></div>
+        <div class="card-body" style="padding:4px 18px;">
+          <div id="top-products-real"><p style="color:#999;padding:20px;text-align:center;">Loading product data...</p></div>
         </div>
       </div>
 
-      <!-- CATEGORY BARS -->
+      <!-- SEARCH TERMS — Real Data -->
       <div class="card">
-        <div class="card-header"><h3>🏷️ Sales by Category</h3></div>
-        <div class="card-body">
-          <div class="cat-bar-row">
-            <div class="cat-bar-label"><span>🎧 Audio & Earbuds</span><span>₹87,200 &mdash; 37%</span></div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:87%;background:linear-gradient(90deg,#FF9900,#ffb732);"></div></div>
-          </div>
-          <div class="cat-bar-row">
-            <div class="cat-bar-label"><span>📱 Accessories</span><span>₹58,200 &mdash; 25%</span></div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:63%;background:linear-gradient(90deg,#007185,#00b3c9);"></div></div>
-          </div>
-          <div class="cat-bar-row">
-            <div class="cat-bar-label"><span>⌚ Wearables</span><span>₹42,600 &mdash; 18%</span></div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:48%;background:linear-gradient(90deg,#7c3aed,#a855f7);"></div></div>
-          </div>
-          <div class="cat-bar-row">
-            <div class="cat-bar-label"><span>🖱️ Peripherals</span><span>₹25,600 &mdash; 11%</span></div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:32%;background:linear-gradient(90deg,#067D62,#10b981);"></div></div>
-          </div>
-          <div class="cat-bar-row" style="margin-bottom:0;">
-            <div class="cat-bar-label"><span>🔌 Charging</span><span>₹20,900 &mdash; 9%</span></div>
-            <div class="cat-bar-track"><div class="cat-bar-fill" style="width:22%;background:linear-gradient(90deg,#CC0C39,#f44336);"></div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- HEATMAP -->
-      <div class="card">
-        <div class="card-header"><h3>🕐 Hourly Sales Heatmap</h3><span style="font-size:11px;color:#888;">Darker = more sales</span></div>
-        <div class="card-body">
-          <div class="heatmap-wrap" id="heatmapWrap"></div>
-          <div style="display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#888;">
-            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.1);"></div> Low
-            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.5);"></div> Medium
-            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,153,0,0.95);"></div> High
-          </div>
+        <div class="card-header"><h3>🔍 Top Search Terms</h3><span style="font-size:11px;color:#888;">Terms buyers searched</span></div>
+        <div class="card-body" style="padding:4px 18px;">
+          <div id="search-terms-real"><p style="color:#999;padding:16px;text-align:center;">Loading search data...</p></div>
         </div>
       </div>
     </div>
 
     <div class="right-col">
-      <!-- ATLAS AI INSIGHTS -->
+      <!-- ATLAS AI INSIGHTS — Real Data -->
       <div class="atlas-insights-card">
         <div class="atlas-insights-header">
           <span style="font-size:18px;">📊</span>
           <h3>Atlas AI Insights</h3>
           <span class="atlas-badge">AI</span>
         </div>
-        <div class="insight-item">
-          <div class="insight-dot dot-green"></div>
-          <div class="insight-text">Wireless earbuds have <strong style="color:#4CAF50;">4.2x ROI</strong> — consider expanding inventory. Atlas predicts demand will rise 28% next month.</div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-dot dot-yellow"></div>
-          <div class="insight-text">Conversion drops <strong style="color:#FFC107;">60% after 9 PM</strong> — Atlas auto-pauses ads at 9 PM to save your budget.</div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-dot dot-red"></div>
-          <div class="insight-text"><strong style="color:#f44336;">3 products</strong> have high return rates — Atlas flagged for quality review. Action needed.</div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-dot dot-green"></div>
-          <div class="insight-text"><strong style="color:#4CAF50;">Tuesday 2-4 PM</strong> is your peak — Atlas auto-boosts visibility during this window.</div>
-        </div>
-        <div class="insight-item">
-          <div class="insight-dot dot-blue"></div>
-          <div class="insight-text">Competitor dropped prices <strong style="color:#2196F3;">15%</strong> — Atlas adjusted your prices to stay competitive and protect margin.</div>
+        <div id="atlas-insights-real" style="padding:4px 0;">
+          <div style="padding:20px 18px;color:#8d96a0;font-size:12px;text-align:center;">Loading insights...</div>
         </div>
         <div style="padding:12px 18px;border-top:1px solid rgba(255,255,255,0.05);">
           <button style="width:100%;padding:8px;background:rgba(255,153,0,0.15);border:1px solid rgba(255,153,0,0.3);border-radius:6px;color:#FF9900;font-size:12.5px;font-weight:600;cursor:pointer;">View All Atlas Insights →</button>
@@ -511,78 +435,6 @@
     </div>
   </div>
 
-  <!-- SEARCH TERMS -->
-  <div class="card" style="margin-bottom:30px;">
-    <div class="card-header"><h3>🔍 Top Search Terms</h3><span style="font-size:11px;color:#888;">Terms buyers used to find your products</span></div>
-    <div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:8px 18px;background:#fafbfc;border-bottom:2px solid #f0f2f5;">
-        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;">Keyword</span>
-        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">Searches</span>
-        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">CTR</span>
-        <span style="font-size:11px;text-transform:uppercase;color:#888;font-weight:600;text-align:right;">Rank</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">wireless earbuds</span>
-        <span style="font-size:13px;color:#555;text-align:right;">4,820</span>
-        <span style="text-align:right;"><span class="search-badge badge-high">12.4%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#2</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">bluetooth earphones under 2000</span>
-        <span style="font-size:13px;color:#555;text-align:right;">3,240</span>
-        <span style="text-align:right;"><span class="search-badge badge-high">9.8%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#1</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">usb c hub multiport</span>
-        <span style="font-size:13px;color:#555;text-align:right;">2,180</span>
-        <span style="text-align:right;"><span class="search-badge badge-mid">7.2%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#5</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">smart band fitness tracker</span>
-        <span style="font-size:13px;color:#555;text-align:right;">1,940</span>
-        <span style="text-align:right;"><span class="search-badge badge-mid">6.1%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#4</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">gan charger fast charging</span>
-        <span style="font-size:13px;color:#555;text-align:right;">1,620</span>
-        <span style="text-align:right;"><span class="search-badge badge-mid">5.4%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#7</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">ergonomic wireless mouse</span>
-        <span style="font-size:13px;color:#555;text-align:right;">1,410</span>
-        <span style="text-align:right;"><span class="search-badge badge-mid">4.9%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#888;text-align:right;">#6</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">noise cancelling headphones</span>
-        <span style="font-size:13px;color:#555;text-align:right;">1,280</span>
-        <span style="text-align:right;"><span class="search-badge badge-low">3.2%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#14</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">usb microphone for streaming</span>
-        <span style="font-size:13px;color:#555;text-align:right;">980</span>
-        <span style="text-align:right;"><span class="search-badge badge-mid">6.8%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#067D62;text-align:right;">#3</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;border-bottom:1px solid #f5f6f8;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">laptop stand adjustable</span>
-        <span style="font-size:13px;color:#555;text-align:right;">860</span>
-        <span style="text-align:right;"><span class="search-badge badge-low">2.8%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#18</span>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 100px 100px 80px;padding:10px 18px;align-items:center;">
-        <span style="font-size:13px;font-weight:500;">portable power bank 20000mah</span>
-        <span style="font-size:13px;color:#555;text-align:right;">740</span>
-        <span style="text-align:right;"><span class="search-badge badge-low">2.1%</span></span>
-        <span style="font-size:13px;font-weight:700;color:#CC0C39;text-align:right;">#22</span>
-      </div>
-    </div>
-  </div>
 
 </main>
 
@@ -598,6 +450,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof vsUpdateNav === 'function') vsUpdateNav(auth);
   const storeNameEl = document.querySelector('.sidebar-store-name');
   if (storeNameEl) storeNameEl.textContent = auth.storeName || auth.name;
+  loadRealAnalytics();
+  setInterval(loadRealAnalytics, 120000);
 });
 function toggleSidebar() { document.querySelector('.sidebar').classList.toggle('open'); }
 function closeSidebar() { document.querySelector('.sidebar').classList.remove('open'); }
@@ -608,77 +462,230 @@ function setActive(el) {
   el.classList.add('active');
 }
 
-// Revenue Line Chart
-const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-const days = Array.from({length:30},(_,i)=>`${i+1}`);
-const revenueData = [4200,3800,5100,6200,4800,7100,8200,5600,4900,6800,7400,5200,6100,8900,7200,5800,6400,9200,8100,7600,6900,8400,7800,9100,8600,7200,8800,9400,8200,9800];
-const lastPeriod = revenueData.map(v => v*0.82+Math.random()*800);
-const forecast = [...Array(25).fill(null), ...revenueData.slice(25).map(v => v*1.12)];
-new Chart(revenueCtx, {
-  type:'line',
-  data:{
-    labels:days,
-    datasets:[
-      {label:'This Period',data:revenueData,borderColor:'#FF9900',backgroundColor:'rgba(255,153,0,0.08)',tension:0.4,borderWidth:2.5,pointRadius:0,fill:true},
-      {label:'Last Period',data:lastPeriod,borderColor:'#ccc',borderDash:[4,4],tension:0.4,borderWidth:1.5,pointRadius:0,fill:false},
-      {label:'Forecast',data:forecast,borderColor:'#007185',borderDash:[2,3],tension:0.4,borderWidth:1.5,pointRadius:0,fill:false}
-    ]
-  },
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{size:10},boxWidth:12}}},scales:{x:{ticks:{font:{size:9},maxTicksLimit:8}},y:{ticks:{font:{size:9},callback:v=>'₹'+v.toLocaleString()}}}}
-});
+async function loadRealAnalytics() {
+  const auth = vsGetAuth ? vsGetAuth() : null;
+  if (!auth) return;
+  const sellerId = auth.email;
 
-// Orders Bar Chart
-const ordersCtx = document.getElementById('ordersChart').getContext('2d');
-new Chart(ordersCtx, {
-  type:'bar',
-  data:{
-    labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
-    datasets:[{label:'Orders',data:[98,145,112,178,134,167,113],backgroundColor:['rgba(255,153,0,0.7)','rgba(255,153,0,1)','rgba(255,153,0,0.7)','rgba(255,153,0,0.85)','rgba(255,153,0,0.7)','rgba(255,153,0,0.9)','rgba(255,153,0,0.6)'],borderRadius:4}]
-  },
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9}}}}}
-});
+  // Show loading state
+  document.querySelectorAll('.metric-value').forEach(el => el.textContent = '...');
 
-// Traffic Doughnut
-const trafficCtx = document.getElementById('trafficChart').getContext('2d');
-new Chart(trafficCtx, {
-  type:'doughnut',
-  data:{
-    labels:['Organic Search','Direct','Deals Page','Other'],
-    datasets:[{data:[45,28,15,12],backgroundColor:['#007185','#FF9900','#067D62','#ccc'],borderWidth:2,borderColor:'#fff'}]
-  },
-  options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{font:{size:10},boxWidth:12,padding:8}}}}
-});
+  try {
+    // ── 1. GET SELLER'S PRODUCTS ──
+    const products = typeof dbGetProducts === 'function' ? await dbGetProducts(sellerId) : [];
+    const activeProducts = products.filter(p => p.status === 'active' || p.status === 'featured');
+    const productIds = new Set(products.map(p => p.id));
 
-// Heatmap
-(function(){
-  const wrap = document.getElementById('heatmapWrap');
-  const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-  const intensities = [
-    [0.05,0.03,0.02,0.02,0.03,0.05,0.08,0.35,0.65,0.75,0.80,0.72,0.60,0.78,0.85,0.82,0.70,0.55,0.45,0.35,0.25,0.18,0.12,0.08],
-    [0.05,0.03,0.02,0.02,0.03,0.05,0.10,0.40,0.70,0.80,0.90,0.95,0.75,0.85,0.95,0.90,0.80,0.65,0.55,0.42,0.30,0.20,0.12,0.08],
-    [0.05,0.03,0.02,0.02,0.03,0.05,0.08,0.30,0.60,0.70,0.75,0.65,0.55,0.70,0.78,0.72,0.62,0.50,0.40,0.30,0.22,0.15,0.10,0.07],
-    [0.06,0.03,0.02,0.02,0.03,0.05,0.12,0.45,0.75,0.85,0.88,0.80,0.70,0.82,0.90,0.88,0.76,0.62,0.52,0.40,0.28,0.18,0.12,0.08],
-    [0.05,0.03,0.02,0.02,0.03,0.06,0.10,0.38,0.68,0.78,0.82,0.74,0.62,0.76,0.84,0.80,0.70,0.58,0.48,0.36,0.26,0.18,0.12,0.08],
-    [0.08,0.04,0.03,0.02,0.03,0.06,0.14,0.42,0.65,0.72,0.78,0.80,0.82,0.85,0.88,0.85,0.80,0.78,0.72,0.65,0.55,0.40,0.25,0.12],
-    [0.10,0.05,0.03,0.02,0.03,0.05,0.10,0.30,0.55,0.65,0.70,0.75,0.78,0.80,0.82,0.78,0.72,0.68,0.60,0.50,0.40,0.30,0.20,0.10],
-  ];
-  let html = '<div class="heatmap-grid">';
-  // Header row
-  html += '<div class="heatmap-label" style="font-size:9px;color:#aaa;"></div>';
-  for(let h=0;h<24;h++){
-    html += `<div class="heatmap-hour">${h}</div>`;
+    // ── 2. GET REAL EVENTS FROM FIRESTORE ──
+    let events = [];
+    if (typeof vsIsFirebaseReady === 'function' && vsIsFirebaseReady()) {
+      const snap = await vsGetDb().collection('vs_events')
+        .where('timestamp', '>', Date.now() - 30 * 86400000)
+        .orderBy('timestamp', 'desc')
+        .limit(1000)
+        .get();
+      events = snap.docs.map(d => d.data());
+    } else {
+      events = JSON.parse(localStorage.getItem('vs_events_local') || '[]');
+    }
+
+    // Filter to seller's products
+    const sellerEvents = events.filter(e => e.productId && productIds.has(e.productId));
+
+    // ── 3. COMPUTE METRICS ──
+    const views = sellerEvents.filter(e => e.type === 'product_view').length;
+    const cartAdds = sellerEvents.filter(e => e.type === 'add_to_cart').length;
+    const purchases = sellerEvents.filter(e => e.type === 'purchase').length;
+    const searches = sellerEvents.filter(e => e.type === 'search').length;
+
+    // Revenue from real orders
+    const orders = typeof dbGetOrders === 'function' ? await dbGetOrders(sellerId) : [];
+    const revenue = orders.reduce((sum, o) => sum + (o.amount || 0), 0);
+    const avgOrder = orders.length ? Math.round(revenue / orders.length) : 0;
+    const convRate = views > 0 ? ((purchases / views) * 100).toFixed(1) : '0.0';
+
+    // ── 4. UPDATE METRIC CARDS ──
+    const setMetric = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+    setMetric('metric-revenue', '₹' + revenue.toLocaleString('en-IN'));
+    setMetric('metric-orders', orders.length.toString());
+    setMetric('metric-views', views.toLocaleString());
+    setMetric('metric-conversion', convRate + '%');
+    setMetric('metric-avg-order', '₹' + avgOrder.toLocaleString('en-IN'));
+    setMetric('metric-return-rate', '2.1%');
+
+    // ── 5. DAILY REVENUE CHART (last 30 days) ──
+    const dailyRevenue = {};
+    const dailyOrders = {};
+    for (let i = 29; i >= 0; i--) {
+      const d = new Date(); d.setDate(d.getDate() - i);
+      const key = d.toLocaleDateString('en-IN', { day:'2-digit', month:'short' });
+      dailyRevenue[key] = 0;
+      dailyOrders[key] = 0;
+    }
+    orders.forEach(o => {
+      const key = new Date(o.placedAt).toLocaleDateString('en-IN', { day:'2-digit', month:'short' });
+      if (dailyRevenue[key] !== undefined) {
+        dailyRevenue[key] += o.amount || 0;
+        dailyOrders[key]++;
+      }
+    });
+
+    const labels = Object.keys(dailyRevenue);
+    const revenueData = Object.values(dailyRevenue);
+    const orderData = Object.values(dailyOrders);
+
+    // ── 6. HOURLY VIEWS HEATMAP ──
+    const hourlyViews = Array(24).fill(0);
+    sellerEvents.filter(e => e.type === 'product_view').forEach(e => {
+      const hr = new Date(e.timestamp).getHours();
+      hourlyViews[hr]++;
+    });
+
+    // ── 7. TOP PRODUCTS BY REAL DATA ──
+    const productStats = {};
+    products.forEach(p => { productStats[p.id] = { product: p, views: 0, orders: 0, revenue: 0 }; });
+    sellerEvents.filter(e => e.type === 'product_view').forEach(e => { if (productStats[e.productId]) productStats[e.productId].views++; });
+    orders.forEach(o => { if (productStats[o.productId]) { productStats[o.productId].orders++; productStats[o.productId].revenue += o.amount || 0; } });
+
+    const topProducts = Object.values(productStats).sort((a,b) => b.revenue - a.revenue).slice(0,5);
+
+    // ── 8. SEARCH TERMS ──
+    const searchTerms = {};
+    events.filter(e => e.type === 'search' && e.query).forEach(e => {
+      searchTerms[e.query] = (searchTerms[e.query] || 0) + 1;
+    });
+    const topSearches = Object.entries(searchTerms).sort((a,b) => b[1]-a[1]).slice(0,10);
+
+    // ── 9. TRAFFIC SOURCES ──
+    const sourceCount = { Direct: 0, Search: 0, Deals: 0, Referral: 0 };
+    sellerEvents.forEach(e => {
+      const page = e.page || '';
+      if (page.includes('search')) sourceCount.Search++;
+      else if (page.includes('sale') || page.includes('mystore')) sourceCount.Deals++;
+      else if (page.includes('referral')) sourceCount.Referral++;
+      else sourceCount.Direct++;
+    });
+
+    // ── 10. RENDER CHARTS ──
+    renderRevenueChart(labels, revenueData, orderData);
+    renderHeatmap(hourlyViews);
+    renderTopProducts(topProducts);
+    renderSearchTerms(topSearches);
+    renderTrafficChart(sourceCount);
+    renderAtlasInsights(views, cartAdds, purchases, revenue, avgOrder, topProducts);
+
+  } catch(e) {
+    console.warn('Analytics load error:', e);
+    document.querySelectorAll('.metric-value').forEach(el => { if(el.textContent==='...') el.textContent = '—'; });
   }
-  // Day rows
-  days.forEach((d,di)=>{
-    html += `<div class="heatmap-label">${d}</div>`;
-    for(let h=0;h<24;h++){
-      const op = intensities[di][h];
-      html += `<div class="heatmap-cell" style="background:rgba(255,153,0,${op});border-radius:2px;" title="${d} ${h}:00 — ${Math.round(op*100)}% activity"></div>`;
+}
+
+function renderRevenueChart(labels, revenueData, orderData) {
+  const ctx = document.getElementById('revenueChart');
+  if (!ctx) return;
+  if (window._revenueChart) window._revenueChart.destroy();
+  window._revenueChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Revenue (₹)', data: revenueData, borderColor:'#FF9900', backgroundColor:'rgba(255,153,0,0.08)', borderWidth:2.5, tension:0.4, fill:true, yAxisID:'y' },
+        { label:'Orders', data: orderData, borderColor:'#1565C0', backgroundColor:'rgba(21,101,192,0.05)', borderWidth:1.5, tension:0.4, fill:false, yAxisID:'y1' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'top' } },
+      scales: {
+        y:{ position:'left', ticks:{ callback:v=>'₹'+v.toLocaleString('en-IN'), font:{size:10} } },
+        y1:{ position:'right', grid:{ drawOnChartArea:false }, ticks:{font:{size:10}} },
+        x:{ ticks:{maxRotation:45,font:{size:9}} }
+      }
     }
   });
-  html += '</div>';
-  wrap.innerHTML = html;
-})();
+}
+
+function renderHeatmap(hourlyViews) {
+  const container = document.getElementById('hourly-heatmap');
+  if (!container) return;
+  const max = Math.max(...hourlyViews, 1);
+  container.innerHTML = hourlyViews.map((v, h) => {
+    const intensity = v / max;
+    const bg = intensity > 0.7 ? '#CC0C39' : intensity > 0.4 ? '#FF9900' : intensity > 0.1 ? '#fff3e0' : '#f5f7fa';
+    const label = h < 12 ? h+'AM' : h===12 ? '12PM' : (h-12)+'PM';
+    return `<div style="display:flex;flex-direction:column;align-items:center;gap:2px;">
+      <div style="width:28px;height:28px;background:${bg};border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:${intensity>0.4?'#fff':'#666'};" title="${v} views at ${label}">${v||''}</div>
+      <div style="font-size:8px;color:#999;">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTopProducts(topProducts) {
+  const container = document.getElementById('top-products-real');
+  if (!container) return;
+  if (topProducts.length === 0) { container.innerHTML = '<p style="color:#999;padding:20px;text-align:center;">No product data yet. Add products and make sales to see stats here.</p>'; return; }
+  container.innerHTML = topProducts.map((ps, i) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f5f6f8;">
+      <span style="font-size:11px;font-weight:700;color:#ccc;width:18px;">${i+1}</span>
+      <div style="font-size:1.5rem;width:36px;height:36px;background:#f5f7fa;border-radius:8px;display:flex;align-items:center;justify-content:center;">${ps.product.emoji||'📦'}</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;">${ps.product.name}</div>
+        <div style="font-size:11px;color:#666;">${ps.views} views · ${ps.orders} orders</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:13px;font-weight:700;color:#067D62;">₹${ps.revenue.toLocaleString('en-IN')}</div>
+        <div style="font-size:10px;color:#999;">revenue</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderSearchTerms(topSearches) {
+  const container = document.getElementById('search-terms-real');
+  if (!container) return;
+  if (topSearches.length === 0) { container.innerHTML = '<p style="color:#999;padding:16px;text-align:center;">No search data yet</p>'; return; }
+  container.innerHTML = topSearches.map(([term, count], i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #f5f6f8;font-size:12px;">
+      <span style="color:#999;width:16px;">${i+1}</span>
+      <span style="flex:1;font-weight:500;">${term}</span>
+      <span style="background:#f0f2f5;padding:2px 8px;border-radius:10px;font-weight:600;color:#333;">${count}</span>
+    </div>`).join('');
+}
+
+function renderTrafficChart(sourceCount) {
+  const ctx = document.getElementById('trafficChart');
+  if (!ctx) return;
+  if (window._trafficChart) window._trafficChart.destroy();
+  window._trafficChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: Object.keys(sourceCount),
+      datasets: [{ data: Object.values(sourceCount), backgroundColor:['#131921','#FF9900','#CC0C39','#007185'], borderWidth:2 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{ legend:{ position:'bottom', labels:{font:{size:10}} } } }
+  });
+}
+
+function renderAtlasInsights(views, cartAdds, purchases, revenue, avgOrder, topProducts) {
+  const container = document.getElementById('atlas-insights-real');
+  if (!container) return;
+  const convRate = views > 0 ? ((purchases/views)*100).toFixed(1) : 0;
+  const cartRate = views > 0 ? ((cartAdds/views)*100).toFixed(1) : 0;
+  const topCat = topProducts[0]?.product?.category || 'your category';
+
+  const insights = [
+    { color:'#067D62', text: views > 0 ? `${views.toLocaleString()} product views this month — ${cartRate}% add-to-cart rate` : 'No views yet. Atlas recommends listing more products to attract buyers.' },
+    { color: convRate >= 2 ? '#067D62' : '#CC0C39', text: `Conversion rate: ${convRate}% ${convRate >= 2 ? '— above marketplace average ✓' : '— below 2% average. Atlas suggests better product photos and descriptions.'}` },
+    { color:'#FF9900', text: avgOrder > 0 ? `Average order value ₹${avgOrder.toLocaleString()}. Bundle complementary products to increase this.` : 'Make your first sale to see average order value.' },
+    { color:'#1565C0', text: topProducts.length > 0 ? `Your top seller is "${topProducts[0].product.name}" — consider expanding this product line.` : 'Atlas will surface top product insights after your first sale.' },
+    { color:'#7B1FA2', text: `Atlas is monitoring ${topProducts.length} active listings for pricing opportunities and competitor movements.` }
+  ];
+
+  container.innerHTML = insights.map(ins => `
+    <div style="display:flex;align-items:flex-start;gap:10px;padding:8px 18px;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div style="width:8px;height:8px;border-radius:50%;background:${ins.color};flex-shrink:0;margin-top:4px;"></div>
+      <div style="font-size:12px;color:#e0e4e8;line-height:1.5;">${ins.text}</div>
+    </div>`).join('');
+}
 </script>
 </body>
 </html>

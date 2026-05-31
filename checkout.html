@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Checkout — VibeStore</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@600;700;800&display=swap" rel="stylesheet"/>
+<script src="gst-invoice.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -505,6 +506,11 @@ a{text-decoration:none;color:inherit}
       <div style="margin-top:12px;font-size:0.8rem;font-weight:700;color:var(--gray);margin-bottom:8px">Estimated Delivery by Seller</div>
       <div id="sellerETAs"></div>
     </div>
+    <div style="text-align:center">
+      <button id="download-invoice-btn" onclick="downloadInvoice()" style="background:#067D62;color:#fff;border:none;padding:12px 24px;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;margin:12px auto;">
+        📄 Download GST Invoice
+      </button>
+    </div>
     <div class="success-btns">
       <button class="btn-track" onclick="location.href='track.html'">📦 Track Order</button>
       <button class="btn-shop-more" onclick="location.href='index.html'">Continue Shopping</button>
@@ -805,6 +811,10 @@ function placeOrder() {
     btn.disabled = true;
   }
   setTimeout(() => {
+    // Save order details for invoice generation
+    const currentCart = JSON.parse(localStorage.getItem('vs_cart') || '[]');
+    localStorage.setItem('vs_last_order', JSON.stringify(currentCart));
+    localStorage.setItem('vs_last_order_id', 'VS-' + Date.now());
     submitOrderToDB().then(() => {
       showSuccess();
     }).catch(e => {
@@ -856,6 +866,43 @@ function launchConfetti() {
     wrap.appendChild(c);
   }
   setTimeout(() => wrap.innerHTML = '', 4500);
+}
+
+async function downloadInvoice() {
+  const auth = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
+  const cart = JSON.parse(localStorage.getItem('vs_last_order') || '[]');
+  const btn = document.getElementById('download-invoice-btn');
+  if (btn) { btn.textContent = '⏳ Generating...'; btn.disabled = true; }
+
+  const orderData = {
+    orderId: localStorage.getItem('vs_last_order_id') || ('VS-' + Date.now()),
+    items: cart.map(item => ({
+      name: item.name,
+      category: item.category || 'Other',
+      price: item.price,
+      qty: item.qty || 1,
+      sellerName: item.sellerName || 'VibeStore Seller',
+      sellerGSTIN: item.sellerGSTIN || '09PENDING1234F1ZX'
+    })),
+    buyer: {
+      name: auth?.name || 'Customer',
+      email: auth?.email || '',
+      address: document.getElementById('addr-street')?.value || '123 Main Street',
+      city: document.getElementById('addr-city')?.value || 'Delhi',
+      state: 'Delhi',
+      stateCode: '07',
+      pincode: document.getElementById('addr-pin')?.value || '110001'
+    },
+    total: cart.reduce((sum, i) => sum + i.price * (i.qty||1), 0)
+  };
+
+  try {
+    const invoiceNo = await vsGenerateGSTInvoice(orderData);
+    if (btn) { btn.innerHTML = `✅ Downloaded — ${invoiceNo}`; btn.disabled = false; }
+  } catch(e) {
+    if (btn) { btn.textContent = '📄 Download GST Invoice'; btn.disabled = false; }
+    console.error('Invoice generation failed:', e);
+  }
 }
 
 function toast(msg) {

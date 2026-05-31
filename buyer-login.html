@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="auth.js"></script>
+<script src="fraud-detector.js"></script>
+<link rel="manifest" href="manifest.json">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -474,6 +476,9 @@
 </div>
 
 <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/ecommerce/service-worker.js').catch(err => console.warn('SW:', err));
+}
 (function() {
   // Auto-redirect if already logged in as buyer
   const existing = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
@@ -521,6 +526,8 @@
 
   // Sign In
   function doSignIn() {
+    const check = vsCheckRateLimit('login_attempts');
+    if (!check.allowed) { showError(check.message); return; }
     const email = document.getElementById('email').value.trim();
     const name = email.split('@')[0]; // use email prefix as name
     if (!email) { showError('Please enter your email'); return; }

@@ -8,6 +8,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="auth.js"></script>
 <script src="vs_store.js"></script>
+<script src="fraud-detector.js"></script>
+<link rel="manifest" href="manifest.json">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -455,6 +457,9 @@
 </div><!-- /.content-wrap -->
 
 <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/ecommerce/service-worker.js').catch(err => console.warn('SW:', err));
+  }
   /* ── AUTO-REDIRECT ──────────────────────────────────────────────────── */
   (function () {
     const existing = typeof vsGetAuth === 'function' ? vsGetAuth() : null;
@@ -502,6 +507,8 @@
 
   /* ── REGISTER HANDLER ───────────────────────────────────────────────── */
   function handleRegister() {
+    const regCheck = vsCheckRateLimit('login_attempts');
+    if (!regCheck.allowed) { showError('reg-error', regCheck.message); return; }
     const name      = document.getElementById('reg-name').value.trim();
     const storeName = document.getElementById('reg-store').value.trim();
     const email     = document.getElementById('reg-email').value.trim();
@@ -532,6 +539,8 @@
 
   /* ── SIGN IN HANDLER ────────────────────────────────────────────────── */
   function handleSignIn() {
+    const siCheck = vsCheckRateLimit('login_attempts');
+    if (!siCheck.allowed) { showError('signin-error', siCheck.message); return; }
     const email    = document.getElementById('si-email').value.trim();
     const password = document.getElementById('si-password').value;
 
