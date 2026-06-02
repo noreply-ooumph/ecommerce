@@ -10,7 +10,7 @@
 // ─────────────────────────────────────────────────────
 
 const firebaseConfig = {
-  apiKey:            "AIzaSyB912DkZ-5DcBxTKAeE8I_TBeQvawAKbJg",
+  apiKey:            "",
   authDomain:        "ooumphapp.firebaseapp.com",
   projectId:         "ooumphapp",
   storageBucket:     "ooumphapp.firebasestorage.app",
